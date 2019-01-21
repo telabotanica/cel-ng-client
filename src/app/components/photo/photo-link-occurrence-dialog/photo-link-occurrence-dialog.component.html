@@ -1,0 +1,55 @@
+
+<h2 mat-dialog-title>Associer cette photo à une observation</h2>
+
+<mat-dialog-content>
+
+    <mat-table class="occurrences-table mat-elevation-z8" 
+        [dataSource]="dataSource"
+        matSort matSortActive="userSciName" 
+        matSortDirection="asc" 
+        matSortDisableClear>
+      
+
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selectOccurrence(row) : null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="userSciName" id="user-sci-name-column">
+            <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="350px">Nom saisi</mat-header-cell>
+            <mat-cell *matCellDef="let occurrence" fxFlex="350px">{{occurrence.userSciName}}</mat-cell>
+        </ng-container>
+      
+        <ng-container matColumnDef="dateObserved">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
+            <mat-cell class="date-observed-cell"
+                      *matCellDef="let occurrence">{{occurrence.dateObserved | date:"dd/MM/yyyy" }}</mat-cell>
+        </ng-container>
+      
+        <ng-container matColumnDef="locality">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Lieu</mat-header-cell>
+            <mat-cell class="localitycell"
+                      *matCellDef="let occurrence">{{occurrence.locality }}</mat-cell>
+        </ng-container>
+
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        
+        <mat-row *matRowDef="let row; columns: displayedColumns" (click)="chooseOccurrence(occurrence)"></mat-row>
+        
+    </mat-table>
+
+    <mat-paginator 
+        [length]="600" 
+        [pageSize]="10" 
+        [pageSizeOptions]="[5, 10, 25, 100]" ></mat-paginator>
+
+</mat-dialog-content>

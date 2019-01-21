@@ -1,0 +1,17 @@
+
+<h2 mat-dialog-title>Importer un fichier excel ou csv</h2>
+
+<mat-dialog-content [formGroup]="importFormGroup">
+  
+  <button type="button" class="mat-raised-button mat-primary"(click)="imgFileInput.click()">Choisir le fichier</button>
+  <input hidden type="file" name="importFile" #imgFileInput (change)="import($event.target.files)" accept="file_extension|audio/*|video/*|image/*|media_type"/>
+
+</mat-dialog-content>
+
+<!--
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Fermer</button>
+    <button class="mat-raised-button mat-primary"(click)="import()">Importer</button>
+</mat-dialog-actions>
+
+-->

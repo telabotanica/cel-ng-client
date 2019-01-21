@@ -1,0 +1,43 @@
+
+<mat-toolbar fxFlex="1 1 auto" style="justify-content: space-between;border-bottom: 1px none #ddd; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);">
+      <div id="logo" >
+        <span>Logo</span>
+      </div>
+      <div id="tabnav" >
+
+<nav mat-tab-nav-bar>
+
+  <a mat-tab-link
+     *ngFor="let link of mainMenuLinks"
+     [routerLink]="['/'+link.path]"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+
+</nav>
+
+
+
+      </div>
+      <div id="menu" cdk-overlay-origin (click)="openUserMenuOverlay()">
+        <span>Menu</span>
+      </div>
+
+
+</mat-toolbar>
+
+<!--
+
+
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
+     *ngFor="let link of navLinks"
+     [routerLink]="link.path"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+
+-->

@@ -1,0 +1,55 @@
+#occurrence-form-container {
+  display: flex;
+}
+
+.occurrence-form-left-column {
+  flex-basis:0;
+  flex: 1 1 0;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.occurrence-form-right-column {
+  flex-basis:0;
+  flex: 1 1 0;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+
+.occurrence-form-column-title {
+  font-weight: bold;    
+  font-size: 22px;
+  padding: 10px;
+}
+
+.occurrence-form-header {
+  height:40px;
+  margin-top:10px;
+}
+
+.occurrence-form-annotation-photo-container {
+
+}
+
+.occurrence-form-label {
+  font-weight: bold;    
+  font-size: 13px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.occurrence-form-photo-container {
+
+}
+
+.occurrence-form-annotation-container {
+
+}
+
+.occurrence-form-submit-button-container {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+

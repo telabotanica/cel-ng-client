@@ -1,0 +1,37 @@
+<div>
+
+<mat-toolbar fxFlex="1 1 auto" style="justify-content: space-between;border-bottom: 1px none #ddd; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);">
+      <div id="dd" >
+        
+            <tb-dropfile-box
+              (rejectedFiles)="onPhotoRejected($event)"
+              (acceptedFiles)="onPhotoAdded($event)"
+              (geolocatedPhotoLatLng)="geolocatedPhotoData($event)"
+            ></tb-dropfile-box>
+      </div>
+
+      <div >
+        <span class="ui-component-menu-item" *ngIf="getSelectedCount()>0"> {{getSelectedCount()}} photo{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} - </span> 
+
+        <span class="ui-component-menu-item" *ngIf="getSelectedCount()>0"><a [routerLink]=""  class="ui-component-menu-item " (click)="bulkDownload()" matTooltip="Télécharger les photos sélectionnées" matTooltipPosition="above">Télécharger</a> - </span> 
+        <span class="ui-component-menu-item" *ngIf="getSelectedCount()>0"><a [routerLink]=""  class="ui-component-menu-item " (click)="bulkUnpublish()" matTooltip="Ajouter un tag aux photos sélectionnées" matTooltipPosition="above"> Ajouter un tag</a> - </span> 
+        <span class="ui-component-menu-item" *ngIf="getSelectedCount()>0"><a [routerLink]=""  class="ui-component-menu-item " (click)="openLinkOccurrenceDialog()" matTooltip="Lier les photos sélectionnées à une observation existante" matTooltipPosition="above">Lier à une observation</a> - </span> 
+        <span class="ui-component-menu-item" *ngIf="getSelectedCount()>0"><a [routerLink]=""  class="ui-component-menu-item " (click)="bulkDelete()" matTooltip="Supprimer les photos sélectionnées" matTooltipPosition="above"> Supprimer </a>- </span> 
+      </div>
+</mat-toolbar>
+
+  <span class="ui-component-menu-item" *ngIf="getSelectedCount()>0" (click)="bulkDownload()" matTooltip="Télécharger les photos sélectionnées" matTooltipPosition="above">Télécharger</span> 
+
+</div>
+
+<div fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+
+  <mat-card class="card-picture" fxFlex="20%" *ngFor="let photo of resources" [ngClass]="( selected.includes(photo.id) ) ? 'highlight' : 'not-highlight'">
+    <mat-card-title fxLayout.gt-xs="row" fxLayout.xs="column">
+    </mat-card-title>
+    <img mat-card-image class="img" src="{{photo.url}}" (click)="showDetail(photo)">
+    <div><mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> {{photo.originalName}} </div>
+  </mat-card>
+  
+</div>
+

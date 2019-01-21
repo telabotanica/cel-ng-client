@@ -1,0 +1,4 @@
+<div style="display:flex;" fxFlex="10 10 auto">
+  <app-occurrence-filters (applyFiltersEvent)='applyFilters($event)' style="flex: 1;"></app-occurrence-filters>
+  <app-occurrence-grid [occFilters]=occFilters style="flex: 4;"></app-occurrence-grid>
+</div>

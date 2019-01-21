@@ -1,0 +1,26 @@
+<div>
+  <h1>{{photo.originalName}} (id: {{photo.id}})</h1>
+</div>
+  
+  <mat-toolbar>
+ 
+      <div >
+        <span><a [routerLink]=""  class="ui-component-menu-item " (click)="download()" matTooltip="Afficher l’url de la photo pour la partager" matTooltipPosition="above"> Télécharger  </a> - </span>
+        <span><a [routerLink]=""  class="ui-component-menu-item " (click)="openShareDialog()" matTooltip="Afficher l’url de la photo pour la partager" matTooltipPosition="above"> Partager  </a> - </span>
+        <span><a [routerLink]=""  class="ui-component-menu-item " (click)="delete()" matTooltip="Supprimer la photo" matTooltipPosition="above">" Supprimer</a></span>
+      </div>
+    </mat-toolbar>
+<div>
+
+<img src="{{photo.url}}" (click)="viewBigger()" />
+
+<span *ngIf="photo.occurrence !== null; else setOccurrenceTemplate"><a [routerLink]=""  class="ui-component-menu-item " (click)="unpublish()"> {{photo.occurrence}} </a> - </span>
+        <span><ng-template #setOccurrenceTemplate><a [routerLink]=""  class="ui-component-menu-item " (click)="openLinkOccurrenceDialog()" matTooltip="Lier cette  photo à une observation existante" matTooltipPosition="above">Associer cette photo à une observation</a>  </ng-template> -  </span>
+
+  {{photo.dateShot}}
+
+  {{photo.latitude}}
+
+  {{photo.longitude}}
+
+</div>

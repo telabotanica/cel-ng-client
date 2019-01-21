@@ -1,0 +1,20 @@
+.img {
+  width: 100%;
+  margin-bottom: 18%;
+}
+.card-picture {
+  width: 23%;
+
+}
+.container {
+  min-height: 100%;
+  width: 100%;
+}
+
+.highlight{
+  background: skyblue;
+}
+
+.not-highlight{
+  background: #fbeafc;
+}

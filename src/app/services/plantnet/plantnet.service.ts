@@ -1,0 +1,52 @@
+import { Injectable } from '@angular/core';
+
+import { Observable } from "rxjs/Observable";
+import { HttpClient, HttpParams } from "@angular/common/http";
+
+import { AppConfig } from "../../app.config";
+import { PlantnetResponse } from "../../model/plantnet/plantnet-response.model";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PlantnetService {
+
+  private plantnetApiKey         = AppConfig.settings.plantnet.apiKey;
+  private plantnetBaseUrl        = AppConfig.settings.plantnet.baseUrl;
+
+  get(
+    imageUrls: string[], 
+    organs: string[], 
+    lang: string): Observable<PlantnetResponse> {
+
+    let httpParams= new HttpParams();
+
+    httpParams = httpParams.append("api-key", this.plantnetApiKey);
+    httpParams = httpParams.append("lang", lang);
+    httpParams = httpParams.append("organs", this.encodeStringArray(organs));
+    httpParams = httpParams.append("images", this.encodeStringArray(imageUrls));
+
+    return this.http.get<PlantnetResponse>(this.plantnetBaseUrl, 
+      {
+        params: httpParams,
+        headers: {'Accept':'application/json'}
+      }
+    );
+  }
+
+  private encodeStringArray(strArr) {
+    let encodedArray = '[';
+    for(let item of strArr) {
+      encodedArray += '"';
+      encodedArray += item;
+      encodedArray += '",';
+    }
+    // Remove the last comma:
+    encodedArray = encodedArray.substring(0, encodedArray.length-1);
+    encodedArray += ']';
+    
+    return encodedArray;
+  }
+
+  constructor(private http:HttpClient) { }
+}

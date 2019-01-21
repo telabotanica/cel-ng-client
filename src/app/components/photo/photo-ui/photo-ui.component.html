@@ -1,0 +1,4 @@
+<div style="display:flex;" fxFlex="10 10 auto">
+  <app-photo-filters  (applyFiltersEvent)='applyFilters($event)' style="flex: 1;"></app-photo-filters>
+  <app-photo-gallery [filters]=filters style="flex: 4;"></app-photo-gallery>
+</div>

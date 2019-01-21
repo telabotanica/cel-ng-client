@@ -1,0 +1,138 @@
+
+<div class="occurrence-filters-form-container">
+
+  <button mat-raised-button color="primary" (click)='emitApplyFilterEvent()'>FILTRER LES OBSERVATIONS</button>
+
+    <form class="occurrence-filters-form" [formGroup]="occurrenceSearchFormGroup">
+
+
+      <span class="form-group-label">Texte</span>
+      <div>
+        <mat-form-field>
+            <mat-label>Recherche libre</mat-label>
+            <input  matInput formControlName="freeTextQuery"  name="freeTextQuery">
+        </mat-form-field>
+
+        <mat-divider></mat-divider>
+      </div>
+
+      <span class="form-group-label">Date d'observation</span>
+
+
+
+      <table class="example-full-width centering-container" cellspacing="0"><tr>
+        <td><mat-form-field class="day-input">
+            <mat-label>Jour</mat-label>
+            <input  matInput  placeholder="dateObservedDay" formControlName="dateObservedDay"  name="dateObservedDay" maxlength="2">
+        </mat-form-field></td>
+
+        <td><mat-form-field class="month-input">
+            <mat-label>Mois</mat-label>
+            <input  matInput  placeholder="dateObservedMonth" formControlName="dateObservedMonth"  name="dateObservedMonth" maxlength="2" >
+        </mat-form-field></td>
+
+        <td><mat-form-field class="year-input">
+            <mat-label>Année</mat-label>
+            <input  matInput  placeholder="dateObservedYear" formControlName="dateObservedYear"  name="dateObservedYear" maxlength="4">
+        </mat-form-field></td>
+      </tr></table>
+
+
+
+      <mat-divider></mat-divider>
+
+      <span class="form-group-label">Lieux</span>
+
+      <table class="example-full-width centering-container" cellspacing="0"><tr>
+        <td><mat-form-field class="osm-locality-input">
+            <mat-label>Pays</mat-label>
+            <input  matInput  placeholder="osmCountry" formControlName="osmCountry"  name="osmCountry"   >
+        </mat-form-field></td>
+      </tr>
+      <tr>
+        <td><mat-form-field class="french-dep-input">
+            <mat-label>Département</mat-label>
+            <input  matInput  placeholder="frenchDep" formControlName="frenchDep"  name="frenchDep"   >
+        </mat-form-field></td>
+      </tr>
+      <tr>
+        <td><mat-form-field class="osm-locality-input">
+            <mat-label>Ville</mat-label>
+            <input  matInput  placeholder="osmLocality" formControlName="osmLocality"  name="osmLocality"   >
+        </mat-form-field></td>
+      </tr></table>
+
+
+
+      <mat-divider></mat-divider>
+
+      <span class="form-group-label">Identification</span>
+
+      <div>
+        <mat-form-field>
+            <mat-label></mat-label>
+                <mat-select [(value)]="certainty" (selectionChange)="changeCertainty($event)">
+                <mat-option>Indifférent</mat-option>
+                <mat-option value="certain">Certaine</mat-option>
+                <mat-option value="douteux">Douteuse</mat-option>
+                <mat-option value="à déterminer">A déterminer</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <mat-divider></mat-divider>
+
+      <span class="form-group-label">Mots-clés</span>
+
+      <user-occurrence-tag-tree-component></user-occurrence-tag-tree-component>
+
+      <mat-divider></mat-divider>
+
+      <span class="form-group-label">Projet</span>
+
+      <div>
+        <mat-form-field>
+            <mat-label></mat-label>
+                <mat-select [(value)]="projectId" (selectionChange)="changeProjectId(project.id)">
+                <mat-option>Tous</mat-option>
+                <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}">{{project.label}}</mat-option>
+
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <span class="form-group-label">Public/privé</span>
+
+      <div>
+        <mat-form-field>
+            <mat-label></mat-label>
+                <mat-select [(value)]="isPublic" (selectionChange)="changeIsPublic($event)">
+                <mat-option>Indifférent</mat-option>
+                <mat-option value="true">Seulement publics</mat-option>
+                <mat-option value="false">Seulement privés</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <span class="form-group-label">Validation IdentiPlante</span>
+
+      <div>
+        <mat-form-field>
+            <mat-label></mat-label>
+                <mat-select [(value)]="isIdentiplanteValidated" (selectionChange)="changeIsIdentiplanteValidated($event)">
+                <mat-option>Indifférent</mat-option>
+                <mat-option value="true">Seulement validés</mat-option>
+                <mat-option value="false">Seulement non validés</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+    </form>
+
+</div>
+

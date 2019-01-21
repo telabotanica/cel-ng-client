@@ -1,0 +1,160 @@
+import {Injectable} from "@angular/core";
+import {CollectionViewer, DataSource} from "@angular/cdk/collections";
+import {Observable} from "rxjs/Observable";
+import {HttpClient, HttpParams, HttpHeaders} from "@angular/common/http";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {map, catchError, finalize} from "rxjs/operators";
+import {of} from "rxjs/observable/of";
+import 'rxjs/Rx' ;
+
+import { AppConfig } from "../../app.config";
+import { Occurrence } from "../../model/occurrence/occurrence.model";
+import { OccurrenceFilters } from "../../model/occurrence/occurrence-filters.model";
+import { JsonPatchService } from "../../../restit/services/json-patch.service";
+import { JsonPatchResponse } from '../../../restit/model/json-patch-response.model';
+
+//@todo refactor this ugly mess!
+@Injectable()
+export class OccurrencesDataSource implements DataSource<Occurrence> {
+
+    // The array of Occurrence instances retrieved from the Web service:
+    public occurrencesSubject = new BehaviorSubject<Occurrence[]>([]);
+    private loadingSubject = new BehaviorSubject<boolean>(false);
+    public loading$ = this.loadingSubject.asObservable();
+    private resourceUrl = AppConfig.settings.api.baseUrl + '/occurrences';
+
+    constructor(private http:HttpClient, private jsonPatchService:JsonPatchService) {
+
+    }
+
+    findOccurrences(sortBy = '', sortDirection = 'asc',
+        pageNumber = 0, pageSize = 10, filters: OccurrenceFilters = null):  Observable<Occurrence[]> {
+
+        let httpParams= new HttpParams()
+            .set('sortBy', sortBy)
+            .set('sortDirection', sortDirection)
+            .set('page', pageNumber.toString())
+            .set('perPage', pageSize.toString());
+        console.debug(filters);
+        if ( filters !== null ) {
+            for (var propertyName in filters) {
+                if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
+                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+                }
+            }
+        }
+
+
+        return this.http.get<Occurrence[]>(this.resourceUrl + '.json', {
+            params: httpParams
+        });
+
+
+    }
+
+    //@todo promote all this to its own reusable service:
+    // If we use this, the multivalued parameter are sent as e.g. ids[]=13,15. 
+    // We want ids[]=13&ids[]=15 instead so we use buildIdsUrlParams(ids).
+    private buildIdsParams(ids) {
+        let params = new HttpParams();
+        ids.forEach(function (id) {
+          params = params.append('id[]', id);
+        });
+        return params;
+    }
+
+
+    //@todo merge with getCollection and add/use as a switch the Accept mimetype 
+    generatePdfEtiquette(ids) {
+        let params = this.buildIdsParams(ids);
+console.debug(params);
+        return this.http.get(this.resourceUrl, {
+            params: params,
+            responseType: 'arraybuffer',
+            headers: {'Accept':'application/pdf'}
+        });
+    }
+
+    get(id) : Observable<Occurrence>{
+        return this.http.get<Occurrence>(this.resourceUrl + '/' + id, {
+            headers: {'Accept':'application/json'}
+        });
+    }
+
+    delete(id) {
+        return this.http.delete<Occurrence>(this.resourceUrl + '/' + id, {
+            headers: {'Accept':'application/json'}
+        });
+    }
+
+
+    patch(id, values) {
+        return this.http.patch<Occurrence>(this.resourceUrl + '/' + id, 
+        values,
+        {
+            headers: {'Accept':'application/json'}
+        });
+    }
+
+    post(occurrence: Occurrence) {
+        return this.http.post<Occurrence>(
+            this.resourceUrl, 
+            occurrence,
+            {
+                headers: {'Accept':'application/json'}
+            }
+        );
+    }
+
+    importSpreadsheet(spreadsheetFile) {
+        let formData:FormData = new FormData();
+        formData.append('file', spreadsheetFile, spreadsheetFile.name);
+        let headers = {
+            'Accept': 'application/json'
+        };
+
+        return this.http.post(this.resourceUrl + '/import', formData, {headers: headers});
+
+    }
+
+
+    bulkRemove(ids): Observable<JsonPatchResponse[]> {
+        this.jsonPatchService.resourceServiceUrl = this.resourceUrl; 
+        return this.jsonPatchService.bulkRemove(ids);
+    }
+
+    bulkReplace(ids, value): Observable<JsonPatchResponse[]> {
+        this.jsonPatchService.resourceServiceUrl = this.resourceUrl; 
+         return this.jsonPatchService.bulkReplace(ids, value);
+    }
+
+    loadOccurrences(sortProperty:string,
+                sortDirection:string,
+                pageIndex:number,
+                pageSize:number, 
+                filters: OccurrenceFilters=null) {
+
+        this.loadingSubject.next(true);
+
+        this.findOccurrences(sortProperty, sortDirection,
+            pageIndex, pageSize, filters).pipe(
+                catchError(() => of([])),
+                finalize(() => this.loadingSubject.next(false))
+            )
+            .subscribe(occurrences => {
+              this.occurrencesSubject.next(occurrences);
+            });
+
+    }
+
+    connect(collectionViewer: CollectionViewer): Observable<Occurrence[]> {
+        console.log("Connecting data source");
+        return this.occurrencesSubject.asObservable();
+    }
+
+    disconnect(collectionViewer: CollectionViewer): void {
+        this.occurrencesSubject.complete();
+        this.loadingSubject.complete();
+    }
+
+}

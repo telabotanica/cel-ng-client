@@ -1,0 +1,26 @@
+
+<div>
+
+<mat-toolbar fxFlex="1 1 auto" style="justify-content: space-between;border-bottom: 1px none #ddd; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);">
+  <div id="dd" >
+    <button mat-raised-button color="primary">Ajouter une observation</button>
+  </div>
+
+  <div >
+    <span class="ui-component-menu-item " *ngIf="getSelectedCount()>0"> {{getSelectedCount()}} observation{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} - </span> 
+    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="openImportDialog()" > Editer</a>  -  </span>
+    <span *ngIf="getSelectedCount()==0"><a [routerLink]="" class="ui-component-menu-item " (click)="openImportDialog()" > Importer</a>  -  </span>
+    <span *ngIf="getSelectedCount()>0; else exportAllTemplate"><a [routerLink]=""  class="ui-component-menu-item "> Exporter</a> - </span>
+    <ng-template #exportAllTemplate><span><a [routerLink]="" class="ui-component-menu-item "> Exporter Tout</a> - </span></ng-template>
+    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="generatePdfEtiquette()" > Etiquette</a>  - </span>
+    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="bulkPublish()" > Publier</a>  -  </span>
+    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="bulkUnpublish()" > Dépublier </a> - </span>
+    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="bulkDelete()" > Supprimer </a>  -</span>
+  </div>
+</mat-toolbar>
+
+  
+
+</div>
+
+<div id="map" class="map"></div>

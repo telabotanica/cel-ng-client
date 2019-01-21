@@ -1,0 +1,42 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@import 'https://openlayers.org/en/v4.6.5/css/ol.css';
+@import '../node_modules/ol-layerswitcher/src/ol-layerswitcher.css';
+
+
+/*
+@import "tela-theme.scss";
+*/
+
+@include mat-core();
+@include angular-material-theme($tela-theme);
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Ubuntu, Helvetica, sans-serif;
+  color: #53504b;
+  display: flex;
+height:100%;
+  flex-direction: column;
+  margin: 0;
+}
+
+
+.ui-component-menu-item {
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 50;
+
+}
+
+
+
+
+
+
+
+
+
+
+
