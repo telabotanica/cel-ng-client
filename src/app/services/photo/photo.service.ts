@@ -4,8 +4,10 @@ import { Observable }
   from "rxjs/Observable";
 import { HttpClient, HttpParams } 
   from "@angular/common/http";
+/*
 import { AppConfig } 
   from "../../app.config";
+*/
 import { Photo } 
   from "../../model/photo/photo.model";
 import { PhotoFilters } 
@@ -20,7 +22,7 @@ import { JsonPatchResponse }
 })
 export class PhotoService {
 
-  private resourceUrl = AppConfig.settings.api.baseUrl + '/photos';
+  private resourceUrl = 'http://localhost:8080/api/photos';
 
   getCollection(
     sortBy:string = "dateShot",

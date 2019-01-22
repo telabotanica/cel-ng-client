@@ -6,7 +6,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {map, catchError, finalize} from "rxjs/operators";
 import {of} from "rxjs/observable/of";
 
-import { AppConfig } from "../../app.config";
+//import { AppConfig } from "../../app.config";
 import {Photo} from "../../model/photo/photo.model";
 
 // @todo: refactor this by making a generic superclass
@@ -17,7 +17,7 @@ export class PhotoDataSource implements DataSource<Photo> {
     public resourcesSubject = new BehaviorSubject<Photo[]>([]);
     private loadingSubject = new BehaviorSubject<boolean>(false);
     public loading$ = this.loadingSubject.asObservable();
-    private resourceUrl = AppConfig.settings.api.baseUrl + '/photos';
+    private resourceUrl = 'http://localhost:8080/api/photos';
 
     constructor(private http:HttpClient) {
 

@@ -50,10 +50,11 @@ import { UserAgreementComponent } from './components/generic/user-agreement/user
 import { HelpComponent } from './components/generic/help/help.component'
 
 // Loading the app config file from assets
+/*
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
 }
-
+*/
 @NgModule({
   declarations: [
     AppComponent,
@@ -103,10 +104,12 @@ export function initializeApp(appConfig: AppConfig) {
     TaxonomicRepositoryService,
     PlantnetService,
     ExistInChorodepService,
+/*
     AppConfig,
       { provide: APP_INITIALIZER,
         useFactory: initializeApp,
         deps: [AppConfig], multi: true }
+*/
   ],
   bootstrap: [AppComponent],
   entryComponents: [

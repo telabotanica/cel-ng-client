@@ -11,7 +11,7 @@ import { TelaBotanicaProject } from "../../model/occurrence/tela-botanica-projec
 })
 export class TelaBotanicaProjectService {
 
-    private resourceUrl = AppConfig.settings.api.baseUrl + '/tela_botanica_projects';
+    private resourceUrl = 'http://localhost:8080/api/tela_botanica_projects';
 
   constructor(private http: HttpClient) { }
 

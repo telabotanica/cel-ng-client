@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {map} from "rxjs/operators";
 
-import { AppConfig } from "../../app.config";
+//import { AppConfig } from "../../app.config";
 import { TaxoRepo } from "../../model/occurrence/taxo-repo.model";
 
 @Injectable({
@@ -11,7 +11,7 @@ import { TaxoRepo } from "../../model/occurrence/taxo-repo.model";
 })
 export class TaxonomicRepositoryService {
 
-  private resourceUrl = AppConfig.settings.api.baseUrl + '/taxo_repos';
+  private resourceUrl = 'http://localhost:8080/api/taxo_repos';
 
   constructor(private http: HttpClient) { }
 
