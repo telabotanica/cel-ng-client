@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { 
+  Router, ActivatedRoute } from "@angular/router";
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
 import OlTileLayer from 'ol/layer/Tile';
@@ -41,111 +43,130 @@ export class OccurrenceMapComponent implements OnInit {
   // The ids of selected occurrences:
   selected = [];
   importDialogRef: MatDialogRef<ImportDialogComponent>;
-
-  map: OlMap;
   source: OlXYZ;
-  layer: OlTileLayer;
+  private map: OlMap;
+  private layer: OlTileLayer;
   private occLayer: VectorLayer;
-  private brgmLayer: OlTileLayer;
   private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
   private celGeoJsonServiceFilteredUrl;
-  view: OlView; 
-  geoJsonFormat = new GeoJSON();
 
   private googleHybridLayer;
 
-    @Input() set occFilters(newOccFilters: OccurrenceFilters) {
-        if (  newOccFilters != null) {
+  @Input() set occFilters(newOccFilters: OccurrenceFilters) {
+    if (  newOccFilters != null) {
+      this._occFilters = newOccFilters;
+      this.redrawMap();
+    }
+  }
 
-            this.redrawMap();
-        }
+  navigateToCreateOccurrenceForm() {
+      this.router.navigateByUrl('/occurrence-form');
+  }
+
+  getSelectedCount() {
+      return this.selected.length;
+  }
+
+  private redrawMap() {
+    let geoJsonUrl = this.celGeoJsonServiceBaseUrl;
+
+    if (this._occfilters != null && this._occfilters != undefined) {
+      geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
 
-    getSelectedCount() {
-        return this.selected.length;
-    }
+alert(geoJsonUrl);
+    var s = new VectorSource({
+        url: geoJsonUrl,
+        format: new GeoJSON()
+    });
 
-    redrawMap() {
-
-            var s = new VectorSource({
-                url: this.celGeoJsonServiceFilteredUrl,
-                format: this.geoJsonFormat
-            });
-
-            this.occLayer.setSource(s);
-
-    }
+    this.occLayer.setSource(s);
+  }
  
-  constructor(private http:HttpClient, private dataSource:OccurrencesDataSource, private dialog: MatDialog, public snackBar: MatSnackBar ) { }
+  constructor(
+    private http:HttpClient, 
+    private dataSource:OccurrencesDataSource, 
+    private dialog: MatDialog, 
+    private router: Router,
+    public snackBar: MatSnackBar ) { }
 
-
-  
-
-
-  ngOnInit() {
-
-
-    this.layer = new OlTileLayer({
+  private createOlLayer() {
+    return new OlTileLayer({
       source: new OlXYZ({
         title: 'OSM',
         //type: 'base',
         visible: true,
         url: 'http://tile.osm.org/{z}/{x}/{y}.png'})
     });
-/*
-    this.googleHybridLayer = new OlTileLayer({
-      source: new OlXYZ({
-            url: 'http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
-        })
-    });
-
-    this.brgmLayer = new OlTileLayer({
-        source: new TileWMS({
-            title: 'BRMG - carte géologie',
-            url: 'http://geoservices.brgm.fr/geologie',
-            params: {'LAYERS': 'Geologie', 'TILED': true},
-
-            transition: 0
-          })
-    });
-
-*/
-    var occVectorSource = new VectorSource({
+  }
+  
+  private createOccurrenceLayer() {
+    this.occVectorSource = new VectorSource({
       title: 'Observations',
       url: this.celGeoJsonServiceBaseUrl ,
       visible: true,
       format: new GeoJSON()
     });
 
-    this.occLayer = new VectorLayer({
-            source: occVectorSource
-          });
+    return new VectorLayer({
+      source: this.occVectorSource
+    });
+  }
+
+  private createBrgmLayer() {
+
+    return new OlTileLayer({
+      source: new TileWMS({
+        title: 'BRMG - carte géologie',
+        url: 'http://geoservices.brgm.fr/geologie',
+        params: {'LAYERS': 'Geologie', 'TILED': true},
+
+        transition: 0
+      })
+    });
+
+  }
+
+  private createGoogleHybridLayer() {
+
+    return new OlTileLayer({
+      source: new OlXYZ({
+            url: 'http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
+        })
+    });
+
+  }
+
+  private createMap() {
+    this.layer = this.createOlLayer();
+    this.occLayer = this.createOccurrenceLayer();
 
     this.view = new OlView({
       center: fromLonLat([6.661594, 50.433237]),
       zoom: 3
     });
 
-    this.map = new OlMap({
+    return new OlMap({
       target: 'map',
-    //  layers: [this.layer, this.brgmLayer, this.googleHybridLayer, this.occLayer],
-  layers: [this.layer, this.occLayer],
+      //  layers: [this.layer, this.brgmLayer, this.googleHybridLayer, this.occLayer],
+      layers: [this.layer, this.occLayer],
       view: this.view
     });
+  }
 
+  ngOnInit() {
 
+    this.map = this.createMap();
+    var select = new Select();
+    var self = this;
 
-        var select = new Select();
-
-        var self = this;
-
-        if (select !== null) {
-            this.map.addInteraction(select);
-            select.on('select', function(e) {
-                // bind local variable to OL event value
-                self.selected= e.selected;
-            });
-        }
+    if (select !== null) {
+        this.map.addInteraction(select);
+        select.on('select', function(e) {
+            // bind local variable to OL event value
+            self.selected= e.selected;
+        });
+    }
 
 
       var selectedFeatures = select.getFeatures();
@@ -162,7 +183,7 @@ export class OccurrenceMapComponent implements OnInit {
         // features that intersect the box are added to the collection of
         // selected features
         var extent = dragBox.getGeometry().getExtent();
-        occVectorSource.forEachFeatureIntersectingExtent(extent, function(feature) {
+        self.occVectorSource.forEachFeatureIntersectingExtent(extent, function(feature) {
           selectedFeatures.push(feature);
             self.selected.push(feature);
 
@@ -260,7 +281,7 @@ export class OccurrenceMapComponent implements OnInit {
 
         this.dataSource.bulkRemove(ids).subscribe(
             data => {
-                this. redrawMap();
+                this.redrawMap();
                 this.snackBar.open(
                 'Les observations ont été supprimées avec succès.', 
                 'Fermer', 

@@ -3,19 +3,58 @@
 
 <mat-toolbar fxFlex="1 1 auto" style="justify-content: space-between;border-bottom: 1px none #ddd; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);">
   <div id="dd" >
-    <button mat-raised-button color="primary">Ajouter une observation</button>
+    <button mat-raised-button color="primary" (click)="navigateToCreateOccurrenceForm()">Ajouter une observation</button>
   </div>
 
   <div >
-    <span class="ui-component-menu-item " *ngIf="getSelectedCount()>0"> {{getSelectedCount()}} observation{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} - </span> 
-    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="openImportDialog()" > Editer</a>  -  </span>
-    <span *ngIf="getSelectedCount()==0"><a [routerLink]="" class="ui-component-menu-item " (click)="openImportDialog()" > Importer</a>  -  </span>
-    <span *ngIf="getSelectedCount()>0; else exportAllTemplate"><a [routerLink]=""  class="ui-component-menu-item "> Exporter</a> - </span>
-    <ng-template #exportAllTemplate><span><a [routerLink]="" class="ui-component-menu-item "> Exporter Tout</a> - </span></ng-template>
-    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="generatePdfEtiquette()" > Etiquette</a>  - </span>
-    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="bulkPublish()" > Publier</a>  -  </span>
-    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="bulkUnpublish()" > Dépublier </a> - </span>
-    <span *ngIf="getSelectedCount()>0"><a [routerLink]="" class="ui-component-menu-item " (click)="bulkDelete()" > Supprimer </a>  -</span>
+    <span class="ui-component-menu-item " *ngIf="getSelectedCount()>0"> {{getSelectedCount()}} observation{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} - </span>
+ 
+        <button mat-button
+          *ngIf="getSelectedCount()>0"
+          (click)="bulkEdit()" 
+          matTooltip="Modifier les observations sélectionnées" 
+          matTooltipPosition="above">Etiquette</button>
+
+        <button mat-button
+          (click)="openImportDialog()" 
+          matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
+          matTooltipPosition="above">Importer</button>
+
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0; else exportAllTemplate"
+          matTooltip="Exporter toutes vos observations dans un tableur"
+          matTooltipPosition="above">Exporter</button>
+
+        <ng-template #exportAllTemplate>
+        <button mat-button
+          matTooltip="Exporter toutes vos observations dans un tableur"
+          matTooltipPosition="above">Exporter Tout</button>
+        </ng-template>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0"
+          (click)="generatePdfEtiquette()" 
+          matTooltip="Créer des étiquettes d'herbier à partir des observations sélectionnées"
+          matTooltipPosition="above">Etiquettes</button>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0"
+          (click)="bulkPublish()" 
+          matTooltip="Rendre publiques les observations sélectionnées"
+          matTooltipPosition="above">Publier</button>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0"
+          (click)="bulkUnpublish()" 
+          matTooltip="Rendre privées les observations sélectionnées"
+          matTooltipPosition="above">Dépublier</button>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0"
+          (click)="bulkDelete()" 
+          matTooltip="Supprimer les observations sélectionnées"
+          matTooltipPosition="above">Supprimer</button>
   </div>
 </mat-toolbar>
 
