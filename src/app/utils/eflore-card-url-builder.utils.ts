@@ -1,4 +1,4 @@
-import { AppConfig } from "../app.config";
+import { environment } from '../../environments/environment';
 
 export class EfloreCardUrlBuilder {  
   

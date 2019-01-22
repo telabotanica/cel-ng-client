@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import { environment } from '../../../environments/environment';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {Observable} from "rxjs/Observable";
 import {HttpClient, HttpParams, HttpHeaders} from "@angular/common/http";
@@ -7,7 +8,7 @@ import {map, catchError, finalize} from "rxjs/operators";
 import {of} from "rxjs/observable/of";
 import 'rxjs/Rx' ;
 
-//import { AppConfig } from "../../app.config";
+
 import { Occurrence } from "../../model/occurrence/occurrence.model";
 import { OccurrenceFilters } from "../../model/occurrence/occurrence-filters.model";
 import { JsonPatchService } from "../../../restit/services/json-patch.service";
@@ -21,7 +22,7 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
     public occurrencesSubject = new BehaviorSubject<Occurrence[]>([]);
     private loadingSubject = new BehaviorSubject<boolean>(false);
     public loading$ = this.loadingSubject.asObservable();
-    private resourceUrl = 'http://localhost:8080/api/occurrences'//AppConfig.settings.api.baseUrl + '/occurrences';
+    private resourceUrl = environment.api.baseUrl + '/occurrences';
 
     constructor(private http:HttpClient, private jsonPatchService:JsonPatchService) {
 

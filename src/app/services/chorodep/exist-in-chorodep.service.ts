@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-
+import { environment } from '../../../environments/environment';
 import { Observable } from "rxjs/Observable";
 import { HttpClient, HttpParams } from "@angular/common/http";
-
-import { AppConfig } from "../../app.config";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExistInChorodepService {
 
-  private chorodepBaseUrl  = "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent";//AppConfig.settings.chorodep.baseUrl;   
+  private chorodepBaseUrl  = environment.chorodep.baseUrl;   
 
   get(taxoRepoName:string, taxonId: number, country: string, ceZoneGeo:string) {
 

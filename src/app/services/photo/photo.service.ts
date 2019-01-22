@@ -4,10 +4,7 @@ import { Observable }
   from "rxjs/Observable";
 import { HttpClient, HttpParams } 
   from "@angular/common/http";
-/*
-import { AppConfig } 
-  from "../../app.config";
-*/
+import { environment } from '../../../environments/environment';
 import { Photo } 
   from "../../model/photo/photo.model";
 import { PhotoFilters } 
@@ -22,7 +19,7 @@ import { JsonPatchResponse }
 })
 export class PhotoService {
 
-  private resourceUrl = 'http://localhost:8080/api/photos';
+  private resourceUrl = environment.api.baseUrl + '/photos';
 
   getCollection(
     sortBy:string = "dateShot",

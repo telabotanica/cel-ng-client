@@ -1,5 +1,3 @@
-import { APP_INITIALIZER } from '@angular/core';
-import { AppConfig } from './app.config';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -49,12 +47,7 @@ import { TaxonomicRepositoryService } from './services/occurrence/taxonomic-repo
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
 import { HelpComponent } from './components/generic/help/help.component'
 
-// Loading the app config file from assets
-/*
-export function initializeApp(appConfig: AppConfig) {
-  return () => appConfig.load();
-}
-*/
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -104,12 +97,6 @@ export function initializeApp(appConfig: AppConfig) {
     TaxonomicRepositoryService,
     PlantnetService,
     ExistInChorodepService,
-/*
-    AppConfig,
-      { provide: APP_INITIALIZER,
-        useFactory: initializeApp,
-        deps: [AppConfig], multi: true }
-*/
   ],
   bootstrap: [AppComponent],
   entryComponents: [

@@ -1,23 +1,26 @@
 import {Injectable} from "@angular/core";
+import { environment } from '../../../environments/environment';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {Observable} from "rxjs/Observable";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {map, catchError, finalize} from "rxjs/operators";
-import {of} from "rxjs/observable/of";
-
-//import { AppConfig } from "../../app.config";
+import {of} from "rxjs/observable/of"; 
+ 
 import {Photo} from "../../model/photo/photo.model";
 
 // @todo: refactor this by making a generic superclass
 @Injectable()
 export class PhotoDataSource implements DataSource<Photo> {
 
+
+
+
     // The array of Occurrence instances retrieved from the Web service:
     public resourcesSubject = new BehaviorSubject<Photo[]>([]);
     private loadingSubject = new BehaviorSubject<boolean>(false);
     public loading$ = this.loadingSubject.asObservable();
-    private resourceUrl = 'http://localhost:8080/api/photos';
+    private resourceUrl = environment.api.baseUrl + '/photos';
 
     constructor(private http:HttpClient) {
 

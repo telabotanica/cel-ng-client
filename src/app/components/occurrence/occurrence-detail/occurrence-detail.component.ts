@@ -52,6 +52,10 @@ export class OccurrenceDetailComponent implements OnInit {
     this.router.navigate(['/occurrence-collection-edit-form', this.occurrence.id]);
   }
 
+  openEfloreCard() {
+    window.open(this.efloreCard.permalink , '_blank');;
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

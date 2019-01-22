@@ -24,6 +24,7 @@ export class AlgoliaEfloreParserService {
         efloreCard.author = efloreEncodedCard.author;
         efloreCard.biblio = efloreEncodedCard.biblio;
         efloreCard.genus = efloreEncodedCard.genus;
+        efloreCard.permalink = efloreEncodedCard.permalink;
         efloreCard.supra_genus_name = efloreEncodedCard.supra_genus_name;
         efloreCard.author = efloreEncodedCard.author;
         efloreCard.chorodepMapUrl = efloreEncodedCard.thumbnails.chorodep;

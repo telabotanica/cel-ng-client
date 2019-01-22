@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from "@angular/common/http";
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
@@ -24,7 +25,6 @@ import {
   MatDialog } from "@angular/material";
 
 //import { LayerSwitcher } from 'ol/control';
-import { AppConfig } from "../../../app.config";
 import {OccurrenceFilters} from "../../../model/occurrence/occurrence-filters.model";
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
@@ -47,7 +47,7 @@ export class OccurrenceMapComponent implements OnInit {
   layer: OlTileLayer;
   private occLayer: VectorLayer;
   private brgmLayer: OlTileLayer;
-  private celGeoJsonServiceBaseUrl = AppConfig.settings.api.baseUrl + '/occurrences.geojson';
+  private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
   private celGeoJsonServiceFilteredUrl;
   view: OlView; 
   geoJsonFormat = new GeoJSON();
