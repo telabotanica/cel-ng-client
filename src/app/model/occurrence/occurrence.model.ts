@@ -21,6 +21,7 @@ export class Occurrence {
     locality:  string;
     sublocality:  string;
     geodatum:  string;
+    bibliographySource: string;
     environment:  string;
     localityConsistency:  boolean;
     station:  string;

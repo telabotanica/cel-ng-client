@@ -12,12 +12,15 @@ import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
 import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.model";
 import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
+import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
 import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { TaxonomicRepositoryService } from "../../../services/occurrence/taxonomic-repository.service";
 import { PlantnetService } from "../../../services/plantnet/plantnet.service";
 import { ExistInChorodepService } from "../../../services/chorodep/exist-in-chorodep.service";
+import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
 import { OccurrenceBuilder } from "../../../utils/occurrence-builder.utils";
+import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.utils";
 
 @Component({
   selector: 'app-occurrence-form',
@@ -28,30 +31,14 @@ export class OccurrenceFormComponent implements OnInit {
 
   occurrenceForm: FormGroup;
 
-  // FORM CONTROLS:
-  // Occurrence properties/form elements:
-  certainty:            string;
-  annotation:           string;
-  isPublic:             boolean;
-  dateObserved:         any;
-  observer:             string;
-  observerInstitution:  string;
-  publishedLocation:    string;
-  occurrenceType:       string;
-  phenology:            string;
-  isWild:               boolean;
-  herbariumSample:      boolean;
-  coef:                 number;
-  locationAccuracy:     string;
-  subLocality:          string;
-  environment:          string;
-  station:              string;
 
   // FORM OPTIONS:
   // Show full form (or base one): 
-  displayFullForm =      false;
+  displayFullFormLeft  = false;
+  displayFullFormRight = false;
   clearFormAfterSubmit = false;
 
+  projects: TelaBotanicaProject[];
   occurrences = [];
 
   private location: LocationModel;
@@ -63,6 +50,7 @@ export class OccurrenceFormComponent implements OnInit {
     private taxoRepoService: TaxonomicRepositoryService,
     private plantnetService: PlantnetService,
     private existInChorodepService: ExistInChorodepService,
+    private tbPrjService: TelaBotanicaProjectService,
     private dialog: MatDialog, 
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
@@ -70,6 +58,14 @@ export class OccurrenceFormComponent implements OnInit {
 
   ngOnInit() { 
    
+    this.initFormGroup();
+    this.initOccurrencesToEdit();
+    this.tbPrjService.getCollection().subscribe(
+      tbProjects => this.projects = tbProjects
+    );
+  }
+
+  initFormGroup() {
     this.occurrenceForm = new FormGroup({
       certainty:            new FormControl(),
       dateObserved:         new FormControl(),
@@ -84,13 +80,11 @@ export class OccurrenceFormComponent implements OnInit {
       coef:                 new FormControl(),
       herbariumSample:      new FormControl(),
       locationAccuracy:     new FormControl(),
-      subLocality:          new FormControl(),
+      sublocality:          new FormControl(),
       environment:          new FormControl(),
       station:              new FormControl(),
+      bibliographySource:   new FormControl(),
     });
-
-    this.initOccurrencesToEdit();
-
   }
 
   async retrieveOccurrences(ids) {
@@ -101,6 +95,22 @@ export class OccurrenceFormComponent implements OnInit {
     if ( this.occurrences.length > 0 ) {
       this.prepopulateForm();
     }
+  }
+
+  displayEfloreCard() {
+    let url = EfloreCardUrlBuilder.build(
+      this.taxon.idTaxo,
+      this.taxon.repository);
+    window.open(url,'_blank');
+  }
+
+  isEfloreCardDisplayable() {
+    return false;
+  }
+
+
+  navigateToHelp() {
+    this.router.navigateByUrl('/help');
   }
   
   /**
@@ -170,8 +180,12 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
 
-  toggleAdvancedForm(event) {
-    this.displayFullForm = !this.displayFullForm;
+  toggleAdvancedFormLeft(event) {
+    this.displayFullFormLeft = !this.displayFullFormLeft;
+  }
+
+  toggleAdvancedFormRight(event) {
+    this.displayFullFormRight = !this.displayFullFormRight;
   }
 
   toggleClearFormAfterSubmit(event) {
@@ -316,10 +330,10 @@ console.debug(this.location);
       // Let's post to the REST service:
       this.postOccurrence(occ);
     }
+  }
 
 
-
-
+  showPlantNetDialog() {
 /*
     this.plantnetService.get(
       ['http://tropical.theferns.info/plantimages/sized/c/a/ca2b39f905c0890b8db7f6c6dec34d70f37e089a_960px.jpg'], 
@@ -328,6 +342,10 @@ console.debug(this.location);
         resp => console.debug(resp)
     );
 */
+  }
+
+  isPlantNetCallable() {
+
   }
 
    private existsInChorodep() {

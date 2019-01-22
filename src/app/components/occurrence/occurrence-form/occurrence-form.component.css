@@ -29,7 +29,7 @@
 }
 
 .occurrence-form-annotation-photo-container {
-
+  display: flex;
 }
 
 .occurrence-form-label {
@@ -40,11 +40,13 @@
 }
 
 .occurrence-form-photo-container {
-
+  flex-basis:0;
+  flex: 1 1 0;
 }
 
 .occurrence-form-annotation-container {
-
+  flex-basis:0;
+  flex: 1 1 0;
 }
 
 .occurrence-form-submit-button-container {
@@ -53,3 +55,42 @@
 }
 
 
+.occurrence-form-options {
+  text-align: right;
+  padding-bottom: 20px;
+}
+
+.occurrence-form-header {
+  text-align: right;
+  padding-left: 40px;
+}
+
+.occurrence-form-option-label {
+  padding-right: 10px;
+}
+
+.advanced-form-left-container {
+  display: flex;
+}
+
+.advanced-form-left-left {
+  flex-basis:0;
+  flex: 1 1 0;
+}
+
+.advanced-form-left-right {
+  flex-basis:0;
+  flex: 1 1 0;
+}
+
+.geoloc-map {
+  padding-bottom:20px;
+}
+
+.tsb-search-box {
+  padding-top:20px;
+}
+
+.certainty-selector {
+  padding-top:20px;
+}

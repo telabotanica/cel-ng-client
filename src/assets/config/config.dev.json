@@ -17,5 +17,8 @@
      },
     "chorodep": {
         "baseUrl": "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent"
+     },
+    "eflore": {
+        "baseUrlTemplate": "https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese"
      }
 }
