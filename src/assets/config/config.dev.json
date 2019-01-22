@@ -6,7 +6,6 @@
         "baseUrl":       "https://yotvbfebjc-dsn.algolia.net/1/indexes/*/queries",
         "apiKey":        "843a36372facc0f1836f53d1d5968aa8",
         "applicationId": "YOTVBFEBJC",
-        "indexNames":     "*"
      },
     "api": {
         "baseUrl": "http://localhost:8080/api"

@@ -11,8 +11,8 @@ import { PlantnetResponse } from "../../model/plantnet/plantnet-response.model";
 })
 export class PlantnetService {
 
-  private plantnetApiKey         = AppConfig.settings.plantnet.apiKey;
-  private plantnetBaseUrl        = AppConfig.settings.plantnet.baseUrl;
+  //private plantnetApiKey         = AppConfig.settings.plantnet.apiKey;
+  //private plantnetBaseUrl        = AppConfig.settings.plantnet.baseUrl;
 
   get(
     imageUrls: string[], 
@@ -21,12 +21,12 @@ export class PlantnetService {
 
     let httpParams= new HttpParams();
 
-    httpParams = httpParams.append("api-key", this.plantnetApiKey);
+    httpParams = httpParams.append("api-key", "2a10O8sbWystFClXLBjAJl6x0O");
     httpParams = httpParams.append("lang", lang);
     httpParams = httpParams.append("organs", this.encodeStringArray(organs));
     httpParams = httpParams.append("images", this.encodeStringArray(imageUrls));
 
-    return this.http.get<PlantnetResponse>(this.plantnetBaseUrl, 
+    return this.http.get<PlantnetResponse>("https://my-api.plantnet.org/v1/identify/all", 
       {
         params: httpParams,
         headers: {'Accept':'application/json'}

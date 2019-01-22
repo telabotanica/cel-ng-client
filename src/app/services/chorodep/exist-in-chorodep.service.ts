@@ -10,7 +10,7 @@ import { AppConfig } from "../../app.config";
 })
 export class ExistInChorodepService {
 
-  private chorodepBaseUrl  = AppConfig.settings.chorodep.baseUrl;   
+  private chorodepBaseUrl  = "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent";//AppConfig.settings.chorodep.baseUrl;   
 
   get(taxoRepoName:string, taxonId: number, country: string, ceZoneGeo:string) {
 

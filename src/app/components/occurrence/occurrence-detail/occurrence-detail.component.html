@@ -1,168 +1,164 @@
-<div>
-  <h1>{{occurrence.userSciName}} (id: {{occurrence.id}})</h1>
-</div>
+<div class="occurrence-detail-container">
+    <div>
+      <h1>{{occurrence.userSciName}} (id: {{occurrence.id}})</h1>
+    </div>
 
-<mat-toolbar>
-    <div >
-        <button mat-button
-            (click)="generatePdfEtiquette()" 
-            matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
-            matTooltipPosition="above">Générer une étiquette d'herbier</button>
+    <mat-toolbar>
+        <div >
+            <button mat-button
+                (click)="generatePdfEtiquette()" 
+                matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
+                matTooltipPosition="above">Générer une étiquette d'herbier</button>
 
-        <button mat-button
-          (click)="clone()" 
-          matTooltip="Créer une nouvelle observation à partir de celle-ci" 
-          matTooltipPosition="above">Dupliquer</button>
+            <button mat-button
+              (click)="clone()" 
+              matTooltip="Créer une nouvelle observation à partir de celle-ci" 
+              matTooltipPosition="above">Dupliquer</button>
 
-        <button mat-button
-          (click)="navigateToEditOccurrenceForm()" 
-          matTooltip="Modifier l’observation" 
-          matTooltipPosition="above">Editer</button>
+            <button mat-button
+              (click)="navigateToEditOccurrenceForm()" 
+              matTooltip="Modifier l’observation" 
+              matTooltipPosition="above">Editer</button>
 
-        <button mat-button
-          *ngIf="occurrence.isPublic; else publishOccTemplate"
-          (click)="unpublish()"  
-          matTooltip="Rendre privée l’observation" 
-          matTooltipPosition="above">Dépublier</button>
+            <button mat-button
+              *ngIf="occurrence.isPublic; else publishOccTemplate"
+              (click)="unpublish()"  
+              matTooltip="Rendre privée l’observation" 
+              matTooltipPosition="above">Dépublier</button>
 
-      <ng-template #publishOccTemplate>
-        <button mat-button  
-          (click)="publish()" 
-          matTooltip="Rendre publique l’observation" 
-          matTooltipPosition="above">Publier</button> 
-      </ng-template>
+          <ng-template #publishOccTemplate>
+            <button mat-button  
+              (click)="publish()" 
+              matTooltip="Rendre publique l’observation" 
+              matTooltipPosition="above">Publier</button> 
+          </ng-template>
 
-      <ng-template #publishOccTemplate>
-        <button mat-button  
-          (click)="delete()" 
-          matTooltip="Supprimer l'observation" 
-          matTooltipPosition="above">Supprimer</button> 
-      </ng-template>
+          <ng-template #publishOccTemplate>
+            <button mat-button  
+              (click)="delete()" 
+              matTooltip="Supprimer l'observation" 
+              matTooltipPosition="above">Supprimer</button> 
+          </ng-template>
+
+        </div>
+      </mat-toolbar>
+    <div>
+
+    <h2>Extrait eFlore</h2>
+
+    <button mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eflore</button>
+
+
+
+
+
+
+    <div class="obs-detail-content">
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Nom retenu</div>
+        <div>{{efloreCard.scientific_name}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Nom vernaculaire</div>
+        <div>{{efloreCard.common_names[0]}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Famille</div>
+        <div></div>
+      </div>
 
     </div>
-  </mat-toolbar>
-<div>
-
-Extrait eFlore
-
-Voir la fiche complète sur eFlore
-
-  {{occurrence.family}}
-
-  {{occurrence.locality}}
-
-  {{occurrence.sublocality}}
-
-  {{occurrence.isPublic}} ---   
 
 
-
-
-<div class="obs-detail-content">
-
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Nom retenu</div>
-    <div>{{efloreCard.scientific_name}}</div>
-  </div>
-
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Nom vernaculaire</div>
-    <div>{{efloreCard.common_names[0]}}</div>
-  </div>
-
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Famille</div>
-    <div></div>
-  </div>
-
-</div>
-
-
-<div class="obs-detail-content-item-title">Répartition départementale</div>
-<div style="width:33%">
-<img src="{{efloreCard.chorodepMapUrl}}" />
-</div>
-
-
-</div>
-
-<div class="obs-detail-content-item-title">Illustrations</div>
-
-<div class="obs-detail-galery" style="width:33%">
-    <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
-</div>
-
-
-
-
-
-
-
-
-
-
-
-<div class="obs-detail-content">
-
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">id obs</div>
-    <div>{{occurrence.id}}</div>
-  </div>
-
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Nom saisi</div>
-    <div> 
-      <a href="https://www.tela-botanica.org/{{occurrence.taxoRepo}}-nn-{{occurrence.userSciNameId}}" 
-        matTooltip="Ouvrir la fiche eFlore" 
-        matTooltipPosition="above">{{occurrence.userSciName}}</a>
+    <div class="obs-detail-content-item-title">Répartition départementale</div>
+    <div style="width:33%">
+    <img src="{{efloreCard.chorodepMapUrl}}" />
     </div>
-  </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Référentiel</div>
-    <div>{{occurrence.taxoRepo.name}}</div>
-  </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Date</div>
-    <div>{{occurrence.dateObserved}}</div>
-  </div>
+    </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Lieu</div>
-    <div>{{occurrence.locality}}</div>
-  </div>
+    <div class="obs-detail-content-item-title">Illustrations</div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Altitude</div>
-    <div>{{occurrence.elevation == null ? "(vide)" : occurrence.elevation}}</div>
-  </div>
+    <div class="obs-detail-galery" style="width:33%">
+        <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
+    </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Certitude</div>
-    <div>{{occurrence.userSciName  == null ? "(vide)" : occurrence.elevation}}</div>
-  </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Lieu-dit</div>
-    <div>{{occurrence.sublocality}}</div>
-  </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Phénologie</div>
-    <div>{{occurrence.phenology}}</div>
-  </div>
 
-  <div class="obs-detail-content-item-holder">
-    <div class="obs-detail-content-item-title">Type de données</div>
-    <div>{{occurrence.occurrenceType}}</div>
-  </div>
-</div>
 
-<div>
-  <button mat-button
-    class="bold-link small" 
-    (click)="generatePdfEtiquette()" 
-    matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
-    matTooltipPosition="above">Générer une étiquette d'herbier</button>
+
+
+
+
+
+
+    <div class="obs-detail-content">
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">id obs</div>
+        <div>{{occurrence.id}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Nom saisi</div>
+        <div> 
+          <a href="https://www.tela-botanica.org/{{occurrence.taxoRepo}}-nn-{{occurrence.userSciNameId}}" 
+            matTooltip="Ouvrir la fiche eFlore" 
+            matTooltipPosition="above">{{occurrence.userSciName}}</a>
+        </div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Référentiel</div>
+        <div>{{occurrence.taxoRepo.name}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Date</div>
+        <div>{{occurrence.dateObserved}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Lieu</div>
+        <div>{{occurrence.locality}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Altitude</div>
+        <div>{{occurrence.elevation == null ? "(vide)" : occurrence.elevation}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Certitude</div>
+        <div>{{occurrence.userSciName  == null ? "(vide)" : occurrence.elevation}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Lieu-dit</div>
+        <div>{{occurrence.sublocality}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Phénologie</div>
+        <div>{{occurrence.phenology}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Type de données</div>
+        <div>{{occurrence.occurrenceType}}</div>
+      </div>
+    </div>
+
+    <div>
+      <button mat-button
+        class="bold-link small" 
+        (click)="generatePdfEtiquette()" 
+        matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
+        matTooltipPosition="above">Générer une étiquette d'herbier</button>
+    </div>
 </div>
