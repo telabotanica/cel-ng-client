@@ -91,7 +91,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     .subscribe();
   }
 
-  refreshGrid() {
+  private refreshGrid() {
     this.dataSource.loadOccurrences(
         this.sort.active,
         this.sort.direction,
@@ -104,7 +104,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
       this.router.navigateByUrl('/occurrence-form');
   }
 
-  navigateToCreateOccurrenceDetail(occ) {
+  navigateToOccurrenceDetail(occ) {
       this.router.navigate(['/occurrence-detail', occ.id]);
   }
 
@@ -156,7 +156,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
               'Les observations ont été publiées avec succès.', 
               'Fermer', 
               { duration: 1500 });
-              this.refreshGrid();
+              this.refresh();
 
           },
           error => this.snackBar.open(
@@ -186,7 +186,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
               'Les observations ont été dépubliées avec succès.', 
               'Fermer', 
               { duration: 1500 });
-              this.refreshGrid();
+              this.refresh();
 
           },
           error => this.snackBar.open(
@@ -211,7 +211,8 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
               'Les observations ont été supprimées avec succès.', 
               'Fermer', 
               { duration: 1500 });
-              this.refreshGrid();
+              this.clearSelection();
+              this.refresh();
 
           },
           error => this.snackBar.open(
@@ -238,7 +239,13 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     }
   }
 
+  clearSelection() {
+    this.selection.clear();
+  }
 
+  refresh() {
+    this.refreshGrid();
+  }
 
   importSpreadsheet(file: File) {
     let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
@@ -251,7 +258,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
           'Les observations ont été importées avec succès.', 
           'Fermer', 
           { duration: 1500 });
-          this.refreshGrid();
+          this.refresh();
 
       },
       error => this.snackBar.open(
