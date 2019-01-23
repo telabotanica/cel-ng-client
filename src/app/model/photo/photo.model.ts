@@ -4,6 +4,8 @@ export class Photo {
 
     id: number;
     originalName: string;
+    latitude: string;
+    longitude: string;
     url: string;
     contentUrl: Date;
     dateCreated: Date;

@@ -53,7 +53,7 @@ export class OccurrenceDetailComponent implements OnInit {
   }
 
   openEfloreCard() {
-    window.open(this.efloreCard.permalink , '_blank');;
+    window.open(this.efloreCard.permalink , '_blank');
   }
 
   ngOnDestroy() {

@@ -403,7 +403,7 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   isPlantNetCallable() {
-
+    return false;
   }
 
    private existsInChorodep() {

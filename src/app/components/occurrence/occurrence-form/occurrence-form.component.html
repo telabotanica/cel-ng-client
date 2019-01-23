@@ -16,8 +16,8 @@
           </div>
 
           <div class="geoloc-map">
+            <!-- [geolocatedPhotoLatLng]= "geolocatedPhotos" -->
             <tb-geoloc-map
-              [geolocatedPhotoLatLng]= "geolocatedPhotos"
               (location)='onLocationChange($event)'
             ></tb-geoloc-map>
           </div>
@@ -178,11 +178,11 @@
               <div class="occurrence-form-label">
                   <label class="occurrence-form-label">Ajouter une photo :</label>
               </div>
-
+                <!--                 (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" -->
               <tb-dropfile-box
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
-                (geolocatedPhotoLatLng)="geolocatedPhotoData($event)"
+
               ></tb-dropfile-box>
             </div>
 
