@@ -5,6 +5,7 @@ import {
   OnInit, 
   ViewChild, 
   Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { 
   Router, ActivatedRoute } from "@angular/router";
 import { 
@@ -41,12 +42,10 @@ import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-d
 })
 export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
-
-  displayedColumns= ["select", "userSciName", "dateObserved", "locality", "isPublic", "id", "identiplanteScore"];
-  importDialogRef: MatDialogRef<ImportDialogComponent>;
-  confirmBulkDeleteDialogRef: MatDialogRef<ConfirmDialogComponent>;
-  confirmBulkPublishDialogRef: MatDialogRef<ConfirmDialogComponent>;
-  confirmBulkUnpublishDialogRef: MatDialogRef<ConfirmDialogComponent>;
+  // Ids of the columns to be displayed:
+  displayedColumns= [
+    "select", "userSciName", "dateObserved", "locality", "isPublic", 
+    "id", "identiplanteScore"];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("sidenav") public detailPanel: MatSidenav;
@@ -56,7 +55,6 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   // Instanciate SelectionModel with multiselection allowed and no row 
   // selected at startup:
   selection = new SelectionModel<Occurrence>(true, []);
-
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
     if (  newOccFilters !== null) {
@@ -69,10 +67,10 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     }
   }
 
-
   constructor(
     public dataSource:OccurrencesDataSource, 
     private importDialog: MatDialog, 
+    // @refactor Would using a single one to hold all three dialog be ok? 
     private confirmBulkDeleteDialog: MatDialog, 
     private confirmBulkPublishDialog: MatDialog, 
     private confirmBulkUnpublishDialog: MatDialog, 
@@ -137,9 +135,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   openImportDialog() {
 
     let dialogConfig = this.buildDialogConfig();
-    this.importDialogRef = this.importDialog.open(ImportDialogComponent, dialogConfig);
+    let importDialogRef = this.importDialog.open(ImportDialogComponent, dialogConfig);
 
-    this.importDialogRef
+    importDialogRef
       .afterClosed()
       .subscribe( file => {
           this.importSpreadsheet(file);
@@ -150,9 +148,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
     let dialogConfig = this.buildDialogConfig();  
     dialogConfig.data = 'Supprimer la/les observation(s) ?';
-    this.confirmBulkDeleteDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+    let confirmBulkDeleteDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
-    this.confirmBulkDeleteDialogRef
+    confirmBulkDeleteDialogRef
       .afterClosed()
       .subscribe( response => {
           if (response == true) {
@@ -165,9 +163,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
     let dialogConfig = this.buildDialogConfig();  
     dialogConfig.data = 'Dépublier la/les observation(s) ?';
-    this.confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+    let confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
-    this.confirmBulkUnpublishDialogRef
+    confirmBulkUnpublishDialogRef
       .afterClosed()
       .subscribe( response => {
           if (response == true) {
@@ -180,9 +178,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
     let dialogConfig = this.buildDialogConfig();  
     dialogConfig.data = 'Publier la/les observation(s) ?';
-    this.confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+    let confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
-    this.confirmBulkPublishDialogRef
+    confirmBulkPublishDialogRef
       .afterClosed()
       .subscribe( response => {
           if (response == true) {
@@ -316,8 +314,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
           'Une erreur est survenue. ' + error, 
           'Fermer', 
           { duration: 1500 })
-    );
-    this.importDialogRef.close(); 
+    ); 
   }
 
   translateBoolean(bool) {
