@@ -26,7 +26,6 @@ import { PhotoUiComponent } from './components/photo/photo-ui/photo-ui.component
 import { UserOccurrenceTagTreeComponent } from "./components/occurrence/user-occurrence-tag-tree/user-occurrence-tag-tree.component";
 import { MapUiComponent } from './components/map/map-ui/map-ui.component';
 import { UserProfileUiComponent } from './components/user-profile/user-profile-ui/user-profile-ui.component';
-import { BurgerMenuComponent } from './components/generic/burger-menu/burger-menu.component';
 import { OccurrenceMapComponent } from './components/map/occurrence-map/occurrence-map.component';
 import { ImportDialogComponent } from './components/occurrence/import-dialog/import-dialog.component';
 import { OccurrencesDataSource } from "./services/occurrence/occurrences.datasource";
@@ -45,7 +44,8 @@ import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
 import { TaxonomicRepositoryService } from './services/occurrence/taxonomic-repository.service';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
-import { HelpComponent } from './components/generic/help/help.component'
+import { HelpComponent } from './components/generic/help/help.component';
+import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component'
 
 
 @NgModule({
@@ -64,7 +64,6 @@ import { HelpComponent } from './components/generic/help/help.component'
     UserOccurrenceTagTreeComponent,
     MapUiComponent,
     UserProfileUiComponent,
-    BurgerMenuComponent,
     OccurrenceMapComponent,
     ImportDialogComponent,
     PhotoShareDialogComponent,
@@ -72,6 +71,7 @@ import { HelpComponent } from './components/generic/help/help.component'
     PhotoDisplayDialogComponent,
     UserAgreementComponent,
     HelpComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,7 +100,7 @@ import { HelpComponent } from './components/generic/help/help.component'
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    BurgerMenuComponent, 
+    ConfirmDialogComponent,
     ImportDialogComponent, 
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,

@@ -32,6 +32,7 @@ import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.
 import { OccurrenceFilters }  from "../../../model/occurrence/occurrence-filters.model";
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { ImportDialogComponent } from "../../../components/occurrence/import-dialog/import-dialog.component";
+import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-occurrence-grid',
@@ -43,6 +44,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   displayedColumns= ["select", "userSciName", "dateObserved", "locality", "isPublic", "id", "identiplanteScore"];
   importDialogRef: MatDialogRef<ImportDialogComponent>;
+  confirmBulkDeleteDialogRef: MatDialogRef<ConfirmDialogComponent>;
+  confirmBulkPublishDialogRef: MatDialogRef<ConfirmDialogComponent>;
+  confirmBulkUnpublishDialogRef: MatDialogRef<ConfirmDialogComponent>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("sidenav") public detailPanel: MatSidenav;
@@ -54,22 +58,24 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   selection = new SelectionModel<Occurrence>(true, []);
 
 
-    @Input() set occFilters(newOccFilters: OccurrenceFilters) {
-        if (  newOccFilters !== null) {
-
-            this.dataSource.loadOccurrences(            
-                this.sort.active,
-                this.sort.direction,
-                this.paginator.pageIndex,
-                this.paginator.pageSize, 
-                newOccFilters);
-        }
+  @Input() set occFilters(newOccFilters: OccurrenceFilters) {
+    if (  newOccFilters !== null) {
+      this.dataSource.loadOccurrences(            
+          this.sort.active,
+          this.sort.direction,
+          this.paginator.pageIndex,
+          this.paginator.pageSize, 
+          newOccFilters);
     }
+  }
 
 
   constructor(
     public dataSource:OccurrencesDataSource, 
-    private dialog: MatDialog, 
+    private importDialog: MatDialog, 
+    private confirmBulkDeleteDialog: MatDialog, 
+    private confirmBulkPublishDialog: MatDialog, 
+    private confirmBulkUnpublishDialog: MatDialog, 
     public snackBar: MatSnackBar,
     private router: Router) { }
 
@@ -93,59 +99,104 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   private refreshGrid() {
     this.dataSource.loadOccurrences(
-        this.sort.active,
-        this.sort.direction,
-        this.paginator.pageIndex,
-        this.paginator.pageSize,
-        this._occFilters);
+      this.sort.active,
+      this.sort.direction,
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      this._occFilters);
   }
 
   navigateToCreateOccurrenceForm() {
-      this.router.navigateByUrl('/occurrence-form');
+    this.router.navigateByUrl('/occurrence-form');
   }
 
   navigateToOccurrenceDetail(occ) {
-      this.router.navigate(['/occurrence-detail', occ.id]);
+    this.router.navigate(['/occurrence-detail', occ.id]);
   }
 
 
   getSelectedCount() {
-      return this.selection.selected.length;
+    return this.selection.selected.length;
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.occurrencesSubject.getValue().length;
-
 
     return numSelected == numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-
     this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.occurrencesSubject.getValue().forEach(row => this.selection.select(row));
-
+      this.selection.clear() :
+      this.dataSource.occurrencesSubject.getValue().forEach(row => this.selection.select(row));
   }
-
 
   openImportDialog() {
 
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = false;
-      dialogConfig.autoFocus = true;
-      dialogConfig.hasBackdrop = true;
-      this.importDialogRef = this.dialog.open(ImportDialogComponent, dialogConfig);
+    let dialogConfig = this.buildDialogConfig();
+    this.importDialogRef = this.importDialog.open(ImportDialogComponent, dialogConfig);
 
-      this.importDialogRef
-          .afterClosed()
-          .subscribe( file => {
-              this.importSpreadsheet(file);
-          });
+    this.importDialogRef
+      .afterClosed()
+      .subscribe( file => {
+          this.importSpreadsheet(file);
+      });
+  }
+
+  openConfirmBulkDeleteDialog() {
+
+    let dialogConfig = this.buildDialogConfig();  
+    dialogConfig.data = 'Supprimer la/les observation(s) ?';
+    this.confirmBulkDeleteDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    this.confirmBulkDeleteDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.bulkDelete();
+          }
+      });
+  }
+
+  openConfirmBulkUnpublishDialog() {
+
+    let dialogConfig = this.buildDialogConfig();  
+    dialogConfig.data = 'Dépublier la/les observation(s) ?';
+    this.confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    this.confirmBulkUnpublishDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.bulkUnpublish();
+          }
+      });
+  }
+
+  openConfirmBulkPublishDialog() {
+
+    let dialogConfig = this.buildDialogConfig();  
+    dialogConfig.data = 'Publier la/les observation(s) ?';
+    this.confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    this.confirmBulkPublishDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.bulkPublish();
+          }
+      });
+  }
+
+  buildDialogConfig() {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    return dialogConfig;
   }
 
   bulkPublish() {

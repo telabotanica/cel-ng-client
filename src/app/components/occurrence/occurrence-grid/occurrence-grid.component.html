@@ -42,19 +42,19 @@
 
         <button mat-button
           *ngIf="getSelectedCount()>0"
-          (click)="bulkPublish()" 
+          (click)="openConfirmBulkPublishDialog()" 
           matTooltip="Rendre publiques les observations sélectionnées"
           matTooltipPosition="above">Publier</button>
 
         <button mat-button
           *ngIf="getSelectedCount()>0"
-          (click)="bulkUnpublish()" 
+          (click)="openConfirmBulkUnpublishDialog()" 
           matTooltip="Rendre privées les observations sélectionnées"
           matTooltipPosition="above">Dépublier</button>
 
         <button mat-button
           *ngIf="getSelectedCount()>0"
-          (click)="bulkDelete()" 
+          (click)="openConfirmBulkDeleteDialog()" 
           matTooltip="Supprimer les observations sélectionnées"
           matTooltipPosition="above">Supprimer</button>
 

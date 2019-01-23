@@ -1,3 +1,37 @@
-<p>
-  user-agreement works!
-</p>
+<div class="user-profile-form-container">
+
+  <div class="user-profile-form-section-container">
+
+    <div class="user-profile-form-section-title-container">Mon compte</div>
+
+    <div class="user-profile-form-section-items-container">
+      
+      <div class="user-profile-form-section-item-container">
+        <span>Connectée en tant que <a href="http://perdu.com">XXXXX</a></span>
+
+        <button mat-button
+          class="bold-link small" 
+          (click)="generatePdfEtiquette()" 
+          matTooltip="Accéder aux réglages de son profil" 
+          matTooltipPosition="above">Modifier la visibilité de mon profil</button>
+
+      </div>
+
+      <div class="user-profile-form-section-item-container">
+
+      <button mat-button
+        class="bold-link small" 
+        (click)="generatePdfEtiquette()" 
+        matTooltip="Se déconnecter" 
+        matTooltipPosition="above">Déconnexion</button>
+
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+  </div>
+
+</div>
+

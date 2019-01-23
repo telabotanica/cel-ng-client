@@ -20,8 +20,12 @@
 
 
       </div>
-      <div id="menu" cdk-overlay-origin (click)="openUserMenuOverlay()">
-        <span>Menu</span>
+      <div id="menu" >
+        <button mat-button
+          class="bold-link small" 
+          (click)="navigateToUserProfile()" 
+          matTooltip="Accéder au profil utilisateur" 
+          matTooltipPosition="above">Menu</button>
       </div>
 
 

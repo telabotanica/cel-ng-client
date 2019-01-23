@@ -1,0 +1,26 @@
+.user-profile-form-container {
+  width:600px;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+.user-profile-form-section-items-container {
+  display: flex;
+}
+
+.user-profile-form-section-item-container  {
+  flex-basis:0;
+  flex: 1 1 0;
+}
+
+.user-profile-form-section-title-container {
+  font-size: 22px;
+  font-weight: 700;
+  padding-bottom:20px;
+}
+
+.user-profile-form-section-container {
+  padding-bottom:20px;
+}

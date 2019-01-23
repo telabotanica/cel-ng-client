@@ -42,8 +42,10 @@ export class OccurrenceMapComponent implements OnInit {
   private _occFilters: OccurrenceFilters;
   // The ids of selected occurrences:
   selected = [];
-  importDialogRef: MatDialogRef<ImportDialogComponent>;
-  source: OlXYZ;
+  private importDialogRef: MatDialogRef<ImportDialogComponent>;
+  private source: OlXYZ;
+  private view: OlView;
+  private occVectorSource: VectorSource;
   private map: OlMap;
   private layer: OlTileLayer;
   private occLayer: VectorLayer;
@@ -70,11 +72,10 @@ export class OccurrenceMapComponent implements OnInit {
   private redrawMap() {
     let geoJsonUrl = this.celGeoJsonServiceBaseUrl;
 
-    if (this._occfilters != null && this._occfilters != undefined) {
+    if (this._occFilters != null && this._occFilters != undefined) {
       geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
 
-alert(geoJsonUrl);
     var s = new VectorSource({
         url: geoJsonUrl,
         format: new GeoJSON()
@@ -157,7 +158,11 @@ alert(geoJsonUrl);
   ngOnInit() {
 
     this.map = this.createMap();
-    var select = new Select();
+    var select = new Select({
+      hitTolerance: 10
+    });
+
+
     var self = this;
 
     if (select !== null) {

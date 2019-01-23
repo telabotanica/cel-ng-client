@@ -1,0 +1,12 @@
+.user-profile-form-container {
+
+}
+
+.user-profile-form-section-items-container {
+  display: flex;
+}
+
+.user-profile-form-section-item-container  {
+  flex-basis:0;
+  flex: 1 1 0;
+}
