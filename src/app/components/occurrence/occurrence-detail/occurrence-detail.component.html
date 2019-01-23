@@ -48,11 +48,6 @@
 
     <button mat-button (click)="openEfloreCard()">Consulter la fiche eflore</button>
 
-
-
-
-
-
     <div class="obs-detail-content">
 
       <div class="obs-detail-content-item-holder">
@@ -67,25 +62,30 @@
 
       <div class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Famille</div>
-        <div></div>
+        <div>{{occurrence.family}}</div>
       </div>
 
-    </div>
+    
 
 
     <div class="obs-detail-content-item-title">Répartition départementale</div>
-    <div style="width:33%">
+    <div>
     <img src="{{efloreCard.chorodepMapUrl}}" />
     </div>
 
 
     </div>
 
-    <div class="obs-detail-content-item-title">Illustrations</div>
 
-    <div class="obs-detail-galery" style="width:33%">
-        <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
-    </div>
+    <div class="obs-detail-galery-container" >
+      <div class="obs-detail-galery" style="width:33%">
+            <div class="obs-detail-content-item-title">Illustrations</div>
+          <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
+      </div>
+    <div>
+
+
+
 
 
 
@@ -115,17 +115,27 @@
 
       <div class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Référentiel</div>
-        <div>{{occurrence.taxoRepo.name}}</div>
+        <div>{{occurrence.taxoRepo.name  == null ? "(vide)" : occurrence.taxoRepo.name}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Certitude</div>
+        <div>{{occurrence.userSciName  == null ? "(vide)" : occurrence.userSciName}}</div>
+      </div>
+
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Commentaire</div>
+        <div>{{occurrence.annotation   == null ? "(vide)" : occurrence.annotation}}</div>
       </div>
 
       <div class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Date</div>
-        <div>{{occurrence.dateObserved}}</div>
+        <div>{{occurrence.dateObserved  == null ? "(vide)" : occurrence.dateObserved}}</div>
       </div>
 
       <div class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Lieu</div>
-        <div>{{occurrence.locality}}</div>
+        <div>{{occurrence.locality}} {{occurrence.osmCountry}}</div>
       </div>
 
       <div class="obs-detail-content-item-holder">
@@ -133,27 +143,74 @@
         <div>{{occurrence.elevation == null ? "(vide)" : occurrence.elevation}}</div>
       </div>
 
-      <div class="obs-detail-content-item-holder">
-        <div class="obs-detail-content-item-title">Certitude</div>
-        <div>{{occurrence.userSciName  == null ? "(vide)" : occurrence.elevation}}</div>
-      </div>
+
 
       <div class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Lieu-dit</div>
         <div>{{occurrence.sublocality}}</div>
       </div>
 
-      <div class="obs-detail-content-item-holder">
+      <div *ngIf="occurrence.station != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Station</div>
+        <div>{{occurrence.station}}</div>
+      </div>
+
+      <div *ngIf="occurrence.environment != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Milieu</div>
+        <div>{{occurrence.environment}}</div>
+      </div>
+
+      <div *ngIf="occurrence.publishedLocation != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Localisation diffusée</div>
+        <div>{{occurrence.publishedLocation}}</div>
+      </div>
+
+      <div *ngIf="occurrence.project != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Projet ou programme</div>
+        <div>{{occurrence.project.label}}</div>
+      </div>
+
+      <div *ngIf="occurrence.observer != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Observateur</div>
+        <div>{{occurrence.observer}}</div>
+      </div>
+
+      <div *ngIf="occurrence.observerInstitution != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Structure de l'observateur</div>
+        <div>{{occurrence.observerInstitution}}</div>
+      </div>
+
+      <div *ngIf="occurrence.occurrenceType != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Type de données</div>
+        <div>{{occurrence.occurrenceType}}</div>
+      </div>
+
+      <div *ngIf="occurrence.biblioSource != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Source bibliographique</div>
+        <div>{{occurrence.biblioSource}}</div>
+      </div>
+
+      <div *ngIf="occurrence.phenology != null" class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Phénologie</div>
         <div>{{occurrence.phenology}}</div>
       </div>
 
-      <div class="obs-detail-content-item-holder">
-        <div class="obs-detail-content-item-title">Type de données</div>
-        <div>{{occurrence.occurrenceType}}</div>
+      <div *ngIf="occurrence.coef != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Abondance</div>
+        <div>{{occurrence.coef}}</div>
       </div>
-    </div>
 
+      <div *ngIf="occurrence.isHerbariumSample != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Présence d'un témoin d'herbier</div>
+        <div>{{occurrence.isHerbariumSample}}</div>
+      </div>
+      <div *ngIf="occurrence.isPublic != null" class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Statut de publication</div>
+        <div>{{occurrence.isPublic ? 'Public' : 'Privé'}}</div>
+      </div>
+
+    </div>
+</div>
     <div>
       <button mat-button
         class="bold-link small" 

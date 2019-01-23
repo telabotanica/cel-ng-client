@@ -25,12 +25,13 @@ border-bottom: 1px solid #ededed;
 }
 
 .obs-detail-galery {
+
     display: block;
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 auto;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
-    background-color: #eee;
+
 }
 
 .obs-detail-img {

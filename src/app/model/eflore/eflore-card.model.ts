@@ -1,7 +1,4 @@
-
-
 export class EfloreCard {
-
   author: string;
   ​​​​​​biblio: string;
   // Common names, comma separated 

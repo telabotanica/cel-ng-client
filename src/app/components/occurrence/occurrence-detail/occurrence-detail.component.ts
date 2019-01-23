@@ -40,12 +40,15 @@ export class OccurrenceDetailComponent implements OnInit {
     this.subscription = this.route.params.subscribe(params => {
        this.id = parseInt(params['id']);
        this.dataSource.get(this.id).subscribe(
-            occurrence => this.occurrence = occurrence
+            occurrence => {this.occurrence = occurrence;
+console.debug(this.occurrence);
+}
         );
     });
     this.efloreService.get('Capscicum').subscribe(result => {
         this.efloreCard = this.parser.parseEfloreCard(result, 'bdtfx');
     });
+
   }
 
   navigateToEditOccurrenceForm() {
