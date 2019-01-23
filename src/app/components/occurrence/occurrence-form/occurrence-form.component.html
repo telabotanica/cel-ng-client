@@ -1,6 +1,6 @@
 <form 
   [formGroup]="occurrenceForm" 
-  (ngSubmit)="formSubmitted(occurrenceForm.value)" >
+  (ngSubmit)="openConfirmActionDialog(occurrenceForm.value)" >
 
   <mat-card-content id='occurrence-form-container' >
 
@@ -125,7 +125,7 @@
             <span class="occurrence-form-option-label">Afficher les champs avancés</span>
             <mat-slide-toggle [checked]="false" (toggleChange)="toggleAdvancedFormLeft($event)" ></mat-slide-toggle>
             </div>
-            <div>
+            <div *ngIf="isInCreateMode()">
               <span class="occurrence-form-option-label">Réinitialiser ces données pour l'observation suivante</span>
               <mat-slide-toggle (toggleChange)="toggleClearFormAfterSubmit($event)" ></mat-slide-toggle>
             </div>

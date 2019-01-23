@@ -21,6 +21,7 @@ import { ExistInChorodepService } from "../../../services/chorodep/exist-in-chor
 import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
 import { OccurrenceBuilder } from "../../../utils/occurrence-builder.utils";
 import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.utils";
+import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-occurrence-form',
@@ -29,18 +30,25 @@ import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.uti
 })
 export class OccurrenceFormComponent implements OnInit {
 
+  // Constant for storing the three different mode values fir this form:
+  private static readonly CREATE_MODE      = "create";
+  private static readonly SINGLE_EDIT_MODE = "single edit";
+  private static readonly BULK_EDIT_MODE   = "multi edit";
+
+  // FORM GROUP:
   occurrenceForm: FormGroup;
 
-
   // FORM OPTIONS:
-  // Show full form (or base one): 
+  // Show advanced (full) form (or basic one): 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
   clearFormAfterSubmit = false;
+  // Let's default to create mode:
+  mode: string = OccurrenceFormComponent.CREATE_MODE;
 
+  // USED/MANAGED MODELS:
   projects: TelaBotanicaProject[];
   occurrences = [];
-
   private location: LocationModel;
   private taxon: RepositoryItemModel;
   private subscription: Subscription;
@@ -52,6 +60,7 @@ export class OccurrenceFormComponent implements OnInit {
     private existInChorodepService: ExistInChorodepService,
     private tbPrjService: TelaBotanicaProjectService,
     private dialog: MatDialog, 
+    private confirmDialog: MatDialog, 
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router) { }
@@ -65,7 +74,7 @@ export class OccurrenceFormComponent implements OnInit {
     );
   }
 
-  initFormGroup() {
+  private initFormGroup() {
     this.occurrenceForm = new FormGroup({
       certainty:            new FormControl(),
       dateObserved:         new FormControl(),
@@ -108,39 +117,94 @@ export class OccurrenceFormComponent implements OnInit {
     return false;
   }
 
+  openConfirmActionDialog(value) {
+
+    let dialogConfig = this.buildDialogConfig();
+    let confirmQuestion = this.generateConfirmQuestionFromMode();
+    dialogConfig.data = confirmQuestion;
+    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    confirmDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.formSubmitted(value);
+          }
+      });
+  }
+
+
+  private generateConfirmQuestionFromMode() {
+    let confirmQuestion = '';
+    if ( this.mode == OccurrenceFormComponent.CREATE_MODE ) {
+      confirmQuestion = "Enregistrer l'observation ?";
+    }
+    else if ( this.mode == OccurrenceFormComponent.SINGLE_EDIT_MODE ) {
+      confirmQuestion = "Modifier l'observation ?";
+    }
+    else if ( this.mode == OccurrenceFormComponent.BULK_EDIT_MODE ) {
+      confirmQuestion = "Modifier les observation ?";
+    }
+
+    return confirmQuestion;
+  }
+
+  buildDialogConfig() {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    return dialogConfig;
+  }
+
+  private navigateToDetail(id: number) {
+    this.router.navigate(['/occurrence-detail', id]);
+  }
 
   navigateToHelp() {
     this.router.navigateByUrl('/help');
   }
-  
+
+  private navigateToOccurrenceUi() {
+    this.router.navigateByUrl('/occurrence-ui');
+  }
+
   /**
    * Retrieves the string encoded ids (no array route parameters in angular
    * at the moment) and loads corresponding Occurrence resources from the WS 
-   * to fill the 'occurrences' array property.
+   * to fill the 'occurrences' array property. Also sets the "mode" of the
+   * form: either CREATE_MODE,  SINGLE_EDIT_MODE or BULK_EDIT_MODE.
    */
-  initOccurrencesToEdit() {
+  private initOccurrencesToEdit() {
     this.route.params.subscribe(params => {
-      //this.occurrences;
+      // Retrieve the string encoded ids parameter from the route: 
       let strIds = params['ids']; 
-
+      
       if ( strIds !== undefined ) {
+        // Edit mode:
         let ids = strIds.split(",");
-        
+        if (ids.length >1) {
+          this.mode = OccurrenceFormComponent.BULK_EDIT_MODE;
+        }
+        else {
+          this.mode = OccurrenceFormComponent.SINGLE_EDIT_MODE;
+        }
         this.retrieveOccurrences(ids); 
       }
+      else {
+        // Create mode:
+        this.mode = OccurrenceFormComponent.CREATE_MODE;
+      }
+      
     });
   }
-
 
   async retrieveOccurrence(id) {
     const resp = await this.dataService.get(parseInt(id)).toPromise();
     return resp;
   }
 
-
-
-
-  prepopulateForm() {
+  private prepopulateForm() {
     let occurrence: Occurrence;
     if ( this.occurrences.length == 1 ) {
       occurrence = this.occurrences[0];
@@ -151,7 +215,7 @@ export class OccurrenceFormComponent implements OnInit {
     this.occurrenceForm.patchValue(occurrence);
   }
 
-  buildPrepopulateOccurrence() {
+  private buildPrepopulateOccurrence() {
     let prepopOcc = new Occurrence();
     let testOcc = this.occurrences[0];
 
@@ -179,6 +243,9 @@ export class OccurrenceFormComponent implements OnInit {
     return prepopOcc;
   }
 
+  isInCreateMode() {
+    return ( this.mode == OccurrenceFormComponent.CREATE_MODE );
+  }
 
   toggleAdvancedFormLeft(event) {
     this.displayFullFormLeft = !this.displayFullFormLeft;
@@ -201,7 +268,7 @@ export class OccurrenceFormComponent implements OnInit {
 
   onLocationChange(location: LocationModel) {
     this.location = location;
-console.debug(this.location);
+    console.debug(this.location);
   }
 
   onTaxonChange(taxon: RepositoryItemModel) {
@@ -223,15 +290,7 @@ console.debug(this.location);
   }
 
   onCancel() {
-    this.navigateToGrid();
-  }
-
-  private navigateToGrid() {
-    this.router.navigate(['/occurrence-grid']);
-  }
-
-  private navigateToDetail(id: number) {
-    this.router.navigate(['/occurrence-detail', id]);
+    this.navigateToOccurrenceUi();
   }
 
   private clearForm() {
@@ -293,9 +352,7 @@ console.debug(this.location);
           "Les observations ont bien été modifiées.", 
           'Fermer', 
           { duration: 1500 });
-        if ( this.clearFormAfterSubmit ) {
-          this.clearForm();
-        }
+        this.navigateToOccurrenceUi();
       },
       error => {
         this.snackBar.open(
@@ -306,6 +363,7 @@ console.debug(this.location);
     );
   }
 
+  //@refactor: Change name
   formSubmitted(occurrenceFormValue) {
     let occBuilder = new OccurrenceBuilder(
       occurrenceFormValue, 
@@ -395,7 +453,6 @@ console.debug(this.location);
       userId, dateObservedMonth, 
       dateObservedDay, dateObservedYear, 
       userSciName, geometry, locality];
-
     let unencodedSignature = '';
 
     for(let bit of signatureBits) {
@@ -406,11 +463,11 @@ console.debug(this.location);
   }
 
 
-  createPhotos(photos: FileData[]) {
+  private createPhotos(photos: FileData[]) {
 
   }
 
-  createPhoto(photo: FileData) {
+  private createPhoto(photo: FileData) {
 
   }
  
