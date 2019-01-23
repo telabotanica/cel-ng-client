@@ -21,11 +21,17 @@ npm install
 
 The configurations are located in the src/environments folder of the project. Edit the file correponding to your environment by setting the right baseUrl for the CEL api:
 
-git clone 
+### Editing CEL2 API URL
+
+Edit the value of the api.baseUrl JSON element to match your installation.
+
+### Editing PlantNet aPI key
+
+Edit the value of the plantnet.apiKey JSON element to match your key.
 
 ## Dev: launching the app on the test server
 
-You can do so by issuing the following comand:
+You can do so by issuing the following command:
 
 ```
 ng serve
