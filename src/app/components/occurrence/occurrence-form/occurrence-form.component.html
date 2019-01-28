@@ -18,6 +18,7 @@
           <div class="geoloc-map">
             <!-- [geolocatedPhotoLatLng]= "geolocatedPhotos" -->
             <tb-geoloc-map
+              [reset]='resetForm'
               (location)='onLocationChange($event)'
             ></tb-geoloc-map>
           </div>
@@ -149,18 +150,19 @@
           </div>
 
           <div class="tsb-search-box">
-            <!-- [updateData]="updateTaxonField" -->
+            <!--  -->
             <tb-tsb-search-box 
               placeholder="Choisir une espèce"
               editingPlaceholder="Modifier l'espèce"
               defaultRepository="bdtfx"
+              [updateData]="patchTaxon"
               (updatedData)='onTaxonChange($event)'
               (newData)='onTaxonChange($event)'></tb-tsb-search-box>
           </div>
 
           <button mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eflore</button>
 
-          <section class="example-section">
+          <section class="base-occurrence-form-section">
             <div>
                 <label class="occurrence-form-label">Certitude :</label>
             </div>
@@ -178,11 +180,10 @@
               <div class="occurrence-form-label">
                   <label class="occurrence-form-label">Ajouter une photo :</label>
               </div>
-                <!--                 (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" -->
+               <!-- [reset]='resetForm'  (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
               <tb-dropfile-box
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
-
               ></tb-dropfile-box>
             </div>
 

@@ -150,6 +150,11 @@
         <div>{{occurrence.sublocality}}</div>
       </div>
 
+      <div class="obs-detail-content-item-holder">
+        <div class="obs-detail-content-item-title">Code INSEE</div>
+        <div>{{occurrence.localityInseeCode}}</div>
+      </div>
+
       <div *ngIf="occurrence.station != null" class="obs-detail-content-item-holder">
         <div class="obs-detail-content-item-title">Station</div>
         <div>{{occurrence.station}}</div>

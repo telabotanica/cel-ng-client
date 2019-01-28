@@ -1,6 +1,6 @@
 
 
-export interface TaxoRepo {
+export class TaxoRepo {
   id: number;
   name: string;
 }

@@ -42,4 +42,8 @@ export class Occurrence {
   sampleHerbarium:          boolean;
   project:                  TelaBotanicaProject;
   taxoRepo:                 TaxoRepo;
+
+
+
+
 } 

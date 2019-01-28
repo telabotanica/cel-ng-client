@@ -39,9 +39,6 @@ export class OccurrenceFormComponent implements OnInit {
   occurrenceForm: FormGroup;
 
   // FORM OPTIONS:
-  // Show advanced (full) form (or basic one): 
-  displayFullFormLeft  = false;
-  displayFullFormRight = false;
   clearFormAfterSubmit = false;
   // Let's default to create mode:
   mode: string = OccurrenceFormComponent.CREATE_MODE;
@@ -51,6 +48,21 @@ export class OccurrenceFormComponent implements OnInit {
   occurrences = [];
   private location: LocationModel;
   private taxon: RepositoryItemModel;
+
+  // MEMBER VARIABLES FOR COMMUNICATING WITH CHILDREN:
+  // Edit mode only (both single and multi): these instances are used to
+  // prepopulate the taxonomic search box component. Once instanciated,
+  // its value should never change: the search box is now resopnsible
+  // for selecting the taxon for this occurrence. 
+  patchTaxon: RepositoryItemModel;
+  patchLocation: LocationModel;
+  // Should the form be reset?
+  resetForm: boolean;
+  // Show advanced (full) form (or basic one): 
+  displayFullFormLeft  = false;
+  displayFullFormRight = false;
+
+
   private subscription: Subscription;
 
   constructor(
@@ -106,11 +118,16 @@ export class OccurrenceFormComponent implements OnInit {
     }
   }
 
+  async retrieveOccurrence(id) {
+    const resp = await this.dataService.get(parseInt(id)).toPromise();
+    return resp;
+  }
+
   displayEfloreCard() {
     let url = EfloreCardUrlBuilder.build(
-      this.taxon.idTaxo,
+      this.taxon.idNomen,
       this.taxon.repository);
-    window.open(url,'_blank');
+    window.open(url, '_blank');
   }
 
   isEfloreCardDisplayable() {
@@ -128,7 +145,7 @@ export class OccurrenceFormComponent implements OnInit {
       .afterClosed()
       .subscribe( response => {
           if (response == true) {
-            this.formSubmitted(value);
+            this.postOrPatch(value);
           }
       });
   }
@@ -199,10 +216,6 @@ export class OccurrenceFormComponent implements OnInit {
     });
   }
 
-  async retrieveOccurrence(id) {
-    const resp = await this.dataService.get(parseInt(id)).toPromise();
-    return resp;
-  }
 
   private prepopulateForm() {
     let occurrence: Occurrence;
@@ -213,6 +226,51 @@ export class OccurrenceFormComponent implements OnInit {
       occurrence = this.buildPrepopulateOccurrence();
     }
     this.occurrenceForm.patchValue(occurrence);
+    this.prepopulateTaxoSearchBox(occurrence);
+    this.prepopulateGeoSearchBox(occurrence);
+  }
+
+  private prepopulateTaxoSearchBox(occ: Occurrence) {
+
+    // Create a dummy temp taxon not to fire change event
+    // for every property setting.
+    let tmpTaxon = {
+      occurenceId: occ.id,
+      repository: (occ.taxoRepo == null) ? '' : occ.taxoRepo.name,
+      idNomen: occ.userSciNameId,
+      name: occ.userSciName,
+      author: ''
+    }
+
+    // Update the class member and, consequently, the search box component: 
+    this.patchTaxon = tmpTaxon;
+  }
+
+  private prepopulateGeoSearchBox(occ: Occurrence) {
+/*
+    let tmpLocation = {
+      geometry: occ.geometry,
+      geodatum: occ.geodatum,
+      locality: occ.locality,
+      elevation: occ.elevation,
+      publishedLocation: occ.publishedLocation,
+      locationAccuracy: occ.locationAccuracy,
+      station: occ.station,
+      sublocality: occ.sublocality,
+      localityConsistency: occ.localityConsistency,
+      osmState: occ.osmState,
+      osmCountry: occ.osmCountry,
+      osmCountryCode: occ.osmCountryCode,
+      osmCounty: occ.osmCounty,
+      osmPostcode: occ.osmPostcode,
+      osmId: occ.osmId,
+      osmPlaceId: occ.osmPlaceId,
+      inseeData: occ.localityInseeCode,
+    }
+
+    // Update the class member and, consequently, the search box component: 
+    this.patchLocation = tmpLocation;
+*/
   }
 
   private buildPrepopulateOccurrence() {
@@ -275,6 +333,8 @@ export class OccurrenceFormComponent implements OnInit {
     this.taxon = taxon;
   }
 
+
+
   addPhoto(location: RepositoryItemModel) {
   }
 
@@ -295,13 +355,34 @@ export class OccurrenceFormComponent implements OnInit {
 
   private clearForm() {
     this.occurrenceForm.reset();
+    // Ask children components to reset themselves:
+    this.resetForm = true;
   }
 
-  private populateForm(occ: Occurrence) {
-    this.occurrenceForm.patchValue(occ);
-  }
+  private async postOccurrence(occ: Occurrence) {
 
-  private postOccurrence(occ: Occurrence) {
+
+    let dateObserved = this.occurrenceForm.controls['dateObserved'].value;
+
+
+    if (dateObserved != null) {
+      let month = dateObserved.getUTCMonth() + 1;
+      let day = dateObserved.getUTCDate();
+      let year = dateObserved.getUTCFullYear();
+      let dbEx = await this.doublonExists(    
+          22, 
+          day,
+          month,
+          year,
+          this.taxon.name,
+          this.location.geometry,
+          this.location.locality);
+
+      alert(dbEx);
+
+    }
+
+
     this.dataService.post(occ).subscribe(
       result => {
         this.snackBar.open(
@@ -363,14 +444,17 @@ export class OccurrenceFormComponent implements OnInit {
     );
   }
 
-  //@refactor: Change name
-  formSubmitted(occurrenceFormValue) {
+  //@refactor: use newly introduced form 'mode' instead of counting occurrences
+  async postOrPatch(occurrenceFormValue) {
+
+
     let occBuilder = new OccurrenceBuilder(
       occurrenceFormValue, 
       this.taxon, 
       this.location,
       this.taxoRepoService);
-    let occ = occBuilder.build();
+    let occ = await occBuilder.build();
+
     // The component has been instanciated with at least one
     // occurrence. We're in 'update/edit' mode:
     if ( this.occurrences.length>0 ) {
@@ -410,14 +494,14 @@ export class OccurrenceFormComponent implements OnInit {
 /*
     return this.existInChorodepService.get(
         this.taxon.repository, 
-        this.taxon.idTaxo,
+        this.taxon.idNomen,
         this.location,
         34);
 */
     return true;
   }
 
-  private doublonExists(    
+  private async doublonExists(    
     userId:string, 
     dateObservedDay: string,
     dateObservedMonth: string,
@@ -432,12 +516,11 @@ export class OccurrenceFormComponent implements OnInit {
         userId, dateObservedDay, dateObservedMonth, dateObservedYear,
         userSciName, geometry, locality);
 
-    let doublonExists = this.dataService.findOccurrences(
+    return this.dataService.findOccurrences(
         null, null, 1, 2, filters).map(
           occurrences => {
             return ( occurrences.length>0 );
-        });
-    return true;
+        }).toPromise();
   }
 
   private generateSignature(

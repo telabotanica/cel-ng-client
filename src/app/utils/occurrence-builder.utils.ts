@@ -10,7 +10,14 @@ export class OccurrenceBuilder {
   private location: LocationModel;
   private formValue;
   private taxoRepoService: TaxonomicRepositoryService;
+  // The occurrence being built:
+  private occ: Occurrence;
 
+  /**
+   * Returns an <code>OccurrenceBuilder</code> instance.
+   *
+   * @parameter 
+   */
   constructor(
     formValue, 
     taxon: RepositoryItemModel, 
@@ -23,83 +30,88 @@ export class OccurrenceBuilder {
     this.taxoRepoService = taxoRepoService;
   }
 
-  build() {
-    let occ = new Occurrence();
+  /**
+   * Returns an <code>Occurrence</code> which members have been populated
+   * with the models and value provided in the constructor.
+   */
+  async build(): Promise<Occurrence>  {
+    this.occ = new Occurrence();
     if ( this.taxon != null ) {
-        occ = this.fillOccTaxoProperties(occ);  
+        await this.fillOccTaxoProperties();  
     }
     if ( this.location != null ) {
-        occ = this.fillOccLocationProperties(occ);  
+        this.fillOccLocationProperties();  
     }
-    occ = this.fillOccProperties(occ);
+    this.fillOccProperties();
 
-    return occ;
+    return this.occ;
   }
 
-  private fillOccPropertyWithValue(occ: Occurrence, propName: string, propValue: string): Occurrence {
+  /**
+   * Returns passed <code>Occurrence</code> with its property named propName  
+   * set to given propValue.
+   */
+  private fillOccPropertyWithValue(propName: string, propValue: string): void {
     if (propValue !== "" && propValue !== null) {   
-      occ[propName] = propValue;
+      this.occ[propName] = propValue;
     } 
-
-    return occ;
   }
 
-  private fillOccLocationProperties(occ: Occurrence): Occurrence {
+  private fillOccLocationProperties(): void {
     let props = ["elevation", "localityConsistency", 
       "locationAccuracy", "osmCountry", "osmCountryCode", "osmId",
       "osmState", "publishedLocation", "station", "sublocality"];
+
     for (let propName of props) {
-      occ = this.fillOccPropertyWithValue(
-        occ, propName, this.location[propName]);
+      this.fillOccPropertyWithValue(
+        propName, this.location[propName]);
     }
+
     if (this.location.geometry != null) {
-        occ.geometry = JSON.stringify(this.location.geometry);
+        this.occ.geometry = JSON.stringify(this.location.geometry);
     }
     if (this.location.osmId != null) {
-        occ.osmId = this.location.osmId;
+        this.occ.osmId = this.location.osmId;
     }
-    return occ;   
+    if (this.location.locality != null) {
+        this.occ.locality = this.location.locality;
+    }
+    if (this.location.inseeData != null && this.location.inseeData.code) {
+        this.occ.localityInseeCode = this.location.inseeData.code;
+    }  
   }
 
-  private fillOccTaxoProperties(occ: Occurrence): Occurrence {
-    occ.userSciName   = this.taxon.name;
+  private async fillOccTaxoProperties() {
+    this.occ.userSciName = this.taxon.name;    
+    this.occ.userSciNameId = parseInt(this.taxon.idNomen);
+    let taxoRepos = await this.taxoRepoService.getCollection().toPromise();
+    let occTaxoRepo = null;
 
-    // ? idNomen ?
-    // Cast pblm because taxon.idTaxo; string|  number...
-//    occ.userSciNameId = this.taxon.idTaxo;
-    let repository = this.getRepositoryByName(this.taxon.repository);
-    occ.taxoRepo.id = repository.id;
+    // Pick the TaxoRepo with selected name:
+    for (let taxoRepo of taxoRepos) {
+      if (taxoRepo.name == this.taxon.repository ) {
+          occTaxoRepo = taxoRepo;
+      }
+    }
 
-    return occ; 
+    if (occTaxoRepo != undefined) {
+      this.occ.taxoRepo = occTaxoRepo;
+    }
+
   }
 
-  private getRepositoryByName(name: string): TaxoRepo {
-
-    this.taxoRepoService.getCollection().map(taxoRepos => {
-        for (let taxoRepo of taxoRepos) {
-            if (taxoRepo.name == name ) {
-                return taxoRepo;
-            }
-        }
-      });
-
-    return null; 
-  }
-
-  private fillOccProperties(occ: Occurrence): Occurrence {
+  private fillOccProperties(): void {
     let props = ["certainty", "observer", "occurrenceType", 
       "certainty", "phenology", "geodatum", "environment",
       "isWild", "isPublic", "station", "coef", "station",
-      "sampleHerbarium"];
+      "sampleHerbarium", "observerInstitution"];
 
     for (let propName of props) {
-      occ = this.fillOccPropertyWithValue(
-        occ, propName, this.formValue[propName]);
+      this.fillOccPropertyWithValue(
+        propName, this.formValue[propName]);
     }
 
-    return occ;  
   }
-
 
 
 }
