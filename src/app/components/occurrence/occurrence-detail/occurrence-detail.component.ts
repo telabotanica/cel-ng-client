@@ -19,7 +19,6 @@ import { EfloreCard } from "../../../model/eflore/eflore-card.model";
   templateUrl: './occurrence-detail.component.html',
   styleUrls: ['./occurrence-detail.component.css']
 })
-//@fixme: anuseless call with a perpage=3 is made on init... hunt and kill this! 
 export class OccurrenceDetailComponent implements OnInit {
 
   id: number;
@@ -40,14 +39,17 @@ export class OccurrenceDetailComponent implements OnInit {
     this.subscription = this.route.params.subscribe(params => {
        this.id = parseInt(params['id']);
        this.dataSource.get(this.id).subscribe(
-            occurrence => {this.occurrence = occurrence;
-console.debug(this.occurrence);
-}
+          occurrence => {this.occurrence = occurrence;
+            console.debug(this.occurrence);
+            if (occurrence.userSciName != null && occurrence.taxoRepo !=null && occurrence.taxoRepo.name != 'Autre/inconnu') {
+              this.efloreService.get(occurrence.userSciName).subscribe(result => {
+                    this.efloreCard = this.parser.parseEfloreCard(result, occurrence.taxoRepo.name);
+                });
+              }
+            }
         );
     });
-    this.efloreService.get('Capscicum').subscribe(result => {
-        this.efloreCard = this.parser.parseEfloreCard(result, 'bdtfx');
-    });
+
 
   }
 
@@ -100,8 +102,20 @@ console.debug(this.occurrence);
   }
 
 
-  close() {
-
+  clone() {
+    let id = this.occurrence.id;
+    this.dataSource.bulkCopy([id]).subscribe(
+      data => {
+        this.snackBar.open(
+        "L'observation a été dupliquée avec succès.", 
+        "Fermer", 
+        { duration: 1500 });
+      },
+      error => this.snackBar.open(
+        'Une erreur est survenue. ' + error, 
+        'Fermer', 
+        { duration: 1500 })
+    )
   }
 
   delete() {
@@ -112,7 +126,6 @@ console.debug(this.occurrence);
         "L'observation a été supprimée avec succès.", 
         "Fermer", 
         { duration: 1500 });
-        this.close();
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 

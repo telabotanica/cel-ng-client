@@ -62,13 +62,22 @@ export class JsonPatchService{
         return this.buildBulkOperation(path, 'replace', value, null);
     }
 
-    private buildCopyOperation(from) {
-        return this.buildBulkOperation(null, 'copy', null, from);
+    private buildCopyOperation(id) {
+        let path = this.buildPath(id);
+        return this.buildBulkOperation(null, 'copy', null, path);
     }
 
     bulkRemove(ids):  Observable<JsonPatchResponse[]> {
         let operations = ids.map(function(id) {
           return this.buildRemoveOperation(id);
+        }, this);
+
+        return this.bulkOperation(operations);
+    }
+
+    bulkCopy(ids):  Observable<JsonPatchResponse[]> {
+        let operations = ids.map(function(id) {
+          return this.buildCopyOperation(id);
         }, this);
 
         return this.bulkOperation(operations);

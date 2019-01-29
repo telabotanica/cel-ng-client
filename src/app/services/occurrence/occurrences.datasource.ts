@@ -129,6 +129,11 @@ console.debug(params);
          return this.jsonPatchService.bulkReplace(ids, value);
     }
 
+    bulkCopy(ids): Observable<JsonPatchResponse[]> {
+        this.jsonPatchService.resourceServiceUrl = this.resourceUrl; 
+         return this.jsonPatchService.bulkCopy(ids);
+    }
+
     loadOccurrences(sortProperty:string,
                 sortDirection:string,
                 pageIndex:number,

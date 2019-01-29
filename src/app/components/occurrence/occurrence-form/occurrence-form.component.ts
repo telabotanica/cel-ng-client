@@ -357,31 +357,79 @@ export class OccurrenceFormComponent implements OnInit {
     this.occurrenceForm.reset();
     // Ask children components to reset themselves:
     this.resetForm = true;
+    this.taxon     = null;
+    this.location  = null;
   }
 
-  private async postOccurrence(occ: Occurrence) {
-
-
+  private async checkCreationWarnings(): Promise<string[]> {
+    let warnings = new Array();
     let dateObserved = this.occurrenceForm.controls['dateObserved'].value;
 
+    // If we've got all the data we need to check existence in chorodep:
+    if ( this.taxon != null && this.location != null ) {
+      this.snackBar.open(
+        "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorlogie départementale).", 
+        'Fermer', 
+        { duration: 1500 });
 
-    if (dateObserved != null) {
-      let month = dateObserved.getUTCMonth() + 1;
-      let day = dateObserved.getUTCDate();
-      let year = dateObserved.getUTCFullYear();
-      let dbEx = await this.doublonExists(    
-          22, 
-          day,
-          month,
-          year,
-          this.taxon.name,
-          this.location.geometry,
-          this.location.locality);
+      let frenchDept = this.location.inseeData.code.substr(0, 2);
+      let existsInChorodep = await this.existsInChorodep();
 
-      alert(dbEx);
+      if (existsInChorodep == "0") {
+        let msg = "Attention, le taxon " + this.taxon.name + " n'est pas signalé par la chorologie dans le département " + frenchDept + ". Si vous êtes sûr de votre observation, vous pouvez signaler votre découverte à la liste chorologie à l'adresse : chorologie@tela-botanica.org. ";
+        warnings.push(msg);
+      }
 
+      // If we've got all the data we need to check duplicate existence:
+      if ( dateObserved != null ) {
+        let month = dateObserved.getUTCMonth() + 1;
+        let day = dateObserved.getUTCDate();
+        let year = dateObserved.getUTCFullYear();
+        // @todo use the user id from the token once we can test with SSO:
+        let duplicateExists = await this.doublonExists(    
+            '22', day, month, year, this.taxon.name,
+            this.location.geometry, this.location.locality);
+
+        if (duplicateExists) {
+          warnings.push("Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre.");
+        }
+      }
     }
 
+    return warnings;
+  }
+
+
+  private async postOccurrenceAfterWarningConfirmation(occ: Occurrence) {
+
+    let warnings = await this.checkCreationWarnings();
+    if ( warnings.length > 0) {
+      let msg = "";
+
+      for (let warning of warnings) {
+        msg += warning;
+      }
+      msg += "<br />Continuer ?";
+      let dialogConfig = this.buildDialogConfig();
+      dialogConfig.data = msg;
+      let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
+      confirmDialogRef
+        .afterClosed()
+        .subscribe( response => {
+            if (response == true) {
+              this.postOccurrence(occ);
+            }
+        });
+    }
+    else {
+      // Let's post the occurrence to the REST service:
+      this.postOccurrence(occ);
+    }
+
+  }
+
+  private postOccurrence(occ: Occurrence) {
 
     this.dataService.post(occ).subscribe(
       result => {
@@ -447,7 +495,6 @@ export class OccurrenceFormComponent implements OnInit {
   //@refactor: use newly introduced form 'mode' instead of counting occurrences
   async postOrPatch(occurrenceFormValue) {
 
-
     let occBuilder = new OccurrenceBuilder(
       occurrenceFormValue, 
       this.taxon, 
@@ -469,8 +516,10 @@ export class OccurrenceFormComponent implements OnInit {
     }
     // No occurrences loaded on init, we're in 'create' mode
     else {
+      this.postOccurrenceAfterWarningConfirmation(occ);
+      
       // Let's post to the REST service:
-      this.postOccurrence(occ);
+      //this.postOccurrence(occ);
     }
   }
 
@@ -490,15 +539,29 @@ export class OccurrenceFormComponent implements OnInit {
     return false;
   }
 
-   private existsInChorodep() {
-/*
-    return this.existInChorodepService.get(
-        this.taxon.repository, 
-        this.taxon.idNomen,
-        this.location,
-        34);
-*/
-    return true;
+   private async existsInChorodep() {
+
+    if ( this.taxon != null && 
+      this.location != null && 
+      this.location.osmCountry != null && 
+      this.location.inseeData.code != null &&
+      this.location.inseeData.code.length >=2 ) {
+
+      let taxonId: number;
+      let frenchDept = this.location.inseeData.code.substr(0, 2);
+
+      if (typeof this.taxon.idNomen === 'string') {
+          taxonId= parseInt(this.taxon.idNomen);
+      } else {
+          taxonId = this.taxon.idNomen;
+      }
+      return this.existInChorodepService.get(
+          this.taxon.repository, 
+          taxonId,
+          this.location.osmCountry,
+          '34').toPromise();
+    }
+    return null;
   }
 
   private async doublonExists(    
@@ -513,8 +576,8 @@ export class OccurrenceFormComponent implements OnInit {
     let filters = new OccurrenceFilters();
 
     filters.signature = this.generateSignature(
-        userId, dateObservedDay, dateObservedMonth, dateObservedYear,
-        userSciName, geometry, locality);
+        userId, dateObservedDay, dateObservedMonth, 
+        dateObservedYear, userSciName, geometry, locality);
 
     return this.dataService.findOccurrences(
         null, null, 1, 2, filters).map(

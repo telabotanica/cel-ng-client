@@ -18,34 +18,43 @@ export class AlgoliaEfloreParserService {
 
         let firstHit = algoliaResponse.results[0].hits[0];
         console.debug(firstHit);
+        if ( firstHit != null ) {
+            let efloreEncodedCard = firstHit[taxoRepo];
 
-        let efloreEncodedCard = firstHit[taxoRepo];
-        efloreCard.common_names = efloreEncodedCard.common_name.split(',');
-        efloreCard.author = efloreEncodedCard.author;
-        efloreCard.biblio = efloreEncodedCard.biblio;
-        efloreCard.genus = efloreEncodedCard.genus;
-        efloreCard.permalink = efloreEncodedCard.permalink;
-        efloreCard.supra_genus_name = efloreEncodedCard.supra_genus_name;
-        efloreCard.author = efloreEncodedCard.author;
-        efloreCard.chorodepMapUrl = efloreEncodedCard.thumbnails.chorodep;
-        let celThumbnails = efloreEncodedCard.thumbnails.cel;
-        let celPhotoUrls = [];
+            if ( firstHit[taxoRepo] != null ) {
+                efloreCard.common_names = efloreEncodedCard.common_name.split(',');
+                efloreCard.author = efloreEncodedCard.author;
+                efloreCard.biblio = efloreEncodedCard.biblio;
+                efloreCard.genus = efloreEncodedCard.genus;
+                efloreCard.permalink = efloreEncodedCard.permalink;
+                efloreCard.supra_genus_name = efloreEncodedCard.supra_genus_name;
+                efloreCard.author = efloreEncodedCard.author;
+                if ( efloreEncodedCard.thumbnails != null ) {
+                    if ( efloreEncodedCard.thumbnails.chorodep != null ) {
+                        efloreCard.chorodepMapUrl = efloreEncodedCard.thumbnails.chorodep;
+                    }
+                    if ( efloreEncodedCard.thumbnails.cel != null ) {
+                        let celThumbnails = efloreEncodedCard.thumbnails.cel;
+                        let celPhotoUrls = [];
 
-        for (let celImgUrl of efloreEncodedCard.thumbnails.cel) {
-            celPhotoUrls.push(celImgUrl)
-        }
+                        for (let celImgUrl of efloreEncodedCard.thumbnails.cel) {
+                            celPhotoUrls.push(celImgUrl)
+                        }
 
-        for (var key in celThumbnails) {
-            if (celThumbnails.hasOwnProperty(key)) {
-                celPhotoUrls.push(celThumbnails[key]);
+                        for (var key in celThumbnails) {
+                            if (celThumbnails.hasOwnProperty(key)) {
+                                celPhotoUrls.push(celThumbnails[key]);
+                            }
+                        }
+                        efloreCard.celPhotoUrls = celPhotoUrls;
+                    }
+                  
+
+                }
+                console.debug(efloreCard);
             }
         }
-
-        efloreCard.celPhotoUrls = celPhotoUrls;
-        efloreCard.chorodepMapUrl = efloreEncodedCard.thumbnails.chorodep;
-        console.debug(efloreCard);
-
-         return efloreCard;
+        return efloreCard;
 
     }
 

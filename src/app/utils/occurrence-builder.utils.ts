@@ -83,7 +83,12 @@ export class OccurrenceBuilder {
 
   private async fillOccTaxoProperties() {
     this.occ.userSciName = this.taxon.name;    
-    this.occ.userSciNameId = parseInt(this.taxon.idNomen);
+     
+    if (typeof this.taxon.idNomen === 'string') {
+        this.occ.userSciNameId = parseInt(this.taxon.idNomen);
+    } else {
+        this.occ.userSciNameId = this.taxon.idNomen;
+    }
     let taxoRepos = await this.taxoRepoService.getCollection().toPromise();
     let occTaxoRepo = null;
 

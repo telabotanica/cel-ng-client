@@ -18,7 +18,7 @@ export class ExistInChorodepService {
     httpParams = httpParams.append("pays", country);
     httpParams = httpParams.append("ce_zone_geo", ceZoneGeo);
 
-    return this.http.post(
+    return this.http.get(
       url, 
       {
         params: httpParams
