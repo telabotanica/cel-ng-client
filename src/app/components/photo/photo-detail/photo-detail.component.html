@@ -1,26 +1,65 @@
-<div>
-  <h1>{{photo.originalName}} (id: {{photo.id}})</h1>
-</div>
+<div *ngIf="photo !== null" class="photo-detail-content">
+
+  <div>
+    <h1>{{photo.originalName}} (id: {{photo.id}})</h1>
+  </div>
   
   <mat-toolbar>
- 
-      <div >
-        <span><a [routerLink]=""  class="ui-component-menu-item " (click)="download()" matTooltip="Afficher l’url de la photo pour la partager" matTooltipPosition="above"> Télécharger  </a> - </span>
-        <span><a [routerLink]=""  class="ui-component-menu-item " (click)="openShareDialog()" matTooltip="Afficher l’url de la photo pour la partager" matTooltipPosition="above"> Partager  </a> - </span>
-        <span><a [routerLink]=""  class="ui-component-menu-item " (click)="delete()" matTooltip="Supprimer la photo" matTooltipPosition="above">" Supprimer</a></span>
+
+    <button mat-button
+      (click)="download()" 
+      matTooltipPosition="above"
+      matTooltip="Afficher l’url de la photo pour la partager"
+      matTooltipPosition="above">Télécharger</button>
+
+    <button mat-button
+      (click)="openShareDialog()" 
+      matTooltipPosition="above"
+      matTooltip="Afficher l’url de la photo pour la partager"
+      matTooltipPosition="above">Partager</button>
+
+    <button mat-button
+      (click)="delete()" 
+      matTooltipPosition="above"
+      matTooltip="Supprimer la photo"
+      matTooltipPosition="above">Supprimer</button>
+
+    <button mat-button
+      *ngIf="photo.occurrence == null"
+      (click)="openLinkOccurrenceDialog()" 
+      matTooltipPosition="above"
+      matTooltip="Lier cette  photo à une observation existante"
+      matTooltipPosition="above">Associer à une observation</button>
+
+  </mat-toolbar>
+
+  <div>
+
+    <img src="{{photo.url}}" (click)="viewBigger()" />
+
+    <div >
+
+      <div class="photo-detail-content-item-holder">
+        <div class="photo-detail-content-item-title">Date de prise de vue</div>
+        <div>{{photo.dateShot | date:'dd/MM/yyyy (HH:mm)'}}</div>
       </div>
-    </mat-toolbar>
-<div>
 
-<img src="{{photo.url}}" (click)="viewBigger()" />
+      <div class="photo-detail-content-item-holder" *ngIf="photo.latitude !== null">
+        <div class="photo-detail-content-item-title">Latitude</div>
+        <div>{{photo.latitude}}</div>
+      </div>
 
-<span *ngIf="photo.occurrence !== null; else setOccurrenceTemplate"><a [routerLink]=""  class="ui-component-menu-item " (click)="unpublish()"> {{photo.occurrence}} </a> - </span>
-        <span><ng-template #setOccurrenceTemplate><a [routerLink]=""  class="ui-component-menu-item " (click)="openLinkOccurrenceDialog()" matTooltip="Lier cette  photo à une observation existante" matTooltipPosition="above">Associer cette photo à une observation</a>  </ng-template> -  </span>
+      <div class="photo-detail-content-item-holder" *ngIf="photo.longitude !== null">
+        <div class="photo-detail-content-item-title">Longitude</div>
+        <div>{{photo.longitude}}</div>
+      </div>
 
-  {{photo.dateShot}}
+      <div class="photo-detail-content-item-holder" *ngIf="photo.occurrence !== null">
+        <div class="photo-detail-content-item-title">Observation liée</div>
+        <div>{{photo.occurrence.userSciName}}</div>
+      </div>
+    </div>
 
-  {{photo.latitude}}
-
-  {{photo.longitude}}
+  </div>
 
 </div>

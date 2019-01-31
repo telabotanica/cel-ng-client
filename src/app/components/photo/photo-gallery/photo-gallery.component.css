@@ -35,11 +35,7 @@ img {
   max-width: 920px;
 }
 
-
-
-/** Object-fit */
-
-.image-fit {
+.image-grid-item {
   -webkit-flex: 0 0 auto;
       -ms-flex: 0 0 auto;
           flex: 0 0 auto;
@@ -48,13 +44,16 @@ img {
   margin-bottom: 40px;
   position: relative;
   width: calc(25% - 10px);
+  cursor: pointer;
 }
-.image-fit-placeholder {
+
+.image-placeholder {
   height: 100%;
   visibility: hidden;
   width: 100%;
 }
-.image-fit-img {
+
+.gallery-image {
   bottom: 0;
   height: 100%;
   left: 0;

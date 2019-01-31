@@ -1,0 +1,29 @@
+
+.mat-toolbar {
+  background: white;
+}
+
+
+.photo-detail-content {
+  margin-top: 20px;
+  padding-left:30px;
+}
+
+.photo-detail-content-item-holder {
+  display: flex;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  -webkit-box-align: center;
+  align-items: center;
+  border-bottom: 1px solid #ededed;
+}
+
+.photo-detail-content-item-title {
+    width: 150px;
+    font-weight: 600;
+}
+
+img{
+    width:100%;
+    max-width:400px;
+}
