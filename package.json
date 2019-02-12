@@ -37,10 +37,10 @@
     "ol-layerswitcher": "^3.2.0",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
-    "tb-dropfile-lib": "https://github.com/steph-del/tb-dropfile-lib/releases/download/v0.1.0/tb-dropfile-lib-0.1.0.tgz",
+    "tb-dropfile-lib": "https://github.com/steph-del/tb-dropfile-lib/releases/download/v0.2.1/tb-dropfile-lib-0.2.1.tgz",
     "tb-dropfile-lib-app": "https://github.com/steph-del/tb-dropfile-lib/archive/v0.2.0.tar.gz",
-    "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.2.0/tb-geoloc-lib-0.2.0.tgz",
-    "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.1/tb-tsb-lib-0.1.0.tgz",
+    "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.3.0/tb-geoloc-lib-0.3.0.tgz",
+    "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.2.0/tb-tsb-lib-0.2.0.tgz",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
