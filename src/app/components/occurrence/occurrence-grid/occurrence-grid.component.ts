@@ -50,6 +50,8 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("sidenav") public detailPanel: MatSidenav;
 
+  totalNbrOfHits = 0;
+
   private _occFilters: OccurrenceFilters;
 
   // Instanciate SelectionModel with multiselection allowed and no row 
@@ -78,8 +80,14 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    this.refreshCount();
       this.dataSource.loadOccurrences('', '', 0, 10);
 
+  }
+
+  refreshCount() {
+    this.dataSource.findCount(this._occFilters).subscribe( 
+        resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
   }
 
   ngAfterViewInit() {
@@ -102,6 +110,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
       this.paginator.pageIndex,
       this.paginator.pageSize,
       this._occFilters);
+    this.refreshCount();
   }
 
   navigateToCreateOccurrenceForm() {

@@ -216,7 +216,10 @@ export class OccurrenceMapComponent implements OnInit {
 
 
     //this.map.addControl(new LayerSwitcher());
-
+    this.snackBar.open(
+    'Pour sélectionner plusieurs observations. Cliquer sur les observations en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.', 
+    'Fermer', 
+    { duration: 5000 });
   }
 
     addBoxSelectionInteractionToMap() {
@@ -324,7 +327,7 @@ export class OccurrenceMapComponent implements OnInit {
 
         this.dataSource.importSpreadsheet(file).subscribe(
             data => {
-                this. redrawMap();
+                this.redrawMap();
                 this.snackBar.open(
                 'Les observations ont été importées avec succès.', 
                 'Fermer', 

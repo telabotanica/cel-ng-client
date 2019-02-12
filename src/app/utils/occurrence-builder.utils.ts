@@ -36,6 +36,7 @@ export class OccurrenceBuilder {
    */
   async build(): Promise<Occurrence>  {
     this.occ = new Occurrence();
+alert(this.taxon);
     if ( this.taxon != null ) {
         await this.fillOccTaxoProperties();  
     }

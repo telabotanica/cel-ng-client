@@ -19,6 +19,10 @@
             <!-- [geolocatedPhotoLatLng]= "geolocatedPhotos" -->
             <tb-geoloc-map
               [reset]='resetForm'
+              [patchElevation]="patchElevation"
+              [patchGeometry]="patchGeometry"
+              [patchLatLngDec]="patchLatLngDec"
+              [patchAddress]="patchAddress"
               (location)='onLocationChange($event)'
             ></tb-geoloc-map>
           </div>
@@ -150,12 +154,14 @@
           </div>
 
           <div class="tsb-search-box">
-            <!--  -->
             <tb-tsb-search-box 
-              placeholder="Choisir une espèce"
+              placeholder='Choisir une espèce'
               editingPlaceholder="Modifier l'espèce"
-              defaultRepository="bdtfx"
-              [updateData]="patchTaxon"
+              defaultRepository='bdtfx'
+              [autoResetWhenSelected]='false'
+              [emitOccurenceOnBlur]='true'
+              [reset]='resetForm'
+              [updateData]='patchTaxon'
               (updatedData)='onTaxonChange($event)'
               (newData)='onTaxonChange($event)'></tb-tsb-search-box>
           </div>
@@ -182,6 +188,7 @@
               </div>
                <!-- [reset]='resetForm'  (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
               <tb-dropfile-box
+                [reset]='resetForm' 
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
               ></tb-dropfile-box>

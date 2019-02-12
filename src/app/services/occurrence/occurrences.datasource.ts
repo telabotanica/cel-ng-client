@@ -28,6 +28,24 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
 
     }
 
+    findCount(filters: OccurrenceFilters = null) {
+
+        let httpParams= new HttpParams();
+        console.debug(filters);
+        if ( filters !== null ) {
+            for (var propertyName in filters) {
+                if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
+                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+                }
+            }
+        }
+
+        return this.http.get(this.resourceUrl + '.json', {
+            params: httpParams,
+            observe: 'response'
+        });
+    }
+
     findOccurrences(sortBy = '', sortDirection = 'asc',
         pageNumber = 0, pageSize = 10, filters: OccurrenceFilters = null):  Observable<Occurrence[]> {
 

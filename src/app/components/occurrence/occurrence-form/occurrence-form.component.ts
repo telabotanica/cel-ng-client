@@ -26,56 +26,71 @@ import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-d
 @Component({
   selector: 'app-occurrence-form',
   templateUrl: './occurrence-form.component.html',
-  styleUrls: ['./occurrence-form.component.css']
+  styleUrls: ['./occurrence-form.component.css']    
 })
 export class OccurrenceFormComponent implements OnInit {
 
-  // Constant for storing the three different mode values fir this form:
+  // -----------------------------------------------------------------
+  // CONSTANTS (storing the three different mode names for this form):
+  // -----------------------------------------------------------------
   private static readonly CREATE_MODE      = "create";
   private static readonly SINGLE_EDIT_MODE = "single edit";
   private static readonly BULK_EDIT_MODE   = "multi edit";
 
+  // -----------
   // FORM GROUP:
+  // -----------
   occurrenceForm: FormGroup;
 
-  // FORM OPTIONS:
-  clearFormAfterSubmit = false;
-  // Let's default to create mode:
-  mode: string = OccurrenceFormComponent.CREATE_MODE;
-
+  // --------------------
   // USED/MANAGED MODELS:
+  // --------------------
   projects: TelaBotanicaProject[];
   occurrences = [];
   private location: LocationModel;
   private taxon: RepositoryItemModel;
 
-  // MEMBER VARIABLES FOR COMMUNICATING WITH CHILDREN:
+  // ----------------------------------------------------------------
+  // PATCH MEMBER VARIABLES (to initiate children component values) :
+  // ----------------------------------------------------------------
   // Edit mode only (both single and multi): these instances are used to
-  // prepopulate the taxonomic search box component. Once instanciated,
-  // its value should never change: the search box is now resopnsible
-  // for selecting the taxon for this occurrence. 
+  // prepopulate the taxonomic search box and geoloc map components and that's
+  // it. Once instanciated, those variable values must never change: 
+  // the children components are now responsible for selecting the 
+  // taxon/location. 
   patchTaxon: RepositoryItemModel;
-  patchLocation: LocationModel;
+  patchElevation: number;
+  patchGeometry;
+  patchAddress: string;
+  patchLatLngDec: Array<number>;
+
+  // -------------
+  // FORM OPTIONS:
+  // -------------
+  // Should the form be cleared after SUBMIT? (create mode only):
+  clearFormAfterSubmit = false;
+  // Let's default to create mode:
+  mode: string = OccurrenceFormComponent.CREATE_MODE;
   // Should the form be reset?
   resetForm: boolean;
   // Show advanced (full) form (or basic one): 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
 
-
   private subscription: Subscription;
 
   constructor(
-    private dataService:OccurrencesDataSource,
-    private taxoRepoService: TaxonomicRepositoryService,
-    private plantnetService: PlantnetService,
+    private dataService:            OccurrencesDataSource,
+    private taxoRepoService:        TaxonomicRepositoryService,
+    private plantnetService:        PlantnetService,
     private existInChorodepService: ExistInChorodepService,
-    private tbPrjService: TelaBotanicaProjectService,
-    private dialog: MatDialog, 
-    private confirmDialog: MatDialog, 
-    public snackBar: MatSnackBar,
-    private route: ActivatedRoute,
-    private router: Router) { }
+    private tbPrjService:           TelaBotanicaProjectService,
+    private dialog:                 MatDialog, 
+    private confirmDialog:          MatDialog, 
+    public  snackBar:               MatSnackBar,
+    private route:                  ActivatedRoute,
+    private router:                 Router) { 
+    }
 
   ngOnInit() { 
    
@@ -190,19 +205,22 @@ export class OccurrenceFormComponent implements OnInit {
    * Retrieves the string encoded ids (no array route parameters in angular
    * at the moment) and loads corresponding Occurrence resources from the WS 
    * to fill the 'occurrences' array property. Also sets the "mode" of the
-   * form: either CREATE_MODE,  SINGLE_EDIT_MODE or BULK_EDIT_MODE.
+   * form to one of the class member constant: either CREATE_MODE,  
+   * SINGLE_EDIT_MODE or BULK_EDIT_MODE.
    */
   private initOccurrencesToEdit() {
     this.route.params.subscribe(params => {
       // Retrieve the string encoded ids parameter from the route: 
       let strIds = params['ids']; 
-      
+
+      // Edit mode:
       if ( strIds !== undefined ) {
-        // Edit mode:
+        // Bulk edit mode:
         let ids = strIds.split(",");
         if (ids.length >1) {
           this.mode = OccurrenceFormComponent.BULK_EDIT_MODE;
         }
+        // Single edit mode:
         else {
           this.mode = OccurrenceFormComponent.SINGLE_EDIT_MODE;
         }
@@ -227,7 +245,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
     this.occurrenceForm.patchValue(occurrence);
     this.prepopulateTaxoSearchBox(occurrence);
-    this.prepopulateGeoSearchBox(occurrence);
+    this.prepopulateGeolocMap(occurrence);
   }
 
   private prepopulateTaxoSearchBox(occ: Occurrence) {
@@ -246,31 +264,19 @@ export class OccurrenceFormComponent implements OnInit {
     this.patchTaxon = tmpTaxon;
   }
 
-  private prepopulateGeoSearchBox(occ: Occurrence) {
-/*
-    let tmpLocation = {
-      geometry: occ.geometry,
-      geodatum: occ.geodatum,
-      locality: occ.locality,
-      elevation: occ.elevation,
-      publishedLocation: occ.publishedLocation,
-      locationAccuracy: occ.locationAccuracy,
-      station: occ.station,
-      sublocality: occ.sublocality,
-      localityConsistency: occ.localityConsistency,
-      osmState: occ.osmState,
-      osmCountry: occ.osmCountry,
-      osmCountryCode: occ.osmCountryCode,
-      osmCounty: occ.osmCounty,
-      osmPostcode: occ.osmPostcode,
-      osmId: occ.osmId,
-      osmPlaceId: occ.osmPlaceId,
-      inseeData: occ.localityInseeCode,
-    }
+  private prepopulateGeolocMap(occ: Occurrence) {
 
-    // Update the class member and, consequently, the search box component: 
-    this.patchLocation = tmpLocation;
-*/
+    let jsonGeom = JSON.parse(occ.geometry); 
+    this.patchElevation = occ.elevation;
+    this.patchGeometry = [{
+      'type': jsonGeom.type,
+      'coordinates': jsonGeom.coordinates
+    }];
+    console.debug(this.patchGeometry);
+    this.patchAddress = occ.locality;
+    if ( jsonGeom.type == 'Point' ) {
+        this.patchLatLngDec = jsonGeom.coordinates;
+    }
   }
 
   private buildPrepopulateOccurrence() {
@@ -356,12 +362,21 @@ export class OccurrenceFormComponent implements OnInit {
   private clearForm() {
     this.occurrenceForm.reset();
     // Ask children components to reset themselves:
-    this.resetForm = true;
+    this.resetTbLibComponents();
     this.taxon     = null;
     this.location  = null;
   }
 
-  private async checkCreationWarnings(): Promise<string[]> {
+  private resetTbLibComponents() {
+    this.resetForm = true;
+    setTimeout(() => {
+      this.resetForm = false;
+    }, 1000);
+  }
+
+
+
+  private async preSubmitValidation(): Promise<string[]> {
     let warnings = new Array();
     let dateObserved = this.occurrenceForm.controls['dateObserved'].value;
 
@@ -402,7 +417,7 @@ export class OccurrenceFormComponent implements OnInit {
 
   private async postOccurrenceAfterWarningConfirmation(occ: Occurrence) {
 
-    let warnings = await this.checkCreationWarnings();
+    let warnings = await this.preSubmitValidation();
     if ( warnings.length > 0) {
       let msg = "";
 
@@ -451,6 +466,7 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   private patchOccurrence(occ: Occurrence) {
+
     this.dataService.patch(occ.id, occ).subscribe(
       result => {
         this.snackBar.open(
@@ -511,6 +527,9 @@ export class OccurrenceFormComponent implements OnInit {
       }
       // single occurrence, let's patch!
       else {
+        occ.id = this.occurrences[0].id;
+console.debug(occ);
+
         this.patchOccurrence(occ);
       }
     }
