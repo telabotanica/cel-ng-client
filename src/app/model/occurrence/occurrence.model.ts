@@ -1,4 +1,3 @@
-import { TaxoRepo } from "./taxo-repo.model";
 import { TelaBotanicaProject } from "./tela-botanica-project.model";
 
 /**
@@ -41,7 +40,7 @@ export class Occurrence {
   osmPlaceId:               number;
   sampleHerbarium:          boolean;
   project:                  TelaBotanicaProject;
-  taxoRepo:                 TaxoRepo;
+  taxoRepo:                 string;
 
 
 

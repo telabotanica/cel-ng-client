@@ -9,7 +9,6 @@ export class OccurrenceBuilder {
   private taxon: RepositoryItemModel;
   private location: LocationModel;
   private formValue;
-  private taxoRepoService: TaxonomicRepositoryService;
   // The occurrence being built:
   private occ: Occurrence;
 
@@ -21,13 +20,11 @@ export class OccurrenceBuilder {
   constructor(
     formValue, 
     taxon: RepositoryItemModel, 
-    location: LocationModel,
-    taxoRepoService: TaxonomicRepositoryService) {
+    location: LocationModel) {
 
     this.taxon = taxon;
     this.location = location;
     this.formValue = formValue;
-    this.taxoRepoService = taxoRepoService;
   }
 
   /**
@@ -36,7 +33,7 @@ export class OccurrenceBuilder {
    */
   async build(): Promise<Occurrence>  {
     this.occ = new Occurrence();
-alert(this.taxon);
+
     if ( this.taxon != null ) {
         await this.fillOccTaxoProperties();  
     }
@@ -90,18 +87,8 @@ alert(this.taxon);
     } else {
         this.occ.userSciNameId = this.taxon.idNomen;
     }
-    let taxoRepos = await this.taxoRepoService.getCollection().toPromise();
-    let occTaxoRepo = null;
-
-    // Pick the TaxoRepo with selected name:
-    for (let taxoRepo of taxoRepos) {
-      if (taxoRepo.name == this.taxon.repository ) {
-          occTaxoRepo = taxoRepo;
-      }
-    }
-
-    if (occTaxoRepo != undefined) {
-      this.occ.taxoRepo = occTaxoRepo;
+    if (this.taxon.repository != undefined) {
+      this.occ.taxoRepo = this.taxon.repository;
     }
 
   }

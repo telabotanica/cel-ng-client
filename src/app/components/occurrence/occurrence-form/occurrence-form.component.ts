@@ -15,7 +15,6 @@ import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
 import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
-import { TaxonomicRepositoryService } from "../../../services/occurrence/taxonomic-repository.service";
 import { PlantnetService } from "../../../services/plantnet/plantnet.service";
 import { ExistInChorodepService } from "../../../services/chorodep/exist-in-chorodep.service";
 import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
@@ -81,7 +80,6 @@ export class OccurrenceFormComponent implements OnInit {
 
   constructor(
     private dataService:            OccurrencesDataSource,
-    private taxoRepoService:        TaxonomicRepositoryService,
     private plantnetService:        PlantnetService,
     private existInChorodepService: ExistInChorodepService,
     private tbPrjService:           TelaBotanicaProjectService,
@@ -90,7 +88,7 @@ export class OccurrenceFormComponent implements OnInit {
     public  snackBar:               MatSnackBar,
     private route:                  ActivatedRoute,
     private router:                 Router) { 
-    }
+  }
 
   ngOnInit() { 
    
@@ -254,7 +252,7 @@ export class OccurrenceFormComponent implements OnInit {
     // for every property setting.
     let tmpTaxon = {
       occurenceId: occ.id,
-      repository: (occ.taxoRepo == null) ? '' : occ.taxoRepo.name,
+      repository: (occ.taxoRepo == null) ? '' : occ.taxoRepo,
       idNomen: occ.userSciNameId,
       name: occ.userSciName,
       author: ''
@@ -514,8 +512,7 @@ export class OccurrenceFormComponent implements OnInit {
     let occBuilder = new OccurrenceBuilder(
       occurrenceFormValue, 
       this.taxon, 
-      this.location,
-      this.taxoRepoService);
+      this.location);
     let occ = await occBuilder.build();
 
     // The component has been instanciated with at least one
