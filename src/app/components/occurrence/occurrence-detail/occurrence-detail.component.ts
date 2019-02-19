@@ -41,9 +41,9 @@ export class OccurrenceDetailComponent implements OnInit {
        this.dataSource.get(this.id).subscribe(
           occurrence => {this.occurrence = occurrence;
             console.debug(this.occurrence);
-            if (occurrence.userSciName != null && occurrence.taxoRepo !=null && occurrence.taxoRepo.name != 'Autre/inconnu') {
+            if (occurrence.userSciName != null && occurrence.taxoRepo !=null && occurrence.taxoRepo != 'Autre/inconnu') {
               this.efloreService.get(occurrence.userSciName).subscribe(result => {
-                    this.efloreCard = this.parser.parseEfloreCard(result, occurrence.taxoRepo.name);
+                    this.efloreCard = this.parser.parseEfloreCard(result, occurrence.taxoRepo);
                 });
               }
             }

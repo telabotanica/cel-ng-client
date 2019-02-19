@@ -2,7 +2,6 @@ import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
 import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.model";
 import { Occurrence } from "../model/occurrence/occurrence.model";
 import { TaxoRepo } from "../model/occurrence/taxo-repo.model";
-import { TaxonomicRepositoryService } from "../services/occurrence/taxonomic-repository.service";
 
 export class OccurrenceBuilder {  
   
