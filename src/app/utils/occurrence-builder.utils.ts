@@ -96,7 +96,7 @@ export class OccurrenceBuilder {
     let props = ["certainty", "observer", "occurrenceType", 
       "certainty", "phenology", "geodatum", "environment",
       "isWild", "isPublic", "station", "coef", "station",
-      "sampleHerbarium", "observerInstitution"];
+      "sampleHerbarium", "observerInstitution", "coef", "dateObserved"];
 
     for (let propName of props) {
       this.fillOccPropertyWithValue(

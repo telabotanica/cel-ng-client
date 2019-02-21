@@ -190,6 +190,7 @@
               <tb-dropfile-box
                 [reset]='resetForm' 
                 [showTable]='true' 
+                [uploadTbPhotoFiles]='true'
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
               ></tb-dropfile-box>
