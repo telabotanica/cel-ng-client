@@ -3,13 +3,7 @@
 @import 'https://openlayers.org/en/v4.6.5/css/ol.css';
 @import '../node_modules/ol-layerswitcher/src/ol-layerswitcher.css';
 
-
-/*
-@import "tela-theme.scss";
-*/
-
 @include mat-core();
-@include angular-material-theme($tela-theme);
 
 html, body {
   margin: 0;
