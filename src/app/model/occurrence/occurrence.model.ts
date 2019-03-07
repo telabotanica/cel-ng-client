@@ -3,6 +3,7 @@ import { TelaBotanicaProject } from "./tela-botanica-project.model";
 /**
  * Models a botanical occurrence.
  */
+// @todo use enum when appropriate
 export class Occurrence {
   id:                       number;
   userSciName:              string;
@@ -29,7 +30,7 @@ export class Occurrence {
   environment:              string;
   localityConsistency:      boolean;
   station:                  string;
-  publishedLocation:        string;
+  publishedLocation:        'précise' | 'localité' | '10x10km';
   locationAccuracy:         string;
   osmCounty:                string;
   osmState:                 string;

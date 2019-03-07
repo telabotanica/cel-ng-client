@@ -23,6 +23,7 @@ import {
   MatTooltipModule,
   MatDividerModule,
   MatDatepickerModule,
+  MAT_DATE_LOCALE,
   MatNativeDateModule,
   MatSlideToggleModule,
 } from '@angular/material';

@@ -49,7 +49,8 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("sidenav") public detailPanel: MatSidenav;
-
+  // The total number of occurrence instances matching _occFilters (used by 
+  // the table paginator):
   totalNbrOfHits = 0;
 
   private _occFilters: OccurrenceFilters;
@@ -66,6 +67,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
           this.paginator.pageIndex,
           this.paginator.pageSize, 
           newOccFilters);
+      this.refreshCountWithFilters(newOccFilters);
     }
   }
 
@@ -86,7 +88,11 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   }
 
   refreshCount() {
-    this.dataSource.findCount(this._occFilters).subscribe( 
+    this.refreshCountWithFilters(this._occFilters);
+  }
+
+  refreshCountWithFilters(filters: OccurrenceFilters) {
+    this.dataSource.findCount(filters).subscribe( 
         resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
   }
 
@@ -104,6 +110,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   }
 
   private refreshGrid() {
+    this.selection.clear();
     this.dataSource.loadOccurrences(
       this.sort.active,
       this.sort.direction,
@@ -111,6 +118,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
       this.paginator.pageSize,
       this._occFilters);
     this.refreshCount();
+
   }
 
   navigateToCreateOccurrenceForm() {

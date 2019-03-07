@@ -12,10 +12,11 @@ import {
 import { 
   Router } from "@angular/router";
 import * as Leaflet from 'leaflet';
-
+import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
 
 import { PhotoService } from "../../../services/photo/photo.service";
 import { Photo } from "../../../model/photo/photo.model";
+
 import { PhotoFilters } from "../../../model/photo/photo-filters.model";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 
@@ -114,35 +115,44 @@ export class PhotoGalleryComponent implements OnInit {
     }
   }
 
-    showDetail(photo) {
-        this.router.navigate(['/photo-detail', photo.id]);
-    }
+  showDetail(photo) {
+    this.router.navigate(['/photo-detail', photo.id]);
+  }
 
-    getSelectedCount() {
-        return this.selected.length;
-    }
+  getSelectedCount() {
+    return this.selected.length;
+  }
 
 
-    bulkDelete() {
-      let ids = this.selected;
-      this.dataService.bulkRemove(ids).subscribe(
-        data => {
-          this.snackBar.open(
-            'Les photos ont bien été supprimées.', 
-            'Fermer', 
-            { duration: 1500 });
-          for (let id of ids) {
-              console.debug(id);
-              console.debug(this.resources);
-              this.resources = this.resources.filter(photo => photo.id !== id);
-          }                        
-        },
-        error => this.snackBar.open(
-          'Une erreur est survenue. ' + error, 
+  bulkDelete() {
+    let ids = this.selected;
+    this.dataService.bulkRemove(ids).subscribe(
+      data => {
+        this.snackBar.open(
+          'Les photos ont bien été supprimées.', 
           'Fermer', 
-          { duration: 1500 })
-      );
-    }
+          { duration: 1500 });
+        for (let id of ids) {
+            console.debug(id);
+            console.debug(this.resources);
+            this.resources = this.resources.filter(photo => photo.id !== id);
+        }           
+        this.selected = [];             
+      },
+      error => this.snackBar.open(
+        'Une erreur est survenue. ' + error, 
+        'Fermer', 
+        { duration: 1500 })
+    );
+  }
+
+  onPhotoAdded(photo: FileData) {
+    console.debug(photo);
+  }
+
+  onPhotoRejected(photo: FileData) {
+  }
+
 
   linkToOccurrence(occurrence) {
 

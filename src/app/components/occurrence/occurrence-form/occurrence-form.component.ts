@@ -234,6 +234,7 @@ export class OccurrenceFormComponent implements OnInit {
 
 
   private prepopulateForm() {
+
     let occurrence: Occurrence;
     if ( this.occurrences.length == 1 ) {
       occurrence = this.occurrences[0];
@@ -242,8 +243,16 @@ export class OccurrenceFormComponent implements OnInit {
       occurrence = this.buildPrepopulateOccurrence();
     }
     this.occurrenceForm.patchValue(occurrence);
-    this.prepopulateTaxoSearchBox(occurrence);
-    this.prepopulateGeolocMap(occurrence);
+    this.prepopulateLocation(occurrence);
+
+//    if ( occurrence.taxoRepo != "Autre/inconnu" && occurrence.userSciNameId != "Valeurs multiples" ) {
+      this.prepopulateTaxoSearchBox(occurrence);
+//    }
+    
+    if ( occurrence.geometry != "Valeurs multiples" ) {
+      this.prepopulateGeolocMap(occurrence);
+    }
+    
   }
 
   private prepopulateTaxoSearchBox(occ: Occurrence) {
@@ -263,7 +272,6 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   private prepopulateGeolocMap(occ: Occurrence) {
-
     let jsonGeom = JSON.parse(occ.geometry); 
     this.patchElevation = occ.elevation;
     this.patchGeometry = [{
@@ -276,6 +284,33 @@ export class OccurrenceFormComponent implements OnInit {
         this.patchLatLngDec = jsonGeom.coordinates;
     }
   }
+
+  private prepopulateLocation(occ: Occurrence) {
+    // only useful so that the location is not null when the component is 
+    // loaded in single edit mode. This will allow the isPublishable() method
+    // to eventually returning true.    
+    this.location = {
+      "geometry": JSON.parse(occ.geometry),
+      "locality": occ.locality,
+      "elevation": occ.elevation,
+      "station": occ.station,
+      "geodatum": occ.geodatum,
+      "publishedLocation": occ.publishedLocation,
+      "locationAccuracy": -1,
+      "sublocality": occ.sublocality,
+      "osmState": occ.osmState,
+      "osmCountry": occ.osmCountry,
+      "osmCountryCode": occ.osmCountryCode,	
+      "osmCounty": occ.osmCounty,
+      "osmId": occ.osmId,
+      "inseeData": null,
+      "osmPostcode": -1,
+      "localityConsistency": false,
+      "osmPlaceId": occ.osmPlaceId
+    };
+
+  }
+
 
   private buildPrepopulateOccurrence() {
     let prepopOcc = new Occurrence();
@@ -298,7 +333,12 @@ export class OccurrenceFormComponent implements OnInit {
           prepopOcc[propertyName] = testOcc[propertyName];
         }
         else {
-          prepopOcc[propertyName] = "Valeurs multiples";
+          if (propertyName == "taxoRepo") {
+            prepopOcc[propertyName] = "Autre/inconnu";
+          }
+          else {
+            prepopOcc[propertyName] = "Valeurs multiples";
+          }
         }
       }
     }
@@ -322,7 +362,7 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   onPhotoAdded(photo: FileData) {
-
+console.debug(photo);
   }
 
   onPhotoRejected(photo: FileData) {
@@ -340,10 +380,11 @@ export class OccurrenceFormComponent implements OnInit {
 
 
   addPhoto(location: RepositoryItemModel) {
+alert('');
   }
 
   removePhoto(location: RepositoryItemModel) {
-
+alert('');
   }
 
   isPublishable() {

@@ -47,8 +47,8 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
   // Instanciate SelectionModel with single selection allowed and no row 
   // selected at startup:
   selection = new SelectionModel<Occurrence>(false, []);
-
-
+  // The total number of occurrence instances (used by the table paginator):
+  totalNbrOfHits = 0;
 
   constructor(
     public dialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>,
@@ -56,42 +56,48 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
     public snackBar: MatSnackBar,
     private router: Router) { }
 
-    ngOnInit() {
-        this.dataSource.loadOccurrences('', '', 0, 10);
-    }
+  ngOnInit() {
+    this.dataSource.loadOccurrences('', '', 0, 10);
+    this.refreshCount();
+  }
 
-    ngAfterViewInit() {
+  ngAfterViewInit() {
 
-        this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-        merge(this.sort.sortChange, this.paginator.page)
-        .pipe(
-            tap(() => {
-                console.log(this.paginator);
-                this.refreshGrid();
-                   // alert(this.sort.active);
-            })
-        )
-        .subscribe();
+    merge(this.sort.sortChange, this.paginator.page)
+    .pipe(
+        tap(() => {
+            console.log(this.paginator);
+            this.refreshGrid();
+               // alert(this.sort.active);
+        })
+    )
+    .subscribe();
 
-    }
+  }
 
-    selectOccurrence(occurrence) {
-        this.dialogRef.close(occurrence);
-    }
+  refreshCount() {
+    this.dataSource.findCount().subscribe( 
+        resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
+  }
 
-    refreshGrid() {
+  selectOccurrence(occurrence) {
+      this.dialogRef.close(occurrence);
+  }
 
-        this.dataSource.loadOccurrences(
-            this.sort.active,
-            this.sort.direction,
-            this.paginator.pageIndex,
-            this.paginator.pageSize);
-    }
+  refreshGrid() {
 
-    chooseOccurrence(occurrence) {
+    this.dataSource.loadOccurrences(
+      this.sort.active,
+      this.sort.direction,
+      this.paginator.pageIndex,
+      this.paginator.pageSize);
+  }
 
-    }
+  chooseOccurrence(occurrence) {
+
+  }
 
 
 }

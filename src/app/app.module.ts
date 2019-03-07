@@ -45,7 +45,9 @@ import { TbTsbLibModule } from 'tb-tsb-lib';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
 import { HelpComponent } from './components/generic/help/help.component';
 import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component'
+5
 
+import {MAT_DATE_LOCALE} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -86,6 +88,7 @@ import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/c
     TbTsbLibModule,
   ],
   providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
     OccurrencesDataSource, 
     PhotoService, 
     TelaBotanicaProjectService, 

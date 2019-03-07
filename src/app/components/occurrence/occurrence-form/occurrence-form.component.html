@@ -188,9 +188,12 @@
               </div>
                <!-- [reset]='resetForm'  (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
               <tb-dropfile-box
-                [reset]='resetForm' 
-                [showTable]='true' 
-                [uploadTbPhotoFiles]='true'
+                [reset]="resetForm" 
+                [showTable]="true" 
+                [uploadTbPhotoFiles]="true"
+                [label]="'Glissez vos photos ici'"
+                [ignoreOversizedFiles]="false"
+                [photoUploadBaseUrl]="'http://localhost:8080'"   
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
               ></tb-dropfile-box>

@@ -15,7 +15,7 @@
           *ngIf="getSelectedCount()>0"
           (click)="bulkEdit()" 
           matTooltip="Modifier les observations sélectionnées" 
-          matTooltipPosition="above">Etiquette</button>
+          matTooltipPosition="above">Editer</button>
 
         <button mat-button
           (click)="openImportDialog()" 
@@ -103,7 +103,7 @@
         </ng-container>
 
         <ng-container matColumnDef="locality">
-            <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par statut de publication" matTooltipPosition="above">Lieu</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par localité" matTooltipPosition="above">Lieu</mat-header-cell>
             <mat-cell class="locality-cell"
                       *matCellDef="let occurrence">{{occurrence.locality}}</mat-cell>
         </ng-container>
