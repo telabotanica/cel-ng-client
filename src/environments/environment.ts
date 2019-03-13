@@ -21,6 +21,9 @@ export const environment = {
    },
   eflore: {
       baseUrlTemplate: "https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese"
+   },
+  mapBgTile: {
+      url: 'http://tile.osm.org/{z}/{x}/{y}.png'
    }
 };
 

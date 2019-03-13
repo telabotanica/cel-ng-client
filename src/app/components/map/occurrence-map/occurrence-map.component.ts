@@ -50,6 +50,7 @@ export class OccurrenceMapComponent implements OnInit {
   private layer: OlTileLayer;
   private occLayer: VectorLayer;
   private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
+  private mapBgTileUrl = environment.mapBgTile.url;
   private celGeoJsonServiceFilteredUrl;
 
   private googleHybridLayer;
@@ -97,7 +98,7 @@ export class OccurrenceMapComponent implements OnInit {
         title: 'OSM',
         //type: 'base',
         visible: true,
-        url: 'http://tile.osm.org/{z}/{x}/{y}.png'})
+        url: this.mapBgTileUrl})
     });
   }
   
