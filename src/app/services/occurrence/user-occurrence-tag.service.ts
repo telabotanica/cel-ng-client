@@ -12,13 +12,11 @@ import {of} from "rxjs/observable/of";
 })
 export class UserOccurrenceTagService {
 
+  private resourceUrl = environment.api.baseUrl + '/userOccurrenceTagTrees';
 
-    private resourceAsTreeUrl = 'http://localhost:8080/api/userOccurrenceTagTrees';
-
-    getCollectionAsTree() {
-        return this.http.get<any[]>(this.resourceAsTreeUrl);
-    }
-
+  getCollectionAsTree() {
+      return this.http.get<any[]>(this.resourceUrl);
+  }
 
   constructor(private http:HttpClient) { }
 }
