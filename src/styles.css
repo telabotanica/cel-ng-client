@@ -1,7 +1,6 @@
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-@import 'https://openlayers.org/en/v4.6.5/css/ol.css';
-@import '../node_modules/ol-layerswitcher/src/ol-layerswitcher.css';
+
 
 @include mat-core();
 
