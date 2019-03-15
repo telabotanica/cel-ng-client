@@ -139,5 +139,10 @@
       }
     }
   },
-  "defaultProject": "cel2-client"
+  "defaultProject": "cel2-client",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "sass"
+    }
+  }
 }
