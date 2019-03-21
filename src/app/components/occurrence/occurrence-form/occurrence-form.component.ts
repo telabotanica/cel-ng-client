@@ -80,8 +80,8 @@ export class OccurrenceFormComponent implements OnInit {
   // LIST VALUES:
   // ---------------
   isWildList = [
-    { "name": "Sauvage", "checked": true},
-    { "name": "Cultivée", "checked": false}
+    { "name": "Sauvage"},
+    { "name": "Cultivée"}
   ]
 
   // ---------------
@@ -89,6 +89,7 @@ export class OccurrenceFormComponent implements OnInit {
   // ---------------
   occurrenceTypeSelected: string    = "observation de terrain";
   publishedLocationSelected: string = "précise"; 
+  isWildSelected: string            = "Sauvage";
 
   private subscription: Subscription;
 

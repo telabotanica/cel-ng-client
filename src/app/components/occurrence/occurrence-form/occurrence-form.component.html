@@ -228,7 +228,7 @@
                 <label class="occurrence-form-label">Spontanéité :</label>
               </div>
 	      <mat-radio-group [(ngModel)]="isWildSelected" formControlName="isWild">  
-                <mat-radio-button *ngFor="let op of isWildList" value="op.name">{{op.name}}</mat-radio-button>
+                <mat-radio-button *ngFor="let op of isWildList" [value]="op.name">{{op.name}}</mat-radio-button>
               </mat-radio-group>
 
               <div>
