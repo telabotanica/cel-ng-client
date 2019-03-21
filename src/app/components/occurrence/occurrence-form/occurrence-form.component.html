@@ -31,7 +31,7 @@
               <label class="occurrence-form-label">Localisation diffusée (floutage) :</label>
           </div>
           <mat-form-field>
-            <select matNativeControl required formControlName="publishedLocation">
+            <select matNativeControl [(ngModel)]="publishedLocationSelected" [placeholder]="publishedLocationSelected" formControlName="publishedLocation">
               <option value="précise">précise</option>
               <option value="localité">localité</option>
               <option value="10x10km">10x10km</option>
@@ -105,7 +105,7 @@
                   <label class="occurrence-form-label">Précision de la localisation :</label>
               </div>
               <mat-form-field>
-                <select matNativeControl required formControlName="locationAccuracy">
+                <select matNativeControl formControlName="locationAccuracy">
                   <option value="0 à 10 m">0 à 10 m</option>
                   <option value="10 à 100 m">10 à 100 m</option>
                   <option value="100 à 500 m">100 à 500 m</option>
@@ -225,15 +225,17 @@
             <div class="advanced-form-left-left" >       
 
               <div>
-                  <label class="occurrence-form-label">Spontanéité :</label>
+                <label class="occurrence-form-label">Spontanéité :</label>
               </div>
-              <mat-slide-toggle formControlName="isWild">Sauvage</mat-slide-toggle>
+	      <mat-radio-group [(ngModel)]="isWildSelected" formControlName="isWild">  
+                <mat-radio-button *ngFor="let op of isWildList" value="op.name">{{op.name}}</mat-radio-button>
+              </mat-radio-group>
 
               <div>
                   <label class="occurrence-form-label">Type de donnée :</label>
               </div>
               <mat-form-field>
-                <select matNativeControl required formControlName="occurrenceType">
+                <select matNativeControl [(ngModel)]="occurrenceTypeSelected" [placeholder]="occurrenceTypeSelected" formControlName="occurrenceType">
                   <option value="observation de terrain">observation de terrain</option>
                   <option value="issue de la bibliographie">issue de la bibliographie</option>
                   <option value="donnée d'herbier">donnée d'herbier</option>
@@ -244,7 +246,7 @@
                   <label class="occurrence-form-label">Phénologie :</label>
               </div>
               <mat-form-field>
-                <select matNativeControl required formControlName="phenology">
+                <select matNativeControl formControlName="phenology">
                   <option value="00-09: germination, développement des bourgeons">00-09: germination, développement des bourgeons</option>
                   <option value="10-19: développement des feuilles">10-19: développement des feuilles</option>
                   <option value="11: par ex, environ 10% des feuilles épanouies">11: par ex, environ 10% des feuilles épanouies</option>

@@ -76,6 +76,20 @@ export class OccurrenceFormComponent implements OnInit {
   displayFullFormLeft  = false;
   displayFullFormRight = false;
 
+  // ---------------
+  // LIST VALUES:
+  // ---------------
+  isWildList = [
+    { "name": "Sauvage", "checked": true},
+    { "name": "Cultivée", "checked": false}
+  ]
+
+  // ---------------
+  // DEFAULT VALUES:
+  // ---------------
+  occurrenceTypeSelected: string    = "observation de terrain";
+  publishedLocationSelected: string = "précise"; 
+
   private subscription: Subscription;
 
   constructor(
