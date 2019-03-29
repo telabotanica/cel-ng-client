@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from "@angular/router";
 import { 
@@ -72,6 +73,7 @@ export class OccurrenceFormComponent implements OnInit {
   mode: string = OccurrenceFormComponent.CREATE_MODE;
   // Should the form be reset?
   resetForm: boolean;
+  baseCelApiUrl: string = environment.api.baseUrl;
   // Show advanced (full) form (or basic one): 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
@@ -90,6 +92,75 @@ export class OccurrenceFormComponent implements OnInit {
   occurrenceTypeSelected: string    = "observation de terrain";
   publishedLocationSelected: string = "précise"; 
   isWildSelected: string            = "Sauvage";
+
+  // List of repositories for the taxon selection module:
+  tbRepositoriesConfig = [
+    {
+      id: 'bdtfx',
+      label: 'Métropole',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtfx/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/bdtfx/noms/',
+      description_fr: ''
+    }, {
+      id: 'bdtfxr',
+      label: 'Métropolole (index réduit)',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtfxr/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/bdtfxr/noms/',
+      description_fr: ''
+    }, {
+      id: 'nva',
+      label: 'Antilles françaises',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/nva/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/nva/noms/',
+      description_fr: ''
+    }, {
+      id: 'bdtre',
+      label: 'Réunion',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtre/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/bdtre/noms/',
+      description_fr: ''
+    }, {
+      id: 'florical',
+      label: 'Nouvelle-Calédonie',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/florical/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + 'florical/noms/',
+      description_fr: ''
+    }, {
+      id: 'aublet',
+      label: 'Guyane',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/aublet/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/aublet/noms/',
+      description_fr: ''
+    }, {
+      id: 'apd',
+      label: 'Afrique',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/apd/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/apd/noms/',
+      description_fr: ''
+    }, {
+      id: 'lbf',
+      label: 'Liban',
+      levels: ['idiotaxon'],
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + 'lbf/',
+      apiUrl2: '',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/lbf/noms/',
+      description_fr: ''
+    }
+];
 
   private subscription: Subscription;
 
@@ -317,7 +388,7 @@ export class OccurrenceFormComponent implements OnInit {
       "osmCountry": occ.osmCountry,
       "osmCountryCode": occ.osmCountryCode,	
       "osmCounty": occ.osmCounty,
-      "osmId": occ.osmId,
+      "osmId": Number(occ.osmId),
       "inseeData": null,
       "osmPostcode": -1,
       "localityConsistency": false,
@@ -382,6 +453,13 @@ console.debug(photo);
 
   onPhotoRejected(photo: FileData) {
   }
+
+  onPhotoUploaded(photo: any) {
+    console.debug(photo);
+    console.log(photo.originalName);
+  }
+
+
 
   onLocationChange(location: LocationModel) {
     this.location = location;

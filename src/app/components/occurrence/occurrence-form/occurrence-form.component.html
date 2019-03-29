@@ -1,4 +1,4 @@
-<form 
+<form
   [formGroup]="occurrenceForm" 
   (ngSubmit)="openConfirmActionDialog(occurrenceForm.value)" >
 
@@ -16,11 +16,12 @@
           </div>
 
           <div class="geoloc-map">
-            <!-- [geolocatedPhotoLatLng]= "geolocatedPhotos" -->
             <tb-geoloc-map
               [reset]='resetForm'
               [patchElevation]="patchElevation"
               [patchGeometry]="patchGeometry"
+              [elevationProvider]="elevationApiIo"
+              [osmTilesLayerApi]="https://{s}.tile.openstreetmap.org"
               [patchLngLatDec]="patchLatLngDec"
               [patchAddress]="patchAddress"
               (location)='onLocationChange($event)'
@@ -158,6 +159,7 @@
               placeholder='Choisir une espèce'
               editingPlaceholder="Modifier l'espèce"
               defaultRepository='bdtfx'
+              [tbRepositoriesConfig]='tbRepositoriesConfig'
               [autoResetWhenSelected]='false'
               [emitOccurenceOnBlur]='true'
               [reset]='resetForm'
@@ -186,16 +188,17 @@
               <div class="occurrence-form-label">
                   <label class="occurrence-form-label">Ajouter une photo :</label>
               </div>
-               <!-- [reset]='resetForm'  (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
+               <!-- (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
               <tb-dropfile-box
                 [reset]="resetForm" 
                 [showTable]="true" 
                 [uploadTbPhotoFiles]="true"
                 [label]="'Glissez vos photos ici'"
                 [ignoreOversizedFiles]="false"
-                [photoUploadBaseUrl]="'http://localhost:8080'"   
+                [photoUploadBaseUrl]="baseCelApiUrl"   
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
+                (uploadedFiles)="onPhotoUploaded($event)"
               ></tb-dropfile-box>
             </div>
 
@@ -235,7 +238,7 @@
                   <label class="occurrence-form-label">Type de donnée :</label>
               </div>
               <mat-form-field>
-                <select matNativeControl [(ngModel)]="occurrenceTypeSelected" [placeholder]="occurrenceTypeSelected" formControlName="occurrenceType">
+                <select matNativeControl [(ngModel)]="occurrenceTypeSelected" formControlName="occurrenceType">
                   <option value="observation de terrain">observation de terrain</option>
                   <option value="issue de la bibliographie">issue de la bibliographie</option>
                   <option value="donnée d'herbier">donnée d'herbier</option>
