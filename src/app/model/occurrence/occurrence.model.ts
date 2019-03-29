@@ -37,7 +37,7 @@ export class Occurrence {
   osmPostcode:              string;
   osmCountry:               string;
   osmCountryCode:           string;
-  osmId:                    number;
+  osmId:                    string;
   osmPlaceId:               number;
   sampleHerbarium:          boolean;
   project:                  TelaBotanicaProject;
