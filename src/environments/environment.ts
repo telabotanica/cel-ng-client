@@ -10,8 +10,12 @@ export const environment = {
       applicationId: "YOTVBFEBJC",
    },
   api: {
-      baseUrl: "http://localhost:8080/api"
+      baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api"
    },
+  taxoApi: {
+      validationBaseUrl: "https://api.tela-botanica.org/service:eflore:0.1",
+      nameSearchBaseUrl: "https://api.tela-botanica.org/service:cel/NameSearch/"
+  },
   plantnet: {
       baseUrl: "https://my-api.plantnet.org/v1/identify/all",
       apiKey:  "2a10O8sbWystFClXLBjAJl6x0O"
@@ -23,7 +27,17 @@ export const environment = {
       baseUrlTemplate: "https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese"
    },
   mapBgTile: {
-      url: 'http://tile.osm.org/{z}/{x}/{y}.png'
+      baseUrl: 'https://osm.tela-botanica.org/tuiles/osmfr',
+      url: 'https://osm.tela-botanica.org/tuiles/osmfr/{z}/{x}/{y}.png'
+   },
+  elevationApi: {
+      provider: 'elevationApiIo'
+   },
+  ssoAnnuaire: {
+      identiteUrl:     'https://beta.tela-botanica.org/service:annuaire:auth/identite',
+      authWidgetUrl:   'http://beta.tela-botanica.org/widget:reseau:auth',
+      refreshTokenUrl: 'https://beta.tela-botanica.org/service:annuaire:auth/rafraichir',
+      refreshInterval: 600000
    }
 };
 
