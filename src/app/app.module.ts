@@ -43,6 +43,7 @@ import { PhotoDisplayDialogComponent } from './components/photo/photo-display-di
 import { TbGeolocLibModule } from 'tb-geoloc-lib';
 import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
+import { TbTagLibModule } from 'tb-tag-lib';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
 import { HelpComponent } from './components/generic/help/help.component';
 import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component';
@@ -88,6 +89,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     TbGeolocLibModule,
     TbDropfileLibModule, 
     TbTsbLibModule,
+    TbTagLibModule,
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },

@@ -41,7 +41,6 @@
     "tb-dropfile-lib": "https://github.com/steph-del/tb-dropfile-lib/releases/download/v0.3.2/tb-dropfile-lib-0.3.2.tgz",
     "tb-dropfile-lib-app": "https://github.com/steph-del/tb-dropfile-lib/archive/v0.2.0.tar.gz",
     "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.5.2/tb-geoloc-lib-0.5.2.tgz",
-    "tb-phototag-lib": "https://github.com/steph-del/tb-phototag-lib/releases/download/v0.1.1/tb-phototag-lib-0.1.1.tgz",
     "tb-tag-lib": "https://github.com/steph-del/tb-tag-lib/releases/download/v0.1.0/tb-tag-lib-0.1.0.tgz",
     "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.4.0/tb-tsb-lib-0.4.0.tgz",
     "tslib": "^1.9.0",
