@@ -2,12 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import { SharedModule } from './shared.module';
 
 import { JsonPatchService } from '../restit/services/json-patch.service';
@@ -44,10 +45,11 @@ import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
 import { HelpComponent } from './components/generic/help/help.component';
-import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component'
-5
-
-import {MAT_DATE_LOCALE} from '@angular/material';
+import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component';
+import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
+import { NotificationService } from "./services/commons/notification.service";
+import { SsoService } from "./services/commons/sso.service";
+import { AuthInterceptor } from "./interceptors/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -89,6 +91,8 @@ import {MAT_DATE_LOCALE} from '@angular/material';
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+//    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     OccurrencesDataSource, 
     PhotoService, 
     TelaBotanicaProjectService, 
@@ -107,4 +111,5 @@ import {MAT_DATE_LOCALE} from '@angular/material';
     PhotoLinkOccurrenceDialogComponent,
     PhotoDisplayDialogComponent]
 })
+
 export class AppModule { }
