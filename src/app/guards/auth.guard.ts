@@ -11,6 +11,7 @@ export class AuthGuard implements CanActivate {
 
   private readonly _ssoAuthWidgetUrl:string = environment.sso.authWidgetUrl;
   private readonly _refreshInterval:number = environment.sso.refreshInterval;
+  private readonly _unsetTokenValue:string = environment.app.unsetTokenValue;
 
   constructor(
      private router: Router,
@@ -24,7 +25,7 @@ export class AuthGuard implements CanActivate {
         console.log('TOKEN IN canActivate = ' + token);
 
     // First access to the app, the token hasn't been retrieved yet
-    if (token == 'X') {
+    if (token == this._unsetTokenValue) {
 
       return this._ssoService.getIdentity().map(response => {
         console.debug(response);
