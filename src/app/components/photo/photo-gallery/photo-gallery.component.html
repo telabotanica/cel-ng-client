@@ -8,13 +8,14 @@
       (geolocatedPhotoLatLng)="geolocatedPhotoData($event)"
 -->        
     <tb-dropfile-box
-      [showTable]="true" 
+      [showTable]="false" 
       [uploadTbPhotoFiles]="true"
       [label]="'Glissez vos photos ici'"
       [ignoreOversizedFiles]="false"
-      [photoUploadBaseUrl]="'http://localhost:8080'"   
+      [photoUploadBaseUrl]="baseCelApiUrl"   
       (rejectedFiles)="onPhotoRejected($event)"
       (acceptedFiles)="onPhotoAdded($event)"
+      (uploadedFiles)="onPhotoUploaded($event)"
     ></tb-dropfile-box>
 
     <div >

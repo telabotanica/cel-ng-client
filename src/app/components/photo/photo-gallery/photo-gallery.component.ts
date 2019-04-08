@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
+import { environment } from '../../../../environments/environment';
 import { 
   MatPaginator, 
   MatSort, 
@@ -34,6 +35,18 @@ export class PhotoGalleryComponent implements OnInit {
   private sortBy;
   private sortDirection;
   linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
+  baseCelApiUrl: string = environment.api.baseUrl;
+
+  constructor(
+    private dataService: PhotoService, 
+    private dialog: MatDialog, 
+    public snackBar: MatSnackBar,
+    private router: Router ) { }
+
+
+  ngOnInit() {
+    this.loadData(null);
+  }
 
   @Input() set filters(photoFilters: PhotoFilters) {
 
@@ -52,16 +65,7 @@ export class PhotoGalleryComponent implements OnInit {
         );
   }
 
-  constructor(
-    private dataService: PhotoService, 
-    private dialog: MatDialog, 
-    public snackBar: MatSnackBar,
-    private router: Router ) { }
 
-
-  ngOnInit() {
-    this.loadData(null);
-  }
 
   openLinkOccurrenceDialog() {
     const dialogConfig = new MatDialogConfig();
@@ -76,6 +80,13 @@ export class PhotoGalleryComponent implements OnInit {
         occ => this.linkToOccurrence(occ)
     );
 
+  }
+
+  onPhotoUploaded(photo: any) {
+    this.snackBar.open(
+      "Photo enregistrée avec succès.", 
+      'Fermer', 
+      { duration: 1500 });
   }
 
     private downloadZipInBrowser(data: any) {
