@@ -179,9 +179,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   openConfirmBulkUnpublishDialog() {
 
     let dialogConfig = this.buildDialogConfig();  
-    dialogConfig.data = 'Dépublier la/les observation(s) ?';
+    dialogConfig.data = 'Dépublier la/les observation(s) ?)';
     let confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
-
+ 
     confirmBulkUnpublishDialogRef
       .afterClosed()
       .subscribe( response => {
@@ -194,7 +194,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   openConfirmBulkPublishDialog() {
 
     let dialogConfig = this.buildDialogConfig();  
-    dialogConfig.data = 'Publier la/les observation(s) ?';
+    dialogConfig.data = 'Publier la/les observation(s) ? Cela ne sera effectif que pour les observations ayant les prérequis (précision, localisation et date renseignés.';
     let confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
     confirmBulkPublishDialogRef
@@ -298,7 +298,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   private downloadPdfEtiquette(data: any) {
     var blob = new Blob([data], { type: "application/pdf"});
     var url = window.URL.createObjectURL(blob);
-    var pwa = window.open(url);
+    var pwa = window.open(url, '_blank');
     //@todo use an angular material dialog
     if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
         alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
