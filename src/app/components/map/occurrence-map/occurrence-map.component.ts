@@ -7,10 +7,11 @@ import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
 import OlTileLayer from 'ol/layer/Tile';
 import OlView from 'ol/View';
+import {Vector} from 'ol/source';
+import {bbox} from 'ol/loadingstrategy';
 import { fromLonLat } from 'ol/proj';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { GeoJSON } from 'ol/format';
-//import { GeoJSON } from '../../../utils/GeoJSON.js';
 import { OSM, Vector as VectorSource } from 'ol/source'
 // import Select from 'ol/interaction/Select';
 import { DragBox, Select } from 'ol/interaction';
@@ -31,6 +32,7 @@ import {OccurrenceFilters} from "../../../model/occurrence/occurrence-filters.mo
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { ImportDialogComponent } from "../../../components/occurrence/import-dialog/import-dialog.component";
+import { SsoService } from "../../../services/commons/sso.service";
 
 @Component({
   selector: 'app-occurrence-map',
@@ -49,11 +51,24 @@ export class OccurrenceMapComponent implements OnInit {
   private map: OlMap;
   private layer: OlTileLayer;
   private occLayer: VectorLayer;
+  private select: Select;
   private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
   private mapBgTileUrl = environment.mapBgTile.url;
   private celGeoJsonServiceFilteredUrl;
 
   private googleHybridLayer;
+  private token:string;
+
+ 
+  constructor(
+    private http:HttpClient, 
+    private dataSource:OccurrencesDataSource, 
+    private dialog: MatDialog, 
+    private ssoService: SsoService,
+    private router: Router,
+    public snackBar: MatSnackBar ) { 
+    this.token = this.ssoService.getToken();
+  }
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
     if (  newOccFilters != null) {
@@ -72,25 +87,13 @@ export class OccurrenceMapComponent implements OnInit {
 
   private redrawMap() {
     let geoJsonUrl = this.celGeoJsonServiceBaseUrl;
-
+this.select.getFeatures().clear();
     if (this._occFilters != null && this._occFilters != undefined) {
       geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
-
-    var s = new VectorSource({
-        url: geoJsonUrl,
-        format: new GeoJSON()
-    });
-
-    this.occLayer.setSource(s);
+    var vectorSource = this.createOccurrenceVectorSource();
+    this.occLayer.setSource(vectorSource);
   }
- 
-  constructor(
-    private http:HttpClient, 
-    private dataSource:OccurrencesDataSource, 
-    private dialog: MatDialog, 
-    private router: Router,
-    public snackBar: MatSnackBar ) { }
 
   private createOlLayer() {
     return new OlTileLayer({
@@ -101,14 +104,47 @@ export class OccurrenceMapComponent implements OnInit {
         url: this.mapBgTileUrl})
     });
   }
+
+
+  private createOccurrenceVectorSource() {
+    var url = this.celGeoJsonServiceBaseUrl;
+    var token =  this.token;
+    var vectorSource = new VectorSource({
+    format: new GeoJSON(),
+    visible: true,
+    loader: function(extent, resolution, projection) {
+       var proj = projection.getCode();
+       var xhr = new XMLHttpRequest();
+       xhr.open('GET', url);
+       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+       var onError = function() {
+         vectorSource.removeLoadedExtent(extent);
+       }
+       xhr.onerror = onError;
+       xhr.onload = function() {
+         if (xhr.status == 200) {
+           vectorSource.addFeatures(
+               vectorSource.getFormat().readFeatures(
+                 xhr.responseText, 
+                 {
+                   dataProjection: 'EPSG:4326',
+                   featureProjection: 'EPSG:3857'
+                 }
+               )
+           );
+         } else {
+           onError();
+         }
+       }
+       xhr.send();
+     }
+   });
+    return vectorSource;
+  }
   
   private createOccurrenceLayer() {
-    this.occVectorSource = new VectorSource({
-      title: 'Observations',
-      url: this.celGeoJsonServiceBaseUrl ,
-      visible: true,
-      format: new GeoJSON()
-    });
+    var vectorSource = this.createOccurrenceVectorSource();
+    this.occVectorSource = vectorSource;
 
     return new VectorLayer({
       source: this.occVectorSource
@@ -142,7 +178,7 @@ export class OccurrenceMapComponent implements OnInit {
   private createMap() {
     this.layer = this.createOlLayer();
     this.occLayer = this.createOccurrenceLayer();
-
+console.log('piopoioppipoipoipoioipoiipoippio');
     this.view = new OlView({
       center: fromLonLat([6.661594, 50.433237]),
       zoom: 3
@@ -159,23 +195,22 @@ export class OccurrenceMapComponent implements OnInit {
   ngOnInit() {
 
     this.map = this.createMap();
-    var select = new Select({
+    this.select = new Select({
       hitTolerance: 10
     });
 
-
     var self = this;
 
-    if (select !== null) {
-        this.map.addInteraction(select);
-        select.on('select', function(e) {
+    if (this.select !== null) {
+        this.map.addInteraction(this.select);
+        this.select.on('select', function(e) {
             // bind local variable to OL event value
             self.selected= e.selected;
         });
     }
 
 
-      var selectedFeatures = select.getFeatures();
+      var selectedFeatures = this.select.getFeatures();
 
       // a DragBox interaction used to select features by drawing boxes
       var dragBox = new DragBox({
@@ -218,7 +253,7 @@ export class OccurrenceMapComponent implements OnInit {
 
     //this.map.addControl(new LayerSwitcher());
     this.snackBar.open(
-    'Pour sélectionner plusieurs observations. Cliquer sur les observations en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.', 
+    'Pour sélectionner plusieurs observations, cliquer sur ces dernières en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.', 
     'Fermer', 
     { duration: 5000 });
   }
