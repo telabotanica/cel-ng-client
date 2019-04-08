@@ -4,10 +4,15 @@
 
     <div class="user-profile-form-section-title-container">Mon compte</div>
 
+    <div class="user-profile-form-section-subtitle-container">
+      Connecté(e) en tant que {{ getUsername() }} 
+    </div>
+
     <div class="user-profile-form-section-items-container">
-      
+
+
       <div class="user-profile-form-section-item-container">
-        <span>Connectée en tant que <a href="http://perdu.com">XXXXX</a></span>
+
         <button mat-button
           class="bold-link small"  
           matTooltip="Accéder aux réglages de son profil" 
@@ -16,6 +21,7 @@
 
       <div class="user-profile-form-section-item-container">
         <button mat-button
+          (click)="logout()"
           class="bold-link small" 
           matTooltip="Se déconnecter" 
           matTooltipPosition="above">Déconnexion</button>
