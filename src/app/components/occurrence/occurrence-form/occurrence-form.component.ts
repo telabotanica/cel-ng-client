@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { environment } from '../../../../environments/environment';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from "@angular/router";
 import { 
@@ -12,10 +11,12 @@ import {
 import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
 import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.model";
 import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
+import { environment } from '../../../../environments/environment';
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
 import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
+import { PhotoService } from "../../../services/photo/photo.service";
 import { PlantnetService } from "../../../services/plantnet/plantnet.service";
 import { ExistInChorodepService } from "../../../services/chorodep/exist-in-chorodep.service";
 import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
@@ -45,9 +46,14 @@ export class OccurrenceFormComponent implements OnInit {
   // --------------------
   // USED/MANAGED MODELS:
   // --------------------
+  // The list of TelaBotanicaProject 
   projects: TelaBotanicaProject[];
   occurrences = [];
+  // The photos which have been uploaded for the current occurrence(s):
+  private photos = [];
+  // The LocationModel object as defined by th user 
   private location: LocationModel;
+  // The RepositoryItemModel (taxon) object as chosen by the user:
   private taxon: RepositoryItemModel;
 
   // ----------------------------------------------------------------
@@ -73,8 +79,12 @@ export class OccurrenceFormComponent implements OnInit {
   mode: string = OccurrenceFormComponent.CREATE_MODE;
   // Should the form be reset?
   resetForm: boolean;
+  // Configuration values for Stephane's modules: 
+  tagObjectId: number;
   baseCelApiUrl: string = environment.api.baseUrl;
-  // Show advanced (full) form (or basic one): 
+  elevationApiProvider: string = environment.elevationApi.provider;
+  mapBgTileUrl: string = environment.mapBgTile.baseUrl;
+  // Shuld the advanced forms be displyed instead of basic ones: 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
 
@@ -82,8 +92,8 @@ export class OccurrenceFormComponent implements OnInit {
   // LIST VALUES:
   // ---------------
   isWildList = [
-    { "name": "Sauvage"},
-    { "name": "Cultivée"}
+    { "name": "Sauvage", "value": true},
+    { "name": "Cultivée", "value": false}
   ]
 
   // ---------------
@@ -91,7 +101,7 @@ export class OccurrenceFormComponent implements OnInit {
   // ---------------
   occurrenceTypeSelected: string    = "observation de terrain";
   publishedLocationSelected: string = "précise"; 
-  isWildSelected: string            = "Sauvage";
+  isWildSelected: boolean           = true;
 
   // List of repositories for the taxon selection module:
   tbRepositoriesConfig = [
@@ -166,6 +176,7 @@ export class OccurrenceFormComponent implements OnInit {
 
   constructor(
     private dataService:            OccurrencesDataSource,
+    private photoService:           PhotoService, 
     private plantnetService:        PlantnetService,
     private existInChorodepService: ExistInChorodepService,
     private tbPrjService:           TelaBotanicaProjectService,
@@ -230,7 +241,11 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   isEfloreCardDisplayable() {
-    return false;
+    return ( this.taxon );
+  }
+
+  isTagComponentDisplayable() {
+    return (this.occurrences && this.occurrences.length ==1);
   }
 
   openConfirmActionDialog(value) {
@@ -306,6 +321,7 @@ export class OccurrenceFormComponent implements OnInit {
         }
         // Single edit mode:
         else {
+          this.tagObjectId = ids[0];
           this.mode = OccurrenceFormComponent.SINGLE_EDIT_MODE;
         }
         this.retrieveOccurrences(ids); 
@@ -324,6 +340,11 @@ export class OccurrenceFormComponent implements OnInit {
     let occurrence: Occurrence;
     if ( this.occurrences.length == 1 ) {
       occurrence = this.occurrences[0];
+      //@todo: temporary ugly fix for CST tests, why the hell does the WS return the nbr as string?!!!
+      if ( typeof occurrence.elevation === "string" ) {
+        occurrence.elevation = Number(occurrence.elevation);
+      }
+
     }
     else {
       occurrence = this.buildPrepopulateOccurrence();
@@ -331,9 +352,9 @@ export class OccurrenceFormComponent implements OnInit {
     this.occurrenceForm.patchValue(occurrence);
     this.prepopulateLocation(occurrence);
 
-//    if ( occurrence.taxoRepo != "Autre/inconnu" && occurrence.userSciNameId != "Valeurs multiples" ) {
+    if ( occurrence.taxoRepo != null && occurrence.userSciNameId != null ) {
       this.prepopulateTaxoSearchBox(occurrence);
-//    }
+    }
     
     if ( occurrence.geometry != "Valeurs multiples" ) {
       this.prepopulateGeolocMap(occurrence);
@@ -372,6 +393,7 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   private prepopulateLocation(occ: Occurrence) {
+    
     // only useful so that the location is not null when the component is 
     // loaded in single edit mode. This will allow the isPublishable() method
     // to eventually returning true.    
@@ -382,7 +404,7 @@ export class OccurrenceFormComponent implements OnInit {
       "station": occ.station,
       "geodatum": occ.geodatum,
       "publishedLocation": occ.publishedLocation,
-      "locationAccuracy": -1,
+      "locationAccuracy": null,
       "sublocality": occ.sublocality,
       "osmState": occ.osmState,
       "osmCountry": occ.osmCountry,
@@ -390,7 +412,7 @@ export class OccurrenceFormComponent implements OnInit {
       "osmCounty": occ.osmCounty,
       "osmId": Number(occ.osmId),
       "inseeData": null,
-      "osmPostcode": -1,
+      "osmPostcode": Number(occ.osmPostcode),
       "localityConsistency": false,
       "osmPlaceId": occ.osmPlaceId
     };
@@ -456,9 +478,30 @@ console.debug(photo);
 
   onPhotoUploaded(photo: any) {
     console.debug(photo);
-    console.log(photo.originalName);
+      this.photos.push(photo);
+      this.snackBar.open(
+        "La photo " + photo.originalName + " a été enregistrée avec succès.", 
+        'Fermer', 
+        { duration: 1500 });
   }
 
+
+  private linkPhotosToOccurrence(occurrenceId) {
+
+    const photoIds = this.photos.map(photo => photo.id);
+    this.photoService.bulkReplace(photoIds, {occurrence:{id:occurrenceId}}).subscribe(
+      data => {
+        this.snackBar.open(
+        "Les photos et l’observation ont été liées avec succès.", 
+        "Fermer", 
+        { duration: 1500 });
+      },
+      error => this.snackBar.open(
+        'Une erreur est survenue. ' + error, 
+        'Fermer', 
+        { duration: 1500 })
+    );
+  }
 
 
   onLocationChange(location: LocationModel) {
@@ -473,11 +516,11 @@ console.debug(photo);
 
 
   addPhoto(location: RepositoryItemModel) {
-alert('');
+
   }
 
   removePhoto(location: RepositoryItemModel) {
-alert('');
+
   }
 
   isPublishable() {
@@ -556,7 +599,7 @@ alert('');
       for (let warning of warnings) {
         msg += warning;
       }
-      msg += "<br />Continuer ?";
+      msg += " Continuer ?";
       let dialogConfig = this.buildDialogConfig();
       dialogConfig.data = msg;
       let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
@@ -584,6 +627,9 @@ alert('');
           "L'observation vient d'être créée.", 
           'Fermer', 
           { duration: 1500 });
+        //console.debug(result);
+        this.linkPhotosToOccurrence(occ.id); 
+        this.photos = [];
         if ( this.clearFormAfterSubmit ) {
           this.clearForm();
         }
@@ -675,18 +721,18 @@ console.debug(occ);
 
 
   showPlantNetDialog() {
-/*
+    const photoUrls = this.photos.map(photo => photo.url);
     this.plantnetService.get(
       ['http://tropical.theferns.info/plantimages/sized/c/a/ca2b39f905c0890b8db7f6c6dec34d70f37e089a_960px.jpg'], 
-      ['fruit'], 
+      ['leaf'], 
       'fr').subscribe(
         resp => console.debug(resp)
     );
-*/
+
   }
 
   isPlantNetCallable() {
-    return false;
+    return (this.photos.length > 0);
   }
 
    private async existsInChorodep() {
@@ -758,6 +804,19 @@ console.debug(occ);
     return btoa(unencodedSignature);
   }
 
+
+  logTagLibMessages(log: TbLog) {
+    if (log.type === 'info') {
+      // tslint:disable-next-line:no-console
+      console.info(log.message_fr);
+    } else if (log.type === 'success') {
+      console.log(log.message_fr);
+    } else if (log.type === 'warning') {
+      console.warn(log.message_fr);
+    } else if (log.type === 'error') {
+      console.error(log.message_fr);
+    }
+  }
 
   private createPhotos(photos: FileData[]) {
 

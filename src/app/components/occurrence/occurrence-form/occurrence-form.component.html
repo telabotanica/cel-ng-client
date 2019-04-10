@@ -3,7 +3,7 @@
   (ngSubmit)="openConfirmActionDialog(occurrenceForm.value)" >
 
   <mat-card-content id='occurrence-form-container' >
-
+      
       <div class="occurrence-form-left-column">
 
         <div class="occurrence-form-header">
@@ -11,8 +11,8 @@
 
         <div class="occurrence-form-column-title">Données relatives à l'observation</div>
 
-          <div>
-              <label class="occurrence-form-label">Localisation :</label>
+          <div class="occurrence-form-label-container">
+            <label class="occurrence-form-label">Localisation :</label>
           </div>
 
           <div class="geoloc-map">
@@ -20,27 +20,27 @@
               [reset]='resetForm'
               [patchElevation]="patchElevation"
               [patchGeometry]="patchGeometry"
-              [elevationProvider]="elevationApiIo"
-              [osmTilesLayerApi]="https://{s}.tile.openstreetmap.org"
+              [elevationProvider]="elevationApiProvider"
+              [osmTilesLayerApi]="mapBgTileUrl"
               [patchLngLatDec]="patchLatLngDec"
               [patchAddress]="patchAddress"
               (location)='onLocationChange($event)'
             ></tb-geoloc-map>
           </div>
 
-          <div>
-              <label class="occurrence-form-label">Localisation diffusée (floutage) :</label>
+          <div class="occurrence-form-label-container">
+            <label class="occurrence-form-label">Localisation diffusée (floutage) :</label>
           </div>
           <mat-form-field>
-            <select matNativeControl [(ngModel)]="publishedLocationSelected" [placeholder]="publishedLocationSelected" formControlName="publishedLocation">
+            <select matNativeControl [(ngModel)]="publishedLocationSelected" formControlName="publishedLocation">
               <option value="précise">précise</option>
               <option value="localité">localité</option>
               <option value="10x10km">10x10km</option>
             </select>
           </mat-form-field>
 
-          <div>
-              <label class="occurrence-form-label">Date de l'observation :</label>
+          <div class="occurrence-form-label-container">
+            <label class="occurrence-form-label">Date de l'observation :</label>
           </div>
           <section class="observed-date-form-field-container">
             <mat-form-field>
@@ -56,38 +56,36 @@
             <!-- Advanced form fields container - left column -->
             <div class="advanced-form-left-left" >   
 
-              <div>
-                  <label class="occurrence-form-label">Lieu-dit :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Lieu-dit :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="sublocality">
+                <input matInput formControlName="sublocality">
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Milieu :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Milieu :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="environment">
+                <input matInput formControlName="environment">
               </mat-form-field>
 
 
-              <div>
-                  <label class="occurrence-form-label">Projet :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Projet :</label>
               </div>
               <mat-form-field>
                   <mat-label></mat-label>
                       <mat-select [(value)]="projectId" (selectionChange)="changeProjectId(project.id)">
-
                       <mat-option *ngFor="let project of projects" value="{{project.id}}">{{project.label}}</mat-option>
-
                   </mat-select>
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Structure :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Structure :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="observerInstitution">
+                <input matInput formControlName="observerInstitution">
               </mat-form-field>
 
             </div>
@@ -95,15 +93,15 @@
             <!-- Advanced form fields container - right column -->
             <div class="advanced-form-left-right" >
 
-              <div>
-                  <label class="occurrence-form-label">Station :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Station :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="station">
+                <input matInput formControlName="station">
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Précision de la localisation :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Précision de la localisation :</label>
               </div>
               <mat-form-field>
                 <select matNativeControl formControlName="locationAccuracy">
@@ -115,11 +113,11 @@
                 </select>
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Observateur :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Observateur :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="observer">
+                <input matInput formControlName="observer">
               </mat-form-field>
 
 
@@ -143,14 +141,14 @@
       <div class="occurrence-form-right-column">
 
         <div class="occurrence-form-header">
-          <button mat-button (click)="navigateToHelp()">Aide</button>
+          <button type="button" mat-button (click)="navigateToHelp()">Aide</button>
         </div>
 
         <div class="occurrence-form-column-title">Qu'avez-vous observé ?</div>
 
         <div>
 
-          <div>
+          <div class="occurrence-form-label-container">
               <label class="occurrence-form-label">Taxon :</label>
           </div>
 
@@ -168,11 +166,11 @@
               (newData)='onTaxonChange($event)'></tb-tsb-search-box>
           </div>
 
-          <button mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eflore</button>
+          <button type="button" mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eflore</button>
 
           <section class="base-occurrence-form-section">
-            <div>
-                <label class="occurrence-form-label">Certitude :</label>
+            <div class="occurrence-form-label-container">
+              <label class="occurrence-form-label">Certitude :</label>
             </div>
             <mat-radio-group  formControlName="certainty" class="certainty-selector">
               <mat-radio-button class="example-margin" value="certain">Certaine</mat-radio-button>
@@ -185,8 +183,8 @@
           <div class="occurrence-form-annotation-photo-container">
 
             <div class="occurrence-form-photo-container">
-              <div class="occurrence-form-label">
-                  <label class="occurrence-form-label">Ajouter une photo :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Ajouter une photo :</label>
               </div>
                <!-- (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
               <tb-dropfile-box
@@ -204,8 +202,8 @@
 
             <div class="occurrence-form-annotation-container">
 
-              <div>
-                  <label class="occurrence-form-label">Commentaire :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Commentaire :</label>
               </div>
 
               <mat-form-field style="width:100%;">
@@ -214,12 +212,41 @@
             </div>
           </div>
 
-          <button mat-button (click)="showPlantNetDialog()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
+          <button mat-button type="button" (click)="showPlantNetDialog()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
 
-            <div>
-                <label class="occurrence-form-label">Options de publication :</label>
+
+          <div class="occurrence-form-label-container">
+            <label class="occurrence-form-label">Spontanéité :</label>
+          </div>
+            <mat-radio-group [(ngModel)]="isWildSelected" formControlName="isWild">  
+            <mat-radio-button *ngFor="let op of isWildList" [value]="op.value">{{op.name}}</mat-radio-button>
+          </mat-radio-group>
+
+
+
+          <div *ngIf="isTagComponentDisplayable()">
+            <div class="occurrence-form-label-container">
+              <label class="occurrence-form-label">Mots-clés :</label>
             </div>
-            <mat-slide-toggle formControlName="isPublic" [disabled]="!isPublishable()" checked="false" >Observation publique</mat-slide-toggle>
+            <tb-tag
+            [userId]=22
+            [objectId]="tagObjectId"
+            [basicTags]="basicTags"
+            [baseApiUrl]="baseUrl"
+            apiPath="/api/user_occurrence_tags"
+            apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
+            apiRetrievePath="/api/occurrence/{id}/occurrence_user_occurrence_tag_relations"
+            objectName="occurrence"
+            objectEndpoint="/api/occurrences"
+            tagName="userOccurrenceTag"
+            tagEndpoint="/api/user_occurrence_tags"
+            (log)="logTagLibMessages($event)"></tb-tag>
+          </div>
+        
+          <div class="occurrence-form-label-container">
+            <label class="occurrence-form-label">Options de publication :</label>
+          </div>
+          <mat-slide-toggle formControlName="isPublic" [disabled]="!isPublishable()" checked="false" >Observation publique</mat-slide-toggle>
 
           <!-- Advanced form fields container -->
           <section class="advanced-form-left-container" *ngIf="displayFullFormRight">
@@ -227,15 +254,10 @@
             <!-- Advanced form fields container - left column -->
             <div class="advanced-form-left-left" >       
 
-              <div>
-                <label class="occurrence-form-label">Spontanéité :</label>
-              </div>
-	      <mat-radio-group [(ngModel)]="isWildSelected" formControlName="isWild">  
-                <mat-radio-button *ngFor="let op of isWildList" [value]="op.name">{{op.name}}</mat-radio-button>
-              </mat-radio-group>
 
-              <div>
-                  <label class="occurrence-form-label">Type de donnée :</label>
+
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Type de donnée :</label>
               </div>
               <mat-form-field>
                 <select matNativeControl [(ngModel)]="occurrenceTypeSelected" formControlName="occurrenceType">
@@ -245,8 +267,8 @@
                 </select>
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Phénologie :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Phénologie :</label>
               </div>
               <mat-form-field>
                 <select matNativeControl formControlName="phenology">
@@ -269,15 +291,15 @@
                 </select>
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Abondance :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Abondance :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="coef">
+                <input matInput formControlName="coef">
               </mat-form-field>
 
-              <div>
-                  <label class="occurrence-form-label">Présence d'un témoin d'herbier :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Présence d'un témoin d'herbier :</label>
               </div>
               <mat-slide-toggle formControlName="herbariumSample"></mat-slide-toggle>
 
@@ -286,11 +308,11 @@
             <!-- Advanced form fields container - right column -->
             <div class="advanced-form-left-right" >
             
-              <div>
-                  <label class="occurrence-form-label">Source bibliographique :</label>
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Source bibliographique :</label>
               </div>
               <mat-form-field>
-                  <input matInput formControlName="bibliographySource">
+                <input matInput formControlName="bibliographySource">
               </mat-form-field>
 
             </div>

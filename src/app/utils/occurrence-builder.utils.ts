@@ -54,7 +54,7 @@ export class OccurrenceBuilder {
   }
 
   private fillOccLocationProperties(): void {
-    let props = ["elevation", "localityConsistency", 
+    let props = ["localityConsistency", 
       "locationAccuracy", "osmCountry", "osmCountryCode", "osmId",
       "osmState", "publishedLocation", "station", "sublocality"];
 
@@ -62,12 +62,17 @@ export class OccurrenceBuilder {
       this.fillOccPropertyWithValue(
         propName, this.location[propName]);
     }
-
+  
+    if (this.location.elevation != null) {
+      //@todo should be done in Stéphane's component
+      // Let's round double, int are expected
+      this.occ.elevation = Number(this.location.elevation.toFixed());
+    }
     if (this.location.geometry != null) {
         this.occ.geometry = JSON.stringify(this.location.geometry);
     }
     if (this.location.osmId != null) {
-        this.occ.osmId = this.location.osmId;
+        this.occ.osmId = String(this.location.osmId);
     }
     if (this.location.locality != null) {
         this.occ.locality = this.location.locality;

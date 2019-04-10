@@ -16,7 +16,6 @@
   padding-right: 60px;
 }
 
-
 .occurrence-form-column-title {
   font-weight: bold;    
   font-size: 22px;
@@ -35,9 +34,13 @@
 .occurrence-form-label {
   font-weight: bold;    
   font-size: 13px;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
+
+.occurrence-form-label-container {
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
 
 .occurrence-form-photo-container {
   flex-basis:0;

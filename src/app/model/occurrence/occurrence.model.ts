@@ -21,7 +21,7 @@ export class Occurrence {
   phenology:                string;  
   geometry:                 string;
   signature:                string;
-  elevation:                number;
+  elevation:                any;
   locality:                 string;
   localityInseeCode:        string;
   sublocality:              string;
