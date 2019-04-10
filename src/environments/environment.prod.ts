@@ -11,7 +11,8 @@ export const environment = {
     applicationId: "YOTVBFEBJC",
   },
   api: {
-    baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api"
+    baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api",
+    tagLibBaseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public",
   },
   taxoApi: {
     validationBaseUrl: "https://api.tela-botanica.org/service:eflore:0.1",
@@ -39,5 +40,24 @@ export const environment = {
     authWidgetUrl:    'http://beta.tela-botanica.org/widget:reseau:auth',
     refreshEndpoint:  'https://beta.tela-botanica.org/service:annuaire:auth/rafraichir',
     refreshInterval:  600000
+  },
+  photoTagLib: {
+    basicTags: [
+      {path: 'Organes', name: 'Fleur', id: null, userId: null},
+      {path: 'Organes', name: 'Feuille', id: null, userId: null},
+      {path: 'Organes', name: 'Fruit', id: null, userId: null},
+      {path: 'Organes', name: 'Port', id: null, userId: null},
+      {path: 'Organes', name: 'Écorce', id: null, userId: null},
+      {path: 'Organes', name: 'Rameau', id: null, userId: null},
+      {path: 'Organes', name: 'Graine', id: null, userId: null},
+      {path: 'Organes', name: 'Bourgeon', id: null, userId: null},
+      {path: 'Organes', name: 'Cotylédon', id: null, userId: null},
+      {path: 'Organes', name: 'Organe souterrain', id: null, userId: null},
+      {path: 'Photo', name: 'Scan', id: null, userId: null},
+      {path: 'Photo', name: 'Planche', id: null, userId: null},
+      {path: 'Photo', name: 'Dessin', id: null, userId: null},
+      {path: 'Morphologie', name: 'Plantule', id: null, userId: null},
+      {path: 'Morphologie', name: 'Rosette', id: null, userId: null},
+    ]
   }
 };
