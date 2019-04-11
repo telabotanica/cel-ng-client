@@ -9,6 +9,8 @@ import {
   MatSnackBar,
   MatDialog } from "@angular/material";
 
+import { TbLog } from "tb-tag-lib/lib/_models/tb-log.model";
+import { environment } from '../../../../environments/environment';
 import { Photo } from "../../../model/photo/photo.model";
 import { PhotoService } from "../../../services/photo/photo.service";
 import { PhotoShareDialogComponent } from "../photo-share-dialog/photo-share-dialog.component";
@@ -28,6 +30,8 @@ export class PhotoDetailComponent implements OnInit {
   shareDialogRef: MatDialogRef<PhotoShareDialogComponent>;
   linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
   photoDisplayDialogRef: MatDialogRef<PhotoDisplayDialogComponent>;
+  basicTags: Array<any> = environment.photoTagLib.basicTags;
+  baseUrl: string = environment.api.tagLibBaseUrl;
 
   constructor(
     private dataService:PhotoService, 
@@ -150,6 +154,19 @@ export class PhotoDetailComponent implements OnInit {
               'Fermer', 
               { duration: 1500 })
       );
+  }
+
+  logTagLibMessages(log: TbLog) {
+    if (log.type === 'info') {
+      // tslint:disable-next-line:no-console
+      console.info(log.message_fr);
+    } else if (log.type === 'success') {
+      console.log(log.message_fr);
+    } else if (log.type === 'warning') {
+      console.warn(log.message_fr);
+    } else if (log.type === 'error') {
+      console.error(log.message_fr);
+    }
   }
 
 }
