@@ -212,8 +212,8 @@
             </div>
           </div>
 
-          <button mat-button type="button" (click)="showPlantNetDialog()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
-
+          <button mat-button type="button" (click)="openLinkPhotoDialog()">Choisir une photo déjà importée</button>
+          <button mat-button type="button" (click)="openPlantNetDialog()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
 
           <div class="occurrence-form-label-container">
             <label class="occurrence-form-label">Spontanéité :</label>

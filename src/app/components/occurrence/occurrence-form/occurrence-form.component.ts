@@ -8,6 +8,7 @@ import {
   MatSnackBar,
   MatDialog } from "@angular/material";
 
+import { TbLog } from "tb-tag-lib/lib/_models/tb-log.model";
 import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
 import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.model";
 import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
@@ -23,6 +24,7 @@ import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-bo
 import { OccurrenceBuilder } from "../../../utils/occurrence-builder.utils";
 import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.utils";
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import { OccurrenceLinkPhotoDialogComponent } from '../occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
 
 @Component({
   selector: 'app-occurrence-form',
@@ -172,6 +174,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 ];
 
+  private linkPhotoToOccDialogRef: MatDialogRef<OccurrenceLinkPhotoDialogComponent>;
   private subscription: Subscription;
 
   constructor(
@@ -720,10 +723,10 @@ console.debug(occ);
   }
 
 
-  showPlantNetDialog() {
+  openPlantNetDialog() {
     const photoUrls = this.photos.map(photo => photo.url);
     this.plantnetService.get(
-      ['http://tropical.theferns.info/plantimages/sized/c/a/ca2b39f905c0890b8db7f6c6dec34d70f37e089a_960px.jpg'], 
+      photoUrls, 
       ['leaf'], 
       'fr').subscribe(
         resp => console.debug(resp)
@@ -802,6 +805,25 @@ console.debug(occ);
     }
 
     return btoa(unencodedSignature);
+  }
+
+  openLinkPhotoDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.height = '500px';
+    dialogConfig.width = '900px';
+    dialogConfig.maxHeight = 500;
+    dialogConfig.maxWidth = 900;
+    dialogConfig.hasBackdrop = true;
+    this.linkPhotoToOccDialogRef = this.dialog.open(OccurrenceLinkPhotoDialogComponent, dialogConfig);
+
+    this.linkPhotoToOccDialogRef
+      .afterClosed()
+      .subscribe(
+        photo => this.photos.push(photo)
+    );
+
   }
 
 

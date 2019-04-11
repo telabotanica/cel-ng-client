@@ -39,6 +39,7 @@ import { PlantnetService } from "./services/plantnet/plantnet.service";
 import { ExistInChorodepService } from "./services/chorodep/exist-in-chorodep.service";
 import { PhotoShareDialogComponent } from './components/photo/photo-share-dialog/photo-share-dialog.component';
 import { PhotoLinkOccurrenceDialogComponent } from './components/photo/photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
+import { OccurrenceLinkPhotoDialogComponent } from './components/occurrence/occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
 import { PhotoDisplayDialogComponent } from './components/photo/photo-display-dialog/photo-display-dialog.component';
 import { TbGeolocLibModule } from 'tb-geoloc-lib';
 import { TbDropfileLibModule } from 'tb-dropfile-lib';
@@ -72,6 +73,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     ImportDialogComponent,
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
+    OccurrenceLinkPhotoDialogComponent,
     PhotoDisplayDialogComponent,
     UserAgreementComponent,
     HelpComponent,
@@ -111,6 +113,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     ImportDialogComponent, 
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
+    OccurrenceLinkPhotoDialogComponent,
     PhotoDisplayDialogComponent]
 })
 
