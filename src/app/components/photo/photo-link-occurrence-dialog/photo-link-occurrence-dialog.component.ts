@@ -74,7 +74,6 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
         })
     )
     .subscribe();
-
   }
 
   refreshCount() {
@@ -87,17 +86,11 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
   }
 
   refreshGrid() {
-
     this.dataSource.loadOccurrences(
       this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize);
   }
-
-  chooseOccurrence(occurrence) {
-
-  }
-
 
 }
