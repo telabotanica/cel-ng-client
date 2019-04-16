@@ -43,7 +43,7 @@
     
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     
-    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="chooseOccurrence(occurrence)"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectOccurrence(occurrence)"></mat-row>
     
   </mat-table>
 

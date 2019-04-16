@@ -6,13 +6,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { 
   MatDialogRef, 
   MatDialogConfig, 
-  MatSnackBar,
   MatDialog } from "@angular/material";
 
 import { TbLog } from "tb-tag-lib/lib/_models/tb-log.model";
+
 import { environment } from '../../../../environments/environment';
 import { Photo } from "../../../model/photo/photo.model";
 import { PhotoService } from "../../../services/photo/photo.service";
+import { NotificationService } from "../../../services/commons/notification.service";
 import { PhotoShareDialogComponent } from "../photo-share-dialog/photo-share-dialog.component";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { PhotoDisplayDialogComponent } from '../photo-display-dialog/photo-display-dialog.component';
@@ -27,18 +28,23 @@ export class PhotoDetailComponent implements OnInit {
   id: number;
   photo: Photo;
   private subscription: Subscription;
-  shareDialogRef: MatDialogRef<PhotoShareDialogComponent>;
-  linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
-  photoDisplayDialogRef: MatDialogRef<PhotoDisplayDialogComponent>;
+  private _shareDialogRef: MatDialogRef<PhotoShareDialogComponent>;
+  private _linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
+  private _photoDisplayDialogRef: MatDialogRef<PhotoDisplayDialogComponent>;
   basicTags: Array<any> = environment.photoTagLib.basicTags;
   baseUrl: string = environment.api.tagLibBaseUrl;
 
+  static readonly _occLinkedOkMsg:string = "La photo et l’observation ont bien été liées.";
+  static readonly _occUnlinkedOkMsg:string = "Le lien entre la photo et l’observation a bien été supprimé.";
+  static readonly _photoDeletedOkMsg:string = "La photo a été supprimée avec succès.";
+  static readonly _errorMsg:string = "Une erreur est survenue.";
+
   constructor(
-    private dataService:PhotoService, 
+    private dataService: PhotoService, 
+    private _notifService: NotificationService,
     private route: ActivatedRoute,
     private dialog: MatDialog, 
-    private router: Router,
-    public snackBar: MatSnackBar) {}
+    private router: Router) {}
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(params => {
@@ -59,26 +65,18 @@ export class PhotoDetailComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.data = this.photo.url;
     dialogConfig.hasBackdrop = true;
-    this.shareDialogRef = this.dialog.open(PhotoShareDialogComponent, dialogConfig);
-
-    this.shareDialogRef
-        .afterClosed()
-        .subscribe();
+    this._shareDialogRef = this.dialog.open(PhotoShareDialogComponent, dialogConfig);
+    this._shareDialogRef.afterClosed().subscribe();
   }
 
   linkToOccurrence(occurrence) {
 
     this.dataService.patch(this.photo.id, {occurrence:{id:occurrence.id}}).subscribe(
       data => {
-        this.snackBar.open(
-        "La photo et l’observation ont bien été liées.", 
-        "Fermer", 
-        { duration: 1500 });
+	this.photo.occurrence = occurrence;
+	this._notifService.notify(PhotoDetailComponent._occLinkedOkMsg);
       },
-      error => this.snackBar.open(
-        'Une erreur est survenue. ' + error, 
-        'Fermer', 
-        { duration: 1500 })
+      error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
     );
   }
 
@@ -88,9 +86,9 @@ export class PhotoDetailComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.data = this.photo;
     dialogConfig.hasBackdrop = true;
-    this.linkToOccDialogRef = this.dialog.open(PhotoLinkOccurrenceDialogComponent, dialogConfig);
+    this._linkToOccDialogRef = this.dialog.open(PhotoLinkOccurrenceDialogComponent, dialogConfig);
 
-    this.linkToOccDialogRef
+    this._linkToOccDialogRef
       .afterClosed()
       .subscribe(
         occ => this.linkToOccurrence(occ)
@@ -99,6 +97,15 @@ export class PhotoDetailComponent implements OnInit {
   }
 
 
+  unlinkOccurrence() {
+    this.dataService.patch(this.photo.id, {occurrence:null}).subscribe(
+      data => {
+	this.photo.occurrence = null;
+	this._notifService.notify(PhotoDetailComponent._occUnlinkedOkMsg);
+      },
+      error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
+    );
+  }
   
   private downloadZipInBrowser(data: any) {
     var blob = new Blob([data], { type: "application/zip"});
@@ -116,12 +123,11 @@ export class PhotoDetailComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.data = this.photo;
     dialogConfig.hasBackdrop = true;
-    this.photoDisplayDialogRef = this.dialog.open(PhotoDisplayDialogComponent, dialogConfig);
+    this._photoDisplayDialogRef = this.dialog.open(PhotoDisplayDialogComponent, dialogConfig);
 
-    this.photoDisplayDialogRef
+    this._photoDisplayDialogRef
         .afterClosed()
         .subscribe();
-
   }
 
   download() {
@@ -129,12 +135,8 @@ export class PhotoDetailComponent implements OnInit {
       this.dataService.download([this.photo.id]).subscribe(
           data => {
             this.downloadZipInBrowser(data);
-
           },
-          error => this.snackBar.open(
-              'Une erreur est survenue. ' + error, 
-              'Fermer', 
-              { duration: 1500 })
+          error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
       );
   }
 
@@ -142,18 +144,15 @@ export class PhotoDetailComponent implements OnInit {
       let id = this.photo.id;
       this.dataService.delete(id).subscribe(
           data => {
-              this.snackBar.open(
-              "L'observation a été supprimée avec succès.", 
-              "Fermer", 
-              { duration: 1500 });
-              this.router.navigate(['/photo-ui']);
-
+            this._notifService.notify(PhotoDetailComponent._photoDeletedOkMsg);
+            this._navigateToPhotoGallery();
           },
-          error => this.snackBar.open(
-              'Une erreur est survenue. ' + error, 
-              'Fermer', 
-              { duration: 1500 })
+          error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
       );
+  }
+
+  _navigateToPhotoGallery() {
+    this.router.navigate(['/photo-ui']);
   }
 
   logTagLibMessages(log: TbLog) {
