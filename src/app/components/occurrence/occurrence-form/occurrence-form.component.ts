@@ -14,6 +14,7 @@ import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.mode
 import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
 import { environment } from '../../../../environments/environment';
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
+import { PlantnetResponse } from "../../../model/plantnet/plantnet-response.model";
 import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
 import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
@@ -25,6 +26,7 @@ import { OccurrenceBuilder } from "../../../utils/occurrence-builder.utils";
 import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.utils";
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import { OccurrenceLinkPhotoDialogComponent } from '../occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
+import { PlantnetResultDialogComponent } from '../plantnet-result-dialog/plantnet-result-dialog.component';
 
 @Component({
   selector: 'app-occurrence-form',
@@ -175,6 +177,7 @@ export class OccurrenceFormComponent implements OnInit {
 ];
 
   private linkPhotoToOccDialogRef: MatDialogRef<OccurrenceLinkPhotoDialogComponent>;
+  private plantnetResultDialogRef: MatDialogRef<PlantnetResultDialogComponent>;
   private subscription: Subscription;
 
   constructor(
@@ -723,16 +726,39 @@ console.debug(occ);
   }
 
 
-  openPlantNetDialog() {
+  askPlantNet() {
     const photoUrls = this.photos.map(photo => photo.url);
     this.plantnetService.get(
       photoUrls, 
       ['leaf'], 
       'fr').subscribe(
-        resp => console.debug(resp)
+        resp => {
+            console.debug(resp);
+          this.openPlantNetDialog(resp);
+        }
     );
 
   }
+
+  fillTaxofromPlantnetChoice(taxon: RepositoryItemModel) {
+
+    this.patchTaxon = taxon;
+  }
+
+  openPlantNetDialog(result: PlantnetResponse) {
+
+    this.plantnetResultDialogRef = this.dialog.open(PlantnetResultDialogComponent, {
+      data:  result
+    });
+    this.plantnetResultDialogRef
+      .afterClosed()
+      .subscribe(
+        taxon => this.fillTaxofromPlantnetChoice(taxon)
+    );
+
+  }
+
+
 
   isPlantNetCallable() {
     return (this.photos.length > 0);
