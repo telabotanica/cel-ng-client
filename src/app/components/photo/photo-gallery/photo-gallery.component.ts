@@ -13,11 +13,10 @@ import {
 import { 
   Router } from "@angular/router";
 import * as Leaflet from 'leaflet';
-import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
 
+import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
 import { PhotoService } from "../../../services/photo/photo.service";
 import { Photo } from "../../../model/photo/photo.model";
-
 import { PhotoFilters } from "../../../model/photo/photo-filters.model";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 
@@ -32,6 +31,7 @@ export class PhotoGalleryComponent implements OnInit {
   resources: Photo[];
   // The ids of selected photos:
   selected = [];
+  _filters: PhotoFilters;
   private sortBy;
   private sortDirection;
   linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
@@ -48,8 +48,12 @@ export class PhotoGalleryComponent implements OnInit {
     this.loadData(null);
   }
 
-  @Input() set filters(photoFilters: PhotoFilters) {
+  refresh() {
+    this.loadData(this._filters);
+  }
 
+  @Input() set filters(photoFilters: PhotoFilters) {
+    this._filters = photoFilters;
     if (  photoFilters !== null) {
         this.loadData(photoFilters);
     }
@@ -83,6 +87,7 @@ export class PhotoGalleryComponent implements OnInit {
   }
 
   onPhotoUploaded(photo: any) {
+    this.refresh();
     this.snackBar.open(
       "Photo enregistrée avec succès.", 
       'Fermer', 
@@ -139,6 +144,7 @@ export class PhotoGalleryComponent implements OnInit {
     let ids = this.selected;
     this.dataService.bulkRemove(ids).subscribe(
       data => {
+	this.refresh();
         this.snackBar.open(
           'Les photos ont bien été supprimées.', 
           'Fermer', 
