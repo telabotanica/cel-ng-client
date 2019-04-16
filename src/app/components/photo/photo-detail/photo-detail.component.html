@@ -57,6 +57,13 @@
       <div class="photo-detail-content-item-holder" *ngIf="photo.occurrence !== null">
         <div class="photo-detail-content-item-title">Observation liée</div>
         <div>{{photo.occurrence.userSciName}}</div>
+        <div>    
+	  <button mat-button
+	    (click)="unlinkOccurrence()" 
+      	    matTooltipPosition="above"
+            matTooltip="Supprimer le lien vers l'observation"
+            matTooltipPosition="above">Supprimer le lien</button>
+        </div>
       </div>
     </div>
 
