@@ -41,6 +41,7 @@ import { PhotoShareDialogComponent } from './components/photo/photo-share-dialog
 import { PhotoLinkOccurrenceDialogComponent } from './components/photo/photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { OccurrenceLinkPhotoDialogComponent } from './components/occurrence/occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
 import { PhotoDisplayDialogComponent } from './components/photo/photo-display-dialog/photo-display-dialog.component';
+import { PlantnetResultDialogComponent } from './components/occurrence/plantnet-result-dialog/plantnet-result-dialog.component';
 import { TbGeolocLibModule } from 'tb-geoloc-lib';
 import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
@@ -74,6 +75,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
+    PlantnetResultDialogComponent,
     PhotoDisplayDialogComponent,
     UserAgreementComponent,
     HelpComponent,
@@ -101,6 +103,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     PhotoService, 
     TelaBotanicaProjectService, 
     UserOccurrenceTagService,
+    NotificationService,
     JsonPatchService,
     EfloreService,
     AlgoliaEfloreParserService,
@@ -114,6 +117,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
+    PlantnetResultDialogComponent,
     PhotoDisplayDialogComponent]
 })
 
