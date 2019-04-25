@@ -118,7 +118,7 @@
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Certitude</div>
-          <div>{{occurrence.userSciName  == null ? "(vide)" : occurrence.userSciName}}</div>
+          <div>{{occurrence.certainty  == null ? "(vide)" : occurrence.certainty}}</div>
         </div>
 
         <div class="obs-detail-content-item-holder">
@@ -213,7 +213,20 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
+
+  <tb-tag
+    [userId]=22
+    [objectId]="id"
+    [baseApiUrl]="baseTagLibBaseUrl"
+    apiPath="/api/user_occurrence_tags"
+    apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
+    apiRetrievePath="/api/occurrences/{id}/user_tag_relations"
+    objectName="occurrence"
+    objectEndpoint="/api/occurrences"
+    tagName="userOccurrenceTag"
+    tagEndpoint="/api/user_occurrence_tags"></tb-tag>
+
     <div>
       <button mat-button
         class="bold-link small" 
