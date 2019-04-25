@@ -585,7 +585,7 @@ console.debug(photo);
     // If we've got all the data we need to check existence in chorodep:
     if ( this.taxon != null && this.location != null ) {
       this.snackBar.open(
-        "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorlogie départementale).", 
+        "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorologie départementale).", 
         'Fermer', 
         { duration: 2500 });
 
@@ -654,8 +654,7 @@ console.debug(photo);
           "L'observation vient d'être créée.", 
           'Fermer', 
           { duration: 2500 });
-        //console.debug(result);
-        if ( this.photos.length === 0 ) {
+        if ( this.photos.length > 0 ) {
           this.linkPhotosToOccurrence(occ.id); 
         }
         this.photos = [];
