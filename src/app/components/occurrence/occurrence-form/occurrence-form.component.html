@@ -157,6 +157,7 @@
               placeholder='Choisir une espèce'
               editingPlaceholder="Modifier l'espèce"
               defaultRepository='bdtfx'
+              [autoSelectValueIfOnlyOneResult]='autoSelectValueIfOnlyOneResult'
               [tbRepositoriesConfig]='tbRepositoriesConfig'
               [autoResetWhenSelected]='false'
               [emitOccurenceOnBlur]='true'
@@ -166,7 +167,7 @@
               (newData)='onTaxonChange($event)'></tb-tsb-search-box>
           </div>
 
-          <button type="button" mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eflore</button>
+          <button type="button" mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eFlore</button>
 
           <section class="base-occurrence-form-section">
             <div class="occurrence-form-label-container">
@@ -194,6 +195,7 @@
                 [label]="'Glissez vos photos ici'"
                 [ignoreOversizedFiles]="false"
                 [photoUploadBaseUrl]="baseCelApiUrl"   
+                (httpError)="onPostPhotoError($event)"
                 (rejectedFiles)="onPhotoRejected($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
                 (uploadedFiles)="onPhotoUploaded($event)"
@@ -229,19 +231,23 @@
               <label class="occurrence-form-label">Mots-clés :</label>
             </div>
             <tb-tag
-            [userId]=22
-            [objectId]="tagObjectId"
-            [basicTags]="basicTags"
-            [baseApiUrl]="baseUrl"
-            apiPath="/api/user_occurrence_tags"
-            apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
-            apiRetrievePath="/api/occurrence/{id}/occurrence_user_occurrence_tag_relations"
-            objectName="occurrence"
-            objectEndpoint="/api/occurrences"
-            tagName="userOccurrenceTag"
-            tagEndpoint="/api/user_occurrence_tags"
-            (log)="logTagLibMessages($event)"></tb-tag>
+              [userId]=22
+              [objectId]="tagObjectId"
+              [noApiCall]="delayTagApiCalls()"
+              [basicTags]="basicTags"
+              [baseApiUrl]="tagLibBaseUrl"
+              (newTag)="onTagAdded($event)"
+              (removedTag)="onTagRemoved($event)"
+              (httpError)="onPostTagError($event)"
+              apiPath="/api/user_occurrence_tags"
+              apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
+              apiRetrievePath="/api/occurrence/{id}/occurrence_user_occurrence_tag_relations"
+              objectName="occurrence"
+              objectEndpoint="/api/occurrences"
+              tagName="userOccurrenceTag"
+              tagEndpoint="/api/user_occurrence_tags"></tb-tag>
           </div>
+
         
           <div class="occurrence-form-label-container">
             <label class="occurrence-form-label">Options de publication :</label>

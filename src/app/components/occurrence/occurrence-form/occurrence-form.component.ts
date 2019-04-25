@@ -84,11 +84,13 @@ export class OccurrenceFormComponent implements OnInit {
   // Should the form be reset?
   resetForm: boolean;
   // Configuration values for Stephane's modules: 
-  tagObjectId: number;
+  tagObjectId: number = null;
   baseCelApiUrl: string = environment.api.baseUrl;
+  tagLibBaseUrl: string = environment.api.tagLibBaseUrl;
   elevationApiProvider: string = environment.elevationApi.provider;
   mapBgTileUrl: string = environment.mapBgTile.baseUrl;
-  // Shuld the advanced forms be displyed instead of basic ones: 
+  autoSelectValueIfOnlyOneResult: boolean = false;
+  // Shuld the advanced forms be displayed instead of basic ones: 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
 
@@ -241,8 +243,8 @@ export class OccurrenceFormComponent implements OnInit {
 
   displayEfloreCard() {
     let url = EfloreCardUrlBuilder.build(
-      this.taxon.idNomen,
-      this.taxon.repository);
+      this.taxon.repository,
+      this.taxon.idNomen);
     window.open(url, '_blank');
   }
 
@@ -251,7 +253,8 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   isTagComponentDisplayable() {
-    return (this.occurrences && this.occurrences.length ==1);
+    // Only when creating a new occurrence or editing a single occurrence:
+    return  ( ! (this.occurrences && this.occurrences.length>1) );
   }
 
   openConfirmActionDialog(value) {
@@ -270,6 +273,10 @@ export class OccurrenceFormComponent implements OnInit {
       });
   }
 
+
+  delayTagApiCalls() {
+     return ( this.mode == OccurrenceFormComponent.CREATE_MODE );
+  }
 
   private generateConfirmQuestionFromMode() {
     let confirmQuestion = '';
@@ -488,7 +495,7 @@ console.debug(photo);
       this.snackBar.open(
         "La photo " + photo.originalName + " a été enregistrée avec succès.", 
         'Fermer', 
-        { duration: 1500 });
+        { duration: 2500 });
   }
 
 
@@ -500,12 +507,12 @@ console.debug(photo);
         this.snackBar.open(
         "Les photos et l’observation ont été liées avec succès.", 
         "Fermer", 
-        { duration: 1500 });
+        { duration: 2500 });
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
         'Fermer', 
-        { duration: 1500 })
+        { duration: 2500 })
     );
   }
 
@@ -519,7 +526,21 @@ console.debug(photo);
     this.taxon = taxon;
   }
 
+  onTagRemoved(tag: any) {
+    console.debug(tag);
+  }
 
+  onPostTagError(error: any) {
+    console.debug(error);
+  }
+
+  onPostPhotoError(error: any) {
+    console.debug(error);
+  }
+
+  onTagAdded(tag: any) {
+    console.debug(tag);
+  }
 
   addPhoto(location: RepositoryItemModel) {
 
@@ -566,7 +587,7 @@ console.debug(photo);
       this.snackBar.open(
         "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorlogie départementale).", 
         'Fermer', 
-        { duration: 1500 });
+        { duration: 2500 });
 
       let frenchDept = this.location.inseeData.code.substr(0, 2);
       let existsInChorodep = await this.existsInChorodep();
@@ -632,9 +653,11 @@ console.debug(photo);
         this.snackBar.open(
           "L'observation vient d'être créée.", 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
         //console.debug(result);
-        this.linkPhotosToOccurrence(occ.id); 
+        if ( this.photos.length === 0 ) {
+          this.linkPhotosToOccurrence(occ.id); 
+        }
         this.photos = [];
         if ( this.clearFormAfterSubmit ) {
           this.clearForm();
@@ -644,7 +667,7 @@ console.debug(photo);
         this.snackBar.open(
           'Une erreur est survenue. ' + error, 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
       }
     );
   }
@@ -656,14 +679,14 @@ console.debug(photo);
         this.snackBar.open(
           "L'observation a bien été modifiée.", 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
         this.navigateToDetail(occ.id)
       },
       error => {
         this.snackBar.open(
           'Une erreur est survenue. ' + error, 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
       }
     );
   }
@@ -680,14 +703,14 @@ console.debug(photo);
         this.snackBar.open(
           "Les observations ont bien été modifiées.", 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
         this.navigateToOccurrenceUi();
       },
       error => {
         this.snackBar.open(
           'Une erreur est survenue. ' + error, 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
       }
     );
   }
@@ -734,6 +757,7 @@ console.debug(occ);
       'fr').subscribe(
         resp => {
             console.debug(resp);
+          this.autoSelectValueIfOnlyOneResult = true;
           this.openPlantNetDialog(resp);
         }
     );
@@ -741,8 +765,8 @@ console.debug(occ);
   }
 
   fillTaxofromPlantnetChoice(taxon: RepositoryItemModel) {
-
     this.patchTaxon = taxon;
+    this.autoSelectValueIfOnlyOneResult = false;
   }
 
   openPlantNetDialog(result: PlantnetResponse) {
@@ -753,7 +777,17 @@ console.debug(occ);
     this.plantnetResultDialogRef
       .afterClosed()
       .subscribe(
-        taxon => this.fillTaxofromPlantnetChoice(taxon)
+        taxon => {
+          // Taxon suggestion selected, let's fill the tb-tsb-lib component:
+          if (taxon) {
+            this.fillTaxofromPlantnetChoice(taxon);
+          }
+          // The close button has been clicked, no taxon suggestion selected:
+          else {
+            // Switch the tb-tsb-lib component to default mode:
+            this.autoSelectValueIfOnlyOneResult = false;
+          }
+        }
     );
 
   }
