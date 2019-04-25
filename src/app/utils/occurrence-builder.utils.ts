@@ -84,6 +84,13 @@ export class OccurrenceBuilder {
 
   private async fillOccTaxoProperties() {
     this.occ.userSciName = this.taxon.name;    
+
+     
+    if (typeof this.taxon.author ) {
+ 
+        this.occ.userSciName = this.occ.userSciName.concat(' ');
+        this.occ.userSciName = this.occ.userSciName.concat(this.taxon.author);
+    }
      
     if (typeof this.taxon.idNomen === 'string') {
         this.occ.userSciNameId = parseInt(this.taxon.idNomen);
@@ -98,8 +105,8 @@ export class OccurrenceBuilder {
 
   private fillOccProperties(): void {
     let props = ["certainty", "observer", "occurrenceType", 
-      "certainty", "phenology", "geodatum", "environment",
-      "isWild", "isPublic", "station", "coef", "station",
+      "certainty", "phenology", "geodatum", "environment", "annotation",
+      "isWild", "isPublic", "station", "coef", "station", "bibliographySource",
       "sampleHerbarium", "observerInstitution", "coef", "dateObserved"];
 
     for (let propName of props) {
