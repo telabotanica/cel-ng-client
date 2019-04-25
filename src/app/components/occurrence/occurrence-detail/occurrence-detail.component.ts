@@ -8,6 +8,7 @@ import {
   MatSnackBar,
   MatDialog } from "@angular/material";
 
+import { environment } from '../../../../environments/environment';
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { EfloreService } from "../../../services/eflore/eflore.service";
@@ -25,6 +26,7 @@ export class OccurrenceDetailComponent implements OnInit {
   occurrence: Occurrence;
   private subscription: Subscription;
   efloreCard: EfloreCard;
+  baseTagLibBaseUrl: string = environment.api.tagLibBaseUrl;
 
   constructor(
     private dataSource: OccurrencesDataSource, 
