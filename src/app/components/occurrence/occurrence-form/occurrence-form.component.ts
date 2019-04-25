@@ -588,15 +588,15 @@ console.debug(photo);
         "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorologie départementale).", 
         'Fermer', 
         { duration: 2500 });
+      if ( this.location.inseeData != null ) {
+          let frenchDept = this.location.inseeData.code.substr(0, 2);
+          let existsInChorodep = await this.existsInChorodep();
 
-      let frenchDept = this.location.inseeData.code.substr(0, 2);
-      let existsInChorodep = await this.existsInChorodep();
-
-      if (existsInChorodep == "0") {
-        let msg = "Attention, le taxon " + this.taxon.name + " n'est pas signalé par la chorologie dans le département " + frenchDept + ". Si vous êtes sûr de votre observation, vous pouvez signaler votre découverte à la liste chorologie à l'adresse : chorologie@tela-botanica.org. ";
-        warnings.push(msg);
+          if (existsInChorodep == "0") {
+            let msg = "Attention, le taxon " + this.taxon.name + " n'est pas signalé par la chorologie dans le département " + frenchDept + ". Si vous êtes sûr de votre observation, vous pouvez signaler votre découverte à la liste chorologie à l'adresse : chorologie@tela-botanica.org. ";
+            warnings.push(msg);
+          }
       }
-
       // If we've got all the data we need to check duplicate existence:
       if ( dateObserved != null ) {
         let month = dateObserved.getUTCMonth() + 1;
@@ -802,9 +802,10 @@ console.debug(occ);
     if ( this.taxon != null && 
       this.location != null && 
       this.location.osmCountry != null && 
+      this.location.inseeData != null &&
       this.location.inseeData.code != null &&
       this.location.inseeData.code.length >=2 ) {
-
+console.log('ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
       let taxonId: number;
       let frenchDept = this.location.inseeData.code.substr(0, 2);
 
