@@ -93,6 +93,7 @@ export class OccurrenceFormComponent implements OnInit {
   // Shuld the advanced forms be displayed instead of basic ones: 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
+  readonly maxDate: Date = new Date();
 
   // ---------------
   // LIST VALUES:
@@ -217,7 +218,7 @@ export class OccurrenceFormComponent implements OnInit {
       observerInstitution:  new FormControl(),
       isWild:               new FormControl(),
       coef:                 new FormControl(),
-      herbariumSample:      new FormControl(),
+      sampleHerbarium:      new FormControl(),
       locationAccuracy:     new FormControl(),
       sublocality:          new FormControl(),
       environment:          new FormControl(),
