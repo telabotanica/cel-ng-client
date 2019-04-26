@@ -37,7 +37,7 @@ export class UserProfileUiComponent implements OnInit {
   }
 
   navigateToHelp() {
-    this.router.navigate(['/help']);
+    this.document.location.href ='https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php';
   }
 
   getUsername() {
