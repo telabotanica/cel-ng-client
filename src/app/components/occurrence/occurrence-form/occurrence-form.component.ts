@@ -7,6 +7,8 @@ import {
   MatDialogConfig, 
   MatSnackBar,
   MatDialog } from "@angular/material";
+import { Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import { TbLog } from "tb-tag-lib/lib/_models/tb-log.model";
 import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
@@ -193,7 +195,8 @@ export class OccurrenceFormComponent implements OnInit {
     private confirmDialog:          MatDialog, 
     public  snackBar:               MatSnackBar,
     private route:                  ActivatedRoute,
-    private router:                 Router) { 
+    private router:                 Router,
+    @Inject(DOCUMENT) private document: any) { 
   }
 
   ngOnInit() { 
@@ -307,7 +310,7 @@ export class OccurrenceFormComponent implements OnInit {
   }
 
   navigateToHelp() {
-    this.router.navigateByUrl('/help');
+    this.document.location.href ='https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php';
   }
 
   private navigateToOccurrenceUi() {
@@ -535,8 +538,22 @@ console.debug(photo);
     console.debug(error);
   }
 
-  onPostPhotoError(error: any) {
-    console.debug(error);
+  onPostPhotoError(data: any) {
+    let msg;
+
+    if ( data.error['hydra:description'].includes('is not a valid image') ) {
+      msg = "Le fichier n'est pas une image valide.";
+    }
+    else if ( data.error['hydra:description'].includes('with the same name') ) {
+      msg = "Vous avez déjà téléversé une image avec le même nom. Ce n'est pas permis dans le CEL.";
+    }
+    else {
+      msg = "Une erreur est survenue.";
+    }
+    this.snackBar.open(
+      msg, 
+      "Fermer", 
+      { duration: 2500 });
   }
 
   onTagAdded(tag: any) {
