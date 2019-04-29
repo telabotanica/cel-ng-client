@@ -204,7 +204,15 @@ export class OccurrenceFormComponent implements OnInit {
     this.initFormGroup();
     this.initOccurrencesToEdit();
     this.tbPrjService.getCollection().subscribe(
-      tbProjects => this.projects = tbProjects
+      tbProjects => {
+        let emptyPrj = new TelaBotanicaProject();
+        emptyPrj.name = '';
+        emptyPrj.id = null;     
+        // Let's add an empty project so the user can revert her choice to
+        // no project (null) after choosing one:
+        tbProjects = [emptyPrj].concat(tbProjects); 
+        this.projects = tbProjects;
+      }
     );
   }
 
