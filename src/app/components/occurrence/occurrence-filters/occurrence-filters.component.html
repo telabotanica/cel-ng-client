@@ -104,15 +104,15 @@
 
       <mat-divider></mat-divider>
 
-      <span class="form-group-label">Public/privé</span>
+      <span class="form-group-label">Publique/privée</span>
 
       <div>
         <mat-form-field>
             <mat-label></mat-label>
                 <mat-select [(value)]="isPublic" (selectionChange)="changeIsPublic($event)">
                 <mat-option>Indifférent</mat-option>
-                <mat-option value="true">Seulement publics</mat-option>
-                <mat-option value="false">Seulement privés</mat-option>
+                <mat-option value="true">Seulement publiques</mat-option>
+                <mat-option value="false">Seulement privées</mat-option>
             </mat-select>
         </mat-form-field>
       </div>
@@ -126,8 +126,8 @@
             <mat-label></mat-label>
                 <mat-select [(value)]="isIdentiplanteValidated" (selectionChange)="changeIsIdentiplanteValidated($event)">
                 <mat-option>Indifférent</mat-option>
-                <mat-option value="true">Seulement validés</mat-option>
-                <mat-option value="false">Seulement non validés</mat-option>
+                <mat-option value="true">Seulement validées</mat-option>
+                <mat-option value="false">Seulement non validées</mat-option>
             </mat-select>
         </mat-form-field>
       </div>
