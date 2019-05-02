@@ -68,8 +68,8 @@ export class OccurrenceFiltersComponent implements OnInit {
       occFilters.dateObservedDay = this.occurrenceSearchFormGroup.get('dateObservedDay').value;
       occFilters.dateObservedMonth = this.occurrenceSearchFormGroup.get('dateObservedMonth').value;
       occFilters.dateObservedYear = this.occurrenceSearchFormGroup.get('dateObservedYear').value;
-      occFilters.country = this.occurrenceSearchFormGroup.get('osmCountry').value;
-      occFilters.locality = this.occurrenceSearchFormGroup.get('osmLocality').value;
+      occFilters.osmCountry = this.occurrenceSearchFormGroup.get('osmCountry').value;
+      occFilters.osmLocality = this.occurrenceSearchFormGroup.get('osmLocality').value;
       occFilters.frenchDep = this.occurrenceSearchFormGroup.get('frenchDep').value;
       occFilters.certainty = this.selectedCertainty;
       occFilters.projectId = this.selectedProjectId;
