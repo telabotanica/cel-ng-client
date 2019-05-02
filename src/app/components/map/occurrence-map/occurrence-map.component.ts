@@ -283,7 +283,7 @@ console.log('piopoioppipoipoipoioipoiipoippio');
         this.dataSource.bulkReplace(ids, {isPublic: true}).subscribe(
             data => {
                 this.snackBar.open(
-                'Les observations ont été publiées avec succès.', 
+                'Les observations complètes ont été publiées avec succès.', 
                 'Fermer', 
                 { duration: 1500 });
 
