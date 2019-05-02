@@ -107,7 +107,7 @@
           <div> 
             <a href="https://www.tela-botanica.org/{{occurrence.taxoRepo}}-nn-{{occurrence.userSciNameId}}" 
               matTooltip="Ouvrir la fiche eFlore" 
-              matTooltipPosition="above">{{occurrence.userSciName}}</a>
+              matTooltipPosition="above">{{occurrence.userSciName  == null ? "(vide)" : occurrence.userSciName}}</a>
           </div>
         </div>
 
@@ -128,79 +128,79 @@
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Date</div>
-          <div>{{occurrence.dateObserved  == null ? "(vide)" : occurrence.dateObserved}}</div>
+          <div>{{occurrence.dateObserved  == null ? "(vide)" : occurrence.dateObserved | date:'dd/mm/yyyy'}}}</div>
         </div>
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Lieu</div>
-          <div>{{occurrence.locality}} {{occurrence.osmCountry}}</div>
+          <div>{{( (occurrence.locality  == null) && (occurrence.osmCountry) ) ? "(vide)" : occurrence.locality + ', ' + occurrence.osmCountry}}</div>
         </div>
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Altitude</div>
-          <div>{{occurrence.elevation == null ? "(vide)" : occurrence.elevation}}</div>
+          <div>{{occurrence.elevation == null ? "(vide)" : occurrence.elevation + 'm'}}</div>
         </div>
 
 
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Lieu-dit</div>
-          <div>{{occurrence.sublocality}}</div>
+          <div>{{occurrence.sublocality == null ? "(vide)" : occurrence.sublocality}}</div>
         </div>
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Code INSEE</div>
-          <div>{{occurrence.localityInseeCode}}</div>
+          <div>{{occurrence.localityInseeCode == null ? "(vide)" : occurrence.localityInseeCode}}</div>
         </div>
 
         <div *ngIf="occurrence.station != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Station</div>
-          <div>{{occurrence.station}}</div>
+          <div>{{occurrence.station == null ? "(vide)" : occurrence.station}}</div>
         </div>
 
         <div *ngIf="occurrence.environment != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Milieu</div>
-          <div>{{occurrence.environment}}</div>
+          <div>{{occurrence.environment == null ? "(vide)" : occurrence.environment}}</div>
         </div>
 
         <div *ngIf="occurrence.publishedLocation != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Localisation diffusée</div>
-          <div>{{occurrence.publishedLocation}}</div>
+          <div>{{occurrence.publishedLocation == null ? "(vide)" : occurrence.publishedLocation}}</div>
         </div>
 
         <div *ngIf="occurrence.project != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Projet ou programme</div>
-          <div>{{occurrence.project.label}}</div>
+          <div>{{occurrence.project == null ? "(vide)" : occurrence.project.label}}</div>
         </div>
 
         <div *ngIf="occurrence.observer != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Observateur</div>
-          <div>{{occurrence.observer}}</div>
+          <div>{{occurrence.observer == null ? "(vide)" : occurrence.observer}}</div>
         </div>
 
         <div *ngIf="occurrence.observerInstitution != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Structure de l'observateur</div>
-          <div>{{occurrence.observerInstitution}}</div>
+          <div>{{occurrence.observerInstitution == null ? "(vide)" : occurrence.observerInstitution}}</div>
         </div>
 
         <div *ngIf="occurrence.occurrenceType != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Type de données</div>
-          <div>{{occurrence.occurrenceType}}</div>
+          <div>{{occurrence.occurrenceType == null ? "(vide)" : occurrence.occurrenceType}}</div>
         </div>
 
         <div *ngIf="occurrence.biblioSource != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Source bibliographique</div>
-          <div>{{occurrence.biblioSource}}</div>
+          <div>{{occurrence.biblioSource == null ? "(vide)" : occurrence.biblioSource}}</div>
         </div>
 
         <div *ngIf="occurrence.phenology != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Phénologie</div>
-          <div>{{occurrence.phenology}}</div>
+          <div>{{occurrence.phenology == null ? "(vide)" : occurrence.phenology}}</div>
         </div>
 
         <div *ngIf="occurrence.coef != null" class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Abondance</div>
-          <div>{{occurrence.coef}}</div>
+          <div>{{occurrence.coef == null ? "(vide)" : occurrence.coef}}</div>
         </div>
 
         <div *ngIf="occurrence.isHerbariumSample != null" class="obs-detail-content-item-holder">
