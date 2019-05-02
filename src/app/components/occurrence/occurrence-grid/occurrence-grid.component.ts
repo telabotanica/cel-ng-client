@@ -194,7 +194,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   openConfirmBulkPublishDialog() {
 
     let dialogConfig = this.buildDialogConfig();  
-    dialogConfig.data = 'Publier la/les observation(s) ? Cela ne sera effectif que pour les observations ayant les prérequis (précision, localisation et date renseignés.';
+    dialogConfig.data = 'Publier la/les observation(s) ? Cela ne sera effectif que pour les observations ayant les prérequis (précision, localisation et date renseignés).';
     let confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
     confirmBulkPublishDialogRef
