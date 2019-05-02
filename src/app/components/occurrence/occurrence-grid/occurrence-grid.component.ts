@@ -61,13 +61,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
     if (  newOccFilters !== null) {
-      this.dataSource.loadOccurrences(            
-          this.sort.active,
-          this.sort.direction,
-          this.paginator.pageIndex,
-          this.paginator.pageSize, 
-          newOccFilters);
-      this.refreshCountWithFilters(newOccFilters);
+      this.paginator.pageIndex = 0;
+      this._occFilters = newOccFilters;
+      this.refreshGrid();
     }
   }
 
