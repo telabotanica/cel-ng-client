@@ -1,7 +1,7 @@
-import { PlantnetResults } from "./plantnet-results.model";
+import { PlantnetHit } from "./plantnet-hit.model";
 
 export class PlantnetResponse {
 
-  results: PlantnetResults;
+  results: PlantnetHit[];
 
 } 
