@@ -20,10 +20,10 @@ export class PlantnetService {
 
     let httpParams= new HttpParams();
 
-    httpParams = httpParams.append("api-key", this.plantnetApiKey);
-    httpParams = httpParams.append("lang", lang);
-    httpParams = httpParams.append("organs", this.encodeStringArray(organs));
     httpParams = httpParams.append("images", this.encodeStringArray(imageUrls));
+    httpParams = httpParams.append("organs", this.encodeStringArray(organs));
+    httpParams = httpParams.append("lang", lang);
+    httpParams = httpParams.append("api-key", this.plantnetApiKey);
 
     return this.http.get<PlantnetResponse>(this.plantnetBaseUrl, 
       {
@@ -34,16 +34,17 @@ export class PlantnetService {
   }
 
   private encodeStringArray(strArr) {
-    let encodedArray = '[';
+    let encodedArray = '';
     for(let item of strArr) {
-      encodedArray += '"';
-      encodedArray += item;
-      encodedArray += '",';
+      //encodedArray += '"';
+      encodedArray += encodeURI(item);
+      //encodedArray += "',';
+      encodedArray += ',';
     }
     // Remove the last comma:
     encodedArray = encodedArray.substring(0, encodedArray.length-1);
-    encodedArray += ']';
-    
+//    encodedArray += ']';
+    console.log(encodedArray);
     return encodedArray;
   }
 
