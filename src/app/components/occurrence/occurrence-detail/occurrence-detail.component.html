@@ -42,48 +42,7 @@
       </mat-toolbar>
     <div>
 
-      <div *ngIf="efloreCard!=null">
 
-        <h2>Extrait eFlore</h2> 
-
-        <button mat-button (click)="openEfloreCard()">Consulter la fiche eflore</button>
-
-        <div class="obs-detail-content">
-
-          <div class="obs-detail-content-item-holder">
-            <div class="obs-detail-content-item-title">Nom retenu</div>
-            <div>{{efloreCard.scientific_name}}</div>
-          </div>
-
-          <div class="obs-detail-content-item-holder">
-            <div class="obs-detail-content-item-title">Nom vernaculaire</div>
-            <div>{{efloreCard.common_names[0]}}</div>
-          </div>
-
-          <div class="obs-detail-content-item-holder">
-            <div class="obs-detail-content-item-title">Famille</div>
-            <div>{{occurrence.family}}</div>
-          </div>
-
-        
-
-
-        <div class="obs-detail-content-item-title" *ngIf="efloreCard.chorodepMapUrl!=null">Répartition départementale</div>
-          <div>
-          <img src="{{efloreCard.chorodepMapUrl}}" />
-          </div>
-        </div>
-
-
-        <div class="obs-detail-galery-container" *ngIf="efloreCard.celPhotoUrls!=null">
-          <div class="obs-detail-galery" style="width:33%">
-                <div class="obs-detail-content-item-title">Illustrations</div>
-              <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
-          </div>
-        </div>
-  
-
-    </div>
 
 
 
@@ -226,6 +185,49 @@
     objectEndpoint="/api/occurrences"
     tagName="userOccurrenceTag"
     tagEndpoint="/api/user_occurrence_tags"></tb-tag>
+
+      <div *ngIf="efloreCard!=null">
+
+        <h2>Extrait eFlore</h2> 
+
+        <button mat-button (click)="openEfloreCard()">Consulter la fiche eflore</button>
+
+        <div class="obs-detail-content">
+
+          <div class="obs-detail-content-item-holder">
+            <div class="obs-detail-content-item-title">Nom retenu</div>
+            <div>{{efloreCard.scientific_name}}</div>
+          </div>
+
+          <div class="obs-detail-content-item-holder">
+            <div class="obs-detail-content-item-title">Nom vernaculaire</div>
+            <div>{{efloreCard.common_names[0]}}</div>
+          </div>
+
+          <div class="obs-detail-content-item-holder">
+            <div class="obs-detail-content-item-title">Famille</div>
+            <div>{{occurrence.family}}</div>
+          </div>
+
+        
+
+
+        <div class="obs-detail-content-item-title" *ngIf="efloreCard.chorodepMapUrl!=null">Répartition départementale</div>
+          <div>
+          <img src="{{efloreCard.chorodepMapUrl}}" />
+          </div>
+        </div>
+
+
+        <div class="obs-detail-galery-container" *ngIf="efloreCard.celPhotoUrls!=null">
+          <div class="obs-detail-galery" style="width:33%">
+                <div class="obs-detail-content-item-title">Illustrations</div>
+              <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
+          </div>
+        </div>
+  
+
+    </div>
 
     <div>
       <button mat-button
