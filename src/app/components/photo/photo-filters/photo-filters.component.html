@@ -86,7 +86,7 @@
       <div>
         <mat-form-field>
             <mat-label></mat-label>
-                <mat-select [(value)]="projectId" (selectionChange)="changeProjectId(project.id)">
+                <mat-select [(value)]="projectId" (selectionChange)="changeProjectId($event)">
                 <mat-option>Tous</mat-option>
                 <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}">{{project.label}}</mat-option>
 

@@ -17,7 +17,7 @@ export class OccurrenceFiltersComponent implements OnInit {
   projectId;
   project;
   telaBotanicaProjects: TelaBotanicaProject[];
-  private selectedProjectId;
+   selectedProjectId;
   private selectedIsPublic;
   private selectedIsIdentiplanteValidated;
   private selectedCertainty;
@@ -77,13 +77,12 @@ export class OccurrenceFiltersComponent implements OnInit {
 
       //occFilters.tags = [this.occurrenceSearchFormGroup.get('tag').value];
       occFilters.freeTextQuery = this.occurrenceSearchFormGroup.get('freeTextQuery').value;
-
       this.applyFiltersEvent.emit(occFilters);
 
   }
 
-    changeProjectId(prjId) {
-       this.selectedProjectId = prjId;
+    changeProjectId(event) {
+       this.selectedProjectId = event.value;
     } 
 
     changeIsPublic(event) {
