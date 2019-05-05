@@ -553,7 +553,6 @@ console.debug(photo);
 
 
   private linkPhotosToOccurrence(occurrenceId) {
-
     const photoIds = this.photos.map(photo => photo.id);
     this.photoService.bulkReplace(photoIds, {occurrence:{id:occurrenceId}}).subscribe(
       data => {
@@ -722,7 +721,7 @@ console.debug(photo);
           'Fermer', 
           { duration: 2500 });
         if ( this.photos.length > 0 ) {
-          this.linkPhotosToOccurrence(occ.id); 
+          this.linkPhotosToOccurrence(result.id); 
         }
         this.photos = [];
         if ( this.clearFormAfterSubmit ) {
