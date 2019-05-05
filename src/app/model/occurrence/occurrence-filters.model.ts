@@ -8,7 +8,7 @@ export class OccurrenceFilters {
   userSciName: string;
   locality: string;
   signature:  string;
-  country: string;
+  osmCountry: string;
   isIdentiplanteValidated: boolean;
   isPublic: boolean;
   certainty: string;
