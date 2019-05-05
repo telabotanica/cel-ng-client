@@ -153,7 +153,9 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     importDialogRef
       .afterClosed()
       .subscribe( file => {
-          this.importSpreadsheet(file);
+          if ( file ) {
+            this.importSpreadsheet(file);
+          }
       });
   }
 
