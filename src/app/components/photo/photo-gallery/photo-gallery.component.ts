@@ -45,22 +45,29 @@ export class PhotoGalleryComponent implements OnInit {
 
 
   ngOnInit() {
-    this.loadData(null);
+    console.log("ngOnInit");
   }
 
   refresh() {
+    this._emptySelection();
     this.loadData(this._filters);
+  }
+
+  _emptySelection() {
+    this.selected = [];
   }
 
   @Input() set filters(photoFilters: PhotoFilters) {
     this._filters = photoFilters;
     if (  photoFilters !== null) {
+        this._emptySelection();
         this.loadData(photoFilters);
     }
   }
 
 
   loadData(filters) {
+console.log("load DATA");
     this.subscription  = this.dataService.getCollection(            
         this.sortBy,
         this.sortDirection,
