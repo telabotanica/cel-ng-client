@@ -1,0 +1,16 @@
+
+<h2 mat-dialog-title>Résultats de la détermination de PlantNet</h2>
+
+<mat-dialog-content>
+  
+  <div *ngFor="let result of plantnetResponse.results" >
+    <span><mat-checkbox (click)="onResultSelect(result.species.scientificNameWithoutAuthor, result.species.scientificNameAuthorship)"></mat-checkbox>{{result.species.scientificNameWithoutAuthor}}  (score: {{result.score | number }}) </span>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button"(click)="close()">Fermer</button>
+</mat-dialog-actions>
+
+
