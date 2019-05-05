@@ -17,6 +17,7 @@ export class Occurrence {
   observer:                 string;
   observerInstitution:      string;
   occurrenceType:           string;
+  identificationAuthor:     string;
   certainty:                string;
   phenology:                string;  
   geometry:                 string;
@@ -40,7 +41,7 @@ export class Occurrence {
   osmId:                    string;
   osmPlaceId:               number;
   sampleHerbarium:          boolean;
-  project:                  TelaBotanicaProject;
+  project:                  any;
   taxoRepo:                 string;
 
 

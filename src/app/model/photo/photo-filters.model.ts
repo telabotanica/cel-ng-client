@@ -5,7 +5,7 @@ export class PhotoFilters {
     dateShotYear: number;
     family: string;
     frenchDep: string;
-    country: string;
+    osmCountry: string;
     userSciName: string;
     locality: string;
     isIdentiplanteValidated: boolean;
