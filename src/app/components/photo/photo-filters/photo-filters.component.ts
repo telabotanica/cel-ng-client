@@ -61,8 +61,8 @@ export class PhotoFiltersComponent implements OnInit {
       photoFilters.dateShotDay = this.photoSearchFormGroup.get('dateShotDay').value;
       photoFilters.dateShotMonth = this.photoSearchFormGroup.get('dateShotMonth').value;
       photoFilters.dateShotYear = this.photoSearchFormGroup.get('dateShotYear').value;
-      photoFilters.country = this.photoSearchFormGroup.get('osmCountry').value;
-      photoFilters.locality = this.photoSearchFormGroup.get('osmLocality').value;
+      photoFilters.osmCountry = this.photoSearchFormGroup.get('osmCountry').value;
+      photoFilters.osmLocality = this.photoSearchFormGroup.get('osmLocality').value;
       photoFilters.frenchDep = this.photoSearchFormGroup.get('frenchDep').value;
       photoFilters.certainty = this.selectedCertainty;
       photoFilters.projectId = this.selectedProjectId;
@@ -75,9 +75,9 @@ export class PhotoFiltersComponent implements OnInit {
 
   }
 
-  changeProjectId(prjId) {
-     this.selectedProjectId = prjId;
-  } 
+    changeProjectId(event) {
+       this.selectedProjectId = event.value;
+    } 
 
   changeIsPublic(event) {
      this.selectedIsPublic = event.value;
