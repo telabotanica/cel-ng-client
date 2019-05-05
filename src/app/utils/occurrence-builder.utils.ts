@@ -1,6 +1,7 @@
 import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
 import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.model";
 import { Occurrence } from "../model/occurrence/occurrence.model";
+import { TelaBotanicaProject } from "../model/occurrence/tela-botanica-project.model";
 
 export class OccurrenceBuilder {  
   
@@ -38,8 +39,11 @@ export class OccurrenceBuilder {
     if ( this.location != null ) {
         this.fillOccLocationProperties();  
     }
-    this.fillOccProperties();
 
+    this.fillOccProperties();
+    if ( this.formValue['projectId'] ) {
+        this.occ.project = '/api/tela_botanica_projects/' + this.formValue['projectId'];//prj;  
+    }
     return this.occ;
   }
 
@@ -57,6 +61,8 @@ export class OccurrenceBuilder {
     let props = ["localityConsistency", 
       "locationAccuracy", "osmCountry", "osmCountryCode", "osmId",
       "osmState", "publishedLocation", "station", "sublocality"];
+
+    console.debug(this.location);
 
     for (let propName of props) {
       this.fillOccPropertyWithValue(
@@ -104,15 +110,21 @@ export class OccurrenceBuilder {
   }
 
   private fillOccProperties(): void {
-    let props = ["certainty", "observer", "occurrenceType", 
+    let props = ["certainty", "observer", "occurrenceType", "sampleHerbarium",
       "certainty", "phenology", "geodatum", "environment", "annotation",
       "isWild", "isPublic", "station", "coef", "station", "bibliographySource",
-      "sampleHerbarium", "observerInstitution", "coef", "dateObserved"];
+      "publishedLocation", "observerInstitution", "coef", "dateObserved",
+      "identificationAuthor", "locationAccuracy"];
 
     for (let propName of props) {
       this.fillOccPropertyWithValue(
         propName, this.formValue[propName]);
     }
+
+    if ( this.formValue[''] != null ) {
+        this.fillOccLocationProperties();  
+    }
+
 
   }
 
