@@ -12,13 +12,12 @@ import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-bo
 })
 export class PhotoFiltersComponent implements OnInit {
 
-
-  photoSearchFormGroup;
   public telaBotanicaProjects: TelaBotanicaProject[];
   private selectedProjectId;
   private selectedIsPublic;
   private selectedIsIdentiplanteValidated;
   private selectedCertainty;
+  photoSearchFormGroup: FormGroup;
 
   isPublic;       
   certainty;         
@@ -39,7 +38,7 @@ export class PhotoFiltersComponent implements OnInit {
        dateShotMonth:     new FormControl(),
        dateShotYear:      new FormControl(),
        osmCountry:        new FormControl(),
-       osmLocality:       new FormControl(),
+       locality:          new FormControl(),
        frenchDep:         new FormControl(),
        certainty:         new FormControl(),
        project:           new FormControl(),
@@ -62,7 +61,7 @@ export class PhotoFiltersComponent implements OnInit {
       photoFilters.dateShotMonth = this.photoSearchFormGroup.get('dateShotMonth').value;
       photoFilters.dateShotYear = this.photoSearchFormGroup.get('dateShotYear').value;
       photoFilters.osmCountry = this.photoSearchFormGroup.get('osmCountry').value;
-      photoFilters.osmLocality = this.photoSearchFormGroup.get('osmLocality').value;
+      photoFilters.locality = this.photoSearchFormGroup.get('locality').value;
       photoFilters.frenchDep = this.photoSearchFormGroup.get('frenchDep').value;
       photoFilters.certainty = this.selectedCertainty;
       photoFilters.projectId = this.selectedProjectId;
