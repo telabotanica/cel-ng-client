@@ -70,15 +70,13 @@
                 <input matInput formControlName="environment">
               </mat-form-field>
 
-
               <div class="occurrence-form-label-container">
                 <label class="occurrence-form-label">Projet :</label>
               </div>
               <mat-form-field>
-                  <mat-label></mat-label>
-                      <mat-select [(value)]="projectId" (selectionChange)="changeProjectId(project.id)">
-                      <mat-option *ngFor="let project of projects" value="{{project.id}}">{{project.label}}</mat-option>
-                  </mat-select>
+                  <select matNativeControl [(ngModel)]="projectIdSelected" formControlName="projectId">
+                  <option *ngFor="let project of projects" value="{{project.id}}">{{project.label}}</option>
+                  </select>
               </mat-form-field>
 
               <div class="occurrence-form-label-container">
@@ -86,6 +84,13 @@
               </div>
               <mat-form-field>
                 <input matInput formControlName="observerInstitution">
+              </mat-form-field>
+
+              <div class="occurrence-form-label-container">
+                <label class="occurrence-form-label">Déterminateur :</label>
+              </div>
+              <mat-form-field>
+                <input matInput formControlName="identificationAuthor">
               </mat-form-field>
 
             </div>

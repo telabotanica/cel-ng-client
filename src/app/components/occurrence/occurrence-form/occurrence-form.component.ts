@@ -9,6 +9,7 @@ import {
   MatDialog } from "@angular/material";
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import * as jwt_decode from "jwt-decode";
 
 import { TbLog } from "tb-tag-lib/lib/_models/tb-log.model";
 import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
@@ -29,6 +30,7 @@ import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.uti
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import { OccurrenceLinkPhotoDialogComponent } from '../occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
 import { PlantnetResultDialogComponent } from '../plantnet-result-dialog/plantnet-result-dialog.component';
+import { SsoService } from "../../../services/commons/sso.service";
 
 @Component({
   selector: 'app-occurrence-form',
@@ -43,6 +45,8 @@ export class OccurrenceFormComponent implements OnInit {
   private static readonly CREATE_MODE      = "create";
   private static readonly SINGLE_EDIT_MODE = "single edit";
   private static readonly BULK_EDIT_MODE   = "multi edit";
+
+  private userId;
 
   // -----------
   // FORM GROUP:
@@ -111,6 +115,7 @@ export class OccurrenceFormComponent implements OnInit {
   occurrenceTypeSelected: string    = "observation de terrain";
   publishedLocationSelected: string = "précise"; 
   isWildSelected: boolean           = true;
+  projectIdSelected: number;
 
   // List of repositories for the taxon selection module:
   tbRepositoriesConfig = [
@@ -191,6 +196,7 @@ export class OccurrenceFormComponent implements OnInit {
     private plantnetService:        PlantnetService,
     private existInChorodepService: ExistInChorodepService,
     private tbPrjService:           TelaBotanicaProjectService,
+    private ssoService:             SsoService,
     private dialog:                 MatDialog, 
     private confirmDialog:          MatDialog, 
     public  snackBar:               MatSnackBar,
@@ -201,7 +207,10 @@ export class OccurrenceFormComponent implements OnInit {
 
   ngOnInit() { 
    
-    this.initFormGroup();
+    this.initFormGroup();    
+    let token = this.ssoService.getToken();
+    let decodedToken = this._getDecodedAccessToken(token);
+    this.userId = decodedToken.id;
     this.initOccurrencesToEdit();
     this.tbPrjService.getCollection().subscribe(
       tbProjects => {
@@ -227,6 +236,7 @@ export class OccurrenceFormComponent implements OnInit {
       phenology:            new FormControl(),
       observer:             new FormControl(),
       observerInstitution:  new FormControl(),
+      projectId:            new FormControl(),
       isWild:               new FormControl(),
       coef:                 new FormControl(),
       sampleHerbarium:      new FormControl(),
@@ -235,7 +245,17 @@ export class OccurrenceFormComponent implements OnInit {
       environment:          new FormControl(),
       station:              new FormControl(),
       bibliographySource:   new FormControl(),
+      identificationAuthor: new FormControl(),
     });
+  }
+
+  private _getDecodedAccessToken(token: string): any {
+    try{
+        return jwt_decode(token);
+    }
+    catch(Error){
+        return null;
+    }
   }
 
   async retrieveOccurrences(ids) {
@@ -363,14 +383,34 @@ export class OccurrenceFormComponent implements OnInit {
   private prepopulateForm() {
 
     let occurrence: Occurrence;
+    // @todo use the form mode instead:
+    // Single edit mode:
     if ( this.occurrences.length == 1 ) {
       occurrence = this.occurrences[0];
+
+      // Initiate the project select input using the right project if needed:
+      if ( occurrence.project ) {
+//        this.occurrenceForm.controls['projectId'].patchValue(occurrence.project.id, {onlySelf: true, emitEvent:true});
+        this.projectIdSelected = occurrence.project.id;
+console.log(this.projectIdSelected);
+      }
+     
+      // for inputs with default values, we need to set the value explicitely:
+      this.occurrenceTypeSelected = occurrence.occurrenceType;
+      this.publishedLocationSelected = occurrence.publishedLocation;
+      this.isWildSelected = occurrence.isWild;
+
       //@todo: temporary ugly fix for CST tests, why the hell does the WS return the nbr as string?!!!
       if ( typeof occurrence.elevation === "string" ) {
         occurrence.elevation = Number(occurrence.elevation);
+        // for inputs with default values, we need to set the value explicitely:
+        this.occurrenceTypeSelected = occurrence.occurrenceType;
+        this.publishedLocationSelected = occurrence.publishedLocation;
+        this.isWildSelected = occurrence.isWild;
       }
 
     }
+    // Bulk edit mode:
     else {
       occurrence = this.buildPrepopulateOccurrence();
     }
@@ -389,8 +429,8 @@ export class OccurrenceFormComponent implements OnInit {
 
   private prepopulateTaxoSearchBox(occ: Occurrence) {
 
-    // Create a dummy temp taxon not to fire change event
-    // for every property setting.
+    // Create a dummy temp taxon so no change events are fired
+    // when setting every single property setting.
     let tmpTaxon = {
       occurenceId: occ.id,
       repository: (occ.taxoRepo == null) ? '' : occ.taxoRepo,
@@ -399,7 +439,8 @@ export class OccurrenceFormComponent implements OnInit {
       author: ''
     }
 
-    // Update the class member and, consequently, the search box component: 
+    // Update the class member reference and, consequently, the search box
+    // component: 
     this.patchTaxon = tmpTaxon;
   }
 
@@ -630,7 +671,7 @@ console.debug(photo);
         let year = dateObserved.getUTCFullYear();
         // @todo use the user id from the token once we can test with SSO:
         let duplicateExists = await this.doublonExists(    
-            '22', day, month, year, this.taxon.name,
+            this.userId, day, month, year, this.taxon.name,
             this.location.geometry, this.location.locality);
 
         if (duplicateExists) {
