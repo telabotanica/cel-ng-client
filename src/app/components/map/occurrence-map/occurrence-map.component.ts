@@ -33,6 +33,7 @@ import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { ImportDialogComponent } from "../../../components/occurrence/import-dialog/import-dialog.component";
 import { SsoService } from "../../../services/commons/sso.service";
+import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-occurrence-map',
@@ -43,7 +44,7 @@ export class OccurrenceMapComponent implements OnInit {
 
   private _occFilters: OccurrenceFilters;
   // The ids of selected occurrences:
-  selected = [];
+  selected: any;
   private importDialogRef: MatDialogRef<ImportDialogComponent>;
   private source: OlXYZ;
   private view: OlView;
@@ -55,9 +56,9 @@ export class OccurrenceMapComponent implements OnInit {
   private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
   private mapBgTileUrl = environment.mapBgTile.url;
   private celGeoJsonServiceFilteredUrl;
-
   private googleHybridLayer;
   private token:string;
+  private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
 
  
   constructor(
@@ -65,13 +66,15 @@ export class OccurrenceMapComponent implements OnInit {
     private dataSource:OccurrencesDataSource, 
     private dialog: MatDialog, 
     private ssoService: SsoService,
+    private confirmDialog: MatDialog, 
     private router: Router,
     public snackBar: MatSnackBar ) { 
     this.token = this.ssoService.getToken();
   }
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
-    if (  newOccFilters != null) {
+console.debug(newOccFilters);
+    if (  newOccFilters != null ) {
       this._occFilters = newOccFilters;
       this.redrawMap();
     }
@@ -82,16 +85,18 @@ export class OccurrenceMapComponent implements OnInit {
   }
 
   getSelectedCount() {
-      return this.selected.length;
+      return this.selected.array_.length;
   }
 
   private redrawMap() {
     let geoJsonUrl = this.celGeoJsonServiceBaseUrl;
-this.select.getFeatures().clear();
+    this.select.getFeatures().clear();
+console.debug(this._occFilters);
     if (this._occFilters != null && this._occFilters != undefined) {
+console.debug('geosjson adddddddddddddd');
       geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
-    var vectorSource = this.createOccurrenceVectorSource();
+    var vectorSource = this.createOccurrenceVectorSource(geoJsonUrl);
     this.occLayer.setSource(vectorSource);
   }
 
@@ -106,8 +111,7 @@ this.select.getFeatures().clear();
   }
 
 
-  private createOccurrenceVectorSource() {
-    var url = this.celGeoJsonServiceBaseUrl;
+  private createOccurrenceVectorSource(geoJsonUrl) {
     var token =  this.token;
     var vectorSource = new VectorSource({
     format: new GeoJSON(),
@@ -115,7 +119,7 @@ this.select.getFeatures().clear();
     loader: function(extent, resolution, projection) {
        var proj = projection.getCode();
        var xhr = new XMLHttpRequest();
-       xhr.open('GET', url);
+       xhr.open('GET', geoJsonUrl);
        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
        var onError = function() {
          vectorSource.removeLoadedExtent(extent);
@@ -143,7 +147,7 @@ this.select.getFeatures().clear();
   }
   
   private createOccurrenceLayer() {
-    var vectorSource = this.createOccurrenceVectorSource();
+    var vectorSource = this.createOccurrenceVectorSource(this.celGeoJsonServiceBaseUrl);
     this.occVectorSource = vectorSource;
 
     return new VectorLayer({
@@ -204,8 +208,9 @@ console.log('piopoioppipoipoipoioipoiipoippio');
     if (this.select !== null) {
         this.map.addInteraction(this.select);
         this.select.on('select', function(e) {
+console.debug(e.target.getFeatures());
             // bind local variable to OL event value
-            self.selected= e.selected;
+            self.selected = e.target.getFeatures();
         });
     }
 
@@ -229,6 +234,7 @@ console.log('piopoioppipoipoipoioipoiipoippio');
             self.selected.push(feature);
 
         });
+        self.selected = selectedFeatures;
       });
 
       // clear selection when drawing a new box and when clicking on the map
@@ -313,11 +319,34 @@ console.log('piopoioppipoipoipoioipoiipoippio');
     }
 
     private getSelectedIds() {
-
-      return this.selected.map(function(occurrence) {
-          return occurrence.values_.id;
-        });
+      return this.selected.array_.map(function(feature) {
+        return feature.values_.id;
+      });
     }
+
+
+  private buildDialogConfig() {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    return dialogConfig;
+  }
+
+  openConfirmDeletionDialog(value) {
+
+    let dialogConfig = this.buildDialogConfig();
+    dialogConfig.data = this._confirmDeletionMsg;
+    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    confirmDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.bulkDelete();
+          }
+      });
+  }
 
     bulkDelete() {
 

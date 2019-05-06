@@ -13,7 +13,7 @@
           *ngIf="getSelectedCount()>0"
           (click)="generatePdfEtiquette()" 
           matTooltip="Modifier les observations sélectionnées" 
-          matTooltipPosition="above">Etiquette</button>
+          matTooltipPosition="above">Editer</button>
 
         <button mat-button
           (click)="openImportDialog()" 
@@ -52,7 +52,7 @@
 
         <button mat-button
           *ngIf="getSelectedCount()>0"
-          (click)="bulkDelete()" 
+          (click)="openConfirmDeletionDialog()" 
           matTooltip="Supprimer les observations sélectionnées"
           matTooltipPosition="above">Supprimer</button>
   </div>
