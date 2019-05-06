@@ -17,6 +17,7 @@ import { NotificationService } from "../../../services/commons/notification.serv
 import { PhotoShareDialogComponent } from "../photo-share-dialog/photo-share-dialog.component";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { PhotoDisplayDialogComponent } from '../photo-display-dialog/photo-display-dialog.component';
+import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-photo-detail',
@@ -33,6 +34,7 @@ export class PhotoDetailComponent implements OnInit {
   private _photoDisplayDialogRef: MatDialogRef<PhotoDisplayDialogComponent>;
   basicTags: Array<any> = environment.photoTagLib.basicTags;
   baseUrl: string = environment.api.tagLibBaseUrl;
+  private _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
 
   static readonly _occLinkedOkMsg:string = "La photo et l’observation ont bien été liées.";
   static readonly _occUnlinkedOkMsg:string = "Le lien entre la photo et l’observation a bien été supprimé.";
@@ -42,6 +44,7 @@ export class PhotoDetailComponent implements OnInit {
   constructor(
     private dataService: PhotoService, 
     private _notifService: NotificationService,
+    private confirmDialog: MatDialog, 
     private route: ActivatedRoute,
     private dialog: MatDialog, 
     private router: Router) {}
@@ -138,6 +141,29 @@ export class PhotoDetailComponent implements OnInit {
           },
           error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
       );
+  }
+
+  buildDialogConfig() {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    return dialogConfig;
+  }
+
+  openConfirmDeletionDialog(value) {
+
+    let dialogConfig = this.buildDialogConfig();
+    dialogConfig.data = this._confirmDeletionMsg;
+    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    confirmDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.delete();
+          }
+      });
   }
 
   delete() {
