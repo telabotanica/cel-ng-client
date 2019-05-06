@@ -13,6 +13,7 @@ import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { EfloreService } from "../../../services/eflore/eflore.service";
 import { AlgoliaEfloreParserService } from "../../../services/eflore/algolia-eflore-parser.service";
+import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import { EfloreCard } from "../../../model/eflore/eflore-card.model";
 
 @Component({
@@ -27,12 +28,13 @@ export class OccurrenceDetailComponent implements OnInit {
   private subscription: Subscription;
   efloreCard: EfloreCard;
   baseTagLibBaseUrl: string = environment.api.tagLibBaseUrl;
+  private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
 
   constructor(
     private dataSource: OccurrencesDataSource, 
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog, 
+    private confirmDialog: MatDialog, 
     public snackBar: MatSnackBar,
     public efloreService: EfloreService,
     private parser: AlgoliaEfloreParserService) {}
@@ -57,6 +59,10 @@ export class OccurrenceDetailComponent implements OnInit {
 
   navigateToEditOccurrenceForm() {
     this.router.navigate(['/occurrence-collection-edit-form', this.occurrence.id]);
+  }
+
+  _navigateToOccurrenceUi() {
+    this.router.navigate(['/occurrence-ui']);
   }
 
   openEfloreCard() {
@@ -120,6 +126,29 @@ export class OccurrenceDetailComponent implements OnInit {
     )
   }
 
+  buildDialogConfig() {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    return dialogConfig;
+  }
+
+  openConfirmDeletionDialog() {
+
+    let dialogConfig = this.buildDialogConfig();
+    dialogConfig.data = this._confirmDeletionMsg;
+    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    confirmDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.delete();
+          }
+      });
+  }
+
   delete() {
     let id = this.occurrence.id;
     this.dataSource.delete(id).subscribe(
@@ -128,6 +157,7 @@ export class OccurrenceDetailComponent implements OnInit {
         "L'observation a été supprimée avec succès.", 
         "Fermer", 
         { duration: 1500 });
+        this._navigateToOccurrenceUi();
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
