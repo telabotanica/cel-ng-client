@@ -25,6 +25,7 @@ import { OccurrenceFiltersComponent } from './components/occurrence/occurrence-f
 import { OccurrenceUiComponent } from './components/occurrence/occurrence-ui/occurrence-ui.component';
 import { PhotoUiComponent } from './components/photo/photo-ui/photo-ui.component';
 import { UserOccurrenceTagTreeComponent } from "./components/occurrence/user-occurrence-tag-tree/user-occurrence-tag-tree.component";
+import { PhotoTagTreeComponent } from "./components/photo/photo-tag-tree/photo-tag-tree.component";
 import { MapUiComponent } from './components/map/map-ui/map-ui.component';
 import { UserProfileUiComponent } from './components/user-profile/user-profile-ui/user-profile-ui.component';
 import { OccurrenceMapComponent } from './components/map/occurrence-map/occurrence-map.component';
@@ -66,6 +67,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     PhotoGalleryComponent,
     PhotoDetailComponent,
     PhotoFiltersComponent,
+    PhotoTagTreeComponent,
     PhotoUiComponent,
     UserOccurrenceTagTreeComponent,
     MapUiComponent,
