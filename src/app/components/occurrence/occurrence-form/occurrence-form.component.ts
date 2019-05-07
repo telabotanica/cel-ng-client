@@ -66,6 +66,9 @@ export class OccurrenceFormComponent implements OnInit {
   // The RepositoryItemModel (taxon) object as chosen by the user:
   private taxon: RepositoryItemModel;
 
+
+  private _duplicateMsg = "Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre."
+
   // ----------------------------------------------------------------
   // PATCH MEMBER VARIABLES (to initiate children component values) :
   // ----------------------------------------------------------------
@@ -668,13 +671,23 @@ console.debug(photo);
         let month = dateObserved.getUTCMonth() + 1;
         let day = dateObserved.getUTCDate();
         let year = dateObserved.getUTCFullYear();
+        let geomAsString = JSON.stringify(this.location.geometry);
+        let sciname = this.taxon.name;
+
+        if (typeof this.taxon.author ) {
+            sciname = sciname.concat(' ');
+            sciname = sciname.concat(this.taxon.author);
+        }
+         
         // @todo use the user id from the token once we can test with SSO:
         let duplicateExists = await this.doublonExists(    
-            this.userId, day, month, year, this.taxon.name,
-            this.location.geometry, this.location.locality);
+            this.userId, day, month, year, sciname,
+            geomAsString, this.location.locality);
+
 
         if (duplicateExists) {
-          warnings.push("Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre.");
+console.log("DDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUPPPPPPPPPPPPPPPPPPPPPPPP");
+          warnings.push(this._duplicateMsg);
         }
       }
     }
@@ -686,25 +699,47 @@ console.debug(photo);
   private async postOccurrenceAfterWarningConfirmation(occ: Occurrence) {
 
     let warnings = await this.preSubmitValidation();
+
+    // Warning(s): duplicate AND/OR the species is not known to chorodep:
     if ( warnings.length > 0) {
-      let msg = "";
-
-      for (let warning of warnings) {
-        msg += warning;
+console.debug(warnings);
+      // Duplicate!
+      if (warnings.includes(this._duplicateMsg)) {
+console.log("SEND DUPLICATE MSG");
+          this.snackBar.open(
+            this._duplicateMsg, 
+            'Fermer', 
+            { duration: 2500 });
       }
-      msg += " Continuer ?";
-      let dialogConfig = this.buildDialogConfig();
-      dialogConfig.data = msg;
-      let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
 
-      confirmDialogRef
-        .afterClosed()
-        .subscribe( response => {
-            if (response == true) {
-              this.postOccurrence(occ);
-            }
-        });
+      // No duplicate but the species is not known to chorodep:
+      else {
+        let msg = "";
+
+        for (let warning of warnings) {
+          msg += warning;
+        }
+        msg += " Continuer ?";
+        let dialogConfig = this.buildDialogConfig();
+        dialogConfig.data = msg;
+        let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
+        confirmDialogRef
+          .afterClosed()
+          .subscribe( response => {
+              if (response == true) {
+                this.postOccurrence(occ);
+              }
+          });
+
+      }
+
+
+
+
+
     }
+    // no duplicate and species known to chorodep:
     else {
       // Let's post the occurrence to the REST service:
       this.postOccurrence(occ);
@@ -871,7 +906,7 @@ console.debug(occ);
       this.location.inseeData != null &&
       this.location.inseeData.code != null &&
       this.location.inseeData.code.length >=2 ) {
-console.log('ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
+
       let taxonId: number;
       let frenchDept = this.location.inseeData.code.substr(0, 2);
 
@@ -904,8 +939,11 @@ console.log('ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
         userId, dateObservedDay, dateObservedMonth, 
         dateObservedYear, userSciName, geometry, locality);
 
+console.log("DOUBLON SIG");
+console.log(filters.signature);
+
     return this.dataService.findOccurrences(
-        null, null, 1, 2, filters).map(
+        null, null, 0, 2, filters).map(
           occurrences => {
             return ( occurrences.length>0 );
         }).toPromise();
@@ -930,7 +968,9 @@ console.log('ppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
         unencodedSignature = unencodedSignature + '-' + bit;
     }
 
-    return btoa(unencodedSignature);
+    // We must urlencode the because of the "Unicode Problem":
+    // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding 
+    return btoa(encodeURIComponent(unencodedSignature));
   }
 
   openLinkPhotoDialog() {
