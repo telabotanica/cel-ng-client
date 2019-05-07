@@ -42,7 +42,10 @@ export class OccurrenceBuilder {
 
     this.fillOccProperties();
     if ( this.formValue['projectId'] ) {
-        this.occ.project = '/api/tela_botanica_projects/' + this.formValue['projectId'];//prj;  
+        this.occ.project = '/api/tela_botanica_projects/' + this.formValue['projectId'];
+    }
+    else {
+        this.occ.project = null;
     }
     return this.occ;
   }
