@@ -85,15 +85,18 @@ console.debug(newOccFilters);
   }
 
   getSelectedCount() {
+    if (this.selected) {
       return this.selected.array_.length;
+    }
+    else {
+      return 0;
+    }
   }
 
   private redrawMap() {
     let geoJsonUrl = this.celGeoJsonServiceBaseUrl;
     this.select.getFeatures().clear();
-console.debug(this._occFilters);
     if (this._occFilters != null && this._occFilters != undefined) {
-console.debug('geosjson adddddddddddddd');
       geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
     var vectorSource = this.createOccurrenceVectorSource(geoJsonUrl);
@@ -317,6 +320,36 @@ console.debug(e.target.getFeatures());
                 { duration: 1500 })
         )
     }
+
+
+
+  edit() {
+    // single edit:
+    if (this.getSelectedCount() == 1) {
+      let ids = this.getSelectedIds();
+      this.navigateToEditOccurrenceForm(ids[0]);
+    }
+    // multi edit:
+    else if (this.getSelectedCount() > 1) {
+      this.bulkEdit();
+    } 
+  }
+
+  navigateToEditOccurrenceForm(occId) {
+    this.router.navigate(['/occurrence-collection-edit-form', occId]);
+  }
+
+  bulkEdit() {
+      let ids = this.getSelectedIds();
+      let strIds = '';
+      for(let id of ids) {
+          strIds += id;
+          strIds += ',';
+      }
+      // Remove the trailing comma:
+      strIds = strIds.substring(0, strIds.length-1);
+      this.router.navigate(['/occurrence-collection-edit-form', strIds]);
+  }
 
     private getSelectedIds() {
       return this.selected.array_.map(function(feature) {
