@@ -116,13 +116,21 @@ export class OccurrenceBuilder {
     let props = ["certainty", "observer", "occurrenceType", "sampleHerbarium",
       "certainty", "phenology", "geodatum", "environment", "annotation",
       "isWild", "isPublic", "station", "coef", "station", "bibliographySource",
-      "publishedLocation", "observerInstitution", "coef", "dateObserved",
+      "publishedLocation", "observerInstitution", "coef",
       "identificationAuthor", "locationAccuracy"];
 
     for (let propName of props) {
       this.fillOccPropertyWithValue(
         propName, this.formValue[propName]);
     }
+    let date = this.formValue['dateObserved'];
+
+    // JSON Stringifying date is based on GWT so we get yesterday. Thus we have
+    // to format it by ourself
+    // https://stackoverflow.com/questions/44744476/angular-material-datepicker-date-becomes-one-day-before-selected-date 
+    let dateObs =  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T12:00:00`
+    this.fillOccPropertyWithValue('dateObserved', dateObs);
+
 
     if ( this.formValue[''] != null ) {
         this.fillOccLocationProperties();  
