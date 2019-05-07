@@ -52,8 +52,16 @@ export class UserProfileUiComponent implements OnInit {
     this.document.location.href = this.ssoAuthWidgetUrl + '?action=deconnexion&origine=https://beta.tela-botanica.org/cel2-dev/cel2-client/dist/cel2-client';;
   }
 
-  navigateToWpProfile() {
-    this.document.location.href = 'https://beta.tela-botanica.org/test/membres/'  + this.getUsername();
+  navigateToWpProfileSettings() {
+    this.document.location.href = this.getProfileUrl() + '/settings/profile';
+  }
+
+  getProfileUrl() {
+    return 'https://www.tela-botanica.org/membres/'  + this.getUsername();
+  }
+
+  navigateToContact() {
+    this.document.location.href = 'https://www.tela-botanica.org/widget:reseau:remarques?lang=fr&service=cel&pageSource=https%3A%2F%2Fwww.tela-botanica.org%2Fcel%2Fappli%2Fcel2.html';
   }
 
 }

@@ -5,7 +5,7 @@
     <div class="user-profile-form-section-title-container">Mon compte</div>
 
     <div class="user-profile-form-section-subtitle-container">
-      Connecté(e) en tant que {{ getUsername() }} 
+      Connecté(e) en tant que <a href="{{ getProfileUrl() }}">{{ getUsername() }}</a>
     </div>
 
     <div class="user-profile-form-section-items-container">
@@ -16,6 +16,7 @@
         <button mat-button
           class="bold-link small"  
           matTooltip="Accéder aux réglages de son profil" 
+          (click)="navigateToWpProfileSettings()"
           matTooltipPosition="above">Modifier la visibilité de mon profil</button>
       </div>
 
@@ -48,6 +49,7 @@
         <button mat-button
           class="bold-link small" 
           matTooltip="Contacter l’équipe de Tela Botanica pour faire part de vos questions ou remarques" 
+          (click)="navigateToContact()" 
           matTooltipPosition="above">Contactez-nous</button>
       </div>
 
