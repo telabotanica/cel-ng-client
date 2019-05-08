@@ -57,7 +57,7 @@ export class UserProfileUiComponent implements OnInit {
   }
 
   getProfileUrl() {
-    return 'https://www.tela-botanica.org/membres/'  + this.getUsername();
+    return 'https://www.tela-botanica.org/membres/me';
   }
 
   navigateToContact() {
