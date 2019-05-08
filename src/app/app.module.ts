@@ -43,6 +43,7 @@ import { PhotoLinkOccurrenceDialogComponent } from './components/photo/photo-lin
 import { OccurrenceLinkPhotoDialogComponent } from './components/occurrence/occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
 import { PhotoDisplayDialogComponent } from './components/photo/photo-display-dialog/photo-display-dialog.component';
 import { PlantnetResultDialogComponent } from './components/occurrence/plantnet-result-dialog/plantnet-result-dialog.component';
+import { OccurrencePhotoGalleryComponent } from './components/occurrence/occurrence-photo-gallery/occurrence-photo-gallery.component';
 import { TbGeolocLibModule } from 'tb-geoloc-lib';
 import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
@@ -78,6 +79,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     PhotoLinkOccurrenceDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
     PlantnetResultDialogComponent,
+    OccurrencePhotoGalleryComponent,
     PhotoDisplayDialogComponent,
     UserAgreementComponent,
     HelpComponent,
