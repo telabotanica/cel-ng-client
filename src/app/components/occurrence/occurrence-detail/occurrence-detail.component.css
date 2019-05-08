@@ -46,4 +46,17 @@ img {
     display: inline-block;
 }
 
+#tag-component-container {
+    width: 400px;
+    vertical-align: middle;
+    border: 0;
+    display: block;
+}
+
+#occurrence-photo-gallery-container {
+    width: 400px;
+    vertical-align: middle;
+    border: 0;
+    display: block;
+}
 

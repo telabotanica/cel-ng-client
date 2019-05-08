@@ -36,11 +36,13 @@ export class OccurrenceBuilder {
     if ( this.taxon != null ) {
         await this.fillOccTaxoProperties();  
     }
+
     if ( this.location != null ) {
         this.fillOccLocationProperties();  
     }
 
     this.fillOccProperties();
+
     if ( this.formValue['projectId'] ) {
         this.occ.project = '/api/tela_botanica_projects/' + this.formValue['projectId'];
     }
@@ -95,8 +97,7 @@ export class OccurrenceBuilder {
     this.occ.userSciName = this.taxon.name;    
 
      
-    if (typeof this.taxon.author ) {
- 
+    if ( this.taxon.author ) {
         this.occ.userSciName = this.occ.userSciName.concat(' ');
         this.occ.userSciName = this.occ.userSciName.concat(this.taxon.author);
     }
@@ -128,9 +129,10 @@ export class OccurrenceBuilder {
     // JSON Stringifying date is based on GWT so we get yesterday. Thus we have
     // to format it by ourself
     // https://stackoverflow.com/questions/44744476/angular-material-datepicker-date-becomes-one-day-before-selected-date 
-    let dateObs =  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T12:00:00`
-    this.fillOccPropertyWithValue('dateObserved', dateObs);
-
+    if (date) {
+      let dateObs =  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T12:00:00`
+      this.fillOccPropertyWithValue('dateObserved', dateObs);
+    }
 
     if ( this.formValue[''] != null ) {
         this.fillOccLocationProperties();  
