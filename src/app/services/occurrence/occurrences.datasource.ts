@@ -8,8 +8,8 @@ import {map, catchError, finalize} from "rxjs/operators";
 import {of} from "rxjs/observable/of";
 import 'rxjs/Rx' ;
 
-
 import { Occurrence } from "../../model/occurrence/occurrence.model";
+import { Photo } from "../../model/photo/photo.model";
 import { OccurrenceFilters } from "../../model/occurrence/occurrence-filters.model";
 import { JsonPatchService } from "../../../restit/services/json-patch.service";
 import { JsonPatchResponse } from '../../../restit/model/json-patch-response.model';
@@ -23,9 +23,17 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
     private loadingSubject = new BehaviorSubject<boolean>(false);
     public loading$ = this.loadingSubject.asObservable();
     private resourceUrl = environment.api.baseUrl + '/occurrences';
+    private photoSubresourceSubpathEndpoint = '/photos';
 
     constructor(private http:HttpClient, private jsonPatchService:JsonPatchService) {
 
+    }
+
+    getPhotos(id) : Observable<Photo[]>{
+        let endpoint = this.resourceUrl + '/' + id + this.photoSubresourceSubpathEndpoint;
+        return this.http.get<Photo[]>(endpoint, {
+            headers: {'Accept':'application/json'}
+        });
     }
 
     findCount(filters: OccurrenceFilters = null) {
