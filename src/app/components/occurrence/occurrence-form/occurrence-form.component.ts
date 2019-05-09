@@ -188,6 +188,8 @@ export class OccurrenceFormComponent implements OnInit {
       description_fr: ''
     }
 ];
+  sendPhotoFlag: boolean = false;
+  nbrOfPhotosToBeSEnt = 0;
 
   private linkPhotoToOccDialogRef: MatDialogRef<OccurrenceLinkPhotoDialogComponent>;
   private plantnetResultDialogRef: MatDialogRef<PlantnetResultDialogComponent>;
@@ -206,6 +208,10 @@ export class OccurrenceFormComponent implements OnInit {
     private route:                  ActivatedRoute,
     private router:                 Router,
     @Inject(DOCUMENT) private document: any) { 
+  }
+
+  isSendPhotoButtonDisabled(): boolean {
+    return !(this.nbrOfPhotosToBeSEnt > 0)
   }
 
   ngOnInit() { 
@@ -539,10 +545,13 @@ console.log(this.projectIdSelected);
   }
 
   onPhotoAdded(photo: FileData) {
-console.debug(photo);
+console.log('ADDDDDDDDDDDDDDDDDED');
+    this.nbrOfPhotosToBeSEnt++;
   }
 
-  onPhotoRejected(photo: FileData) {
+  onPhotoDeleted(photo: FileData) {
+console.log('DELETEED');
+    this.nbrOfPhotosToBeSEnt--;
   }
 
   onPhotoUploaded(photo: any) {
@@ -939,9 +948,6 @@ console.debug(occ);
         userId, dateObservedDay, dateObservedMonth, 
         dateObservedYear, userSciName, geometry, locality);
 
-console.log("DOUBLON SIG");
-console.log(filters.signature);
-
     return this.dataService.findOccurrences(
         null, null, 0, 2, filters).map(
           occurrences => {
@@ -1014,5 +1020,12 @@ console.log(filters.signature);
 
   }
  
+
+  sendPhotos() {
+    this.sendPhotoFlag = true;
+    setTimeout(() => {
+      this.sendPhotoFlag = false;
+    }, 100);
+}
 
 }

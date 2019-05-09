@@ -65,7 +65,7 @@ export class OccurrenceBuilder {
   private fillOccLocationProperties(): void {
     let props = ["localityConsistency", 
       "locationAccuracy", "osmCountry", "osmCountryCode", "osmId",
-      "osmState", "publishedLocation", "station", "sublocality"];
+      "osmState", "publishedLocation", "station"];
 
     console.debug(this.location);
 
@@ -117,7 +117,7 @@ export class OccurrenceBuilder {
     let props = ["certainty", "observer", "occurrenceType", "sampleHerbarium",
       "certainty", "phenology", "geodatum", "environment", "annotation",
       "isWild", "isPublic", "station", "coef", "station", "bibliographySource",
-      "publishedLocation", "observerInstitution", "coef",
+      "publishedLocation", "observerInstitution", "coef", "sublocality",
       "identificationAuthor", "locationAccuracy"];
 
     for (let propName of props) {

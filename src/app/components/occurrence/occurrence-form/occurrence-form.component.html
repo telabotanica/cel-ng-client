@@ -201,27 +201,35 @@
                 [label]="'Glissez vos photos ici'"
                 [ignoreOversizedFiles]="false"
                 [photoUploadBaseUrl]="baseCelApiUrl"   
+                [sendImages]="sendPhotoFlag"
                 (httpError)="onPostPhotoError($event)"
-                (rejectedFiles)="onPhotoRejected($event)"
+                (deletedFiles)="onPhotoDeleted($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
                 (uploadedFiles)="onPhotoUploaded($event)"
               ></tb-dropfile-box>
+
+            <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
+            <button mat-button type="button" (click)="openLinkPhotoDialog()">Choisir une photo déjà importée</button>
+            <button mat-button type="button" (click)="askPlantNet()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
             </div>
 
-            <div class="occurrence-form-annotation-container">
 
-              <div class="occurrence-form-label-container">
-                <label class="occurrence-form-label">Commentaire :</label>
-              </div>
-
-              <mat-form-field style="width:100%;">
-                <textarea matInput formControlName="annotation"></textarea>
-              </mat-form-field>
-            </div>
           </div>
 
-          <button mat-button type="button" (click)="openLinkPhotoDialog()">Choisir une photo déjà importée</button>
-          <button mat-button type="button" (click)="askPlantNet()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
+
+          <div class="occurrence-form-annotation-container">
+
+            <div class="occurrence-form-label-container">
+              <label class="occurrence-form-label">Commentaire :</label>
+            </div>
+
+            <mat-form-field style="width:100%;">
+              <textarea matInput formControlName="annotation"></textarea>
+            </mat-form-field>
+          </div>
+
+
+
 
           <div class="occurrence-form-label-container">
             <label class="occurrence-form-label">Spontanéité :</label>
@@ -240,7 +248,6 @@
               [userId]=22
               [objectId]="tagObjectId"
               [noApiCall]="delayTagApiCalls()"
-              [basicTags]="basicTags"
               [baseApiUrl]="tagLibBaseUrl"
               (newTag)="onTagAdded($event)"
               (removedTag)="onTagRemoved($event)"
