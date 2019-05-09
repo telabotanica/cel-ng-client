@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from "@angular/router";
@@ -39,12 +39,28 @@ import { SsoService } from "../../../services/commons/sso.service";
 })
 export class OccurrenceFormComponent implements OnInit {
 
+  // Reference to the photo gallery:
+  @ViewChild('photoGallery') photoGallery;
+
   // -----------------------------------------------------------------
   // CONSTANTS (storing the three different mode names for this form):
   // -----------------------------------------------------------------
-  private static readonly CREATE_MODE      = "create";
-  private static readonly SINGLE_EDIT_MODE = "single edit";
-  private static readonly BULK_EDIT_MODE   = "multi edit";
+  static readonly CREATE_MODE      = "create";
+  static readonly SINGLE_EDIT_MODE = "single edit";
+  static readonly BULK_EDIT_MODE   = "multi edit";
+
+
+  get CREATE_MODE() {
+    return OccurrenceFormComponent.CREATE_MODE;
+  }
+
+  get SINGLE_EDIT_MODE() {
+    return OccurrenceFormComponent.SINGLE_EDIT_MODE;
+  }
+
+  get BULK_EDIT_MODE() {
+    return OccurrenceFormComponent.BULK_EDIT_MODE;
+  }
 
   private userId;
 
@@ -545,7 +561,6 @@ console.log(this.projectIdSelected);
   }
 
   onPhotoAdded(photo: FileData) {
-console.log('ADDDDDDDDDDDDDDDDDED');
     this.nbrOfPhotosToBeSEnt++;
   }
 
@@ -555,12 +570,12 @@ console.log('DELETEED');
   }
 
   onPhotoUploaded(photo: any) {
-    console.debug(photo);
-      this.photos.push(photo);
-      this.snackBar.open(
-        "La photo " + photo.originalName + " a été enregistrée avec succès.", 
-        'Fermer', 
-        { duration: 2500 });
+    this.photoGallery.addPhoto(photo);
+		this.photos.push(photo);
+		this.snackBar.open(
+		"La photo " + photo.originalName + " a été enregistrée avec succès.", 
+		'Fermer', 
+		{ duration: 2500 });
   }
 
 
@@ -587,6 +602,7 @@ console.log('DELETEED');
   }
 
   onTaxonChange(taxon: RepositoryItemModel) {
+console.log('onTAXCHANGE');
     this.taxon = taxon;
   }
 
@@ -695,7 +711,6 @@ console.log('DELETEED');
 
 
         if (duplicateExists) {
-console.log("DDDDDDDDDDDDDDDDDDDDDDDUUUUUUUUUUUUUUUUUUUUUUUUUUUPPPPPPPPPPPPPPPPPPPPPPPP");
           warnings.push(this._duplicateMsg);
         }
       }
@@ -901,7 +916,12 @@ console.debug(occ);
 
   }
 
-
+  onPhotoRemoved(photo: any) {
+		let index = this.photos.indexOf(photo);
+		if (index > -1) {
+  		this.photos.splice(index, 1);
+		}
+  }
 
   isPlantNetCallable() {
     return (this.photos.length > 0);
@@ -993,9 +1013,13 @@ console.debug(occ);
     this.linkPhotoToOccDialogRef
       .afterClosed()
       .subscribe(
-        photo => this.photos.push(photo)
+        photo => {
+					if ( photo ) {
+						this.photos.push(photo);
+						this.photoGallery.addPhoto(photo);
+					}
+			}
     );
-
   }
 
 

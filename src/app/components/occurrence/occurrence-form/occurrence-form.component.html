@@ -187,6 +187,11 @@
           </section>
         </div>
 
+        <div class="divider-container">
+          <mat-divider></mat-divider>
+ 				</div>
+
+        <div *ngIf="mode != BULK_EDIT_MODE">
           <div class="occurrence-form-annotation-photo-container">
 
             <div class="occurrence-form-photo-container">
@@ -198,7 +203,7 @@
                 [reset]="resetForm" 
                 [showTable]="true" 
                 [uploadTbPhotoFiles]="true"
-                [label]="'Glissez vos photos ici'"
+                [label]="'Cliquez pour choisir les photos ou glissez les ici'"
                 [ignoreOversizedFiles]="false"
                 [photoUploadBaseUrl]="baseCelApiUrl"   
                 [sendImages]="sendPhotoFlag"
@@ -207,15 +212,24 @@
                 (acceptedFiles)="onPhotoAdded($event)"
                 (uploadedFiles)="onPhotoUploaded($event)"
               ></tb-dropfile-box>
+            <button mat-button type="button" (click)="sendPhotos()" *ngIf="!isSendPhotoButtonDisabled()" >Envoyer les images</button>
 
-            <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
+						<div id="occurrence-photo-gallery-container">
+							<occurrence-photo-gallery #photoGallery
+							  (onPhotoRemoved)="onPhotoRemoved($event)"
+								[enableRemove]="true"
+								[occurrenceId]="(mode == SINGLE_EDIT_MODE) ? occurrences[0].id : null"></occurrence-photo-gallery>
+		</div>
+
             <button mat-button type="button" (click)="openLinkPhotoDialog()">Choisir une photo déjà importée</button>
             <button mat-button type="button" (click)="askPlantNet()" [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
             </div>
+          </div> 
 
 
           </div>
-
+          
+					<mat-divider></mat-divider>
 
           <div class="occurrence-form-annotation-container">
 

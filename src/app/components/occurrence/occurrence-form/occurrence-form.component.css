@@ -97,3 +97,15 @@
 .certainty-selector {
   padding-top:20px;
 }
+
+.divider-container {
+  text-align:center;
+}
+
+.mat-divider {
+  margin-left:50px;
+  margin-right:50px;
+  border-top-width: 2px;
+  border-top-color: black;  
+  margin-top:20px;
+}
