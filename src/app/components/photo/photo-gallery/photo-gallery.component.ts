@@ -71,6 +71,24 @@ export class PhotoGalleryComponent implements OnInit {
     return !(this.nbrOfPhotosToBeSEnt > 0)
   }
 
+  onPostPhotoError(data: any) {
+    let msg;
+
+    if ( data.error['hydra:description'].includes('is not a valid image') ) {
+      msg = "Le fichier n'est pas une image valide.";
+    }
+    else if ( data.error['hydra:description'].includes('with the same name') ) {
+      msg = "Vous avez déjà téléversé une image avec le même nom. Ce n'est pas permis dans le CEL.";
+    }
+    else {
+      msg = "Une erreur est survenue.";
+    }
+    this.snackBar.open(
+      msg, 
+      "Fermer", 
+      { duration: 2500 });
+  }
+
   onPhotoAdded(photo: FileData) {
     this.nbrOfPhotosToBeSEnt++;
   }
