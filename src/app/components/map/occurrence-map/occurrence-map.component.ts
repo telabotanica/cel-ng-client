@@ -107,6 +107,7 @@ console.debug(newOccFilters);
     return new OlTileLayer({
       source: new OlXYZ({
         title: 'OSM',
+        attributions:  'Carte : <a href="openstreetmap.org/copyright" target="_blank">© les contributeurs d’OpenStreetMap</a> - Tuiles : <a href="swww.openstreetmap.fr" target="_blank">OsmFr</a>',
         //type: 'base',
         visible: true,
         url: this.mapBgTileUrl})
@@ -118,6 +119,7 @@ console.debug(newOccFilters);
     var token =  this.token;
     var vectorSource = new VectorSource({
     format: new GeoJSON(),
+    attributions:  '- Observations du réseau : <a href="tela-botanica.org" target="_blank">Tela Botanica</a',
     visible: true,
     loader: function(extent, resolution, projection) {
        var proj = projection.getCode();
