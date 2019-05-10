@@ -1,22 +1,18 @@
 <div>
-
-  <mat-toolbar fxFlex="1 1 auto" class="photo-gallery-toolbar">
-
-<!--
-      (rejectedFiles)="onPhotoRejected($event)"
-      (acceptedFiles)="onPhotoAdded($event)"
-      (geolocatedPhotoLatLng)="geolocatedPhotoData($event)"
--->        
+  <div style="display:block"> 
     <tb-dropfile-box
       [showTable]="false" 
       [uploadTbPhotoFiles]="true"
-      [label]="'Glissez vos photos ici'"
+      [label]="'Cliquez pour choisir les photos ou glissez les ici'"
       [ignoreOversizedFiles]="false"
+      [sendImages]="sendPhotoFlag"
       [photoUploadBaseUrl]="baseCelApiUrl"   
-      (rejectedFiles)="onPhotoRejected($event)"
       (acceptedFiles)="onPhotoAdded($event)"
       (uploadedFiles)="onPhotoUploaded($event)"
     ></tb-dropfile-box>
+    <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
+  </div>
+  <mat-toolbar fxFlex="1 1 auto" class="photo-gallery-toolbar">
 
     <div >
 
