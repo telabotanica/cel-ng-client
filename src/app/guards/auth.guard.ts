@@ -10,8 +10,9 @@ import { SsoService } from "../services/commons/sso.service"
 export class AuthGuard implements CanActivate {
 
   private readonly _ssoAuthWidgetUrl:string = environment.sso.authWidgetUrl;
-  private readonly _refreshInterval:number = environment.sso.refreshInterval;
-  private readonly _unsetTokenValue:string = environment.app.unsetTokenValue;
+  private readonly _refreshInterval:number  = environment.sso.refreshInterval;
+  private readonly _unsetTokenValue:string  = environment.app.unsetTokenValue;
+  private readonly _absoluteBaseUrl:string  = environment.app.absoluteBaseUrl;
 
   constructor(
      private router: Router,
@@ -42,8 +43,13 @@ export class AuthGuard implements CanActivate {
             return true;
          }
          this.loadAuthWidget();        
-         return false;
-      });
+         //return false;
+      }).catch(
+        error => { 
+          this.loadAuthWidget(); 
+          return Observable.throw(error.statusText);
+        }
+      );
     
     }
     // We've got a token which should always be fresh so return true (grant access)
@@ -52,14 +58,14 @@ export class AuthGuard implements CanActivate {
     }
 
     this.loadAuthWidget();
-    return false;
+    //return false;
     
   }
 
 
   loadAuthWidget(): void {
     console.log('not logged');
-    this.document.location.href = this._ssoAuthWidgetUrl + '?origine=https://beta.tela-botanica.org/cel2-dev/cel2-client/dist/cel2-client';
+    this.document.location.href = this._ssoAuthWidgetUrl + '?origine=' + this._absoluteBaseUrl;
   }
 
 }
