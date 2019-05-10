@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Observable } from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
-import { environment } from '../../../../environments/environment';
 import { 
   MatPaginator, 
   MatSort, 
@@ -14,6 +13,7 @@ import {
   Router } from "@angular/router";
 import * as Leaflet from 'leaflet';
 
+import { environment } from '../../../../environments/environment';
 import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { Photo } from "../../../model/photo/photo.model";
@@ -32,13 +32,14 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
   baseCelApiUrl: string = environment.api.baseUrl;
 
   @Input('occurrenceId') occurrenceId: number;
+  @Input('enableRemove') enableRemove: boolean = false;
+  @Output() onPhotoRemoved = new EventEmitter<Photo>();
 
   constructor(
     private dataService: OccurrencesDataSource, 
     private dialog: MatDialog, 
     public snackBar: MatSnackBar,
     private router: Router ) { }
-
 
   ngOnInit() {
     console.log("ngOnInit");
@@ -51,12 +52,21 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
     this.selected = [];
   }
 
-  loadData() {
-    this.dataService.getPhotos(this.occurrenceId).subscribe( 
-      photos => {this.resources = photos;}
-    );
+  removePhoto(photo: Photo) {
+		let index = this.resources.indexOf(photo);
+		if (index > -1) {
+  		this.resources.splice(index, 1);
+		}
+    this.onPhotoRemoved.emit(photo);
   }
 
+  loadData() {
+    if ( this.occurrenceId ) {
+		  this.dataService.getPhotos(this.occurrenceId).subscribe( 
+		    photos => {this.resources = photos;}
+		  );
+	  }
+  }
 
   isSelected(photo) {
     return (this.selected.includes(photo.id));  
@@ -79,7 +89,9 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
     return this.selected.length;
   }
 
-
+  addPhoto(photo: Photo) {
+    this.resources.push(photo);
+  }
 
   onPhotoAdded(photo: FileData) {
     console.debug(photo);
@@ -87,24 +99,5 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
 
   onPhotoRejected(photo: FileData) {
   }
-
-
-  linkToOccurrence(occurrence) {
-
-    let ids = this.selected;
-    this.dataService.bulkReplace(ids, {occurrence:{id:occurrence.id}}).subscribe(
-      data => {
-        this.snackBar.open(
-        "La photo et l’observation ont bien été liées.", 
-        "Fermer", 
-        { duration: 1500 });
-      },
-      error => this.snackBar.open(
-        'Une erreur est survenue. ' + error, 
-        'Fermer', 
-        { duration: 1500 })
-    );
-  }
-
 
 }
