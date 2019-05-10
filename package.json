@@ -41,14 +41,14 @@
     "rxjs-compat": "^6.3.3",
     "tb-dropfile-lib": "https://github.com/steph-del/tb-dropfile-lib/releases/download/v0.5.0/tb-dropfile-lib-0.5.0.tgz",
     "tb-dropfile-lib-app": "https://github.com/steph-del/tb-dropfile-lib/archive/v0.2.0.tar.gz",
-    "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.6.0/tb-geoloc-lib-0.6.0.tgz",
+    "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.6.1/tb-geoloc-lib-0.6.1.tgz",
     "tb-tag-lib": "https://github.com/steph-del/tb-tag-lib/releases/download/v0.2.0/tb-tag-lib-0.2.0.tgz",
     "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.5.1/tb-tsb-lib-0.5.1.tgz",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.13.8",
+    "@angular-devkit/build-angular": "^0.13.9",
     "@angular/cli": "^7.3.8",
     "@angular/compiler-cli": "^7.2.10",
     "@angular/language-service": "~7.2.0",
