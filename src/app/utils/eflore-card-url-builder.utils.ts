@@ -2,9 +2,17 @@ import { environment } from '../../environments/environment';
 
 export class EfloreCardUrlBuilder {  
   
+  // Too bad we cannot use ` in JSON. Therefore, we cannot use the string
+  // template magic...
+  static efloreUrlTemplate: string = environment.eflore.baseUrlTemplate;
 
   static build(taxoRepoName, taxonId) {
-    let url = "";//AppConfig.settings.eflore.baseUrlTemplate
+    let url = EfloreCardUrlBuilder.efloreUrlTemplate;
+    var re1 = /\${taxoRepoName}/gi; 
+    var re2 = /\${taxonId}/gi; 
+    url = url.replace(re1, taxoRepoName); 
+    url = url.replace(re2, taxonId); 
+
     return url;
   }
 
