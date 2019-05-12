@@ -148,7 +148,7 @@ export class OccurrenceFormComponent implements OnInit {
       description_fr: ''
     }, {
       id: 'bdtfxr',
-      label: 'Métropolole (index réduit)',
+      label: 'bdtfxr',
       levels: ['idiotaxon'],
       apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtfxr/',
       apiUrl2: '',
