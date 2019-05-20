@@ -148,7 +148,7 @@ export class OccurrenceFormComponent implements OnInit {
       description_fr: ''
     }, {
       id: 'bdtfxr',
-      label: 'bdtfxr',
+      label: 'Métropole (index réduit)',
       levels: ['idiotaxon'],
       apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtfxr/',
       apiUrl2: '',
@@ -967,7 +967,7 @@ console.debug(occ);
     filters.signature = this.generateSignature(
         userId, dateObservedDay, dateObservedMonth, 
         dateObservedYear, userSciName, geometry, locality);
-
+console.debug(filters);
     return this.dataService.findOccurrences(
         null, null, 0, 2, filters).map(
           occurrences => {
@@ -987,13 +987,17 @@ console.debug(occ);
     let signatureBits = [
       userId, dateObservedMonth, 
       dateObservedDay, dateObservedYear, 
-      userSciName, geometry, locality];
+      userSciName.trim(), geometry, locality];
     let unencodedSignature = '';
 
     for(let bit of signatureBits) {
-        unencodedSignature = unencodedSignature + '-' + bit;
+        unencodedSignature = unencodedSignature + '-';
+        if ( bit != undefined ) {
+          unencodedSignature = unencodedSignature + bit;
+        }
+        
     }
-
+console.log(encodeURIComponent(unencodedSignature));
     // We must urlencode the because of the "Unicode Problem":
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding 
     return btoa(encodeURIComponent(unencodedSignature));
