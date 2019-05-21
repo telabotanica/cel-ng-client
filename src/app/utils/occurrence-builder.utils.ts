@@ -2,6 +2,7 @@ import { LocationModel } from "tb-geoloc-lib/lib/_models/location.model";
 import { RepositoryItemModel } from "tb-tsb-lib/lib/_models/repository-item.model";
 import { Occurrence } from "../model/occurrence/occurrence.model";
 import { TelaBotanicaProject } from "../model/occurrence/tela-botanica-project.model";
+import { DateFormatter } from "./date-formatter.utils";
 
 export class OccurrenceBuilder {  
   
@@ -130,7 +131,7 @@ export class OccurrenceBuilder {
     // to format it by ourself
     // https://stackoverflow.com/questions/44744476/angular-material-datepicker-date-becomes-one-day-before-selected-date 
     if (date) {
-      let dateObs =  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T12:00:00`
+      let dateObs =  DateFormatter.format(date);
       this.fillOccPropertyWithValue('dateObserved', dateObs);
     }
 
