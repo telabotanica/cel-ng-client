@@ -218,7 +218,7 @@
 							<occurrence-photo-gallery #photoGallery
 							  (onPhotoRemoved)="onPhotoRemoved($event)"
 								[enableRemove]="true"
-								[occurrenceId]="(mode == SINGLE_EDIT_MODE) ? occurrences[0].id : null"></occurrence-photo-gallery>
+								[occurrenceId]="(mode == SINGLE_EDIT_MODE) ? ids[0] : null"></occurrence-photo-gallery>
 		</div>
 
             <button mat-button type="button" (click)="openLinkPhotoDialog()">Choisir une photo déjà importée</button>

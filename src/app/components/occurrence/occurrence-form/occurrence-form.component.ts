@@ -27,6 +27,7 @@ import { ExistInChorodepService } from "../../../services/chorodep/exist-in-chor
 import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
 import { OccurrenceBuilder } from "../../../utils/occurrence-builder.utils";
 import { EfloreCardUrlBuilder } from "../../../utils/eflore-card-url-builder.utils";
+import { DateFormatter } from "../../../utils/date-formatter.utils";
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import { OccurrenceLinkPhotoDialogComponent } from '../occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
 import { PlantnetResultDialogComponent } from '../plantnet-result-dialog/plantnet-result-dialog.component';
@@ -75,6 +76,8 @@ export class OccurrenceFormComponent implements OnInit {
   // The list of TelaBotanicaProject 
   projects: TelaBotanicaProject[];
   occurrences = [];
+  // The ids of the occurrences to be edited:
+  ids = [];
   // The photos which have been uploaded for the current occurrence(s):
   private photos = [];
   // The LocationModel object as defined by th user 
@@ -386,6 +389,7 @@ export class OccurrenceFormComponent implements OnInit {
       if ( strIds !== undefined ) {
         // Bulk edit mode:
         let ids = strIds.split(",");
+        this.ids = ids;
         if (ids.length >1) {
           this.mode = OccurrenceFormComponent.BULK_EDIT_MODE;
         }
@@ -693,9 +697,12 @@ console.log('onTAXCHANGE');
       }
       // If we've got all the data we need to check duplicate existence:
       if ( dateObserved != null ) {
-        let month = dateObserved.getUTCMonth() + 1;
-        let day = dateObserved.getUTCDate();
-        let year = dateObserved.getUTCFullYear();
+
+        let trueDate = new Date();
+        trueDate.setDate(dateObserved.getDate());
+        let month = (trueDate.getUTCMonth() + 1).toString();
+        let day = trueDate.getUTCDate().toString();
+        let year = trueDate.getUTCFullYear().toString();
         let geomAsString = JSON.stringify(this.location.geometry);
         let sciname = this.taxon.name;
 
@@ -703,12 +710,12 @@ console.log('onTAXCHANGE');
             sciname = sciname.concat(' ');
             sciname = sciname.concat(this.taxon.author);
         }
+
+
          
-        // @todo use the user id from the token once we can test with SSO:
         let duplicateExists = await this.doublonExists(    
             this.userId, day, month, year, sciname,
             geomAsString, this.location.locality);
-
 
         if (duplicateExists) {
           warnings.push(this._duplicateMsg);
