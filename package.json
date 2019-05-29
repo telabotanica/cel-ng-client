@@ -25,6 +25,7 @@
     "@angular/router": "~7.2.0",
     "@asymmetrik/ngx-leaflet": "^5.0.1",
     "@asymmetrik/ngx-leaflet-draw": "^4.0.0",
+    "@ngx-translate/core": "^11.0.1",
     "algoliasearch": "^3.32.0",
     "algoliasearch-helper": "^2.26.1",
     "angular-tree-component": "^8.4.0",
