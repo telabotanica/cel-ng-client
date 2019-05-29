@@ -207,6 +207,7 @@
                 [ignoreOversizedFiles]="false"
                 [photoUploadBaseUrl]="baseCelApiUrl"   
                 [sendImages]="sendPhotoFlag"
+                [allowedFileTypes]="['jpeg', 'png']"
                 (httpError)="onPostPhotoError($event)"
                 (deletedFiles)="onPhotoDeleted($event)"
                 (acceptedFiles)="onPhotoAdded($event)"
