@@ -161,7 +161,7 @@ export class OccurrenceFormComponent implements OnInit {
       id: 'nva',
       label: 'Antilles françaises',
       levels: ['idiotaxon'],
-      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/nva/',
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtxa/',
       apiUrl2: '',
       apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/nva/noms/',
       description_fr: ''
