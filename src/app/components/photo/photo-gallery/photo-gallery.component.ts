@@ -19,6 +19,7 @@ import { PhotoService } from "../../../services/photo/photo.service";
 import { Photo } from "../../../model/photo/photo.model";
 import { PhotoFilters } from "../../../model/photo/photo-filters.model";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
+import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-photo-gallery',
@@ -38,9 +39,11 @@ export class PhotoGalleryComponent implements OnInit {
   baseCelApiUrl: string = environment.api.baseUrl;
   nbrOfPhotosToBeSEnt = 0;
   sendPhotoFlag: boolean = false;
+  private _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
 
   constructor(
     private dataService: PhotoService, 
+    private confirmDeletionDialog: MatDialog, 
     private dialog: MatDialog, 
     public snackBar: MatSnackBar,
     private router: Router ) { }
@@ -106,6 +109,28 @@ export class PhotoGalleryComponent implements OnInit {
         );
   }
 
+  openConfirmDeletionDialog(value) {
+
+    let dialogConfig = this.buildDialogConfig();
+    dialogConfig.data = this._confirmDeletionMsg;
+    let confirmDeletionDialogRef = this.confirmDeletionDialog.open(ConfirmDialogComponent, dialogConfig);
+
+    confirmDeletionDialogRef
+      .afterClosed()
+      .subscribe( response => {
+          if (response == true) {
+            this.bulkDelete();
+          }
+      });
+  }
+
+  buildDialogConfig() {
+    let dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    return dialogConfig;
+  }
 
 
   openLinkOccurrenceDialog() {

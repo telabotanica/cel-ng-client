@@ -7,6 +7,7 @@
       [ignoreOversizedFiles]="false"
       [sendImages]="sendPhotoFlag"
       [photoUploadBaseUrl]="baseCelApiUrl"   
+      [allowedFileTypes]="['jpeg', 'png']"
       (httpError)="onPostPhotoError($event)"
       (acceptedFiles)="onPhotoAdded($event)"
       (uploadedFiles)="onPhotoUploaded($event)"
@@ -41,7 +42,7 @@
 
       <button mat-button
         *ngIf="getSelectedCount()>0"
-        (click)="bulkDelete()" 
+        (click)="openConfirmDeletionDialog()" 
         matTooltip="Supprimer les photos sélectionnées"
         matTooltipPosition="above">Supprimer</button>
 
