@@ -23,6 +23,13 @@
     font-weight: 600;
 }
 
+#tag-component-container {
+    width: 400px;
+    vertical-align: middle;
+    border: 0;
+    display: block;
+}
+
 img{
     width:100%;
     max-width:400px;

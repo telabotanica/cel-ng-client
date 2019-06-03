@@ -69,18 +69,20 @@
 
   </div>
 
-  <tb-tag
-  [userId]=22
-  [objectId]="photo.id"
-  [basicTags]="basicTags"
-  [baseApiUrl]="baseUrl"
-  apiPath="/api/photo_tags"
-  apiRelationPath="/api/photo_photo_tag_relations"
-  apiRetrievePath="/api/photos/{id}/photo_tag_relations"
-  objectName="photo"
-  objectEndpoint="/api/photos"
-  tagName="photoTag"
-  tagEndpoint="/api/photo_tags"
-  (log)="logTagLibMessages($event)"></tb-tag>
+  <div id="tag-component-container">
+    <tb-tag
+      [userId]=22
+      [objectId]="photo.id"
+      [basicTags]="basicTags"
+      [baseApiUrl]="baseUrl"
+      apiPath="/api/photo_tags"
+      apiRelationPath="/api/photo_photo_tag_relations"
+      apiRetrievePath="/api/photos/{id}/photo_tag_relations"
+      objectName="photo"
+      objectEndpoint="/api/photos"
+      tagName="photoTag"
+      tagEndpoint="/api/photo_tags"
+      (log)="logTagLibMessages($event)"></tb-tag>
+  </div>
 
 </div>
