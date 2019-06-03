@@ -17,6 +17,7 @@
 
           <div class="geoloc-map">
             <tb-geoloc-map
+              [layersToAdd]="['osm','opentopomap','google hybrid','brgm']"
               [reset]='resetForm'
               [patchElevation]="patchElevation"
               [patchGeometry]="patchGeometry"
