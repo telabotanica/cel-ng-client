@@ -2,13 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
 import { MAT_DATE_LOCALE } from '@angular/material';
+import { MatPaginatorIntl } from '@angular/material';
 import { SharedModule } from './shared.module';
 
 import { JsonPatchService } from '../restit/services/json-patch.service';
@@ -54,7 +57,12 @@ import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/c
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { NotificationService } from "./services/commons/notification.service";
 import { SsoService } from "./services/commons/sso.service";
+import { MatPaginatorI18nService } from "./services/commons/mat-paginator-i18n.service";
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -98,11 +106,24 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     TbDropfileLibModule, 
     TbTsbLibModule,
     TbTagLibModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+    { provide: MAT_DATE_LOCALE, 
+      useValue: 'fr-FR' },
 //    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, 
+      useClass: AuthInterceptor, 
+      multi: true },
+    {
+      provide: MatPaginatorIntl,
+      useClass: MatPaginatorI18nService },
     OccurrencesDataSource, 
     PhotoService, 
     TelaBotanicaProjectService, 
@@ -113,6 +134,7 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
     AlgoliaEfloreParserService,
     PlantnetService,
     ExistInChorodepService,
+    TranslateService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
