@@ -43,7 +43,14 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
         if ( filters !== null ) {
             for (var propertyName in filters) {
                 if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
+                    if (Array.isArray(filters[propertyName])) {
+                        for (var val in filters[propertyName]) {
+                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
+                        }
+                    }
+                    else {
                         httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+                    }
                 }
             }
         }
@@ -62,11 +69,17 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
             .set('sortDirection', sortDirection)
             .set('page', pageNumber.toString())
             .set('perPage', pageSize.toString());
-        console.debug(filters);
         if ( filters !== null ) {
             for (var propertyName in filters) {
                 if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
+                    if (Array.isArray(filters[propertyName])) {
+                        for (var val in filters[propertyName]) {
+                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
+                        }
+                    }
+                    else {
                         httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+                    }
                 }
             }
         }
