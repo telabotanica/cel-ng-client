@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import {OccurrenceFilters} from "../../../model/occurrence/occurrence-filters.model";
+import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
 import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
 import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
 
@@ -12,6 +12,7 @@ import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-bo
 })
 export class OccurrenceFiltersComponent implements OnInit {
 
+  @ViewChild('tagTree') tagTree;
   occurrenceSearchFormGroup: FormGroup;
   isIdentiplanteValidated;
   projectId;
@@ -74,8 +75,9 @@ export class OccurrenceFiltersComponent implements OnInit {
       occFilters.certainty = this.selectedCertainty;
       occFilters.projectId = this.selectedProjectId;
       occFilters.isIdentiplanteValidated = this.selectedIsIdentiplanteValidated;
+      occFilters.tags = this.tagTree.userOccurrenceTagSelection.selected.map(sel => sel.item);
+    console.debug(occFilters.tags);
 
-      //occFilters.tags = [this.occurrenceSearchFormGroup.get('tag').value];
       occFilters.freeTextQuery = this.occurrenceSearchFormGroup.get('freeTextQuery').value;
       this.applyFiltersEvent.emit(occFilters);
 

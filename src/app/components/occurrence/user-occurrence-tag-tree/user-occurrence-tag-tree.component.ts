@@ -98,22 +98,14 @@ export class FileTreeBuilder {
 export class UserOccurrenceTagTreeComponent {
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<UserOccurrenceTagItemFlatNode, UserOccurrenceTagItemNode>();
-
   /** Map from nested node to flattened node. This helps us to keep the same object for selection */
   nestedNodeMap = new Map<UserOccurrenceTagItemNode, UserOccurrenceTagItemFlatNode>();
-
   /** A selected parent node to be inserted */
   selectedParent: UserOccurrenceTagItemFlatNode | null = null;
-
   /** The new item's name */
   newItemName = '';
-
-
-
   treeControl: FlatTreeControl<UserOccurrenceTagItemFlatNode>;
-
   treeFlattener: MatTreeFlattener<UserOccurrenceTagItemNode, UserOccurrenceTagItemFlatNode>;
-
   dataSource: MatTreeFlatDataSource<UserOccurrenceTagItemNode, UserOccurrenceTagItemFlatNode>;
 
 

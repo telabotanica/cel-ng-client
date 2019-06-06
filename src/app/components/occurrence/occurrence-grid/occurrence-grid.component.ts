@@ -60,6 +60,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   selection = new SelectionModel<Occurrence>(true, []);
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
+console.debug(newOccFilters);
     if (  newOccFilters !== null) {
       this.paginator.pageIndex = 0;
       this._occFilters = newOccFilters;
@@ -83,14 +84,6 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   }
 
-  refreshCount() {
-    this.refreshCountWithFilters(this._occFilters);
-  }
-
-  refreshCountWithFilters(filters: OccurrenceFilters) {
-    this.dataSource.findCount(filters).subscribe( 
-        resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
-  }
 
   ngAfterViewInit() {
     // Reset the paginator when sort is triggered:
@@ -116,6 +109,16 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     this.refreshCount();
 
   }
+
+  refreshCount() {
+    this.refreshCountWithFilters(this._occFilters);
+  }
+
+  refreshCountWithFilters(filters: OccurrenceFilters) {
+    this.dataSource.findCount(filters).subscribe( 
+        resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
+  }
+
 
   navigateToCreateOccurrenceForm() {
     this.router.navigateByUrl('/occurrence-form');
