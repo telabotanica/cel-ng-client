@@ -12,9 +12,9 @@ import {of} from "rxjs/observable/of";
 })
 export class PhotoTagService {
 
-  private resourceUrl = environment.api.baseUrl + '/photo-tags';
+  private resourceUrl = environment.api.baseUrl + '/photoTagTrees';
 
-  get() {
+  getCollectionAsTree() {
       return this.http.get<any[]>(this.resourceUrl);
   }
 

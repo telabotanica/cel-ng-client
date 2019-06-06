@@ -37,7 +37,7 @@ export class FileTreeBuilder {
 
   constructor(private http: HttpClient, private photoTagService:PhotoTagService) {
 	//this.http.get<any[]>("http://10.99.34.5:8080/api/PhotoTagTrees").subscribe((jsonTree: any) => this.initialize(jsonTree));
-    photoTagService.get().subscribe((jsonTree: any) => this.initialize(jsonTree));
+    photoTagService.getCollectionAsTree().subscribe((jsonTree: any) => this.initialize(jsonTree));
   }
 
 

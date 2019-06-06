@@ -38,9 +38,16 @@ export class PhotoService {
       
       for (var propertyName in filters) {
         if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
-          httpParams = httpParams.append(
-            propertyName, filters[propertyName].toString()
-          );
+
+          if (Array.isArray(filters[propertyName])) {
+              for (var val in filters[propertyName]) {
+                  httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
+              }
+          }
+          else {
+              httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+          }
+
         }
       }
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import {PhotoFilters} from "../../../model/photo/photo-filters.model";
@@ -12,6 +12,7 @@ import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-bo
 })
 export class PhotoFiltersComponent implements OnInit {
 
+  @ViewChild('tagTree') tagTree;
   public telaBotanicaProjects: TelaBotanicaProject[];
   private selectedProjectId;
   private selectedIsPublic;
@@ -66,8 +67,7 @@ export class PhotoFiltersComponent implements OnInit {
       photoFilters.certainty = this.selectedCertainty;
       photoFilters.projectId = this.selectedProjectId;
       photoFilters.isIdentiplanteValidated = this.selectedIsIdentiplanteValidated;
-
-      //photoFilters.tags = [this.photoSearchFormGroup.get('tag').value];
+      photoFilters.tags = this.tagTree.photoTagSelection.selected.map(sel => sel.item);
       photoFilters.freeTextQuery = this.photoSearchFormGroup.get('freeTextQuery').value;
 
       this.applyFiltersEvent.emit(photoFilters);
