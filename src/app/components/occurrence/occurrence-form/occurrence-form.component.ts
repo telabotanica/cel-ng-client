@@ -85,7 +85,6 @@ export class OccurrenceFormComponent implements OnInit {
   // The RepositoryItemModel (taxon) object as chosen by the user:
   private taxon: RepositoryItemModel;
 
-
   private _duplicateMsg = "Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre."
 
   // ----------------------------------------------------------------
@@ -179,7 +178,7 @@ export class OccurrenceFormComponent implements OnInit {
       levels: ['idiotaxon'],
       apiUrl: environment.taxoApi.nameSearchBaseUrl + '/florical/',
       apiUrl2: '',
-      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + 'florical/noms/',
+      apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/florical/noms/',
       description_fr: ''
     }, {
       id: 'aublet',
@@ -201,7 +200,7 @@ export class OccurrenceFormComponent implements OnInit {
       id: 'lbf',
       label: 'Liban',
       levels: ['idiotaxon'],
-      apiUrl: environment.taxoApi.nameSearchBaseUrl + 'lbf/',
+      apiUrl: environment.taxoApi.nameSearchBaseUrl + '/lbf/',
       apiUrl2: '',
       apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/lbf/noms/',
       description_fr: ''
@@ -446,7 +445,7 @@ console.log(this.projectIdSelected);
     this.occurrenceForm.patchValue(occurrence);
     this.prepopulateLocation(occurrence);
 
-    if ( occurrence.taxoRepo != null && occurrence.userSciNameId != null ) {
+    if ( occurrence.userSciName != null ) {
       this.prepopulateTaxoSearchBox(occurrence);
     }
     
@@ -462,7 +461,7 @@ console.log(this.projectIdSelected);
     // when setting every single property setting.
     let tmpTaxon = {
       occurenceId: occ.id,
-      repository: (occ.taxoRepo == null) ? '' : occ.taxoRepo,
+      repository: (occ.taxoRepo == null) ? 'otherunknown' : occ.taxoRepo,
       idNomen: occ.userSciNameId,
       name: occ.userSciName,
       author: ''
@@ -474,16 +473,18 @@ console.log(this.projectIdSelected);
   }
 
   private prepopulateGeolocMap(occ: Occurrence) {
-    let jsonGeom = JSON.parse(occ.geometry); 
-    this.patchElevation = occ.elevation;
-    this.patchGeometry = [{
-      'type': jsonGeom.type,
-      'coordinates': jsonGeom.coordinates
-    }];
-    console.debug(this.patchGeometry);
-    this.patchAddress = occ.locality;
-    if ( jsonGeom.type == 'Point' ) {
-        this.patchLatLngDec = jsonGeom.coordinates;
+    if ( occ.geometry != null ) {
+      let jsonGeom = JSON.parse(occ.geometry); 
+      this.patchElevation = occ.elevation;
+      this.patchGeometry = [{
+        'type': jsonGeom.type,
+        'coordinates': jsonGeom.coordinates
+      }];
+      console.debug(this.patchGeometry);
+      this.patchAddress = occ.locality;
+      if ( jsonGeom.type == 'Point' ) {
+          this.patchLatLngDec = jsonGeom.coordinates;
+      }
     }
   }
 
@@ -1004,7 +1005,7 @@ console.debug(filters);
         }
         
     }
-console.log(encodeURIComponent(unencodedSignature));
+
     // We must urlencode the because of the "Unicode Problem":
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding 
     return btoa(encodeURIComponent(unencodedSignature));

@@ -127,11 +127,23 @@ export class OccurrenceBuilder {
     }
     let date = this.formValue['dateObserved'];
 
+console.log('ttttttttttttttttttttttttttttttttttttttttttttttt');
+console.debug(date);
     // JSON Stringifying date is based on GWT so we get yesterday. Thus we have
     // to format it by ourself
     // https://stackoverflow.com/questions/44744476/angular-material-datepicker-date-becomes-one-day-before-selected-date 
     if ( date != null ) {
-      let dateObs =  DateFormatter.format(date);
+      let dateObs;
+      // Create mode: the value returned is a true Date
+      if (typeof(date) == 'string') {
+        // No need to do anything, 
+        dateObs = date;
+      }
+      // Edit mode: the value returned is a string because of the way it 
+      // was assigned:
+      else {
+          dateObs =  DateFormatter.format(date);
+      }
       this.fillOccPropertyWithValue('dateObserved', dateObs);
     }
 
