@@ -64,6 +64,7 @@
 
 </div>
 <div>
+  <div>
 
     <mat-table class="occurrences-table mat-elevation-z8" 
         [dataSource]="dataSource" 
@@ -126,12 +127,13 @@
         <mat-row *matRowDef="let row; columns: displayedColumns" (click)="navigateToOccurrenceDetail(row)"></mat-row>
         
     </mat-table>
-
-    <mat-paginator 
-        [length]="totalNbrOfHits" 
-        [pageSize]="10" 
-        [pageSizeOptions]="[5, 10, 25, 100]" ></mat-paginator>
-
+  </div>
+  <div class="paginator-container">
+	  <mat-paginator
+	      [length]="totalNbrOfHits" 
+	      [pageSize]="10" 
+	      [pageSizeOptions]="[5, 10, 25, 100]" ></mat-paginator>
+  </div>
 </div>
 <mat-sidenav-container
     class="detail-container" (backdropClick)="close('backdrop')" *ngIf="false">

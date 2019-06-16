@@ -2,7 +2,7 @@
 
 :host {
 
-overflow-y: scroll;
+
 }
 
 
@@ -28,6 +28,17 @@ mat-header-cell, mat-cell {
   border-bottom: 1px none #ddd; 
   background-color: #fff; 
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);
+}
+
+td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+	padding: 0;
+	padding-right: 0px;
+	padding-left: 0px;
+	border-bottom-width: 0px;	
+}
+
+.paginator-container {
+
 }
 
 

@@ -1,0 +1,8 @@
+RewriteEngine On
+RewriteBase /cel2-dev/cel2-client/dist/cel2-client/
+# Redir pour la version test du client cel2 (ajoutée mars 2019)
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . index.html [L]
+

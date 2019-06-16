@@ -1,4 +1,8 @@
-<div style="display:flex;" fxFlex="10 10 auto">
-  <app-occurrence-filters (applyFiltersEvent)='applyFilters($event)' style="flex: 1;" [hidden]="isMobile"></app-occurrence-filters>
-  <app-occurrence-grid [occFilters]=occFilters style="flex: 4;"></app-occurrence-grid>
+<div class="module-container">
+  <div class="module-left-col">
+    <app-occurrence-filters (applyFiltersEvent)='applyFilters($event)' [hidden]="isMobile"></app-occurrence-filters>
+  </div>
+  <div class="module-right-col">
+    <app-occurrence-grid [occFilters]=occFilters></app-occurrence-grid>
+  </div>
 </div>

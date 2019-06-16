@@ -11,6 +11,10 @@ html, body {
   margin: 0;
 }
 
+body {
+  overflow: hidden !important;
+}
+
 .ui-component-menu-item {
   font-size: 13px;
   line-height: 13px;
@@ -34,16 +38,28 @@ html, body {
     padding-bottom: 10px;
     text-align: center;
     letter-spacing: 1px;
-/*
-    background-color: #2d5ffd;
-    background-image: none;
-    background-size: auto;
-    background-repeat: repeat;
-    box-shadow: 3px 5px 20px 0 rgba(0, 0, 0, .25);
-    border-radius: 4px;
-    text-transform: uppercase;
-    font-size: 14px;
-*/
+}
+
+.module-left-col {
+  float:left;
+  width:20%;
+  overflow:auto;  
+  height: calc(100vh - 67px);
+}
+
+
+.module-right-col {
+  float:left;
+  width:80%;
+  overflow:auto;  
+  height: calc(100vh - 67px);
+}
+
+.module-right-col-mobile {
+  float:left;
+  width:100%;
+  overflow:auto;  
+  height: calc(100vh - 67px);
 }
 
 

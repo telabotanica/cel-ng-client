@@ -1,0 +1,6 @@
+/* Clear floats after the columns */
+.module-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
