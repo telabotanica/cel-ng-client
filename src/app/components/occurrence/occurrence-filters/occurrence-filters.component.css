@@ -6,7 +6,15 @@
 overflow-y: scroll;
 }
 
-
+/*
+.occurrence-filters-form-container {
+    background-color: #fcfaf5;
+    margin-top: 4px;
+    justify-content: center;
+    padding: 20px;
+  overflow-y: scroll;
+}
+*/
 .day-input, .month-input{
   width:34px !important;
 }

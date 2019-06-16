@@ -22,7 +22,29 @@ html, body {
   padding-right: 8px !important; 
 }
 
+.floating-button {
 
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 10000;
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+/*
+    background-color: #2d5ffd;
+    background-image: none;
+    background-size: auto;
+    background-repeat: repeat;
+    box-shadow: 3px 5px 20px 0 rgba(0, 0, 0, .25);
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 14px;
+*/
+}
 
 
 

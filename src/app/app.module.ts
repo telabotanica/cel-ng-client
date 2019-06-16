@@ -57,6 +57,7 @@ import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/c
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { NotificationService } from "./services/commons/notification.service";
 import { SsoService } from "./services/commons/sso.service";
+import { DeviceDetectionService } from "./services/commons/device-detection.service";
 import { MatPaginatorI18nService } from "./services/commons/mat-paginator-i18n.service";
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
 

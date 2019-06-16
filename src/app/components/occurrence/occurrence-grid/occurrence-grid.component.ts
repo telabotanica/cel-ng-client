@@ -34,6 +34,7 @@ import { OccurrenceFilters }  from "../../../model/occurrence/occurrence-filters
 import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { ImportDialogComponent } from "../../../components/occurrence/import-dialog/import-dialog.component";
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
 
 @Component({
   selector: 'app-occurrence-grid',
@@ -43,7 +44,7 @@ import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-d
 export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   // Ids of the columns to be displayed:
-  displayedColumns= [
+  displayedColumns = [
     "select", "userSciName", "dateObserved", "locality", "isPublic", 
     "id", "identiplanteScore"];
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,6 +53,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   // The total number of occurrence instances matching _occFilters (used by 
   // the table paginator):
   totalNbrOfHits = 0;
+  public isMobile: boolean = false;
 
   private _occFilters: OccurrenceFilters;
 
@@ -60,7 +62,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   selection = new SelectionModel<Occurrence>(true, []);
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
-console.debug(newOccFilters);
+
     if (  newOccFilters !== null) {
       this.paginator.pageIndex = 0;
       this._occFilters = newOccFilters;
@@ -76,7 +78,18 @@ console.debug(newOccFilters);
     private confirmBulkPublishDialog: MatDialog, 
     private confirmBulkUnpublishDialog: MatDialog, 
     public snackBar: MatSnackBar,
-    private router: Router) { }
+    private deviceDetectionService: DeviceDetectionService,
+    private router: Router) { 
+
+      deviceDetectionService.detectDevice().subscribe(result => {
+        this.isMobile = result.matches;
+        this.displayedColumns = this.isMobile ? 
+          ["userSciName", "dateObserved"] : 
+          ["select", "userSciName", "dateObserved", "locality", 
+           "isPublic", "id", "identiplanteScore"];
+      });
+
+    }
 
   ngOnInit() {
     this.refreshCount();
