@@ -109,3 +109,9 @@
   border-top-color: black;  
   margin-top:20px;
 }
+
+
+.occurrence-form-submit-button-card-container > * {
+    margin-left: 10px;
+}
+

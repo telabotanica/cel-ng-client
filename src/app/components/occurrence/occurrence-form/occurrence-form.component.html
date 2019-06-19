@@ -32,7 +32,7 @@
 		          <label class="occurrence-form-label">Localisation diffusée (floutage) :</label>
 		        </div>
 		        <mat-form-field>
-		          <select matNativeControl [(ngModel)]="publishedLocationSelected" formControlName="publishedLocation">
+		          <select matNativeControl [(ngModel)]="publishedLocationSelected" formControlName="publishedLocation" matTooltip="Indiquer si vous souhaitez flouter la localisation de l’observation" matTooltipPosition="above">
 		            <option value="précise">précise</option>
 		            <option value="localité">localité</option>
 		            <option value="10x10km">10x10km</option>
@@ -44,7 +44,7 @@
 		        </div>
 		        <section class="observed-date-form-field-container">
 		          <mat-form-field>
-		            <input matInput readonly [max]="maxDate" [matDatepicker]="dateObserved" formControlName="dateObserved">
+		            <input matInput readonly [max]="maxDate" [matDatepicker]="dateObserved" formControlName="dateObserved" matTooltip="Saisir la date de l’observation" matTooltipPosition="above">
 		            <mat-datepicker-toggle matSuffix [for]="dateObserved"></mat-datepicker-toggle>
 		            <mat-datepicker #dateObserved></mat-datepicker>
 		          </mat-form-field>
@@ -60,21 +60,21 @@
 		              <label class="occurrence-form-label">Lieu-dit :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="sublocality">
+		              <input matInput formControlName="sublocality" matTooltip="Toponyme plus précis que la localité" matTooltipPosition="above">
 		            </mat-form-field>
 
 		            <div class="occurrence-form-label-container">
 		              <label class="occurrence-form-label">Milieu :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="environment">
+		              <input matInput formControlName="environment"  matTooltip="Type d’habitat, par exemple issu des codes Corine ou Catminat" matTooltipPosition="above">
 		            </mat-form-field>
 
 		            <div class="occurrence-form-label-container">
 		              <label class="occurrence-form-label">Projet :</label>
 		            </div>
 		            <mat-form-field>
-		                <select matNativeControl [(ngModel)]="projectIdSelected" formControlName="projectId">
+		                <select matNativeControl [(ngModel)]="projectIdSelected" formControlName="projectId"  matTooltip="Programme de sciences participatives ou observatoire citoyen. En choisissant un projet, vous pourrez avoir à saisir des champs étendus spécifiques" matTooltipPosition="above">
 		                <option *ngFor="let project of projects" value="{{project.id}}">{{project.label}}</option>
 		                </select>
 		            </mat-form-field>
@@ -83,14 +83,14 @@
 		              <label class="occurrence-form-label">Structure :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="observerInstitution">
+		              <input matInput formControlName="observerInstitution" matTooltip="Structure d’appartenance de l’observateur, dans le cadre de laquelle a été faite l’observation" matTooltipPosition="above">
 		            </mat-form-field>
 
 		            <div class="occurrence-form-label-container">
 		              <label class="occurrence-form-label">Déterminateur :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="identificationAuthor">
+		              <input matInput formControlName="identificationAuthor" matTooltip="Nom de la personne ayant identifié l'espèce observée (si différente de l'observateur)" matTooltipPosition="above">
 		            </mat-form-field>
 
 		          </div>
@@ -102,14 +102,14 @@
 		              <label class="occurrence-form-label">Station :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="station">
+		              <input matInput formControlName="station" matTooltip="Lieu précis de l'observation définissant une unité écologique homogène" matTooltipPosition="above">
 		            </mat-form-field>
 
 		            <div class="occurrence-form-label-container">
 		              <label class="occurrence-form-label">Précision de la localisation :</label>
 		            </div>
 		            <mat-form-field>
-		              <select matNativeControl formControlName="locationAccuracy">
+		              <select matNativeControl formControlName="locationAccuracy" matTooltip="Renseigner à quel point la localisation renseignée est précise" matTooltipPosition="above">
 		                <option value=""></option>
 		                <option value="0 à 10 m">0 à 10 m</option>
 		                <option value="10 à 100 m">10 à 100 m</option>
@@ -123,7 +123,7 @@
 		              <label class="occurrence-form-label">Observateur :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="observer">
+		              <input matInput formControlName="observer" matTooltip="Identité de l’observateur. Ce champ est renseigné automatiquement à partir de votre compte Tela Botanica" matTooltipPosition="above">
 		            </mat-form-field>
 
 
@@ -133,11 +133,11 @@
 		        <div class="occurrence-form-options">
 		          <div>
 		          <span class="occurrence-form-option-label">Afficher les champs avancés</span>
-		          <mat-slide-toggle [checked]="false" (toggleChange)="toggleAdvancedFormLeft($event)" ></mat-slide-toggle>
+		          <mat-slide-toggle [checked]="false" (toggleChange)="toggleAdvancedFormLeft($event)"  matTooltip="Afficher l’ensemble des champs de saisie" matTooltipPosition="above"></mat-slide-toggle>
 		          </div>
 		          <div *ngIf="isInCreateMode()">
 		            <span class="occurrence-form-option-label">Réinitialiser ces données pour l'observation suivante</span>
-		            <mat-slide-toggle (toggleChange)="toggleClearFormAfterSubmit($event)" ></mat-slide-toggle>
+		            <mat-slide-toggle (toggleChange)="toggleClearFormAfterSubmit($event)"  matTooltip="Si vous souhaitez enchainer avec la saisie d’une autre observation, vous pouvez choisir de réinitialiser ces champs" matTooltipPosition="above"></mat-slide-toggle>
 		          </div>
 
 		        </div>
@@ -177,10 +177,11 @@
 		          <div class="occurrence-form-label-container">
 		            <label class="occurrence-form-label">Certitude :</label>
 		          </div>
-		          <mat-radio-group  formControlName="certainty" class="certainty-selector">
-		            <mat-radio-button class="example-margin" value="certain">Certaine</mat-radio-button>
-		            <mat-radio-button class="example-margin" value="douteux">Douteuse</mat-radio-button>
-		            <mat-radio-button class="example-margin" value="à déterminer">A déterminer</mat-radio-button>
+		          <mat-radio-group  formControlName="certainty" class="certainty-selector" >
+		            <mat-radio-button class="example-margin" value="certain"  matTooltip="Vous êtes certain·e de l’identification du taxon" matTooltipPosition="above">Certaine</mat-radio-button>
+		            <mat-radio-button class="example-margin" value="douteux" matTooltip="Vous êtes avez un doute quant à l’identification du taxon" matTooltipPosition="above">Douteuse</mat-radio-button>
+		            <mat-radio-button class="example-margin" value="à déterminer" matTooltip="Vous n’avez pas identifié le taxon observé
+" matTooltipPosition="above">A déterminer</mat-radio-button>
 		          </mat-radio-group>
 		        </section>
 		      </div>
@@ -228,7 +229,7 @@
 
 		        </div>
 		        
-						<mat-divider></mat-divider>
+				<mat-divider></mat-divider>
 
 		        <div class="occurrence-form-annotation-container">
 
@@ -237,7 +238,7 @@
 		          </div>
 
 		          <mat-form-field style="width:100%;">
-		            <textarea matInput formControlName="annotation"></textarea>
+		            <textarea matInput formControlName="annotation"  matTooltip="Ajouter une note" matTooltipPosition="above"></textarea>
 		          </mat-form-field>
 		        </div>
 
@@ -247,7 +248,7 @@
 		        <div class="occurrence-form-label-container">
 		          <label class="occurrence-form-label">Spontanéité :</label>
 		        </div>
-		          <mat-radio-group [(ngModel)]="isWildSelected" formControlName="isWild">  
+		          <mat-radio-group [(ngModel)]="isWildSelected" formControlName="isWild"  matTooltip="Ajouter une note" matTooltipPosition="above">  
 		          <mat-radio-button *ngFor="let op of isWildList" [value]="op.value">{{op.name}}</mat-radio-button>
 		        </mat-radio-group>
 
@@ -278,7 +279,7 @@
 		        <div class="occurrence-form-label-container">
 		          <label class="occurrence-form-label">Options de publication :</label>
 		        </div>
-		        <mat-slide-toggle formControlName="isPublic" [disabled]="!isPublishable()" checked="false" >Observation publique</mat-slide-toggle>
+		        <mat-slide-toggle formControlName="isPublic" [disabled]="!isPublishable()" checked="false" matTooltip="Afin de publier une observation, vous devez avoir renseigné au moins le lieu et la date." matTooltipPosition="above">Observation publique</mat-slide-toggle>
 
 		        <!-- Advanced form fields container -->
 		        <section class="advanced-form-left-container" *ngIf="displayFullFormRight">
@@ -292,7 +293,7 @@
 		              <label class="occurrence-form-label">Type de donnée :</label>
 		            </div>
 		            <mat-form-field>
-		              <select matNativeControl [(ngModel)]="occurrenceTypeSelected" formControlName="occurrenceType">
+		              <select matNativeControl [(ngModel)]="occurrenceTypeSelected" formControlName="occurrenceType"  matTooltip="Sélectionner le type de donnée en cours de saisie" matTooltipPosition="above">
 		                <option value="observation de terrain">observation de terrain</option>
 		                <option value="issue de la bibliographie">issue de la bibliographie</option>
 		                <option value="donnée d'herbier">donnée d'herbier</option>
@@ -303,7 +304,7 @@
 		              <label class="occurrence-form-label">Phénologie :</label>
 		            </div>
 		            <mat-form-field>
-		              <select matNativeControl formControlName="phenology">
+		              <select matNativeControl formControlName="phenology"  matTooltip="Sélectionner le stade phénologique du spécimen observé" matTooltipPosition="above">
 		                <option value=""></option>
 		                <option value="00-09: germination, développement des bourgeons">00-09: germination, développement des bourgeons</option>
 		                <option value="10-19: développement des feuilles">10-19: développement des feuilles</option>
@@ -328,13 +329,13 @@
 		              <label class="occurrence-form-label">Abondance :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="coef">
+		              <input matInput formControlName="coef"  matTooltip="ACoefficient d'abondance - dominance - sociabilité. ex : +, 1, 2, 3, 4, 5, 12, 34, 55, +3, etc. Décrit à la fois l'abondance surfacique d'une espèce et sa sociabilité (individus isolés à colonie homogène)." matTooltipPosition="above">
 		            </mat-form-field>
 
 		            <div class="occurrence-form-label-container">
 		              <label class="occurrence-form-label">Présence d'un témoin d'herbier :</label>
 		            </div>
-		            <mat-slide-toggle formControlName="sampleHerbarium"></mat-slide-toggle>
+		            <mat-slide-toggle formControlName="sampleHerbarium"  matTooltip="Une planche d’herbier a été réalisée à partir du spécimen observé (permet notamment une vérification de l'identification a posteriori)" matTooltipPosition="above"></mat-slide-toggle>
 
 		          </div>
 
@@ -345,7 +346,7 @@
 		              <label class="occurrence-form-label">Source bibliographique :</label>
 		            </div>
 		            <mat-form-field>
-		              <input matInput formControlName="bibliographySource">
+		              <input matInput formControlName="bibliographySource"  matTooltip="Dans le cas où la donnée est issue de la bibliographie, renseigner la source" matTooltipPosition="above">
 		            </mat-form-field>
 
 		          </div>
@@ -354,7 +355,7 @@
 
 		        <div class="occurrence-form-options">
 		          <span class="occurrence-form-option-label">Afficher les champs avancés</span>
-		          <mat-slide-toggle [checked]="false" (toggleChange)="toggleAdvancedFormRight($event)" ></mat-slide-toggle>
+		          <mat-slide-toggle [checked]="false" (toggleChange)="toggleAdvancedFormRight($event)"  matTooltip="Afficher l’ensemble des champs de saisie" matTooltipPosition="above"></mat-slide-toggle>
 		        </div>
 
 		  </div>
@@ -362,9 +363,10 @@
 		</mat-card-content>
 
 		<div class="occurrence-form-submit-button-container">
-		  <mat-card-actions align="center" >
-		    <button type="submit" mat-raised-button color="primary" >Enregistrer</button>
-		    <button type="button" mat-raised-button color="warn" (click)="onCancel()">Annuler</button>
+		  <mat-card-actions align="center" class="occurrence-form-submit-button-card-container">
+		    <button type="button" mat-raised-button color="accent" (click)="onCancel()" matTooltip="Enregistrer l’observation et retourner à la page Observations" matTooltipPosition="above">Annuler</button>
+		    <button type="submit" mat-raised-button color="primary" matTooltip="Retourner à la page Observations sans enregistrer" matTooltipPosition="above">Enregistrer</button>
+		    <button type="button" mat-raised-button color="primary" matTooltip="Enregistrer l’observation et rester sur le formulaire pour en saisir une autre" matTooltipPosition="above">OBSERVATION SUIVANTE</button>
 		  </mat-card-actions>
 		</div>
 
