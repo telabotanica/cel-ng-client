@@ -1,4 +1,5 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
     <button mat-icon-button disabled></button>
     <mat-checkbox class="checklist-leaf-node"
@@ -26,5 +27,6 @@
                   (change)="userOccurrenceTagItemSelectionToggle(node)">{{node.item}}</mat-checkbox>
     <button mat-icon-button (click)="addNewItem(node)"><mat-icon>add</mat-icon></button>
   </mat-tree-node>
+
 </mat-tree>
 

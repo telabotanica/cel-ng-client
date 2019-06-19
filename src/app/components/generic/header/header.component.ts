@@ -8,32 +8,47 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { 
-  Router, ActivatedRoute } from "@angular/router";
+  Router, ActivatedRoute 
+} from "@angular/router";
+
+import { DeviceDetectionService 
+} from "../../../services/commons/device-detection.service";
 
 @Component({
-  selector: 'app-header',
+  selector: 'header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
 
-  // Links for the main, centered, menu:	
+  // Links for the main, top, menu:	
   mainMenuLinks = [
     { path: 'occurrence-ui', label: 'OBSERVATIONS' },
     { path: 'photo-ui', label: 'PHOTOS' },
     { path: 'map-ui', label: 'CARTE' },
   ];
   activeLink = this.mainMenuLinks[0];
+  isMobile: boolean = false;
 
+  constructor(
+    private deviceDetectionService: DeviceDetectionService,
+    private router:       Router) {
 
+    deviceDetectionService.detectDevice().subscribe(result => {
+      this.isMobile = result.matches;
+    });
 
-  constructor(private router: Router) { }
+  }
 
   ngOnInit() {
   }
 
   navigateToUserProfile() {
       this.router.navigateByUrl('/user-profile-ui');
+  }
+
+  navigateToAppRoot() {
+      this.router.navigateByUrl('/occurrence-ui');
   }
 
 }

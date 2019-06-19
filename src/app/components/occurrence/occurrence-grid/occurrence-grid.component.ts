@@ -3,13 +3,19 @@ import {
   Component, 
   ElementRef, 
   OnInit, 
+  Output, 
+  EventEmitter, 
   ViewChild, 
-  Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+  Input 
+} from '@angular/core';
+import { CommonModule 
+} from '@angular/common';
 import { 
-  Router, ActivatedRoute } from "@angular/router";
+  Router, ActivatedRoute 
+} from "@angular/router";
 import { 
-  HttpClient, HttpParams } from "@angular/common/http";
+  HttpClient, HttpParams 
+} from "@angular/common/http";
 import { 
   MatPaginator, 
   MatSort, 
@@ -18,7 +24,8 @@ import {
   MatDialogConfig, 
   MatSidenav,
   MatSnackBar,
-  MatDialog } from "@angular/material";
+  MatDialog } 
+from "@angular/material";
 import { 
   debounceTime, 
   distinctUntilChanged, 
@@ -44,16 +51,19 @@ import { DeviceDetectionService } from "../../../services/commons/device-detecti
 export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   // Ids of the columns to be displayed:
-  displayedColumns = [
+  displayedColumns = [];
+  private displayedColumnsForMobiles = ["userSciName", "dateObserved"]; 
+  private displayedColumnsForDesktop = [
     "select", "userSciName", "dateObserved", "locality", "isPublic", 
     "id", "identiplanteScore"];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("sidenav") public detailPanel: MatSidenav;
+  @Output() showFilterEvent = new EventEmitter();
   // The total number of occurrence instances matching _occFilters (used by 
   // the table paginator):
   totalNbrOfHits = 0;
-  public isMobile: boolean = false;
+  isMobile: boolean = false;
 
   private _occFilters: OccurrenceFilters;
 
@@ -70,31 +80,38 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     }
   }
 
+  // @refactor Would using a single one to hold all three dialog be ok? 
   constructor(
-    public dataSource:OccurrencesDataSource, 
-    private importDialog: MatDialog, 
-    // @refactor Would using a single one to hold all three dialog be ok? 
-    private confirmBulkDeleteDialog: MatDialog, 
-    private confirmBulkPublishDialog: MatDialog, 
+    public dataSource:                  OccurrencesDataSource, 
+    private importDialog:               MatDialog, 
+    private confirmBulkDeleteDialog:    MatDialog, 
+    private confirmBulkPublishDialog:   MatDialog, 
     private confirmBulkUnpublishDialog: MatDialog, 
-    public snackBar: MatSnackBar,
-    private deviceDetectionService: DeviceDetectionService,
-    private router: Router) { 
+    public  snackBar:                   MatSnackBar,
+    private deviceDetectionService:     DeviceDetectionService,
+    private router: Router) {
+ 
+    this.setupResponsive();
+  }
 
-      deviceDetectionService.detectDevice().subscribe(result => {
+  private setupResponsive() {
+    
+      // @responsive: sets public variable + sets the array of columns 
+      //              to display:
+      this.deviceDetectionService.detectDevice().subscribe(result => {
         this.isMobile = result.matches;
         this.displayedColumns = this.isMobile ? 
-          ["userSciName", "dateObserved"] : 
-          ["select", "userSciName", "dateObserved", "locality", 
-           "isPublic", "id", "identiplanteScore"];
+          this.displayedColumnsForMobiles : this.displayedColumnsForDesktop;
       });
-
-    }
+  }
 
   ngOnInit() {
     this.refreshCount();
-      this.dataSource.loadOccurrences('', '', 0, 10);
+    this.dataSource.loadOccurrences('', '', 0, 10);
+  }
 
+  showFilters() {
+     this.showFilterEvent.emit();
   }
 
 
@@ -137,8 +154,11 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     this.router.navigateByUrl('/occurrence-form');
   }
 
-  navigateToOccurrenceDetail(occ) {
-    this.router.navigate(['/occurrence-detail', occ.id]);
+  navigateToOccurrenceDetail(row, e) {
+    console.debug(e);
+    if (e.originalTarget.className != 'mat-row ng-star-inserted') {
+      this.router.navigate(['/occurrence-detail', row.id]);
+    }
   }
 
 

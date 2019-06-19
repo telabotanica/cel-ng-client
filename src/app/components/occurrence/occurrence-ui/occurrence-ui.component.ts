@@ -13,7 +13,8 @@ import { DeviceDetectionService } from "../../../services/commons/device-detecti
 export class OccurrenceUiComponent implements OnInit {
 
   occFilters: OccurrenceFilters;
-  public isMobile: boolean = false;
+  isMobile: boolean = false;
+  isFilterVisible: boolean = false;
 
   constructor(private deviceDetectionService: DeviceDetectionService) { 
 
@@ -21,6 +22,14 @@ export class OccurrenceUiComponent implements OnInit {
       this.isMobile = result.matches;
     });
 
+  }
+
+  onShowFilterEvent() {
+     this.isFilterVisible = true;
+  }
+
+  onCloseFilterEvent() {
+     this.isFilterVisible = false;
   }
 
   ngOnInit() {

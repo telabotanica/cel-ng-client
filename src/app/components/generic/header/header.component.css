@@ -4,5 +4,21 @@
     font-weight: 500;
 }
 
+.cel-icon {
+  height: 50px;
+  width: 100px;
+}
 
+
+.cel-icon-mobile {
+  height: 32px;
+  width: 64px;
+}
+
+.main-toolbar {
+  justify-content: space-between;
+  border-bottom: 1px none #ddd; 
+  background-color: #fff; 
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);
+}
 

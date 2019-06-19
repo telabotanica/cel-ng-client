@@ -1,4 +1,21 @@
-<div style="display:flex;" fxFlex="10 10 auto">
-  <app-occurrence-filters (applyFiltersEvent)='applyFilters($event)' style="flex: 1;"></app-occurrence-filters>
-  <app-occurrence-map [occFilters]=occFilters style="flex: 4;"></app-occurrence-map>
+<div class="module-container">
+
+  <div [ngClass]="{
+    'module-left-col-mobile': isMobile,
+    'module-left-col': !isMobile }" 
+    *ngIf="!isMobile || (isMobile && isFilterVisible)">
+    <app-occurrence-filters 
+      (applyFiltersEvent)='applyFilters($event)'
+      (closeFiltersEvent)='onCloseFilterEvent()'></app-occurrence-filters>
+  </div>
+
+  <div [ngClass]="{
+  'module-right-col-mobile': isMobile,
+  'module-right-col': !isMobile}">
+    <app-occurrence-map 
+      *ngIf="!isMobile || (isMobile && !isFilterVisible)"
+      (showFilterEvent)='onShowFilterEvent()' 
+      [occFilters]=occFilters></app-occurrence-map>
+  </div>
+
 </div>

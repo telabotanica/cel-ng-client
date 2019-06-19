@@ -184,6 +184,10 @@ export class UserOccurrenceTagTreeComponent {
 
   }
 
+  reset() {
+    this.userOccurrenceTagSelection.clear();
+  }
+
   /** Toggle a leaf UserOccurrenceTag item selection. Check all the parents to see if they changed */
   userOccurrenceTagLeafItemSelectionToggle(node: UserOccurrenceTagItemFlatNode): void {
     this.userOccurrenceTagSelection.toggle(node);

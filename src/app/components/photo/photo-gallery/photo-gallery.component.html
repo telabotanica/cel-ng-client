@@ -1,4 +1,7 @@
 <div>
+
+
+<!--
   <div style="display:block"> 
     <tb-dropfile-box
       [showTable]="false" 
@@ -14,7 +17,12 @@
     ></tb-dropfile-box>
     <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
   </div>
+-->
   <mat-toolbar fxFlex="1 1 auto" class="photo-gallery-toolbar">
+
+    <div [className]="isMobile ? 'floating-button' : ''">
+      <button mat-raised-button color="primary" >Ajouter des photos</button>
+    </div>
 
     <div >
 
@@ -23,25 +31,31 @@
           {{getSelectedCount()}} photo{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} 
       </span> 
 
+    <button mat-button
+      *ngIf="isMobile"
+      (click)="showFilters()"
+      matTooltip="Filtrer les observations"
+      matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
+
       <button mat-button
-        *ngIf="getSelectedCount()>0"
+        *ngIf="getSelectedCount()>0 && !isMobile"
         (click)="bulkDownload()" 
         matTooltip="Télécharger les photos sélectionnées"
         matTooltipPosition="above">Télécharger</button>
 
       <button mat-button
-        *ngIf="getSelectedCount()>0"
+        *ngIf="getSelectedCount()>0 && !isMobile"
         matTooltip="Ajouter un tag aux photos sélectionnées"
         matTooltipPosition="above">Ajouter un tag</button>
 
       <button mat-button
-        *ngIf="getSelectedCount()>0"
+        *ngIf="getSelectedCount()>0 && !isMobile"
         (click)="openLinkOccurrenceDialog()" 
         matTooltip="Lier les photos sélectionnées à une observation existante"
         matTooltipPosition="above">Lier à une observation</button>
 
       <button mat-button
-        *ngIf="getSelectedCount()>0"
+        *ngIf="getSelectedCount()>0 && !isMobile"
         (click)="openConfirmDeletionDialog()" 
         matTooltip="Supprimer les photos sélectionnées"
         matTooltipPosition="above">Supprimer</button>
@@ -52,13 +66,13 @@
 
 </div>
 
-<div class="image-grid">
+<div class="image-grid module-right-col-content">
 
-  <div class="image-grid-item"  *ngFor="let photo of resources" [ngClass]="( selected.includes(photo.id) ) ? 'highlight' : 'not-highlight'">
+  <div  [ngClass]="isMobile ? 'image-grid-item-mobile' : 'image-grid-item'"  *ngFor="let photo of resources" [ngClass]="( selected.includes(photo.id) ) ? 'highlight' : 'not-highlight'">
     <img class="image-placeholder" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="" />
-    <img class="gallery-image" src="{{photo.url}}" (click)="showDetail(photo)"/>
-    <div><mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> {{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }} </div>
+    <img matTooltip="{{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }}" matTooltipPosition="above" class="gallery-image" src="{{photo.url}}" (click)="showDetail(photo)"/>
+    <div *ngIf="!isMobile" class="base-text"><mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> {{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }} </div>
   </div>
-  
+  <div style="height:60px;" *ngIf="isMobile"></div>
 </div>
 

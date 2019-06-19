@@ -1,8 +1,23 @@
 <div class="module-container">
-  <div class="module-left-col">
-    <app-occurrence-filters (applyFiltersEvent)='applyFilters($event)' [hidden]="isMobile"></app-occurrence-filters>
+
+  <div [ngClass]="{
+  'module-left-col-mobile': isMobile,
+  'module-left-col': !isMobile }" 
+   *ngIf="!isMobile || (isMobile && isFilterVisible)">
+    <app-occurrence-filters (applyFiltersEvent)='applyFilters($event)' (closeFiltersEvent)="onCloseFilterEvent()"></app-occurrence-filters>
+    <!-- Added to allow to scroll down afther the last field so the user 
+         can still edit it. -->
+    <div style="height:80px;" *ngIf="isMobile"></div>
   </div>
-  <div class="module-right-col">
-    <app-occurrence-grid [occFilters]=occFilters></app-occurrence-grid>
+
+  <div [ngClass]="{
+  'module-right-col-mobile': isMobile,
+  'module-right-col': !isMobile }"
+   *ngIf="!isMobile || (isMobile && !isFilterVisible)">
+    <app-occurrence-grid [occFilters]=occFilters (showFilterEvent)="onShowFilterEvent()"></app-occurrence-grid>  
   </div>
+  <!-- Added to allow to scroll down a bit below the table bottom so the user 
+       can still click the paginator buttons when on mobile. -->
+  <div style="height:40px;" *ngIf="isMobile"></div>
+
 </div>

@@ -1,4 +1,27 @@
-<div style="display:flex;" fxFlex="10 10 auto">
-  <app-photo-filters  (applyFiltersEvent)='applyFilters($event)' style="flex: 1;"></app-photo-filters>
-  <app-photo-gallery [filters]=filters style="flex: 4;"></app-photo-gallery>
+<div class="module-container">
+
+  <div [ngClass]="{
+    'module-left-col-mobile': isMobile,
+    'module-left-col': !isMobile }" 
+    *ngIf="!isMobile || (isMobile && isFilterVisible)">
+    <app-photo-filters 
+      (applyFiltersEvent)='applyFilters($event)'
+      (closeFiltersEvent)='onCloseFilterEvent()'></app-photo-filters>
+    <!-- Added to allow to scroll down afther the last field so the user 
+         can still edit it. -->
+    <div style="height:80px;" *ngIf="isMobile"></div>
+  </div>
+
+  <div [ngClass]="{
+  'module-right-col-mobile': isMobile,
+  'module-right-col': !isMobile}"
+  *ngIf="!isMobile || (isMobile && !isFilterVisible)">
+    <app-photo-gallery
+      (showFilterEvent)='onShowFilterEvent()'
+      [filters]=filters></app-photo-gallery>
+    <div style="height:40px;" *ngIf="isMobile"></div>
+  </div>
+  <!-- Added to allow to scroll down a bit below the last images. -->
+  <div style="height:40px;" *ngIf="isMobile"></div>
+
 </div>

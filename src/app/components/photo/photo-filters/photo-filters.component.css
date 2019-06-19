@@ -7,33 +7,17 @@ overflow-y: scroll;
 }
 
 
-.day-input, .month-input{
-  width:34px !important;
+.filter-button {
+  margin-bottom: 10px;
 }
 
-.year-input, .french-dep-input{
-  width:68px !important;
-}
-
-.filter-title  {
-    text-align: center;
-    font-size: 15px;
-    line-height: 16px;
-    font-weight: 60;
+.reinit-button {
+  margin-left: 20px;
 }
 
 
-mat-form-field {
-    font-size: 11px;
-    line-height: 13px;
-    font-weight: 2;
+.close-button-container {
+  width: 100%;
+  text-align: right;
 }
-
-.form-group-label {
-    font-size: 13px;
-    line-height: 13px;
-    font-weight: 50;
-
-}
-
 

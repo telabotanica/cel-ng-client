@@ -1,4 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { 
+  Component, 
+  OnInit, 
+  Output, 
+  EventEmitter, 
+  Input } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { 
@@ -28,12 +33,20 @@ import {
   MatDialog } from "@angular/material";
 
 //import { LayerSwitcher } from 'ol/control';
-import {OccurrenceFilters} from "../../../model/occurrence/occurrence-filters.model";
-import { Occurrence } from "../../../model/occurrence/occurrence.model";
-import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
-import { ImportDialogComponent } from "../../../components/occurrence/import-dialog/import-dialog.component";
-import { SsoService } from "../../../services/commons/sso.service";
-import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import {OccurrenceFilters} 
+  from "../../../model/occurrence/occurrence-filters.model";
+import { Occurrence } 
+  from "../../../model/occurrence/occurrence.model";
+import { OccurrencesDataSource } 
+  from "../../../services/occurrence/occurrences.datasource";
+import { ImportDialogComponent } 
+  from "../../../components/occurrence/import-dialog/import-dialog.component";
+import { SsoService } 
+  from "../../../services/commons/sso.service";
+import { ConfirmDialogComponent } 
+  from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import { DeviceDetectionService } 
+  from "../../../services/commons/device-detection.service";
 
 @Component({
   selector: 'app-occurrence-map',
@@ -59,21 +72,26 @@ export class OccurrenceMapComponent implements OnInit {
   private googleHybridLayer;
   private token:string;
   private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
-
+  public isMobile: boolean = false;
+  @Output() showFilterEvent = new EventEmitter();
  
   constructor(
     private http:HttpClient, 
-    private dataSource:OccurrencesDataSource, 
-    private dialog: MatDialog, 
-    private ssoService: SsoService,
-    private confirmDialog: MatDialog, 
-    private router: Router,
-    public snackBar: MatSnackBar ) { 
+    private dataSource:             OccurrencesDataSource, 
+    private dialog:                 MatDialog, 
+    private ssoService:             SsoService,
+    private router:                 Router,
+    private confirmDialog:          MatDialog, 
+    private deviceDetectionService: DeviceDetectionService,
+    public snackBar:                MatSnackBar ) { 
+
     this.token = this.ssoService.getToken();
+    deviceDetectionService.detectDevice().subscribe(result => {
+      this.isMobile = result.matches;
+    });
   }
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
-console.debug(newOccFilters);
     if (  newOccFilters != null ) {
       this._occFilters = newOccFilters;
       this.redrawMap();
@@ -82,6 +100,10 @@ console.debug(newOccFilters);
 
   navigateToCreateOccurrenceForm() {
       this.router.navigateByUrl('/occurrence-form');
+  }
+
+  showFilters() {
+     this.showFilterEvent.emit();
   }
 
   getSelectedCount() {

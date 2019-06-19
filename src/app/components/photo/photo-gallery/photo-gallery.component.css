@@ -32,7 +32,6 @@ img {
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
   margin: 0 auto 35px;
-  max-width: 920px;
 }
 
 .image-grid-item {
@@ -42,6 +41,18 @@ img {
   margin: 5px;
   margin-top: 20px;
   margin-bottom: 40px;
+  position: relative;
+  width: calc(25% - 10px);
+  cursor: pointer;
+}
+
+.image-grid-item-mobile {
+  -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  margin: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   position: relative;
   width: calc(25% - 10px);
   cursor: pointer;

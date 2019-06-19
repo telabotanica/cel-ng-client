@@ -1,4 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { 
+  Component, 
+  ElementRef, 
+  OnInit, 
+  Output, 
+  EventEmitter, 
+  Input 
+} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../../environments/environment';
@@ -20,6 +27,7 @@ import { Photo } from "../../../model/photo/photo.model";
 import { PhotoFilters } from "../../../model/photo/photo-filters.model";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
 
 @Component({
   selector: 'app-photo-gallery',
@@ -39,14 +47,22 @@ export class PhotoGalleryComponent implements OnInit {
   baseCelApiUrl: string = environment.api.baseUrl;
   nbrOfPhotosToBeSEnt = 0;
   sendPhotoFlag: boolean = false;
+  @Output() showFilterEvent = new EventEmitter();
   private _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
+  public isMobile: boolean = false;
 
   constructor(
     private dataService: PhotoService, 
     private confirmDeletionDialog: MatDialog, 
     private dialog: MatDialog, 
     public snackBar: MatSnackBar,
-    private router: Router ) { }
+    private deviceDetectionService: DeviceDetectionService,
+    private router: Router ) { 
+    deviceDetectionService.detectDevice().subscribe(result => {
+      this.isMobile = result.matches;
+    });
+
+  }
 
 
   ngOnInit() {
@@ -60,6 +76,11 @@ export class PhotoGalleryComponent implements OnInit {
 
   _emptySelection() {
     this.selected = [];
+  }
+
+
+  showFilters() {
+     this.showFilterEvent.emit();
   }
 
   @Input() set filters(photoFilters: PhotoFilters) {

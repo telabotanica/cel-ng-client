@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
+import { OccurrenceDetailComponent } from '../../occurrence/occurrence-detail/occurrence-detail.component';
+import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
 
 @Component({
   selector: 'app-map-ui',
@@ -9,10 +11,27 @@ import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.
 export class MapUiComponent implements OnInit {
 
   occFilters: OccurrenceFilters;
+  public isMobile: boolean = false;
+  public isFilterVisible: boolean = false;
 
-  constructor() { }
+  constructor(private deviceDetectionService: DeviceDetectionService) { 
+
+    deviceDetectionService.detectDevice().subscribe(result => {
+      this.isMobile = result.matches;
+    });
+
+  }
+
+  onShowFilterEvent() {
+        this.isFilterVisible = true;
+  }
+
+  onCloseFilterEvent() {
+     this.isFilterVisible = false;
+  }
 
   ngOnInit() {
+        
   }
 
   applyFilters(occFilters) { 

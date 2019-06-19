@@ -10,8 +10,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { MaterialModule } from './material.module';
-import { MAT_DATE_LOCALE } from '@angular/material';
-import { MatPaginatorIntl } from '@angular/material';
+import { MAT_DATE_LOCALE, MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions, MatPaginatorIntl } from '@angular/material';
 import { SharedModule } from './shared.module';
 
 import { JsonPatchService } from '../restit/services/json-patch.service';
@@ -64,6 +63,10 @@ import { AuthInterceptor } from "./interceptors/auth.interceptor";
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
 }
+
+const appearance: MatFormFieldDefaultOptions = {
+  appearance: 'outline'
+};
 
 @NgModule({
   declarations: [
@@ -119,6 +122,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     { provide: MAT_DATE_LOCALE, 
       useValue: 'fr-FR' },
 //    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: appearance },
     { provide: HTTP_INTERCEPTORS, 
       useClass: AuthInterceptor, 
       multi: true },

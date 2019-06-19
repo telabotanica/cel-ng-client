@@ -1,47 +1,37 @@
 
-<mat-toolbar fxFlex="1 1 auto" style="justify-content: space-between;border-bottom: 1px none #ddd; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .15);">
-      <div id="logo" >
-        <span>Logo</span>
-      </div>
-      <div id="tabnav" >
+<mat-toolbar class="main-toolbar" fxFlex="1 1 auto">
 
-<nav mat-tab-nav-bar>
+  <div id="logo">
+    <button mat-button
+      (click)="navigateToAppRoot()" 
+      matTooltipPosition="above">
 
-  <a mat-tab-link
-     *ngFor="let link of mainMenuLinks"
-     [routerLink]="['/'+link.path]"
-     routerLinkActive #rla="routerLinkActive"
-     [active]="rla.isActive">
-    {{link.label}}
-  </a>
+      <mat-icon  [ngClass]="{
+       'cel-icon-mobile': isMobile,
+       'cel-icon': !isMobile }" svgIcon="cel"></mat-icon>
 
-</nav>
+    </button>
+  </div>
 
+  <div id="tabnav" >
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+         *ngFor="let link of mainMenuLinks"
+         [routerLink]="['/'+link.path]"
+         routerLinkActive #rla="routerLinkActive"
+         [active]="rla.isActive">
+        {{link.label}}
+      </a>
+    </nav>
+  </div>
 
-
-      </div>
-      <div id="menu" >
-        <button mat-button
-          class="bold-link small" 
-          (click)="navigateToUserProfile()" 
-          matTooltip="Accéder au profil utilisateur" 
-          matTooltipPosition="above">Menu</button>
-      </div>
-
+  <div id="menu" >
+    <button mat-button
+      class="bold-link small" 
+      (click)="navigateToUserProfile()" 
+      matTooltip="Accéder au profil utilisateur" 
+      matTooltipPosition="above"><mat-icon svgIcon="burger"></mat-icon></button>
+  </div>
 
 </mat-toolbar>
 
-<!--
-
-
-<nav mat-tab-nav-bar>
-  <a mat-tab-link
-     *ngFor="let link of navLinks"
-     [routerLink]="link.path"
-     routerLinkActive #rla="routerLinkActive"
-     [active]="rla.isActive">
-    {{link.label}}
-  </a>
-</nav>
-
--->

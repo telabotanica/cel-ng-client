@@ -1,11 +1,3 @@
-
-
-:host {
-
-
-}
-
-
 .mat-column-select {
   overflow: initial;
 }
@@ -37,8 +29,9 @@ td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
 	border-bottom-width: 0px;	
 }
 
-.paginator-container {
-
+.cdk-column-userSciName, .cdk-column-dateObserved, .cdk-column-locality, 
+.cdk-column-isPublic, .cdk-column-id, .cdk-column-identiplanteScore {
+  display:         flex;
+  justify-content: flex-start;
 }
-
 
