@@ -45,7 +45,7 @@ export class PhotoFiltersComponent implements OnInit {
        certainty:               new FormControl(),
        tag:                     new FormControl(),
        freeTextQuery:           new FormControl(),
-       projectId:               new FormControl(),
+       project:                 new FormControl(),
        isPublic:                new FormControl(),
        isIdentiplanteValidated: new FormControl(),
     });
