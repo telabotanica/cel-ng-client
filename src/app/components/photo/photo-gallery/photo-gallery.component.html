@@ -70,13 +70,26 @@
 
   <div [ngClass]="isMobile ? 'image-grid-item-mobile gallery-image-container' : 'image-grid-item gallery-image-container'"  *ngFor="let photo of resources" >
 
-    <img class="image-placeholder" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="" />
+    <img class="image-placeholder" 
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="" />
 
-    <img *ngIf="photo.occurrence != null" [ngClass]="isMobile ? 'linked-to-occurrence-icon-mobile : 'linked-to-occurrence-icon'" matTooltip="Cette photo est liée à une observation" matTooltipPosition="above" src="assets/img/icons/link-icon.svg"/>
+    <img *ngIf="photo.occurrence != null" 
+      [ngClass]="isMobile ? 'linked-to-occurrence-icon-mobile' : 'linked-to-occurrence-icon'"
+      matTooltip="Cette photo est liée à une observation" 
+      matTooltipPosition="above" 
+      src="assets/img/icons/link-icon.svg"/>
 
-    <img class="gallery-image" matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" matTooltipPosition="above" src="{{photo.url}}" (click)="showDetail(photo)"/>
+    <img class="gallery-image" 
+      matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" 
+      matTooltipPosition="above" 
+      src="{{photo.url}}" 
+      (click)="showDetail(photo)"/>
 
-    <div *ngIf="!isMobile" class="base-text"><mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> {{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }} </div>
+    <div *ngIf="!isMobile" class="base-text">
+      <mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> 
+      {{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }} 
+    </div>
+
   </div>
 
 </div>
