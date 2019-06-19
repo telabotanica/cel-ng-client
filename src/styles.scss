@@ -1,0 +1,159 @@
+
+@import "tb-theme.scss";
+
+@include angular-material-theme($tb-theme);
+
+html, body {
+  margin:         0;
+  padding:        0;
+  color:          #53504b;
+  display:        flex;
+  height:         100%;
+  flex-direction: column;
+  margin: 0;
+}
+
+body {
+  overflow: hidden !important;
+}
+
+.ui-component-menu-item {
+  font-size: 13px;
+  line-height: 13px;
+  font-weight: 50;
+}
+
+.mat-radio-label-content {
+  padding-left: 5px !important; 
+  padding-right: 8px !important; 
+}
+
+.mat-raised-button{
+   color: white !important;
+}
+
+.floating-button {
+  position: fixed;
+  left: 1px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 10000;
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  letter-spacing: 1px;
+  background: #FFFFFF88
+}
+
+.module-left-col {
+  float:      left;
+  background: #FCFAF5;
+  width:      20%;
+  overflow:   auto;  
+  height:     calc(100vh - 67px);
+}
+
+.module-left-col-mobile {
+  float: left;
+  width: 100%;
+  background: #FCFAF5;
+  overflow:auto;  
+  height: calc(100vh - 67px);
+}
+/*
+.module-right-col {
+  float:left;
+  width:80%;
+  overflow:auto;  
+  height: calc(100vh - 67px);
+}
+*/
+
+.module-right-col {
+  float:left;
+  width:80%;
+}
+
+.module-right-col-content {
+  float:left;
+  overflow-y:auto; 
+  width:100%;
+  height: calc(100vh - 131px); 
+}
+
+.module-right-col-mobile {
+  width:100%;
+  overflow:none;  
+  height: calc(100vh - 67px);
+}
+
+.base-text {
+  @extend .mat-typography;
+}
+
+.form-group-label {
+  @extend .mat-typography;
+  font-size: 13px;
+  line-height: 13px;
+  font-weight: 50;   
+}
+
+.occurrence-form-label {
+  @extend .mat-typography;
+}
+
+.occurrence-form-option-label {
+  @extend .mat-typography;
+}
+
+/* FIlter components */
+
+.day-input, .month-input{
+  width:34px !important;
+}
+
+.year-input, .french-dep-input{
+  width:68px !important;
+}
+
+.filter-title  {
+    text-align: center;
+    font-size: 15px;
+    line-height: 16px;
+    font-weight: 60;
+}
+
+.occurrence-filters-form {
+  margin-left:20px;
+
+}
+
+.filter-buttons-container {
+  text-align:center;
+  margin-bottom: 20px;
+}
+
+.mat-form-field {
+    font-size: 11px;
+    line-height: 13px;
+    font-weight: 2;
+}
+
+.form-group-label {
+  @extend .mat-typography;
+  font-size: 13px;
+  line-height: 13px;
+  font-weight: 50;   
+}
+
+
+/* Filters */
+
+.fixed-filter-buttons-container {
+  text-align: center;
+  padding: 20px;
+}
+
+
+

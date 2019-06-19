@@ -23,7 +23,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "./node_modules/leaflet/dist/leaflet.css",
               "./node_modules/leaflet-draw/dist/leaflet.draw.css",
               "./node_modules/ol-layerswitcher/src/ol-layerswitcher.css",
@@ -142,7 +142,7 @@
   "defaultProject": "cel2-client",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "sass"
+      "styleext": "scss"
     }
   }
 }
