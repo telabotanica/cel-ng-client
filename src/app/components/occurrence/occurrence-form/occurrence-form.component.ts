@@ -117,7 +117,7 @@ export class OccurrenceFormComponent implements OnInit {
   elevationApiProvider: string = environment.elevationApi.provider;
   mapBgTileUrl: string = environment.mapBgTile.baseUrl;
   autoSelectValueIfOnlyOneResult: boolean = false;
-  // Shuld the advanced forms be displayed instead of basic ones: 
+  // Should the advanced forms be displayed instead of basic ones: 
   displayFullFormLeft  = false;
   displayFullFormRight = false;
   readonly maxDate: Date = new Date();
@@ -322,14 +322,21 @@ export class OccurrenceFormComponent implements OnInit {
     let confirmQuestion = this.generateConfirmQuestionFromMode();
     dialogConfig.data = confirmQuestion;
     let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
-
-    confirmDialogRef
-      .afterClosed()
-      .subscribe( response => {
-          if (response == true) {
-            this.postOrPatch(value);
-          }
+    
+    // In create mode: no need for confirmation:
+    if ( this.mode == OccurrenceFormComponent.CREATE_MODE ) {
+      this.postOrPatch(value);
+    }
+    // Not in create mode: ask for confirmation:
+    else {
+      confirmDialogRef
+        .afterClosed()
+        .subscribe( response => {
+            if (response == true) {
+              this.postOrPatch(value);
+            }
       });
+    }
   }
 
 
