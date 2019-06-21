@@ -2,16 +2,10 @@
   display: flex;
 }
 
-.occurrence-form-left-column {
+.occurrence-form-column {
   flex-basis:0;
   flex: 1 1 0;
-  padding-left: 60px;
-  padding-right: 60px;
-}
-
-.occurrence-form-right-column {
-  flex-basis:0;
-  flex: 1 1 0;
+  padding-top: 16px;
   padding-left: 60px;
   padding-right: 60px;
 }
@@ -27,8 +21,12 @@
   margin-top:10px;
 }
 
-.occurrence-form-annotation-photo-container {
+#occurrence-form-annotation-photo-container {
   display: flex;
+  border: solid;
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+  border-width: 1px
 }
 
 .occurrence-form-label {
@@ -37,10 +35,13 @@
 }
 
 .occurrence-form-label-container {
-  padding-top: 10px;
-  padding-bottom: 8px;
+  padding-top: 0px;
+  padding-bottom: 4px;
 }
 
+.occurrence-form-label-container-without-bottom-margin {
+  padding-top: 10px;
+}
 
 .occurrence-form-photo-container {
   flex-basis:0;
@@ -114,4 +115,21 @@
 .occurrence-form-submit-button-card-container > * {
     margin-left: 10px;
 }
+
+#form-container {
+  overflow:auto;
+  height:calc(100vh - 67px);
+}
+
+/** Mimicks the field-wrapper container style which angular material includes for
+ input fields but which lacks for selects/radio groups. 
+*/
+.mat-form-field-wrapperish {
+    margin: .25em 0;
+    position: relative;
+    padding-bottom: 1.34375em;
+}
+
+
+
 

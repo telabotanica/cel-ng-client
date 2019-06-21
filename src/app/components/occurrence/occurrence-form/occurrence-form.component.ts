@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from "@angular/router";
@@ -36,7 +36,8 @@ import { SsoService } from "../../../services/commons/sso.service";
 @Component({
   selector: 'app-occurrence-form',
   templateUrl: './occurrence-form.component.html',
-  styleUrls: ['./occurrence-form.component.css']    
+  styleUrls: ['./occurrence-form.component.css', 'material-overide.css'],
+//  encapsulation : ViewEncapsulation.None,
 })
 export class OccurrenceFormComponent implements OnInit {
 
@@ -126,16 +127,20 @@ export class OccurrenceFormComponent implements OnInit {
   // LIST VALUES:
   // ---------------
   isWildList = [
-    { "name": "Sauvage", "value": true},
-    { "name": "Cultivée", "value": false}
+    { "name": "Sauvage", "value": true, "tooltip": "La plante observée pousse de manière spontanée dans le milieu"},
+    { "name": "Cultivée", "value": false, "tooltip": "La plante observée est cultivée ou a été plantée"}
   ]
+
+  static readonly occurrenceTypeDefault: string = "observation de terrain";   
+  static readonly publishedLocationDefault: string = "précise";   
+  static readonly isWildSelectedDefault: boolean = true;    
 
   // ---------------
   // DEFAULT VALUES:
   // ---------------
-  occurrenceTypeSelected: string    = "observation de terrain";
-  publishedLocationSelected: string = "précise"; 
-  isWildSelected: boolean           = true;
+  occurrenceTypeSelected: string    = OccurrenceFormComponent.occurrenceTypeDefault;
+  publishedLocationSelected: string = OccurrenceFormComponent.publishedLocationDefault; 
+  isWildSelected: boolean           = OccurrenceFormComponent.isWildSelectedDefault;
   projectIdSelected: number;
 
   // List of repositories for the taxon selection module:
@@ -258,13 +263,13 @@ export class OccurrenceFormComponent implements OnInit {
       dateObserved:         new FormControl(),
       isPublic:             new FormControl(),
       annotation:           new FormControl(),
-      publishedLocation:    new FormControl(),
-      occurrenceType:       new FormControl(),
+      publishedLocation:    new FormControl(OccurrenceFormComponent.publishedLocationDefault),
+      occurrenceType:       new FormControl(OccurrenceFormComponent.occurrenceTypeDefault),
       phenology:            new FormControl(),
       observer:             new FormControl(),
       observerInstitution:  new FormControl(),
       projectId:            new FormControl(),
-      isWild:               new FormControl(),
+      isWild:               new FormControl(OccurrenceFormComponent.isWildSelectedDefault),
       coef:                 new FormControl(),
       sampleHerbarium:      new FormControl(),
       locationAccuracy:     new FormControl(),
@@ -316,24 +321,26 @@ export class OccurrenceFormComponent implements OnInit {
     return  ( ! (this.occurrences && this.occurrences.length>1) );
   }
 
-  openConfirmActionDialog(value) {
-
-    let dialogConfig = this.buildDialogConfig();
-    let confirmQuestion = this.generateConfirmQuestionFromMode();
-    dialogConfig.data = confirmQuestion;
-    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+  openConfirmActionDialog(value, stayOnPage) {
     
+    this.disableForm();
     // In create mode: no need for confirmation:
     if ( this.mode == OccurrenceFormComponent.CREATE_MODE ) {
-      this.postOrPatch(value);
+      this.postOrPatch(value, stayOnPage);
     }
     // Not in create mode: ask for confirmation:
     else {
+
+      let dialogConfig = this.buildDialogConfig();
+      let confirmQuestion = this.generateConfirmQuestionFromMode();
+      dialogConfig.data = confirmQuestion;
+      let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+
       confirmDialogRef
         .afterClosed()
         .subscribe( response => {
             if (response == true) {
-              this.postOrPatch(value);
+              this.postOrPatch(value, stayOnPage);
             }
       });
     }
@@ -614,7 +621,28 @@ console.log('DELETEED');
   }
 
   onTaxonChange(taxon: RepositoryItemModel) {
-console.log('onTAXCHANGE');
+console.debug(taxon);
+    if (taxon.repository != null && taxon.repository != '' && taxon.name != null) {
+      if ( taxon.repository != 'otherunknow' ) {
+
+        if (this.occurrenceForm.controls['certainty'].value == "douteux") {
+          this.snackBar.open(
+            "La valeur de la certitude a été mise à 'certain'.", 
+            "Fermer", 
+            { duration: 2500 })
+        }
+        this.occurrenceForm.controls['certainty'].patchValue("certain");
+      }
+      else {
+        if (this.occurrenceForm.controls['certainty'].value !== "à déterminer") {
+          this.snackBar.open(
+            "La valeur de la certitude a été mise à 'à déterminer'.", 
+            "Fermer", 
+            { duration: 2500 })
+        }
+        this.occurrenceForm.controls['certainty'].patchValue("à déterminer");
+      }
+    } 
     this.taxon = taxon;
   }
 
@@ -668,7 +696,12 @@ console.log('onTAXCHANGE');
   }
 
   private clearForm() {
-    this.occurrenceForm.reset();
+    this.occurrenceForm.reset({
+      occurrenceType: OccurrenceFormComponent.occurrenceTypeDefault,
+      publishedLocation: OccurrenceFormComponent.publishedLocationDefault, 
+      isWildSelected: OccurrenceFormComponent.isWildSelectedDefault,
+      projectId: null
+    });
     // Ask children components to reset themselves:
     this.resetTbLibComponents();
     this.taxon     = null;
@@ -682,6 +715,13 @@ console.log('onTAXCHANGE');
     }, 1000);
   }
 
+  private disableForm() {
+    this.occurrenceForm.disable();
+  }
+
+  private enableForm() {
+    this.occurrenceForm.enable();
+  }
 
 
   private async preSubmitValidation(): Promise<string[]> {
@@ -735,16 +775,14 @@ console.log('onTAXCHANGE');
   }
 
 
-  private async postOccurrenceAfterWarningConfirmation(occ: Occurrence) {
+  private async postOccurrenceAfterWarningConfirmation(occ: Occurrence, stayOnPage: Boolean) {
 
     let warnings = await this.preSubmitValidation();
 
     // Warning(s): duplicate AND/OR the species is not known to chorodep:
     if ( warnings.length > 0) {
-console.debug(warnings);
       // Duplicate!
       if (warnings.includes(this._duplicateMsg)) {
-console.log("SEND DUPLICATE MSG");
           this.snackBar.open(
             this._duplicateMsg, 
             'Fermer', 
@@ -767,26 +805,22 @@ console.log("SEND DUPLICATE MSG");
           .afterClosed()
           .subscribe( response => {
               if (response == true) {
-                this.postOccurrence(occ);
+                this.postOccurrence(occ, stayOnPage);
               }
           });
 
       }
-
-
-
-
-
+  
     }
     // no duplicate and species known to chorodep:
     else {
       // Let's post the occurrence to the REST service:
-      this.postOccurrence(occ);
+      this.postOccurrence(occ, stayOnPage);
     }
 
   }
 
-  private postOccurrence(occ: Occurrence) {
+  private postOccurrence(occ: Occurrence, stayOnPage: Boolean) {
 
     this.dataService.post(occ).subscribe(
       result => {
@@ -794,13 +828,21 @@ console.log("SEND DUPLICATE MSG");
           "L'observation vient d'être créée.", 
           'Fermer', 
           { duration: 2500 });
+        if ( !stayOnPage ) {
+          this.navigateToOccurrenceUi();
+        }
+/*
         if ( this.photos.length > 0 ) {
           this.linkPhotosToOccurrence(result.id); 
         }
         this.photos = [];
+
+*/
         if ( this.clearFormAfterSubmit ) {
           this.clearForm();
         }
+        this.enableForm();
+
       },
       error => {
         this.snackBar.open(
@@ -819,6 +861,8 @@ console.log("SEND DUPLICATE MSG");
           "L'observation a bien été modifiée.", 
           'Fermer', 
           { duration: 2500 });
+        // Useless in this case but quite logical...
+        this.enableForm();
         this.navigateToDetail(occ.id)
       },
       error => {
@@ -855,7 +899,7 @@ console.log("SEND DUPLICATE MSG");
   }
 
   //@refactor: use newly introduced form 'mode' instead of counting occurrences
-  async postOrPatch(occurrenceFormValue) {
+  async postOrPatch(occurrenceFormValue, stayOnPage: Boolean) {
 
     let occBuilder = new OccurrenceBuilder(
       occurrenceFormValue, 
@@ -880,7 +924,7 @@ console.debug(occ);
     }
     // No occurrences loaded on init, we're in 'create' mode
     else {
-      this.postOccurrenceAfterWarningConfirmation(occ);
+      this.postOccurrenceAfterWarningConfirmation(occ, stayOnPage);
       
       // Let's post to the REST service:
       //this.postOccurrence(occ);

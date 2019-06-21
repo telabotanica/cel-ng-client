@@ -17,6 +17,10 @@ body {
   overflow: hidden !important;
 }
 
+a {
+  color: #6c7b0f;
+}
+
 .ui-component-menu-item {
   font-size: 13px;
   line-height: 13px;
@@ -32,9 +36,26 @@ body {
    color: white !important;
 }
 
+.mat-checkbox-inner-container {
+  height: 12px !important;
+  width: 12px !important;
+}
+
+
+.mat-tree {
+  padding-bottom: 12px !important;
+  background-color: #fcfaf5 !important;
+}
+
+
+.mat-tree-node {
+  height: 20px !important;
+  min-height: 22px !important;
+  color:#53504b !important;
+}
 
 .mat-tooltip.tooltip {
-  font-size: 12px;
+  font-size: 22px !important;
 }
 
 .floating-button {
@@ -75,6 +96,43 @@ body {
 }
 */
 
+.mat-button[disabled].thirdary-button {
+  color:#bbbbbb !important;
+}
+
+
+/*
+
+mat-form-field {
+    font-size: 13px !important;
+    font-size: 12px;
+    line-height: 1px;
+    font-weight: 2;
+}
+
+.mat-form-field-flex {
+    background-color: white !important;
+}
+
+*/
+.mat-form-field {
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: 2;
+}
+
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: white !important;
+}
+
+
+
+
+.mat-button.thirdary-button {
+  color:#6c7b0f !important;
+}
+
 .module-right-col {
   float:left;
   width:80%;
@@ -97,16 +155,7 @@ body {
   @extend .mat-typography;
 }
 
-.form-group-label {
-  @extend .mat-typography;
-  font-size: 13px;
-  line-height: 13px;
-  font-weight: 50;   
-}
 
-.occurrence-form-label {
-  @extend .mat-typography;
-}
 
 .occurrence-form-option-label {
   @extend .mat-typography;
@@ -114,19 +163,24 @@ body {
 
 /* FIlter components */
 
-.day-input, .month-input{
-  width:34px !important;
+.day-input {
+  width:48px !important;
+}
+
+.month-input {
+  width:52px !important;
 }
 
 .year-input, .french-dep-input{
-  width:68px !important;
+  width:128px !important;
 }
 
 .filter-title  {
-    text-align: center;
-    font-size: 15px;
-    line-height: 16px;
-    font-weight: 60;
+  text-align: center;
+  font-family: Muli;
+  font-size: 15px;
+  line-height: 16px;
+  font-weight: 60;
 }
 
 .occurrence-filters-form {
@@ -139,26 +193,26 @@ body {
   margin-bottom: 20px;
 }
 
-.mat-form-field {
-    font-size: 11px;
-    line-height: 13px;
-    font-weight: 2;
+
+input.mat-input-element {
+  color: #484a4c;
 }
-
-.form-group-label {
-  @extend .mat-typography;
-  font-size: 13px;
-  line-height: 13px;
-  font-weight: 50;   
-}
-
-
-/* Filters */
 
 .fixed-filter-buttons-container {
   text-align: center;
   padding: 20px;
 }
 
+.form-group-label {
+  @extend .mat-typography;
+  font-size: 13px;
+  line-height: 13px;
+  padding-bottom: 10px;
+  padding-top: 7px;
+  font-weight: 50;   
+}
 
+.occurrence-form-label {
+  @extend .mat-typography;
+}
 

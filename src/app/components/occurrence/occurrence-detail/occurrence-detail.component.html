@@ -1,26 +1,27 @@
-<div class="occurrence-detail-container base-text" *ngIf="occurrence!=null && occurrence!=undefined">
-    <div >
-      <h1>{{occurrence.userSciName}} (id: {{occurrence.id}})</h1>
-    </div>
+<div id="occurrence-detail-container" class="base-text" *ngIf="occurrence!=null && occurrence!=undefined">
 
     <mat-toolbar>
         <div >
             <button mat-button
+                class="thirdary-button"
                 (click)="generatePdfEtiquette()" 
                 matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
                 matTooltipPosition="above">Générer une étiquette d'herbier</button>
                
             <button mat-button
+              class="thirdary-button"
               (click)="clone()"
               matTooltip="Créer une nouvelle observation à partir de celle-ci" 
               matTooltipPosition="above">Dupliquer</button>
 
             <button mat-button
-              (click)="navigateToEditOccurrenceForm()" 
+              class="thirdary-button"
+              (click)="navigateToEditOccurrenceForm(occurrence.id)" 
               matTooltip="Modifier l’observation" 
               matTooltipPosition="above">Editer</button>
 
             <button mat-button
+              class="thirdary-button"
               *ngIf="occurrence.isPublic; else publishOccTemplate"
               (click)="unpublish()"  
               matTooltip="Rendre privée l’observation" 
@@ -28,6 +29,7 @@
 
           <ng-template #publishOccTemplate>
             <button mat-button  
+              class="thirdary-button"
               (click)="publish()" 
               matTooltip="Rendre publique l’observation" 
               matTooltipPosition="above">Publier</button> 
@@ -35,12 +37,17 @@
 
           <button mat-button  
             (click)="openConfirmDeletionDialog()" 
+            class="thirdary-button"  
             matTooltip="Supprimer l'observation" 
             matTooltipPosition="above">Supprimer</button> 
 
         </div>
       </mat-toolbar>
     <div>
+
+    <div >
+      <h1>{{occurrence.userSciName}} (id: {{occurrence.id}})</h1>
+    </div>
 
     <div *ngIf="occurrence!=null && occurrence!=undefined">
 
@@ -190,7 +197,7 @@
 
       <h2>Extrait eFlore</h2> 
 
-      <button mat-button (click)="openEfloreCard()">Consulter la fiche eflore</button>
+      <button mat-button class="thirdary-button" (click)="openEfloreCard()">Consulter la fiche eflore</button>
 
       <div class="obs-detail-content">
 
@@ -204,7 +211,7 @@
           <div>{{efloreCard.common_names[0] == null ? "-" : efloreCard.common_names[0]}}</div>
         </div>
 
-        <!-- algolia WS don't return the family nale... -->
+        <!-- algolia Web services don't return the family name... -->
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Famille</div>
           <div>{{occurrence.family}}</div>
@@ -231,9 +238,10 @@
 
     <div>
       <button mat-button
-        class="bold-link small" 
+        class="bold-link small thirdary-button"
         (click)="generatePdfEtiquette()" 
         matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
         matTooltipPosition="above">Générer une étiquette d'herbier</button>
+      <button mat-button (click)="openIdentiPlante()">Ouvrir l'observation dans identiPlante</button>
     </div>
 </div>

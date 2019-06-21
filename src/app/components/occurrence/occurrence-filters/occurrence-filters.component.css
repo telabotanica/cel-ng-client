@@ -6,6 +6,11 @@
   overflow-y: scroll;
 }
 
+.mat-icon {
+  height: 16px !important;
+  width: 16px !important;
+}
+
 
 .filter-button {
   margin-bottom: 10px;
@@ -16,8 +21,20 @@
   margin-right: 20px;
 }
 
-
 .close-button-container {
   width: 100%;
   text-align: right;
+}
+
+.mat-tree-node {
+    display: flex;
+    align-items: center;
+    height: 20px;
+    flex: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+.mat-tooltip.tooltip {
+  font-size: 14px;
 }

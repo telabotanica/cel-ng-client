@@ -1,4 +1,4 @@
-<div *ngIf="photo !== null" class="photo-detail-content">
+<div *ngIf="photo !== null" class="photo-detail-content base-text">
 
   <div>
     <h1>{{photo.originalName}} (id: {{photo.id}})</h1>
@@ -8,18 +8,21 @@
 
     <button mat-button
       (click)="download()" 
+      class="thirdary-button"
       matTooltipPosition="above"
       matTooltip="Afficher l’url de la photo pour la partager"
       matTooltipPosition="above">Télécharger</button>
 
     <button mat-button
-      (click)="openShareDialog()" 
+      (click)="openShareDialog()"
+      class="thirdary-button" 
       matTooltipPosition="above"
       matTooltip="Afficher l’url de la photo pour la partager"
       matTooltipPosition="above">Partager</button>
 
     <button mat-button
       (click)="openConfirmDeletionDialog()" 
+      class="thirdary-button"
       matTooltipPosition="above"
       matTooltip="Supprimer la photo"
       matTooltipPosition="above">Supprimer</button>
@@ -27,6 +30,7 @@
     <button mat-button
       *ngIf="photo.occurrence == null"
       (click)="openLinkOccurrenceDialog()" 
+      class="thirdary-button"
       matTooltipPosition="above"
       matTooltip="Lier cette  photo à une observation existante"
       matTooltipPosition="above">Associer à une observation</button>
@@ -60,6 +64,7 @@
         <div>    
 	  <button mat-button
 	    (click)="unlinkOccurrence()" 
+        class="thirdary-button"
       	    matTooltipPosition="above"
             matTooltip="Supprimer le lien vers l'observation"
             matTooltipPosition="above">Supprimer le lien</button>

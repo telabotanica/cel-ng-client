@@ -7,17 +7,18 @@
   </div>
 
   <div class="close-button-container">
-    <button mat-button
+    <button mat-button 
       *ngIf="isMobile"
       (click)="closeMobile()"
       matTooltip="Fermer"
-      matTooltipPosition="above"><mat-icon svgIcon="close"></mat-icon></button>
+      matTooltipPosition="above"><mat-icon svgIcon="close" ></mat-icon></button>
   </div>
 
+  <h1 syle="text-align:center" class="filter-title" *ngIf="isMobile">Filtres</h1>
 
     <form class="occurrence-filters-form" [formGroup]="formGroup">
 
-      <span class="form-group-label">Texte</span>
+      <span class="form-group-label">Texte</span> 
       <div>
         <mat-form-field>
             <mat-label>Recherche libre</mat-label>
@@ -97,12 +98,10 @@
 
       <div>
         <mat-form-field>
-            <mat-label></mat-label>
-                <mat-select [(value)]="projectId" (selectionChange)="changeProjectId($event)">
-                <mat-option>Tous</mat-option>
-                <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}" formControlName="project">{{project.label}}</mat-option>
-
-            </mat-select>
+          <mat-select [(value)]="projectId" (selectionChange)="changeProjectId($event)">
+          <mat-option>Tous</mat-option>
+            <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}" formControlName="project">{{project.label}}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 
@@ -112,12 +111,11 @@
 
       <div>
         <mat-form-field>
-            <mat-label></mat-label>
-                <mat-select [(value)]="isPublic" (selectionChange)="changeIsPublic($event)" formControlName="isPublic">
-                <mat-option>Indifférent</mat-option>
-                <mat-option value="true">Seulement publiques</mat-option>
-                <mat-option value="false">Seulement privées</mat-option>
-            </mat-select>
+          <mat-select [(value)]="isPublic" (selectionChange)="changeIsPublic($event)" formControlName="isPublic">
+            <mat-option>Indifférent</mat-option>
+            <mat-option value="true">Seulement publiques</mat-option>
+            <mat-option value="false">Seulement privées</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
 
@@ -127,7 +125,6 @@
 
       <div>
         <mat-form-field>
-            <mat-label></mat-label>
                 <mat-select [(value)]="isIdentiplanteValidated" (selectionChange)="changeIsIdentiplanteValidated($event)" formControlName="isIdentiplanteValidated">
                 <mat-option>Indifférent</mat-option>
                 <mat-option value="true">Seulement validés</mat-option>

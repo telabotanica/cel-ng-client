@@ -4,3 +4,19 @@
   display: table;
   clear: both;
 }
+
+/* We need to use /deep/ to override angular material component children 
+   class styles of encapsulation. Beware, this is deprecated! But there is no alternative yet... 
+
+"deep AND ::ng-deep will be depricated and removed: The shadow-piercing descendant combinator is deprecated and support is being removed from major browsers and tools. As such we plan to drop support in Angular (for all 3 of /deep/, >>> and ::ng-deep). Until then ::ng-deep should be preferred for a broader compatibility with the tools." Source: angular.io/guide/component-styles#deprecated-deep--and-ng-deep 
+*/
+
+::ng-deep .mat-form-field-infix {
+    border-top: none !important;
+}
+
+::ng-deep input.mat-input-element {
+  color: grey;
+  background-color: white;
+}
+

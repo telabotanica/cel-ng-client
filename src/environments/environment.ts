@@ -17,6 +17,7 @@ export const environment = {
   api: {
     baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api",
     tagLibBaseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public",
+    prefix: "api",
   },
   taxoApi: {
     validationBaseUrl: "https://api.tela-botanica.org/service:eflore:0.1",
@@ -28,6 +29,9 @@ export const environment = {
   },
   chorodep: {
     baseUrl: "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent"
+  },
+  identiplante: {
+    baseUrl: "https://www.tela-botanica.org/appli:identiplante"
   },
   eflore: {
     baseUrlTemplate: "https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese"

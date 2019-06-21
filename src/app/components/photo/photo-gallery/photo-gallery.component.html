@@ -1,98 +1,115 @@
+<mat-drawer-container  autosize>
+
 <div>
 
-
-<!--
-  <div style="display:block"> 
-    <tb-dropfile-box
-      [showTable]="false" 
-      [uploadTbPhotoFiles]="true"
-      [label]="'Cliquez pour choisir les photos ou glissez les ici'"
-      [ignoreOversizedFiles]="false"
-      [sendImages]="sendPhotoFlag"
-      [photoUploadBaseUrl]="baseCelApiUrl"   
-      [allowedFileTypes]="['jpeg', 'png']"
-      (httpError)="onPostPhotoError($event)"
-      (acceptedFiles)="onPhotoAdded($event)"
-      (uploadedFiles)="onPhotoUploaded($event)"
-    ></tb-dropfile-box>
-    <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
-  </div>
--->
-  <mat-toolbar fxFlex="1 1 auto" class="photo-gallery-toolbar">
-
-    <div [className]="isMobile ? 'floating-button' : ''">
-      <button mat-raised-button color="primary" >Ajouter des photos</button>
+  <!--
+    <div style="display:block"> 
+      <tb-dropfile-box
+        [showTable]="false" 
+        [uploadTbPhotoFiles]="true"
+        [label]="'Cliquez pour choisir les photos ou glissez les ici'"
+        [ignoreOversizedFiles]="false"
+        [sendImages]="sendPhotoFlag"
+        [photoUploadBaseUrl]="baseCelApiUrl"   
+        [allowedFileTypes]="['jpeg', 'png']"
+        (httpError)="onPostPhotoError($event)"
+        (acceptedFiles)="onPhotoAdded($event)"
+        (uploadedFiles)="onPhotoUploaded($event)"
+      ></tb-dropfile-box>
+      <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
     </div>
+  -->
+    <mat-toolbar fxFlex="1 1 auto" class="photo-gallery-toolbar">
 
-    <div >
+      <div [className]="isMobile ? 'floating-button' : ''">
+        <button mat-raised-button color="primary" >Ajouter des photos</button>
+      </div>
 
-      <span class="ui-component-menu-item" 
-        *ngIf="getSelectedCount()>0"> 
-          {{getSelectedCount()}} photo{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} 
-      </span> 
+      <div >
 
-    <button mat-button
-      *ngIf="isMobile"
-      (click)="showFilters()"
-      matTooltip="Filtrer les observations"
-      matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
-
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        (click)="bulkDownload()" 
-        matTooltip="Télécharger les photos sélectionnées"
-        matTooltipPosition="above">Télécharger</button>
+        <span class="ui-component-menu-item" 
+          *ngIf="getSelectedCount()>0"> 
+            {{getSelectedCount()}} photo{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} 
+        </span> 
 
       <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        matTooltip="Ajouter un tag aux photos sélectionnées"
-        matTooltipPosition="above">Ajouter un tag</button>
+        *ngIf="isMobile"
+        class="thirdary-button"
+        (click)="showFilters()"
+        matTooltip="Filtrer les observations"
+        matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
 
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        (click)="openLinkOccurrenceDialog()" 
-        matTooltip="Lier les photos sélectionnées à une observation existante"
-        matTooltipPosition="above">Lier à une observation</button>
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="bulkDownload()" 
+          matTooltip="Télécharger les photos sélectionnées"
+          matTooltipPosition="above">Télécharger</button>
 
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        (click)="openConfirmDeletionDialog()" 
-        matTooltip="Supprimer les photos sélectionnées"
-        matTooltipPosition="above">Supprimer</button>
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          matTooltip="Ajouter un tag aux photos sélectionnées"
+          matTooltipPosition="above">Ajouter un tag</button>
 
-    </div>
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="openLinkOccurrenceDialog()" 
+          matTooltip="Lier les photos sélectionnées à une observation existante"
+          matTooltipPosition="above">Lier à une observation</button>
 
-  </mat-toolbar>
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="openConfirmDeletionDialog()" 
+          matTooltip="Supprimer les photos sélectionnées"
+          matTooltipPosition="above">Supprimer</button>
 
-</div>
+      </div>
 
-<div class="image-grid module-right-col-content">
-
-  <div [ngClass]="isMobile ? 'image-grid-item-mobile gallery-image-container' : 'image-grid-item gallery-image-container'"  *ngFor="let photo of resources" >
-
-    <img class="image-placeholder" 
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="" />
-
-    <img *ngIf="photo.occurrence != null" 
-      [ngClass]="isMobile ? 'linked-to-occurrence-icon-mobile' : 'linked-to-occurrence-icon'"
-      matTooltip="Cette photo est liée à une observation" 
-      matTooltipPosition="above" 
-      src="assets/img/icons/link-icon.svg"/>
-
-    <img class="gallery-image" 
-      matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" 
-      matTooltipPosition="above" 
-      src="{{photo.url}}" 
-      (click)="showDetail(photo)"/>
-
-    <div *ngIf="!isMobile" class="base-text">
-      <mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> 
-      {{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }} 
-    </div>
+    </mat-toolbar>
 
   </div>
 
-</div>
+  <div class="image-grid module-right-col-content">
 
-<div style="height: 80px;" *ngIf="isMobile"></div>
+    <div [ngClass]="isMobile ? 'image-grid-item-mobile gallery-image-container' : 'image-grid-item gallery-image-container'"  *ngFor="let photo of resources" >
+
+      <img class="image-placeholder" 
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="" />
+
+      <img *ngIf="photo.occurrence != null" 
+        [ngClass]="isMobile ? 'linked-to-occurrence-icon-mobile' : 'linked-to-occurrence-icon'"
+        matTooltip="Cette photo est liée à une observation" 
+        matTooltipPosition="above" 
+        src="assets/img/icons/link-icon.svg"/>
+
+      <img class="gallery-image" 
+        matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" 
+        matTooltipPosition="above" 
+        src="{{photo.url}}" 
+        (click)="showDetail(photo)"/>
+
+      <div *ngIf="!isMobile" class="base-text">
+        <mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> 
+        {{  (photo.originalName.length>15) ? (photo.originalName | slice:0:15)+'...':(photo.originalName) }} 
+      </div>
+
+    </div>
+
+  </div>
+
+  <div style="height: 120px;" *ngIf="isMobile"></div>
+
+  <mat-drawer #drawer class="example-sidenav" mode="over">
+    <p *ngIf="true">Auto-resizing sidenav</p>
+    <p>Lorem, ipsum dolor sit amet consectetur.</p>
+    <button  mat-raised-button>
+      Toggle extra text
+    </button>
+  </mat-drawer>
+
+
+</mat-drawer-container>
 

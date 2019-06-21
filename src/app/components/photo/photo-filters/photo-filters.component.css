@@ -7,6 +7,12 @@ overflow-y: scroll;
 }
 
 
+.mat-icon {
+  height: 16px !important;
+  width: 16px !important;
+}
+
+
 .filter-button {
   margin-bottom: 10px;
 }
@@ -18,7 +24,9 @@ overflow-y: scroll;
 
 
 .close-button-container {
-  width: 100%;
+
   text-align: right;
 }
+
+
 

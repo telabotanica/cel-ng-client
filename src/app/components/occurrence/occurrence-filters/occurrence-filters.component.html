@@ -14,20 +14,24 @@
       matTooltipPosition="above"><mat-icon svgIcon="close"></mat-icon></button>
   </div>
 
+  <h1 syle="text-align:center" class="filter-title" *ngIf="isMobile">Filtres</h1>
+
   <form class="occurrence-filters-form" [formGroup]="formGroup">
 
 
-    <span class="form-group-label mat-typography">Texte</span>
+    <div class="form-group-label mat-typography">Texte</div>
     <div>
       <mat-form-field>
           <mat-label>Recherche libre</mat-label>
           <input  matInput formControlName="freeTextQuery"  name="freeTextQuery">
       </mat-form-field>
 
-      <mat-divider></mat-divider>
     </div>
 
-    <span class="form-group-label mat-typography">Date d'observation</span>
+    <mat-divider></mat-divider>
+
+
+    <div class="form-group-label mat-typography">Date d'observation</div>
 
     <table class="example-full-width centering-container" cellspacing="0"><tr>
       <td><mat-form-field class="day-input">
@@ -50,7 +54,7 @@
 
     <mat-divider></mat-divider>
 
-    <span class="form-group-label">Lieux</span>
+    <div class="form-group-label">Lieux</div>
 
     <table class="example-full-width centering-container" cellspacing="0"><tr>
       <td><mat-form-field class="osm-locality-input">
@@ -75,7 +79,7 @@
 
     <mat-divider></mat-divider>
 
-    <span class="form-group-label">Identification</span>
+    <div class="form-group-label">Identification</div>
 
     <div>
       <mat-form-field>
@@ -92,32 +96,29 @@
 
     <mat-divider></mat-divider>
 
-    <span class="form-group-label">Mots-clés</span>
+    <div class="form-group-label">Mots-clés</div>
 
     <user-occurrence-tag-tree-component #tagTree></user-occurrence-tag-tree-component>
 
     <mat-divider></mat-divider>
 
-    <span class="form-group-label">Projet</span>
+    <div class="form-group-label">Projet</div>
 
     <div>
       <mat-form-field>
-          <mat-label></mat-label>
               <mat-select [(value)]="projectId" (selectionChange)="changeProjectId($event)" formControlName="project">
               <mat-option>Tous</mat-option>
               <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}">{{project.label}}</mat-option>
-
           </mat-select>
       </mat-form-field>
     </div>
 
     <mat-divider></mat-divider>
 
-    <span class="form-group-label">Publique/privée</span>
+    <div class="form-group-label">Publique/privée</div>
 
     <div>
       <mat-form-field>
-          <mat-label></mat-label>
               <mat-select [(value)]="isPublic" (selectionChange)="changeIsPublic($event)" formControlName="isPublic">
               <mat-option>Indifférent</mat-option>
               <mat-option value="true">Seulement publiques</mat-option>
@@ -128,11 +129,10 @@
 
     <mat-divider></mat-divider>
 
-    <span class="form-group-label">Validation IdentiPlante</span>
+    <div class="form-group-label">Validation IdentiPlante</div>
 
     <div>
       <mat-form-field>
-          <mat-label></mat-label>
               <mat-select [(value)]="isIdentiplanteValidated" (selectionChange)="changeIsIdentiplanteValidated($event)" formControlName="isIdentiplanteValidated">
               <mat-option>Indifférent</mat-option>
               <mat-option value="true">Seulement validées</mat-option>

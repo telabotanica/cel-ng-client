@@ -3,5 +3,8 @@ export interface JsonPatchResponse {
     path?:string;
     value?:string;
     from?:string;    
+    index?:string
+    status?:number
+    message?:any
 }
 

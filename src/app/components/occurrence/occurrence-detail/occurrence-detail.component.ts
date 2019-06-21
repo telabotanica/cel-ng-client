@@ -28,6 +28,8 @@ export class OccurrenceDetailComponent implements OnInit {
   private subscription: Subscription;
   efloreCard: EfloreCard;
   baseTagLibBaseUrl: string = environment.api.tagLibBaseUrl;
+  private _identiplanteBaseUrl: string = environment.identiplante.baseUrl;
+  private _apiPrefix = environment.api.prefix;
   private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
 
   constructor(
@@ -57,8 +59,8 @@ export class OccurrenceDetailComponent implements OnInit {
 
   }
 
-  navigateToEditOccurrenceForm() {
-    this.router.navigate(['/occurrence-collection-edit-form', this.occurrence.id]);
+  navigateToEditOccurrenceForm(id: number) {
+    this.router.navigate(['/occurrence-collection-edit-form', id]);
   }
 
   _navigateToOccurrenceUi() {
@@ -68,6 +70,14 @@ export class OccurrenceDetailComponent implements OnInit {
   openEfloreCard() {
     window.open(this.efloreCard.permalink , '_blank');
   }
+
+  openIdentiPlante() {
+    let url = `${this._identiplanteBaseUrl}/obs${this.occurrence.id}`
+    window.open(url , '_blank');
+  }
+
+
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -114,10 +124,18 @@ export class OccurrenceDetailComponent implements OnInit {
     let id = this.occurrence.id;
     this.dataSource.bulkCopy([id]).subscribe(
       data => {
+        // The key in the JSON response for the current resource
+        // is its relative URL:
+        let key = `/${this._apiPrefix}/occurrences/${this.occurrence.id}`;
+        // Retrieve the id of the duplicated occurrence from the JSON response:
+        let duplicatedId = data[0][key].message.id;
+
         this.snackBar.open(
         "L'observation a été dupliquée avec succès.", 
         "Fermer", 
         { duration: 1500 });
+
+        this.navigateToEditOccurrenceForm(duplicatedId);
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
