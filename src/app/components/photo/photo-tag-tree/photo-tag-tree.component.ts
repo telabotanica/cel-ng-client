@@ -98,27 +98,19 @@ export class FileTreeBuilder {
 export class PhotoTagTreeComponent {
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<PhotoTagItemFlatNode, PhotoTagItemNode>();
-
   /** Map from nested node to flattened node. This helps us to keep the same object for selection */
   nestedNodeMap = new Map<PhotoTagItemNode, PhotoTagItemFlatNode>();
-
   /** A selected parent node to be inserted */
   selectedParent: PhotoTagItemFlatNode | null = null;
-
   /** The new item's name */
   newItemName = '';
-
-
-
   treeControl: FlatTreeControl<PhotoTagItemFlatNode>;
-
   treeFlattener: MatTreeFlattener<PhotoTagItemNode, PhotoTagItemFlatNode>;
-
   dataSource: MatTreeFlatDataSource<PhotoTagItemNode, PhotoTagItemFlatNode>;
 
 
   /** The selection for checklist */
-  photoTagSelection = new SelectionModel<PhotoTagItemFlatNode>(false);
+  photoTagSelection = new SelectionModel<PhotoTagItemFlatNode>(true);
 
   constructor(private database: FileTreeBuilder) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
@@ -241,17 +233,11 @@ export class PhotoTagTreeComponent {
     return null;
   }
 
-  /** Select the category so we can insert the new item. */
-  addNewItem(node: PhotoTagItemFlatNode) {
-    const parentNode = this.flatNodeMap.get(node);
-    this.database.insertItem(parentNode!, '');
-    this.treeControl.expand(node);
+
+
+  reset() {
+    this.photoTagSelection.clear();
   }
 
-  /** Save the node to database */
-  saveNode(node: PhotoTagItemFlatNode, itemValue: string) {
-    const nestedNode = this.flatNodeMap.get(node);
-    this.database.updateItem(nestedNode!, itemValue);
-  }
 }
 

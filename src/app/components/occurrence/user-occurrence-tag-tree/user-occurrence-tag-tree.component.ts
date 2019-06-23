@@ -110,7 +110,7 @@ export class UserOccurrenceTagTreeComponent {
 
 
   /** The selection for checklist */
-  userOccurrenceTagSelection = new SelectionModel<UserOccurrenceTagItemFlatNode>(false);
+  userOccurrenceTagSelection = new SelectionModel<UserOccurrenceTagItemFlatNode>(true);
 
   constructor(private database: FileTreeBuilder) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
@@ -237,17 +237,6 @@ export class UserOccurrenceTagTreeComponent {
     return null;
   }
 
-  /** Select the category so we can insert the new item. */
-  addNewItem(node: UserOccurrenceTagItemFlatNode) {
-    const parentNode = this.flatNodeMap.get(node);
-    this.database.insertItem(parentNode!, '');
-    this.treeControl.expand(node);
-  }
 
-  /** Save the node to database */
-  saveNode(node: UserOccurrenceTagItemFlatNode, itemValue: string) {
-    const nestedNode = this.flatNodeMap.get(node);
-    this.database.updateItem(nestedNode!, itemValue);
-  }
 }
 
