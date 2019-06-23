@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
@@ -13,11 +13,12 @@ import { Occurrence } from "../../../model/occurrence/occurrence.model";
 import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
 import { EfloreService } from "../../../services/eflore/eflore.service";
 import { AlgoliaEfloreParserService } from "../../../services/eflore/algolia-eflore-parser.service";
+import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import { EfloreCard } from "../../../model/eflore/eflore-card.model";
 
 @Component({
-  selector: 'app-occurrence-detail',
+  selector: 'occurrence-detail',
   templateUrl: './occurrence-detail.component.html',
   styleUrls: ['./occurrence-detail.component.css']
 })
@@ -31,6 +32,12 @@ export class OccurrenceDetailComponent implements OnInit {
   private _identiplanteBaseUrl: string = environment.identiplante.baseUrl;
   private _apiPrefix = environment.api.prefix;
   private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
+  isMobile: boolean;
+  @Output() closeEvent = new EventEmitter();
+  @Input() 
+  set occToDisplay(occ: Occurrence) {
+    this.occurrence = occ;
+  }
 
   constructor(
     private dataSource: OccurrencesDataSource, 
@@ -38,33 +45,26 @@ export class OccurrenceDetailComponent implements OnInit {
     private router: Router,
     private confirmDialog: MatDialog, 
     public snackBar: MatSnackBar,
+    private deviceDetectionService: DeviceDetectionService,
     public efloreService: EfloreService,
-    private parser: AlgoliaEfloreParserService) {}
+    private parser: AlgoliaEfloreParserService) {
+
+      this.deviceDetectionService.detectDevice().subscribe(result => {
+        this.isMobile = result.matches;
+      });
+  }
 
   ngOnInit() {
-    this.subscription = this.route.params.subscribe(params => {
-       this.id = parseInt(params['id']);
-       this.dataSource.get(this.id).subscribe(
-          occurrence => {this.occurrence = occurrence;
-            console.debug(this.occurrence);
-            if (occurrence.userSciName != null && occurrence.taxoRepo !=null && occurrence.taxoRepo != 'Autre/inconnu') {
-              this.efloreService.get(occurrence.userSciName).subscribe(result => {
-                    this.efloreCard = this.parser.parseEfloreCard(result, occurrence.taxoRepo);
-                });
-              }
-            }
-        );
-    });
 
-
+      if (this.occurrence.userSciName != null && this.occurrence.taxoRepo !=null && this.occurrence.taxoRepo != 'Autre/inconnu') {
+        this.efloreService.get(this.occurrence.userSciName).subscribe(result => {
+              this.efloreCard = this.parser.parseEfloreCard(result, this.occurrence.taxoRepo);
+        });
+      }
   }
 
   navigateToEditOccurrenceForm(id: number) {
     this.router.navigate(['/occurrence-collection-edit-form', id]);
-  }
-
-  _navigateToOccurrenceUi() {
-    this.router.navigate(['/occurrence-ui']);
   }
 
   openEfloreCard() {
@@ -74,13 +74,6 @@ export class OccurrenceDetailComponent implements OnInit {
   openIdentiPlante() {
     let url = `${this._identiplanteBaseUrl}/obs${this.occurrence.id}`
     window.open(url , '_blank');
-  }
-
-
-
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
   publish() {
@@ -175,7 +168,7 @@ export class OccurrenceDetailComponent implements OnInit {
         "L'observation a été supprimée avec succès.", 
         "Fermer", 
         { duration: 1500 });
-        this._navigateToOccurrenceUi();
+        this.close();
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
@@ -200,5 +193,9 @@ export class OccurrenceDetailComponent implements OnInit {
     }
   }
 
+
+  close() {
+    this.closeEvent.emit();
+  }
 
 }

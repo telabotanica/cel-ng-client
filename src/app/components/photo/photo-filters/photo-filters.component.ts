@@ -15,10 +15,6 @@ export class PhotoFiltersComponent implements OnInit {
 
   @ViewChild('tagTree') tagTree;
   public telaBotanicaProjects: TelaBotanicaProject[];
-  private selectedProjectId;
-  private selectedIsPublic;
-  private selectedIsIdentiplanteValidated;
-  private selectedCertainty;
   formGroup: FormGroup;
   isMobile: boolean = false;
   isPublic;       
@@ -59,22 +55,22 @@ export class PhotoFiltersComponent implements OnInit {
 
   emitApplyFilterEvent() {
 
-      let photoFilters = new PhotoFilters();
+      let filters = new PhotoFilters();
 
-      photoFilters.isPublic = this.selectedIsPublic;
-      photoFilters.dateShotDay = this.formGroup.get('dateShotDay').value;
-      photoFilters.dateShotMonth = this.formGroup.get('dateShotMonth').value;
-      photoFilters.dateShotYear = this.formGroup.get('dateShotYear').value;
-      photoFilters.osmCountry = this.formGroup.get('osmCountry').value;
-      photoFilters.locality = this.formGroup.get('locality').value;
-      photoFilters.frenchDep = this.formGroup.get('frenchDep').value;
-      photoFilters.certainty = this.selectedCertainty;
-      photoFilters.projectId = this.selectedProjectId;
-      photoFilters.isIdentiplanteValidated = this.selectedIsIdentiplanteValidated;
-      photoFilters.tags = this.tagTree.photoTagSelection.selected.map(sel => sel.item);
-      photoFilters.freeTextQuery = this.formGroup.get('freeTextQuery').value;
+      filters.isPublic =  this.formGroup.get('isPublic').value;
+      filters.dateShotDay = this.formGroup.get('dateShotDay').value;
+      filters.dateShotMonth = this.formGroup.get('dateShotMonth').value;
+      filters.dateShotYear = this.formGroup.get('dateShotYear').value;
+      filters.osmCountry = this.formGroup.get('osmCountry').value;
+      filters.locality = this.formGroup.get('locality').value;
+      filters.frenchDep = this.formGroup.get('frenchDep').value;
+      filters.certainty = this.formGroup.get('certainty').value;
+      filters.projectId = this.formGroup.get('project').value;
+      filters.isIdentiplanteValidated = this.formGroup.get('isIdentiplanteValidated').value;
+      filters.tags = this.tagTree.photoTagSelection.selected.map(sel => sel.item);
+      filters.freeTextQuery = this.formGroup.get('freeTextQuery').value;
 
-      this.applyFiltersEvent.emit(photoFilters);
+      this.applyFiltersEvent.emit(filters);
 
   }
  
@@ -97,20 +93,6 @@ export class PhotoFiltersComponent implements OnInit {
     this.closeFiltersEvent.emit();
   }
 
-    changeProjectId(event) {
-       this.selectedProjectId = event.value;
-    } 
 
-  changeIsPublic(event) {
-     this.selectedIsPublic = event.value;
-  }
-
-  changeCertainty(event) {
-     this.selectedCertainty = event.value;
-  }
-
-  changeIsIdentiplanteValidated(event) {
-     this.selectedIsIdentiplanteValidated = event.value;
-  }
 
 }

@@ -7,6 +7,10 @@ overflow-y: scroll;
 }
 
 
+
+
+
+
 .mat-icon {
   height: 16px !important;
   width: 16px !important;
@@ -24,9 +28,5 @@ overflow-y: scroll;
 
 
 .close-button-container {
-
   text-align: right;
 }
-
-
-

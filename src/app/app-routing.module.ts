@@ -45,18 +45,6 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'occurrence-detail/:id', 
-    component: OccurrenceDetailComponent, 
-
-    canActivate: [AuthGuard] 
-  },
-  { 
-    path: 'photo-detail/:id', 
-    component: PhotoDetailComponent, 
-
-    canActivate: [AuthGuard] 
-  },
-  { 
     path: 'user-agreement', 
     component: UserAgreementComponent, 
 

@@ -1,11 +1,15 @@
 .obs-detail-content {
-  margin-top: 20px;
-  padding-left:30px;
+;
+}
+
+.mat-toolbar {
+  background: white;
 }
 
 #occurrence-detail-container {
   overflow: auto;
-  height: 100%;
+  margin-top: 20px;
+  padding-left:30px;
 }
 
 .obs-detail-content-item-holder {
@@ -34,7 +38,6 @@
   -webkit-flex: 0 0 auto;
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
-  padding-left: 30px;
 }
 
 .obs-detail-img {
@@ -60,5 +63,11 @@ img {
   vertical-align: middle;
   border: 0;
   display: block;
+}
+
+
+.close-button-container {
+  width: 100%;
+  text-align: right;
 }
 

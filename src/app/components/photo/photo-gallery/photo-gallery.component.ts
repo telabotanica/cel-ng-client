@@ -4,7 +4,8 @@ import {
   OnInit, 
   Output, 
   EventEmitter, 
-  Input 
+  Input,
+  ViewChild
 } from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
@@ -49,7 +50,12 @@ export class PhotoGalleryComponent implements OnInit {
   sendPhotoFlag: boolean = false;
   @Output() showFilterEvent = new EventEmitter();
   private _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
+  // Mobile or desktop device?
   public isMobile: boolean = false;
+  // The photo the luser wants to see the detail of used to feed the detail
+  // component input:
+  photoUnderSpotlight: Photo;
+  @ViewChild('drawer') detailDrawer: any;
 
   constructor(
     private dataService: PhotoService, 
@@ -126,7 +132,9 @@ export class PhotoGalleryComponent implements OnInit {
         this.sortBy,
         this.sortDirection,
         filters).subscribe( 
-          photos => {this.resources = photos;}
+          photos => {
+            this.resources = photos;
+          }
         );
   }
 
@@ -227,10 +235,6 @@ export class PhotoGalleryComponent implements OnInit {
     }
   }
 
-  showDetail(photo) {
-    this.router.navigate(['/photo-detail', photo.id]);
-  }
-
   getSelectedCount() {
     return this.selected.length;
   }
@@ -278,5 +282,19 @@ export class PhotoGalleryComponent implements OnInit {
     );
   }
 
+  toogleDetailSlideNav(photo: Photo) {
+    if ( photo != null ) {
+      this.photoUnderSpotlight = photo;
+    }
+    if (this.detailDrawer.opened) {
+      this.detailDrawer.close();
+    } else {
+      this.detailDrawer.open();
+    }
+  }
+
+  onCloseFilterEvent() {
+    this.detailDrawer.close();
+  }
 
 }

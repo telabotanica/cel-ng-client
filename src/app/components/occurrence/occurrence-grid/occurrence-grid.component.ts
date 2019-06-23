@@ -58,12 +58,15 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     "id", "identiplanteScore"];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("sidenav") public detailPanel: MatSidenav;
+  @ViewChild('drawer') detailDrawer: any;
   @Output() showFilterEvent = new EventEmitter();
   // The total number of occurrence instances matching _occFilters (used by 
   // the table paginator):
   totalNbrOfHits = 0;
   isMobile: boolean = false;
+  // The occ the luser wants to see the detail of used to feed the detail
+  // component input:
+  occUnderSpotlight: Occurrence;
 
   private _occFilters: OccurrenceFilters;
 
@@ -154,12 +157,6 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     this.router.navigateByUrl('/occurrence-form');
   }
 
-  navigateToOccurrenceDetail(row, e) {
-    console.debug(e);
-    if (e.originalTarget.className != 'mat-row ng-star-inserted') {
-      this.router.navigate(['/occurrence-detail', row.id]);
-    }
-  }
 
 
   getSelectedCount() {
@@ -371,5 +368,25 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   translateBoolean(bool) {
       return bool ? "oui":"non";
   }
+
+  toogleDetailSlideNav(occ: Occurrence, event) {
+    if ( occ != null ) {
+      this.occUnderSpotlight = occ;
+    }
+    // This is a dirty hack but couldn't find a solution to disable opening
+    // occ detail when clicking outside of the selection check boxes
+    if (event.originalTarget.className != 'mat-row ng-star-inserted') {
+      if (this.detailDrawer.opened) {
+        this.detailDrawer.close();
+      } else {
+        this.detailDrawer.open();
+      }
+    }
+  }
+
+  onCloseFilterEvent() {
+    this.detailDrawer.close();
+  }
+
 
 }

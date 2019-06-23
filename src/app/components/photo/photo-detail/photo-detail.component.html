@@ -1,5 +1,13 @@
 <div *ngIf="photo !== null" class="photo-detail-content base-text">
 
+
+  <div class="close-button-container">
+    <button mat-button 
+      (click)="close()"
+      matTooltip="Fermer"
+      matTooltipPosition="above"><mat-icon svgIcon="close" ></mat-icon></button>
+  </div>
+
   <div>
     <h1>{{photo.originalName}} (id: {{photo.id}})</h1>
   </div>
@@ -28,7 +36,7 @@
       matTooltipPosition="above">Supprimer</button>
 
     <button mat-button
-      *ngIf="photo.occurrence == null"
+      *ngIf="photo.occurrence == null && !isMobile"
       (click)="openLinkOccurrenceDialog()" 
       class="thirdary-button"
       matTooltipPosition="above"
@@ -86,8 +94,7 @@
       objectName="photo"
       objectEndpoint="/api/photos"
       tagName="photoTag"
-      tagEndpoint="/api/photo_tags"
-      (log)="logTagLibMessages($event)"></tb-tag>
+      tagEndpoint="/api/photo_tags"></tb-tag>
   </div>
 
 </div>

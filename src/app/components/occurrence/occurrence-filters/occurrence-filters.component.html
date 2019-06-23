@@ -84,7 +84,7 @@
     <div>
       <mat-form-field>
           <mat-label></mat-label>
-              <mat-select [(value)]="certainty" (selectionChange)="changeCertainty($event)" formControlName="certainty">
+              <mat-select [(value)]="certainty" formControlName="certainty">
               <mat-option>Indifférent</mat-option>
               <mat-option value="certain">Certaine</mat-option>
               <mat-option value="douteux">Douteuse</mat-option>
@@ -106,7 +106,7 @@
 
     <div>
       <mat-form-field>
-              <mat-select [(value)]="projectId" (selectionChange)="changeProjectId($event)" formControlName="project">
+              <mat-select [(value)]="projectId" formControlName="project">
               <mat-option>Tous</mat-option>
               <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}">{{project.label}}</mat-option>
           </mat-select>
@@ -119,7 +119,7 @@
 
     <div>
       <mat-form-field>
-              <mat-select [(value)]="isPublic" (selectionChange)="changeIsPublic($event)" formControlName="isPublic">
+              <mat-select [(value)]="isPublic" formControlName="isPublic">
               <mat-option>Indifférent</mat-option>
               <mat-option value="true">Seulement publiques</mat-option>
               <mat-option value="false">Seulement privées</mat-option>
@@ -133,7 +133,7 @@
 
     <div>
       <mat-form-field>
-              <mat-select [(value)]="isIdentiplanteValidated" (selectionChange)="changeIsIdentiplanteValidated($event)" formControlName="isIdentiplanteValidated">
+              <mat-select [(value)]="isIdentiplanteValidated" formControlName="isIdentiplanteValidated">
               <mat-option>Indifférent</mat-option>
               <mat-option value="true">Seulement validées</mat-option>
               <mat-option value="false">Seulement non validées</mat-option>

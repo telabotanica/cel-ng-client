@@ -1,4 +1,4 @@
-<mat-drawer-container  autosize>
+<mat-drawer-container>
 
 <div>
 
@@ -89,7 +89,7 @@
         matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" 
         matTooltipPosition="above" 
         src="{{photo.url}}" 
-        (click)="showDetail(photo)"/>
+        (click)="toogleDetailSlideNav(photo)"/>
 
       <div *ngIf="!isMobile" class="base-text">
         <mat-checkbox (click)="onPhotoSelect(photo)"></mat-checkbox> 
@@ -102,12 +102,17 @@
 
   <div style="height: 120px;" *ngIf="isMobile"></div>
 
-  <mat-drawer #drawer class="example-sidenav" mode="over">
-    <p *ngIf="true">Auto-resizing sidenav</p>
-    <p>Lorem, ipsum dolor sit amet consectetur.</p>
-    <button  mat-raised-button>
-      Toggle extra text
-    </button>
+  <mat-drawer #drawer mode="over" position="end" 
+    [ngClass]="{
+      'detail-drawer-mobile': isMobile,
+      'detail-drawer': !isMobile }">
+    <app-photo-detail 
+      *ngIf="photoUnderSpotlight != null" 
+      [photoToDisplay]="photoUnderSpotlight" 
+      (closeEvent)="onCloseFilterEvent()"> 
+    </app-photo-detail>
+
+
   </mat-drawer>
 
 

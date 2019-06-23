@@ -21,11 +21,7 @@ export class OccurrenceFiltersComponent implements OnInit {
 	isPublic;
 	certainty;         
   telaBotanicaProjects: TelaBotanicaProject[];
-  selectedProjectId;
   isMobile: boolean = false;
-  private selectedIsPublic;
-  private selectedIsIdentiplanteValidated;
-  private selectedCertainty;
 
   @Output() applyFiltersEvent = new EventEmitter<OccurrenceFilters>();
   @Output() closeFiltersEvent = new EventEmitter();
@@ -68,6 +64,7 @@ export class OccurrenceFiltersComponent implements OnInit {
     this.formGroup.reset();
     this.tagTree.reset();
     this.emitApplyFilterEvent();
+
   }
 
   private _initResponsive() {
@@ -82,38 +79,22 @@ export class OccurrenceFiltersComponent implements OnInit {
 
     let occFilters = new OccurrenceFilters();
 
-    occFilters.isPublic = this.selectedIsPublic;
+    occFilters.isPublic =  this.formGroup.get('isPublic').value;
     occFilters.dateObservedDay = this.formGroup.get('dateObservedDay').value;
     occFilters.dateObservedMonth = this.formGroup.get('dateObservedMonth').value;
     occFilters.dateObservedYear = this.formGroup.get('dateObservedYear').value;
     occFilters.osmCountry = this.formGroup.get('osmCountry').value;
     occFilters.locality = this.formGroup.get('locality').value;
     occFilters.frenchDep = this.formGroup.get('frenchDep').value;
-    occFilters.certainty = this.selectedCertainty;
-    occFilters.projectId = this.selectedProjectId;
-    occFilters.isIdentiplanteValidated = this.selectedIsIdentiplanteValidated;
+    occFilters.certainty = this.formGroup.get('certainty').value;
+    occFilters.projectId = this.formGroup.get('project').value;
+    occFilters.isIdentiplanteValidated = this.formGroup.get('isIdentiplanteValidated').value;
     occFilters.tags = this.tagTree.userOccurrenceTagSelection.selected.map(sel => sel.item);
   console.debug(occFilters.tags);
 
     occFilters.freeTextQuery = this.formGroup.get('freeTextQuery').value;
     this.applyFiltersEvent.emit(occFilters);
 
-  }
-
-  changeProjectId(event) {
-     this.selectedProjectId = event.value;
-  } 
-
-  changeIsPublic(event) {
-     this.selectedIsPublic = event.value;
-  }
-
-  changeCertainty(event) {
-     this.selectedCertainty = event.value;
-  }
-
-  changeIsIdentiplanteValidated(event) {
-     this.selectedIsIdentiplanteValidated = event.value;
   }
 
 }

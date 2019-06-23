@@ -1,6 +1,3 @@
-.highlight{
-  background: skyblue;
-}
 
 .photo-gallery-toolbar {
   justify-content: space-between;
@@ -13,10 +10,6 @@
   background: white;
 }
 
-
-.not-highlight{
-  background: #fbeafc;
-}
 
 img {
   height: auto;
@@ -62,7 +55,7 @@ img {
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
-  margin: 0 auto 35px;
+
 }
 
 .image-grid-item {
@@ -107,6 +100,21 @@ img {
   width: 100%;
 }
 
+.detail-drawer {
+  width:600px;
+  height:calc(100% - 20px) !important;
+  margin-top: 10px; 
+  padding: 10px;
+  overflow:none;
+}
+
+.detail-drawer-mobile {
+  width:calc(100% - 40px);
+  height:calc(100% - 20px) !important;
+  margin-top: 10px; 
+  padding: 10px;
+  overflow:none;
+}
 
 
 /** Responsive grid */

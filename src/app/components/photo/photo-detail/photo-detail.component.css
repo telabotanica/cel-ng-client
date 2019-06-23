@@ -24,7 +24,7 @@
 }
 
 #tag-component-container {
-    width: 400px;
+    width: 350px;
     vertical-align: middle;
     border: 0;
     display: block;
@@ -34,3 +34,10 @@ img{
     width:100%;
     max-width:400px;
 }
+
+
+.close-button-container {
+  width: 100%;
+  text-align: right;
+}
+

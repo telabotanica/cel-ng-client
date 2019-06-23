@@ -35,3 +35,20 @@ td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
   justify-content: flex-start;
 }
 
+
+.detail-drawer {
+  width:600px;
+  height:calc(100% - 20px) !important;
+  margin-top: 10px; 
+  padding: 10px;
+  overflow:none;
+}
+
+.detail-drawer-mobile {
+  width:calc(100% - 40px);
+  height:calc(100% - 20px) !important;
+  margin-top: 10px; 
+  padding: 10px;
+  overflow:none;
+}
+

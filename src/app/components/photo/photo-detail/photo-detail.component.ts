@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { 
   Router, ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs/Observable";
@@ -14,6 +14,7 @@ import { environment } from '../../../../environments/environment';
 import { Photo } from "../../../model/photo/photo.model";
 import { PhotoService } from "../../../services/photo/photo.service";
 import { NotificationService } from "../../../services/commons/notification.service";
+import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
 import { PhotoShareDialogComponent } from "../photo-share-dialog/photo-share-dialog.component";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { PhotoDisplayDialogComponent } from '../photo-display-dialog/photo-display-dialog.component';
@@ -24,11 +25,11 @@ import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-d
   templateUrl: './photo-detail.component.html',
   styleUrls: ['./photo-detail.component.css']
 })
-export class PhotoDetailComponent implements OnInit {
+export class PhotoDetailComponent {
 
   id: number;
   photo: Photo;
-  private subscription: Subscription;
+  isMobile: boolean = false;
   private _shareDialogRef: MatDialogRef<PhotoShareDialogComponent>;
   private _linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
   private _photoDisplayDialogRef: MatDialogRef<PhotoDisplayDialogComponent>;
@@ -40,26 +41,26 @@ export class PhotoDetailComponent implements OnInit {
   static readonly _occUnlinkedOkMsg:string = "Le lien entre la photo et l’observation a bien été supprimé.";
   static readonly _photoDeletedOkMsg:string = "La photo a été supprimée avec succès.";
   static readonly _errorMsg:string = "Une erreur est survenue.";
+  @Output() closeEvent = new EventEmitter();
+  @Input() 
+  set photoToDisplay(photo:Photo) {
+    this.photo = photo;
+  }
+
 
   constructor(
     private dataService: PhotoService, 
     private _notifService: NotificationService,
+    private _deviceDetectionService: DeviceDetectionService,
     private confirmDialog: MatDialog, 
     private route: ActivatedRoute,
     private dialog: MatDialog, 
-    private router: Router) {}
+    private router: Router) {
 
-  ngOnInit() {
-    this.subscription = this.route.params.subscribe(params => {
-       this.id = parseInt(params['id']);
-       this.dataService.get(this.id).subscribe( 
-          photo => {this.photo = photo;}
-       );
+    _deviceDetectionService.detectDevice().subscribe(result => {
+      this.isMobile = result.matches;
     });
-  }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
   openShareDialog() {
@@ -171,27 +172,15 @@ export class PhotoDetailComponent implements OnInit {
       this.dataService.delete(id).subscribe(
           data => {
             this._notifService.notify(PhotoDetailComponent._photoDeletedOkMsg);
-            this._navigateToPhotoGallery();
+            this.close();
           },
           error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
       );
   }
 
-  _navigateToPhotoGallery() {
-    this.router.navigate(['/photo-ui']);
+  close() {
+    this.closeEvent.emit();
   }
 
-  logTagLibMessages(log: TbLog) {
-    if (log.type === 'info') {
-      // tslint:disable-next-line:no-console
-      console.info(log.message_fr);
-    } else if (log.type === 'success') {
-      console.log(log.message_fr);
-    } else if (log.type === 'warning') {
-      console.warn(log.message_fr);
-    } else if (log.type === 'error') {
-      console.error(log.message_fr);
-    }
-  }
 
 }

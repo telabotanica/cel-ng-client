@@ -1,8 +1,21 @@
 <div id="occurrence-detail-container" class="base-text" *ngIf="occurrence!=null && occurrence!=undefined">
 
+  <div class="close-button-container">
+    <button mat-button 
+      (click)="close()"
+      matTooltip="Fermer"
+      matTooltipPosition="above"><mat-icon svgIcon="close" ></mat-icon></button>
+  </div>
+
+
+    <div >
+      <h1>{{occurrence.userSciName}} (id: {{occurrence.id}})</h1>
+    </div>
+
     <mat-toolbar>
-        <div >
+
             <button mat-button
+                *ngIf="!isMobile"
                 class="thirdary-button"
                 (click)="generatePdfEtiquette()" 
                 matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
@@ -41,13 +54,9 @@
             matTooltip="Supprimer l'observation" 
             matTooltipPosition="above">Supprimer</button> 
 
-        </div>
       </mat-toolbar>
     <div>
 
-    <div >
-      <h1>{{occurrence.userSciName}} (id: {{occurrence.id}})</h1>
-    </div>
 
     <div *ngIf="occurrence!=null && occurrence!=undefined">
 
@@ -217,23 +226,19 @@
           <div>{{occurrence.family}}</div>
         </div>
 
-     
-
         <div class="obs-detail-content-item-title" *ngIf="efloreCard.chorodepMapUrl!=null">Répartition départementale</div>
           <div>
           <img src="{{efloreCard.chorodepMapUrl}}" />
           </div>
         </div>
 
-
-        <div class="obs-detail-galery-container" *ngIf="efloreCard.celPhotoUrls!=null">
-          <div class="obs-detail-galery" style="width:33%">
+        <div class="obs-detail-galery-container" *ngIf="efloreCard.celPhotoUrls!=null" style="width:600px">
+          <div class="obs-detail-galery" style="width:70%">
                 <div class="obs-detail-content-item-title">Illustrations</div>
               <img *ngFor="let url of efloreCard.celPhotoUrls; let i = index" src="{{url}}" alt="" class="obs-detail-img">
           </div>
         </div>
   
-
     </div>
 
     <div>
@@ -242,6 +247,9 @@
         (click)="generatePdfEtiquette()" 
         matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
         matTooltipPosition="above">Générer une étiquette d'herbier</button>
-      <button mat-button (click)="openIdentiPlante()">Ouvrir l'observation dans identiPlante</button>
+
+      <button mat-button 
+        class="bold-link small thirdary-button"
+        (click)="openIdentiPlante()">Ouvrir l'observation dans identiPlante</button>
     </div>
 </div>

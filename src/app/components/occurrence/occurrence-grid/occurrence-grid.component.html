@@ -1,178 +1,182 @@
-<div>
+<mat-drawer-container>
 
-  <mat-toolbar fxFlex="1 1 auto" class="occurrence-grid-toolbar" >
+  <div>
 
-    <div id="add-occurrence-button-container" [className]="isMobile ? 'floating-button' : ''">
-      <button mat-raised-button color="primary" (click)="navigateToCreateOccurrenceForm()">Ajouter une observation</button>
-    </div>
+    <mat-toolbar fxFlex="1 1 auto" class="occurrence-grid-toolbar" >
 
-    <div >
+      <div id="add-occurrence-button-container" [className]="isMobile ? 'floating-button' : ''">
+        <button mat-raised-button color="primary" (click)="navigateToCreateOccurrenceForm()">Ajouter une observation</button>
+      </div>
 
-    <button mat-button
-      *ngIf="isMobile"
-      class="thirdary-button"
-      (click)="showFilters()"
-      matTooltip="Filtrer les observations"
-      matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
-
-      <span 
-        class="ui-component-menu-item " 
-        *ngIf="getSelectedCount()>0"> {{getSelectedCount()}} observation{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} - </span> 
-
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        class="thirdary-button"
-        (click)="bulkEdit()" 
-        matTooltip="Modifier les observations sélectionnées" 
-        matTooltipPosition="above">Editer</button>
-
-      <button mat-button
-        *ngIf="!isMobile"
-        class="thirdary-button"
-        (click)="openImportDialog()" 
-        matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
-        matTooltipPosition="above">Importer</button>
+      <div >
 
       <button mat-button
         *ngIf="isMobile"
         class="thirdary-button"
-        (click)="openImportDialog()" 
-        matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
-        matTooltipPosition="above"><mat-icon svgIcon="import"></mat-icon></button>
+        (click)="showFilters()"
+        matTooltip="Filtrer les observations"
+        matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
 
-      <button mat-button
-        class="thirdary-button"
-        *ngIf="getSelectedCount()>0 && !isMobile; else exportAllTemplate"
-        matTooltip="Exporter toutes vos observations dans un tableur"
-        matTooltipPosition="above">Exporter</button>
+        <span 
+          class="ui-component-menu-item " 
+          *ngIf="getSelectedCount()>0"> {{getSelectedCount()}} observation{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} - </span> 
 
-      <ng-template #exportAllTemplate>
-      <button mat-button
-        *ngIf="!isMobile"
-        class="thirdary-button"
-        matTooltip="Exporter toutes vos observations dans un tableur"
-        matTooltipPosition="above">Exporter Tout</button>
-      </ng-template>
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="bulkEdit()" 
+          matTooltip="Modifier les observations sélectionnées" 
+          matTooltipPosition="above">Editer</button>
 
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        class="thirdary-button"
-        (click)="generatePdfEtiquette()" 
-        matTooltip="Créer des étiquettes d'herbier à partir des observations sélectionnées"
-        matTooltipPosition="above">Etiquettes</button>
+        <button mat-button
+          *ngIf="!isMobile"
+          class="thirdary-button"
+          (click)="openImportDialog()" 
+          matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
+          matTooltipPosition="above">Importer</button>
 
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        class="thirdary-button"
-        (click)="openConfirmBulkPublishDialog()" 
-        matTooltip="Rendre publiques les observations sélectionnées"
-        matTooltipPosition="above">Publier</button>
+        <button mat-button
+          *ngIf="isMobile"
+          class="thirdary-button"
+          (click)="openImportDialog()" 
+          matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
+          matTooltipPosition="above"><mat-icon svgIcon="import"></mat-icon></button>
 
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        class="thirdary-button"
-        (click)="openConfirmBulkUnpublishDialog()" 
-        matTooltip="Rendre privées les observations sélectionnées"
-        matTooltipPosition="above">Dépublier</button>
+        <button mat-button
+          class="thirdary-button"
+          *ngIf="getSelectedCount()>0 && !isMobile; else exportAllTemplate"
+          matTooltip="Exporter toutes vos observations dans un tableur"
+          matTooltipPosition="above">Exporter</button>
 
-      <button mat-button
-        *ngIf="getSelectedCount()>0 && !isMobile"
-        class="thirdary-button"
-        (click)="openConfirmBulkDeleteDialog()" 
-        matTooltip="Supprimer les observations sélectionnées"
-        matTooltipPosition="above">Supprimer</button>
+        <ng-template #exportAllTemplate>
+        <button mat-button
+          *ngIf="!isMobile"
+          class="thirdary-button"
+          matTooltip="Exporter toutes vos observations dans un tableur"
+          matTooltipPosition="above">Exporter Tout</button>
+        </ng-template>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="generatePdfEtiquette()" 
+          matTooltip="Créer des étiquettes d'herbier à partir des observations sélectionnées"
+          matTooltipPosition="above">Etiquettes</button>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="openConfirmBulkPublishDialog()" 
+          matTooltip="Rendre publiques les observations sélectionnées"
+          matTooltipPosition="above">Publier</button>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="openConfirmBulkUnpublishDialog()" 
+          matTooltip="Rendre privées les observations sélectionnées"
+          matTooltipPosition="above">Dépublier</button>
+
+        <button mat-button
+          *ngIf="getSelectedCount()>0 && !isMobile"
+          class="thirdary-button"
+          (click)="openConfirmBulkDeleteDialog()" 
+          matTooltip="Supprimer les observations sélectionnées"
+          matTooltipPosition="above">Supprimer</button>
 
 
 
+      </div>
+    </mat-toolbar>
+
+  </div>
+  <div class="module-right-col-content">
+    <div>
+
+      <mat-table class="occurrences-table mat-elevation-z8" 
+          [dataSource]="dataSource" 
+          matSort
+          matSortDirection="asc" 
+          matSortDisableClear>
+
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="userSciName" id="user-sci-name-column">
+              <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="350px" matTooltip="Trier par nom saisi" matTooltipPosition="above">Nom saisi</mat-header-cell>
+              <mat-cell *matCellDef="let occurrence" fxFlex="350px">{{occurrence.userSciName}}</mat-cell>
+          </ng-container>
+        
+          <ng-container matColumnDef="dateObserved">
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par date" matTooltipPosition="above">Date</mat-header-cell>
+              <mat-cell class="date-observed-cell"
+                        *matCellDef="let occurrence">{{occurrence.dateObserved | date:"dd/MM/yyyy" }}</mat-cell>
+          </ng-container>
+        
+          <ng-container matColumnDef="isPublic">
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par statut de publication" matTooltipPosition="above">Public</mat-header-cell>
+              <mat-cell class="is-public-cell"
+                        *matCellDef="let occurrence">{{translateBoolean(occurrence.isPublic)}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="locality">
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par localité" matTooltipPosition="above">Lieu</mat-header-cell>
+              <mat-cell class="locality-cell"
+                        *matCellDef="let occurrence">{{occurrence.locality}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="120px" matTooltip="Trier par identifiant" matTooltipPosition="above">Identifiant</mat-header-cell>
+              <mat-cell  class="id-cell"
+                        *matCellDef="let occurrence" fxFlex="120px">{{occurrence.id}}</mat-cell >
+          </ng-container>
+
+          <ng-container matColumnDef="identiplanteScore">
+              <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par note sur IdentiPlante" matTooltipPosition="above">Note IdentiPlante</mat-header-cell>
+              <mat-cell  class="identiplante-score-cell"
+                        *matCellDef="let occurrence">{{occurrence.identiplanteScore}}</mat-cell>
+          </ng-container>
+          
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          
+          <mat-row *matRowDef="let row; columns: displayedColumns" (click)="toogleDetailSlideNav(row, $event)"></mat-row>
+          
+      </mat-table>
     </div>
-  </mat-toolbar>
 
-</div>
-<div class="module-right-col-content">
-  <div>
-
-    <mat-table class="occurrences-table mat-elevation-z8" 
-        [dataSource]="dataSource" 
-        matSort
-        matSortDirection="asc" 
-        matSortDisableClear>
-
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
-            <mat-checkbox (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(row) : null"
-                          [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="userSciName" id="user-sci-name-column">
-            <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="350px" matTooltip="Trier par nom saisi" matTooltipPosition="above">Nom saisi</mat-header-cell>
-            <mat-cell *matCellDef="let occurrence" fxFlex="350px">{{occurrence.userSciName}}</mat-cell>
-        </ng-container>
-      
-        <ng-container matColumnDef="dateObserved">
-            <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par date" matTooltipPosition="above">Date</mat-header-cell>
-            <mat-cell class="date-observed-cell"
-                      *matCellDef="let occurrence">{{occurrence.dateObserved | date:"dd/MM/yyyy" }}</mat-cell>
-        </ng-container>
-      
-        <ng-container matColumnDef="isPublic">
-            <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par statut de publication" matTooltipPosition="above">Public</mat-header-cell>
-            <mat-cell class="is-public-cell"
-                      *matCellDef="let occurrence">{{translateBoolean(occurrence.isPublic)}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="locality">
-            <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par localité" matTooltipPosition="above">Lieu</mat-header-cell>
-            <mat-cell class="locality-cell"
-                      *matCellDef="let occurrence">{{occurrence.locality}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="120px" matTooltip="Trier par identifiant" matTooltipPosition="above">Identifiant</mat-header-cell>
-            <mat-cell  class="id-cell"
-                      *matCellDef="let occurrence" fxFlex="120px">{{occurrence.id}}</mat-cell >
-        </ng-container>
-
-        <ng-container matColumnDef="identiplanteScore">
-            <mat-header-cell *matHeaderCellDef mat-sort-header matTooltip="Trier par note sur IdentiPlante" matTooltipPosition="above">Note IdentiPlante</mat-header-cell>
-            <mat-cell  class="identiplante-score-cell"
-                      *matCellDef="let occurrence">{{occurrence.identiplanteScore}}</mat-cell>
-        </ng-container>
-        
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        
-        <mat-row *matRowDef="let row; columns: displayedColumns" (click)="navigateToOccurrenceDetail(row, $event)"></mat-row>
-        
-    </mat-table>
+    <div class="paginator-container">
+	    <mat-paginator
+	        [length]="totalNbrOfHits" 
+	        [pageSize]="10" 
+	        [pageSizeOptions]="[5, 10, 25, 100]" ></mat-paginator>
+    </div>
+    <div style="height:50px;"></div>
   </div>
 
-  <div class="paginator-container">
-	  <mat-paginator
-	      [length]="totalNbrOfHits" 
-	      [pageSize]="10" 
-	      [pageSizeOptions]="[5, 10, 25, 100]" ></mat-paginator>
-  </div>
-  <div style="height:50px;"></div>
-</div>
 
 
-<mat-sidenav-container
-    class="detail-container" (backdropClick)="close('backdrop')" *ngIf="false">
+  <mat-drawer #drawer mode="over" position="end" 
+    [ngClass]="{
+      'detail-drawer-mobile': isMobile,
+      'detail-drawer': !isMobile }">
+    <occurrence-detail [occToDisplay]="occUnderSpotlight" *ngIf="occUnderSpotlight != null" (closeEvent)="onCloseFilterEvent(drawer)"> 
+    </occurrence-detail>
 
-  <mat-sidenav #sidenav (keydown.escape)="close('escape')" disableClose>
-    <p><button mat-button (click)="close('toggle button')">Toggle</button></p>
-  </mat-sidenav>
 
-    <mat-sidenav-content>
+  </mat-drawer>
 
-  </mat-sidenav-content>
-</mat-sidenav-container>
+
+</mat-drawer-container>
 
