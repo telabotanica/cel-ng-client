@@ -1,12 +1,6 @@
-.user-profile-form-container {
 
-}
-
-.user-profile-form-section-items-container {
-  display: flex;
-}
-
-.user-profile-form-section-item-container  {
-  flex-basis:0;
-  flex: 1 1 0;
+.user-agreement-container {
+  padding:60px;
+  overflow: auto;
+  height: calc(100vh - 67px);
 }
