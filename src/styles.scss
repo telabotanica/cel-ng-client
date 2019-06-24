@@ -4,11 +4,12 @@
 @include angular-material-theme($tb-theme);
 
 html, body {
-  margin:         0;
-  padding:        0;
-  color:          #53504b;
-  display:        flex;
-  height:         100%;
+  margin: 0;
+  padding: 0;
+  color: #53504b;
+  font-family: Muli;
+  display: flex;
+  height: 100%;
   flex-direction: column;
   margin: 0;
 }
@@ -41,12 +42,10 @@ a {
   width: 12px !important;
 }
 
-
 .mat-tree {
   padding-bottom: 12px !important;
   background-color: #fcfaf5 !important;
 }
-
 
 .mat-tree-node {
   height: 20px !important;
@@ -87,51 +86,34 @@ a {
   overflow:auto;  
   height: calc(100vh - 67px);
 }
-/*
-.module-right-col {
-  float:left;
-  width:80%;
-  overflow:auto;  
-  height: calc(100vh - 67px);
-}
-*/
 
 .mat-button[disabled].thirdary-button {
   color:#bbbbbb !important;
 }
 
-
-/*
-
-mat-form-field {
-    font-size: 13px !important;
-    font-size: 12px;
-    line-height: 1px;
-    font-weight: 2;
+input.mat-input-element {
+  color: #484a4c;
 }
 
-.mat-form-field-flex {
-    background-color: white !important;
-}
-
-*/
 .mat-form-field {
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 13px;
+    line-height: 14px;
     font-weight: 2;
 }
-
 
 .mat-form-field-appearance-outline .mat-form-field-outline {
     background-color: white !important;
 }
 
-
-
-
 .mat-button.thirdary-button {
   color:#6c7b0f !important;
 }
+
+
+.mat-drawer-backdrop.mat-drawer-shown {
+    background-color: transparent;
+}
+
 
 .module-right-col {
   float:left;
@@ -191,11 +173,6 @@ mat-form-field {
 .filter-buttons-container {
   text-align:center;
   margin-bottom: 20px;
-}
-
-
-input.mat-input-element {
-  color: #484a4c;
 }
 
 .fixed-filter-buttons-container {

@@ -1,9 +1,10 @@
-<div id="form-container">
+<div id="outer-container">
+<div id="occurrence-form-container">
 
 	<form
 		[formGroup]="occurrenceForm" >
 
-		<mat-card-content id='occurrence-form-container' >
+		<div id='occurrence-form-container' >
 		    
 		    <div class="occurrence-form-column">
 
@@ -13,15 +14,14 @@
 		        <section class="observed-date-form-field-container">
 		          <mat-form-field >
 		            <input matInput 
-                  readonly 
-                  class="mat-form-field-without-label-overhead"
-                  [max]="maxDate" 
-                  [matDatepicker]="dateObserved" 
-                  formControlName="dateObserved" 
-                  matTooltip="Saisir la date de l’observation" 
-                  matTooltipPosition="above">
+                      readonly 
+                      [max]="maxDate" 
+                      [matDatepicker]="dateObserved" 
+                      formControlName="dateObserved" 
+                      matTooltip="Saisir la date de l’observation" 
+                      matTooltipPosition="above">
 		            <mat-datepicker-toggle matSuffix 
-                  [for]="dateObserved"></mat-datepicker-toggle>
+                      [for]="dateObserved"></mat-datepicker-toggle>
 		            <mat-datepicker #dateObserved></mat-datepicker>
 		          </mat-form-field>
 		        </section>
@@ -34,8 +34,11 @@
 		          <tb-geoloc-map
 		            [layersToAdd]="['osm','opentopomap','google hybrid','brgm']"
 		            [reset]='resetForm'
+                [enabled]='formEnabled'
 		            [patchElevation]="patchElevation"
 		            [patchGeometry]="patchGeometry"
+                [height]="getTbTagLibMapHeight()"
+                [width]="getTbTagLibMapWidth()"
 		            [elevationProvider]="elevationApiProvider"
 		            [osmTilesLayerApi]="mapBgTileUrl"
 		            [patchLngLatDec]="patchLatLngDec"
@@ -73,10 +76,9 @@
 		            </div>
 		            <mat-form-field>
 		              <input matInput
-                    class="mat-form-field-without-label-overhead" 
-                    formControlName="sublocality" 
-                    matTooltip="Toponyme plus précis que la localité" 
-                    matTooltipPosition="above">
+                        formControlName="sublocality" 
+                        matTooltip="Toponyme plus précis que la localité" 
+                       matTooltipPosition="above">
 		            </mat-form-field>
 
 
@@ -86,7 +88,7 @@
 		            </div>
 		            <mat-form-field>
 		              <input matInput 
-                        class="mat-form-field-without-label-overhead" formControlName="environment" 
+                        formControlName="environment" 
                         matTooltip="Type d’habitat, par exemple issu des codes Corine ou Catminat" matTooltipPosition="above">
 		            </mat-form-field>
 
@@ -171,6 +173,7 @@
 
 		          <mat-slide-toggle 
                 [checked]="false" 
+                [disabled]="!formEnabled" 
                 (toggleChange)="toggleAdvancedFormLeft($event)"  
                 matTooltip="Afficher l’ensemble des champs de saisie" 
                 matTooltipPosition="above"></mat-slide-toggle>
@@ -179,6 +182,7 @@
 		          <div *ngIf="isInCreateMode()">
 		            <span class="occurrence-form-option-label">Réinitialiser ces données pour l'observation suivante</span>
 		            <mat-slide-toggle 
+                  [disabled]="!formEnabled" 
                   (toggleChange)="toggleClearFormAfterSubmit($event)"  
                   matTooltip="Si vous souhaitez enchainer avec la saisie d’une autre observation, vous pouvez choisir de réinitialiser ces champs" 
                   matTooltipPosition="above"></mat-slide-toggle>
@@ -202,6 +206,7 @@
 		            editingPlaceholder="Modifier l'espèce"
 		            defaultRepository='bdtfx'
 		            [autoSelectValueIfOnlyOneResult]='autoSelectValueIfOnlyOneResult'
+                [enabled]='formEnabled'
 		            [tbRepositoriesConfig]='tbRepositoriesConfig'
 		            [autoResetWhenSelected]='false'
 		            [emitOccurenceOnBlur]='true'
@@ -216,7 +221,7 @@
 
 
 		        <div style="display: flex;">
-  		        <div style="width: 68%;">
+  		        <div style="width: 72%;">
 
 		            <div class="occurrence-form-label-container">
 		              <label class="occurrence-form-label">Certitude :</label>
@@ -246,7 +251,7 @@
 
 		        </div>
 
-		        <div style="width: 32%;">
+		        <div style="width: 38%;">
 
 		          <div class="occurrence-form-label-container">
 		            <label class="occurrence-form-label">Spontanéité :</label>
@@ -295,6 +300,7 @@
 		               <!-- (geolocatedPhotoLatLng)="geolocatedPhotoData($event)" --> 
 		              <tb-dropfile-box
 		                [reset]="resetForm" 
+                    [enabled]='formEnabled'
 		                [showTable]="true" 
 		                [uploadTbPhotoFiles]="true"
 		                [label]="'Cliquez pour choisir les photos ou glissez les ici'"
@@ -321,13 +327,15 @@
                       type="button" 
                       matTooltip="Ajouter une photo déjà présente dans le CEL" 
                       matTooltipPosition="above"
+                      [disabled]="!formEnabled"
                       (click)="openLinkPhotoDialog()">Choisir une photo déjà importée</button>
+
 		            <button mat-button class="thirdary-button"  
                       type="button" 
                       (click)="askPlantNet()" 
                       matTooltip="Interroger PlantNet pour obtenir des suggestions d’identification à partir des photos que vous avez importées" 
                       matTooltipPosition="above"
-                      [disabled]="!isPlantNetCallable()">Aide à la détermination avec PlantNet</button>
+                      [disabled]="!isPlantNetCallable() || !formEnabled">Aide à la détermination avec PlantNet</button>
 		            </div>
 		          </div> 
 		        </div> 
@@ -338,24 +346,17 @@
 
 
 		        <div *ngIf="isTagComponentDisplayable()">
-		          <div class="occurrence-form-label-container">
-		            <label class="occurrence-form-label">Mots-clés :</label>
-		          </div>
-		          <tb-tag
-		            [userId]=22
-		            [objectId]="tagObjectId"
-		            [noApiCall]="delayTagApiCalls()"
-		            [baseApiUrl]="tagLibBaseUrl"
-		            (newTag)="onTagAdded($event)"
-		            (removedTag)="onTagRemoved($event)"
-		            (httpError)="onPostTagError($event)"
-		            apiPath="/api/user_occurrence_tags"
-		            apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
-		            apiRetrievePath="/api/occurrence/{id}/occurrence_user_occurrence_tag_relations"
-		            objectName="occurrence"
-		            objectEndpoint="/api/occurrences"
-		            tagName="userOccurrenceTag"
-		            tagEndpoint="/api/user_occurrence_tags"></tb-tag>
+              
+
+	            <button mat-button class="thirdary-button"  
+                    type="button" 
+                    (click)="openTagDialog()" 
+                    matTooltip="Consulter les mots-clés liés ou ajouter un nouveau mot-clé" 
+                    matTooltipPosition="above"
+                    [disabled]="!formEnabled">Gérer les mots-clés liés</button>
+
+
+
 		        </div>
 
 		      
@@ -433,7 +434,7 @@
 		              <label class="occurrence-form-label">Source bibliographique :</label>
 		            </div>
 		            <mat-form-field>
-		              <input class="mat-form-field-without-label-overhead" matInput formControlName="bibliographySource"  matTooltip="Dans le cas où la donnée est issue de la bibliographie, renseigner la source" matTooltipPosition="above">
+		              <input matInput formControlName="bibliographySource"  matTooltip="Dans le cas où la donnée est issue de la bibliographie, renseigner la source" matTooltipPosition="above">
 		            </mat-form-field>
 
 		            <div class="occurrence-form-label-container">
@@ -456,23 +457,35 @@
 
 		        <div class="occurrence-form-options">
 		          <span class="occurrence-form-option-label">Afficher les champs complémentaires</span>
-		          <mat-slide-toggle [checked]="false" (toggleChange)="toggleAdvancedFormRight($event)"  matTooltip="Afficher l’ensemble des champs de saisie" matTooltipPosition="above"></mat-slide-toggle>
+		          <mat-slide-toggle 
+                [checked]="false"      
+                [disabled]="!formEnabled" 
+                (toggleChange)="toggleAdvancedFormRight($event)"  
+                matTooltip="Afficher l’ensemble des champs de saisie" matTooltipPosition="above"></mat-slide-toggle>
 		        </div>
+
+        <div id="help-button-container">
+		      <button type="button" mat-raised-button color="accent" (click)="navigateToHelp()">Aide</button>
+		    </div>
 
 		  </div>
 
-		</mat-card-content>
+
+
+
+		</div>
 
 		<div class="occurrence-form-submit-button-container">
 		  <mat-card-actions align="center" class="occurrence-form-submit-button-card-container">
 		    <button type="button" mat-raised-button color="accent" (click)="onCancel()" matTooltip="Retourner à la page Observations sans enregistrer" matTooltipPosition="above">Annuler</button>
 		    <button type="submit" mat-raised-button color="primary" (click)="openConfirmActionDialog(occurrenceForm.value, false)" matTooltip="Enregistrer l’observation et retourner à la page Observations" matTooltipPosition="above">Enregistrer</button>
-		    <button type="button" mat-raised-button color="primary" (click)="openConfirmActionDialog(occurrenceForm.value, true)" matTooltip="Enregistrer l’observation et rester sur le formulaire pour en saisir une autre" matTooltipPosition="above">Observation suivante</button>
-		    <button type="button" mat-raised-button color="accent" (click)="navigateToHelp()">Aide</button>
+		    <button type="button" *ngIf="isInCreateMode()" mat-raised-button color="primary" (click)="openConfirmActionDialog(occurrenceForm.value, true)" matTooltip="Enregistrer l’observation et rester sur le formulaire pour en saisir une autre" matTooltipPosition="above">Observation suivante</button>
 
 		  </mat-card-actions>
 		</div>
 
 	</form>
+
+</div>
 
 </div>

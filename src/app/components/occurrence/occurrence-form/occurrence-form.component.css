@@ -1,13 +1,22 @@
+#outer-container {
+  overflow-y: auto;
+  height: calc(100vh - 67px);
+
+}
+
 #occurrence-form-container {
   display: flex;
+ -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .occurrence-form-column {
   flex-basis:0;
   flex: 1 1 0;
   padding-top: 16px;
-  padding-left: 60px;
-  padding-right: 60px;
+  padding-left: 50px;
+  padding-right: 50px;
+  width: 50VW;
 }
 
 .occurrence-form-column-title {
@@ -131,5 +140,8 @@
 }
 
 
-
+#help-button-container {
+  text-align:right;
+  padding-bottom:14px
+}
 

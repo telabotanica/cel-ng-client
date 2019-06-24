@@ -30,7 +30,7 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
   // The ids of selected photos:
   selected = [];
   baseCelApiUrl: string = environment.api.baseUrl;
-
+  enabled = true;
   @Input('occurrenceId') occurrenceId: number;
   @Input('enableRemove') enableRemove: boolean = false;
   @Output() onPhotoRemoved = new EventEmitter<Photo>();
@@ -47,6 +47,20 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
       this.loadData();
     }
   }
+
+  reset() {
+    this.selected = [];
+    this.resources = [];
+  }
+
+  disable() {
+    this.enabled = false;
+  }
+
+  enable() {
+    this.enabled = true;
+  }
+
 
   _emptySelection() {
     this.selected = [];

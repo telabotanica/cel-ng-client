@@ -282,13 +282,14 @@ console.debug(e.target.getFeatures());
           console.log('No occ selected');
         }
       });
-
-
     //this.map.addControl(new LayerSwitcher());
-    this.snackBar.open(
-    'Pour sélectionner plusieurs observations, cliquer sur ces dernières en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.', 
-    'Fermer', 
-    { duration: 5000 });
+
+    if ( !this.isMobile ) {
+      this.snackBar.open(
+        'Pour sélectionner plusieurs observations, cliquer sur ces dernières en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.', 
+        'Fermer', 
+        { duration: 5000 });
+    }
   }
 
     addBoxSelectionInteractionToMap() {

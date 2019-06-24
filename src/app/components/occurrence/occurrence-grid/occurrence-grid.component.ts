@@ -210,7 +210,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   openConfirmBulkUnpublishDialog() {
 
     let dialogConfig = this.buildDialogConfig();  
-    dialogConfig.data = 'Dépublier la/les observation(s) ?)';
+    dialogConfig.data = "Rendre privées la/les observations ? Elles ne seront visibles que par vous-mêmes.";
     let confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
  
     confirmBulkUnpublishDialogRef
@@ -225,7 +225,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   openConfirmBulkPublishDialog() {
 
     let dialogConfig = this.buildDialogConfig();  
-    dialogConfig.data = 'Publier la/les observation(s) ? Cela ne sera effectif que pour les observations ayant les prérequis (précision, localisation et date renseignés).';
+    dialogConfig.data = "Rendre publiques la/les observations ? Elles seront visibles par les autres telabotanistes sur le site de Tela Botanica. Cela ne sera effectif que pour les observations dont la localisation, la date et la certitude d'identification ont été renseignées.";
     let confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
     confirmBulkPublishDialogRef
