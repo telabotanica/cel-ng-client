@@ -1,11 +1,17 @@
 
 <h2 mat-dialog-title>Importer un fichier excel ou csv</h2>
 
-<mat-dialog-content [formGroup]="importFormGroup">
-  
-  <button type="button" class="mat-raised-button mat-primary"(click)="imgFileInput.click()">Choisir le fichier</button>
-  <input hidden type="file" name="importFile" #imgFileInput (change)="import($event.target.files)" accept="file_extension|audio/*|video/*|image/*|media_type"/>
+<mat-dialog-content>
 
+<form [formGroup]="importFormGroup">
+
+<span>Avant d’importer un fichier tableur, assurez-vous que les données soient au bon format (nom des colonnes, valeurs autorisées, etc.). Dans le cas contraire, certaines données ne seront pas importées. Vous pouvez télécharger <a onClick="navigateToImportTemplate()">ici</a> le modèle de fichier d’import.</span>
+
+
+  
+  <div style="text-align:center;">  <button type="button" class="mat-raised-button mat-primary"(click)="imgFileInput.click()">Choisir le fichier</button> </div>
+  <input hidden type="file" name="importFile" #imgFileInput (change)="import($event.target.files)" accept="file_extension|audio/*|video/*|image/*|media_type"/>
+</form>
 </mat-dialog-content>
 
 <!--

@@ -1,6 +1,13 @@
-import { Component, OnInit,EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialogRef, MatSnackBar } from "@angular/material";
+import {
+    DOCUMENT
+} from '@angular/common';
+
+import {
+    environment
+} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-import-dialog',
@@ -11,9 +18,13 @@ export class ImportDialogComponent implements OnInit {
 
   importFormGroup;
   spreadsheetFile;
+  private static readonly _importTemplateUrl: string = environment.app.importTemplateUrl;
   onImport = new EventEmitter();
 
-  constructor(public snackBar: MatSnackBar, private importDialogRef: MatDialogRef<ImportDialogComponent>) { }
+  constructor(
+    public snackBar: MatSnackBar, 
+    private importDialogRef: MatDialogRef<ImportDialogComponent>,
+    @Inject(DOCUMENT) private document: any) { }
 
   ngOnInit() {
 
@@ -39,5 +50,8 @@ export class ImportDialogComponent implements OnInit {
         this.importDialogRef.close(files.item(0));
     }
 
+    navigateToImportTemplate() {
+        this.document.location.href = ImportDialogComponent._importTemplateUrl;
+    }
 
 }
