@@ -8,6 +8,8 @@ export const environment = {
     title:           "Carnet en ligne V2",
     unsetTokenValue: "unset",
     absoluteBaseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-client/dist/cel2-client",
+    helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
+    importTemplateUrl: 'http://perdu.com',
   },
   algolia: {
     baseUrl:       "https://yotvbfebjc-dsn.algolia.net/1/indexes/*/queries",
@@ -18,6 +20,11 @@ export const environment = {
     baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api",
     tagLibBaseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public",
     prefix: "api",
+  },
+  telaWebSite: {
+    profileUrl: 'https://www.tela-botanica.org/membres/me/settings/profile',
+    homepageUrl: 'https://www.tela-botanica.org',
+    contactUrl: 'https://www.tela-botanica.org/widget:reseau:remarques?lang=fr&service=cel&pageSource=https%3A%2F%2Fwww.tela-botanica.org%2Fcel%2Fappli%2Fcel2.html',
   },
   taxoApi: {
     validationBaseUrl: "https://api.tela-botanica.org/service:eflore:0.1",
@@ -48,6 +55,9 @@ export const environment = {
     authWidgetUrl:    'http://beta.tela-botanica.org/widget:reseau:auth',
     refreshEndpoint:  'https://beta.tela-botanica.org/service:annuaire:auth/rafraichir',
     refreshInterval:  600000
+  },
+  misc: {
+    ministereMTESHomepageUrl: "https://www.ecologique-solidaire.gouv.fr/",
   },
   photoTagLib: {
     basicTags: [
