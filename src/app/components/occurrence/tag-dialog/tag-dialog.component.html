@@ -1,0 +1,33 @@
+<!--
+  <tb-tag
+    [userId]=22
+    [objectId]="tagObjectId"
+    [noApiCall]="delayTagApiCalls()"
+    [baseApiUrl]="tagLibBaseUrl"
+    (newTag)="onTagAdded($event)"
+    (removedTag)="onTagRemoved($event)"
+    (httpError)="onPostTagError($event)"
+    [apiPath]="apiPath"
+    [apiRelationPath]="apiRelationPath"
+    [apiRetrievePath]="apiRetrievePath"
+    [objectName]="objectName"
+    [objectEndpoint]="objectEndpoint"
+    [tagName]="tagName"
+    [tagEndpoint]="tagEndpoint"></tb-tag>
+-->
+
+  <tb-tag
+    [userId]=22
+    [objectId]="tagObjectId"
+    [noApiCall]="delayTagApiCalls"
+    [baseApiUrl]="tagLibBaseUrl"
+    (newTag)="onTagAdded($event)"
+    (removedTag)="onTagRemoved($event)"
+    (httpError)="onPostTagError($event)"
+    apiPath="/api/user_occurrence_tags"
+    apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
+    apiRetrievePath="/api/occurrence/{id}/occurrence_user_occurrence_tag_relations"
+    objectName="occurrence"
+    objectEndpoint="/api/occurrences"
+    tagName="userOccurrenceTag"
+    tagEndpoint="/api/user_occurrence_tags"></tb-tag>

@@ -32,6 +32,7 @@ import { MapUiComponent } from './components/map/map-ui/map-ui.component';
 import { UserProfileUiComponent } from './components/user-profile/user-profile-ui/user-profile-ui.component';
 import { OccurrenceMapComponent } from './components/map/occurrence-map/occurrence-map.component';
 import { ImportDialogComponent } from './components/occurrence/import-dialog/import-dialog.component';
+import { TagDialogComponent } from './components/occurrence/tag-dialog/tag-dialog.component';
 import { OccurrencesDataSource } from "./services/occurrence/occurrences.datasource";
 import { PhotoService } from "./services/photo/photo.service";
 import { TelaBotanicaProjectService } from "./services/occurrence/tela-botanica-project.service";
@@ -90,6 +91,7 @@ const appearance: MatFormFieldDefaultOptions = {
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
+    TagDialogComponent,
     PlantnetResultDialogComponent,
     OccurrencePhotoGalleryComponent,
     PhotoDisplayDialogComponent,
@@ -149,6 +151,7 @@ const appearance: MatFormFieldDefaultOptions = {
     ImportDialogComponent, 
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
+    TagDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
     PlantnetResultDialogComponent,
     PhotoDisplayDialogComponent]
