@@ -17,7 +17,6 @@ const routes: Routes = [
     path: '', 
     redirectTo: '/occurrence-ui', 
     pathMatch: 'full', 
-
     canActivate: [AuthGuard] 
   },
   { 
@@ -29,43 +28,36 @@ const routes: Routes = [
   { 
     path: 'photo-ui', 
     component: PhotoUiComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
     path: 'map-ui', 
     component: MapUiComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
     path: 'user-profile-ui', 
     component: UserProfileUiComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
     path: 'user-agreement', 
     component: UserAgreementComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
     path: 'occurrence-form', 
     component: OccurrenceFormComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
     path: 'occurrence-collection-edit-form/:ids', 
     component: OccurrenceFormComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
     path: 'help', 
     component: HelpComponent,
- 
     canActivate: [AuthGuard] 
   },
 ];
