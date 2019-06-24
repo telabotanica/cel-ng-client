@@ -1,40 +1,31 @@
-<div class="user-profile-form-container base-text">
+<div  
+  [ngClass]="{
+    'user-profile-form-container-mobile': isMobile,
+    'user-profile-form-container': !isMobile
+  }" >
 
   <div class="user-profile-form-section-container">
-
     <div class="user-profile-form-section-title-container">Mon compte</div>
-
     <div class="user-profile-form-section-subtitle-container">
       Connecté(e) en tant que <a href="{{ getProfileUrl() }}">{{ getUsername() }}</a>
     </div>
+    <div class="user-profile-form-section-item-container">
 
-    <div class="user-profile-form-section-items-container">
-
-
-      <div class="user-profile-form-section-item-container">
-
-        <button mat-button
-          class="bold-link small thirdary-button"
-          matTooltip="Accéder aux réglages de son profil" 
-          (click)="navigateToWpProfileSettings()"
-          matTooltipPosition="above">Modifier la visibilité de mon profil</button>
-        <button mat-button
-          (click)="logout()"
-          class="bold-link small thirdary-button"
-          matTooltip="Se déconnecter" 
-          matTooltipPosition="above">Déconnexion</button>
-      </div>
-
+      <button mat-button
+        class="bold-link small thirdary-button"
+        matTooltip="Accéder aux réglages de son profil" 
+        (click)="navigateToWpProfileSettings()"
+        matTooltipPosition="above">Modifier la visibilité de mon profil</button>
+      <button mat-button
+        (click)="logout()"
+        class="bold-link small thirdary-button"
+        matTooltip="Se déconnecter" 
+        matTooltipPosition="above">Déconnexion</button>
     </div>
-
   </div>
 
   <div class="user-profile-form-section-container">
-
     <div class="user-profile-form-section-title-container">Informations</div>
-
-    <div class="user-profile-form-section-items-container">
-      
       <div class="user-profile-form-section-item-container">
         <button mat-button
           class="bold-link small thirdary-button" 
@@ -49,23 +40,37 @@
       </div>
 
       <div class="user-profile-form-section-item-container">
-
         <button mat-button
           class="bold-link small thirdary-button"
-          (click)="navigateToHelp()" 
+          (click)="navigateToImportTemplate()" 
           matTooltip="Consulter le modèle de fichier pour l’import" 
           matTooltipPosition="above">Modèle pour l’import</button>
         <button mat-button
           class="bold-link small thirdary-button" 
+          (click)="navigateToUserAgreement()"
           matTooltip="Consulter la charte d’utilisation du Carnet en Ligne" 
           matTooltipPosition="above">Consulter la charte d’utilisation</button>
-
       </div>
-
-    </div>
 
   </div>
 
+  <div class="user-profile-form-section-container">
+      <div class="user-profile-form-section-title-container">Options</div>
+      <div class="user-profile-form-section-item-container">
+        <button mat-button
+          class="bold-link small thirdary-button" 
+          (click)="navigateToUserAgreement()"
+          matTooltip="Consulter la charte d’utilisation du Carnet en Ligne" 
+          matTooltipPosition="above">Toujours afficher les champs avancés</button>
+      </div>
+  </div>
+
+  <div class="logo-img-container">
+    <img class="logo-img" style="width:93px;" (click)="navigateToTelaHomepage()" src="assets/img/logos/logo_tela.png" /> 
+    <img class="logo-img" style="width:70px;" (click)="navigateToMinistereMTESHomepage()" src="assets/img/logos/logo_ministere_mtes.jpg" />
+  </div>
 
 </div>
+
+
 

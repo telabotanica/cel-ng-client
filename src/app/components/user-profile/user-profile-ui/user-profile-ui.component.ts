@@ -1,67 +1,118 @@
-import { Inject } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { environment } from '../../../../environments/environment';
-import { DOCUMENT } from '@angular/common';
+import {
+    Inject
+} from '@angular/core';
+import {
+    Component,
+    OnInit
+} from '@angular/core';
+import {
+    Router
+} from "@angular/router";
+import {
+    DOCUMENT
+} from '@angular/common';
 import * as jwt_decode from "jwt-decode";
 
-import { SsoService } from "../../../services/commons/sso.service";
+import {
+    environment
+} from '../../../../environments/environment';
+import {
+    SsoService
+} from "../../../services/commons/sso.service";
+import {
+    DeviceDetectionService
+} from "../../../services/commons/device-detection.service";
 
 @Component({
-  selector: 'app-user-profile-ui',
-  templateUrl: './user-profile-ui.component.html',
-  styleUrls: ['./user-profile-ui.component.css']
+    selector: 'app-user-profile-ui',
+    templateUrl: './user-profile-ui.component.html',
+    styleUrls: ['./user-profile-ui.component.css']
 })
 export class UserProfileUiComponent implements OnInit {
 
-  private ssoAuthWidgetUrl = environment.sso.authWidgetUrl;
-  private decodedToken;
+    private static readonly _ssoAuthWidgetUrl: string = environment.sso.authWidgetUrl;
+    private static readonly _profileUrl: string = environment.telaWebSite.profileUrl;
+    private static readonly _importTemplateUrl: string = environment.app.importTemplateUrl;
+    private static readonly _contactUrl: string = environment.telaWebSite.contactUrl;
+    private static readonly _helpUrl: string = environment.app.helpUrl;
+    private static readonly _appAbsoluteBaseUrl: string = environment.app.absoluteBaseUrl;
+    private static readonly _homepageUrl: string = environment.telaWebSite.homepageUrl;
+    private static readonly _ministereMTESHomepageUrl: string = environment.misc.ministereMTESHomepageUrl;
+    private decodedToken;
+    isMobile = false;
 
-  constructor(
-    private router: Router, 
-    private ssoService: SsoService,
-    @Inject(DOCUMENT) private document: any) { }
+    constructor(
+        private router: Router,
+        private _deviceDetectionService: DeviceDetectionService,
+        private ssoService: SsoService,
+        @Inject(DOCUMENT) private document: any) {}
 
-  ngOnInit() {
-    let token = this.ssoService.getToken();
-    this.decodedToken = this.getDecodedAccessToken(token);
-  }
-
-  getDecodedAccessToken(token: string): any {
-    try{
-        return jwt_decode(token);
+    ngOnInit() {
+        this._initResponsive();
+        let token = this.ssoService.getToken();
+        this.decodedToken = this.getDecodedAccessToken(token);
     }
-    catch(Error){
-        return null;
+
+    private _initResponsive() {
+
+        // @responsive: sets isMobile member value
+        this._deviceDetectionService.detectDevice().subscribe(result => {
+            this.isMobile = result.matches;
+        });
     }
-  }
 
-  navigateToHelp() {
-    this.document.location.href ='https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php';
-  }
-
-  getUsername() {
-    let pseudoUsed = this.decodedToken.pseudoUtilise;
-    if ( pseudoUsed ) {
-      return this.decodedToken.pseudo;
+    getDecodedAccessToken(token: string): any {
+        try {
+            return jwt_decode(token);
+        } catch (Error) {
+            return null;
+        }
     }
-    return this.decodedToken.prenom + ' ' + this.decodedToken.nom;
-  }
 
-  logout() {
-    this.document.location.href = this.ssoAuthWidgetUrl + '?action=deconnexion&origine=https://beta.tela-botanica.org/cel2-dev/cel2-client/dist/cel2-client';;
-  }
+    navigateToHelp() {
+        this.document.location.href = UserProfileUiComponent._helpUrl;
+    }
 
-  navigateToWpProfileSettings() {
-    this.document.location.href = this.getProfileUrl() + '/settings/profile';
-  }
+    navigateToUserAgreement() {
+        this.router.navigateByUrl('/user-agreement');
+    }
 
-  getProfileUrl() {
-    return 'https://www.tela-botanica.org/membres/me';
-  }
+    navigateToImportTemplate() {
+        this.document.location.href = UserProfileUiComponent._importTemplateUrl;
+    }
 
-  navigateToContact() {
-    this.document.location.href = 'https://www.tela-botanica.org/widget:reseau:remarques?lang=fr&service=cel&pageSource=https%3A%2F%2Fwww.tela-botanica.org%2Fcel%2Fappli%2Fcel2.html';
-  }
+    getProfileUrl() {
+        return UserProfileUiComponent._profileUrl;
+    }
+
+    getUsername() {
+        let pseudoUsed = this.decodedToken.pseudoUtilise;
+        if (pseudoUsed) {
+            return this.decodedToken.pseudo;
+        }
+        return `${this.decodedToken.prenom} ${this.decodedToken.nom}`;
+    }
+
+    logout() {
+        this.document.location.href = `${UserProfileUiComponent._ssoAuthWidgetUrl}?action=deconnexion&origine=${UserProfileUiComponent._appAbsoluteBaseUrl}`;
+    }
+
+    navigateToWpProfileSettings() {
+        this.document.location.href = this.getProfileUrl();
+    }
+
+    navigateToContact() {
+        this.document.location.href = UserProfileUiComponent._contactUrl;
+    }
+
+    navigateToTelaHomepage() {
+        this.document.location.href = UserProfileUiComponent._homepageUrl;
+    }
+
+    navigateToMinistereMTESHomepage() {
+        this.document.location.href = UserProfileUiComponent._ministereMTESHomepageUrl;
+    }
+
+
 
 }

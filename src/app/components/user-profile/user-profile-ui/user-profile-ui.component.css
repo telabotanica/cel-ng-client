@@ -1,7 +1,15 @@
-.user-profile-form-container {
+.user-profile-form-container-mobile {
   margin-top:50px;
   overflow:auto;
   text-align: center;
+}
+
+.user-profile-form-container {
+  width:600px;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
 }
 
 .user-profile-form-section-items-container {
@@ -11,7 +19,7 @@
 .user-profile-form-section-item-container  {
   flex-basis:0;
   flex: 1 1 0;
-}	
+}
 
 .user-profile-form-section-title-container {
   font-size: 22px;
@@ -25,4 +33,16 @@
 
 .user-profile-form-section-container {
   padding-bottom:20px;
+}
+
+
+.logo-img {
+  padding-left:10px;
+  padding-right:10px;
+  vertical-align:middle;
+}
+
+.logo-img-container {
+  text-align:center;
+  padding-top:22px;
 }
