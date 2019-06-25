@@ -20,6 +20,7 @@ import { HeaderComponent } from './components/generic/header/header.component';
 import { OccurrenceGridComponent } from './components/occurrence/occurrence-grid/occurrence-grid.component';
 import { OccurrenceFormComponent } from './components/occurrence/occurrence-form/occurrence-form.component';
 import { OccurrenceDetailComponent } from './components/occurrence/occurrence-detail/occurrence-detail.component';
+import { OccurrenceListDetailComponent } from './components/occurrence/occurrence-list-detail/occurrence-list-detail.component';
 import { PhotoGalleryComponent } from './components/photo/photo-gallery/photo-gallery.component';
 import { PhotoDetailComponent } from './components/photo/photo-detail/photo-detail.component';
 import { PhotoFiltersComponent } from './components/photo/photo-filters/photo-filters.component';
@@ -32,7 +33,9 @@ import { MapUiComponent } from './components/map/map-ui/map-ui.component';
 import { UserProfileUiComponent } from './components/user-profile/user-profile-ui/user-profile-ui.component';
 import { OccurrenceMapComponent } from './components/map/occurrence-map/occurrence-map.component';
 import { ImportDialogComponent } from './components/occurrence/import-dialog/import-dialog.component';
+import { OccurrenceDetailDialogComponent } from './components/occurrence/occurrence-detail-dialog/occurrence-detail-dialog.component';
 import { TagDialogComponent } from './components/occurrence/tag-dialog/tag-dialog.component';
+import { AddPhotoDialogComponent } from './components/photo/add-photo-dialog/add-photo-dialog.component';
 import { OccurrencesDataSource } from "./services/occurrence/occurrences.datasource";
 import { PhotoService } from "./services/photo/photo.service";
 import { TelaBotanicaProjectService } from "./services/occurrence/tela-botanica-project.service";
@@ -76,6 +79,7 @@ const appearance: MatFormFieldDefaultOptions = {
     OccurrenceGridComponent,
     OccurrenceFormComponent,
     OccurrenceDetailComponent,
+    OccurrenceListDetailComponent,
     OccurrenceFiltersComponent,
     OccurrenceUiComponent,
     PhotoGalleryComponent,
@@ -88,10 +92,12 @@ const appearance: MatFormFieldDefaultOptions = {
     UserProfileUiComponent,
     OccurrenceMapComponent,
     ImportDialogComponent,
+    OccurrenceDetailDialogComponent,
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
     TagDialogComponent,
+    AddPhotoDialogComponent,
     PlantnetResultDialogComponent,
     OccurrencePhotoGalleryComponent,
     PhotoDisplayDialogComponent,
@@ -149,9 +155,11 @@ const appearance: MatFormFieldDefaultOptions = {
   entryComponents: [
     ConfirmDialogComponent,
     ImportDialogComponent, 
+    OccurrenceDetailDialogComponent,
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
     TagDialogComponent,
+    AddPhotoDialogComponent,
     OccurrenceLinkPhotoDialogComponent,
     PlantnetResultDialogComponent,
     PhotoDisplayDialogComponent]

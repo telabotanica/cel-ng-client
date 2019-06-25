@@ -1,0 +1,28 @@
+<div id="occurrence-detail-container" class="base-text" *ngIf="occurrences!=null && occurrences!=undefined">
+
+<!--
+  <div class="close-button-container">
+    <button mat-button 
+      (click)="close()"
+      matTooltip="Fermer"
+      matTooltipPosition="above"><mat-icon svgIcon="close" ></mat-icon></button>
+  </div>
+-->
+
+    <div *ngFor="let occ of occurrences" >
+
+    <h3>{{occ.userSciName != null ? occ.userSciName : 'Non identifié'}} (id:{{occ.id}})</h3>
+    <div *ngIf="occ.dateObserved !==null">{{occ.dateObserved | date:'d L yyyy'}}</div>
+    <div *ngIf="occ.locality !==null">{{occ.locality}}</div>
+          <button mat-button 
+            class="bold-link small thirdary-button"
+            (click)="openDetail(occ.id)">Voir le détail de l'observation</button>
+
+      <mat-divider></mat-divider>
+    </div>
+
+
+
+
+
+</div>
