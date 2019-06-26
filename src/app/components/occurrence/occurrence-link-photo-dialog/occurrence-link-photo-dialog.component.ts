@@ -42,17 +42,19 @@ export class OccurrenceLinkPhotoDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<OccurrenceLinkPhotoDialogComponent>,
     private dataService: PhotoService, 
     public snackBar: MatSnackBar,
-    private router: Router) { }
+    private router: Router) {  this.loadData();}
 
   ngOnInit() {
-    this.loadData(null);
+    //this.loadData();
   }
 
-  loadData(filters) {
+  loadData() {
     this.subscription  = this.dataService.getCollection(            
         this.sortBy,
         this.sortDirection,
-        filters).subscribe( 
+        0,
+        10000,
+        null).subscribe( 
           photos => {this.resources = photos;}
         );
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit,EventEmitter } from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
 import { Inject } from '@angular/core';
 import { MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { PlantnetResponse } from "../../../model/plantnet/plantnet-response.model";
 

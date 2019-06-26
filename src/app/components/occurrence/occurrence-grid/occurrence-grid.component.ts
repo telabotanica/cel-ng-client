@@ -27,11 +27,8 @@ import {
   MatDialog } 
 from "@angular/material";
 import { 
-  debounceTime, 
-  distinctUntilChanged, 
-  startWith, 
-  tap, 
-  delay } from 'rxjs/operators';
+  tap
+} from 'rxjs/operators';
 import { merge } from "rxjs/observable/merge";
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -252,14 +249,14 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
               this.snackBar.open(
               'Les observations complètes ont été publiées avec succès.', 
               'Fermer', 
-              { duration: 1500 });
+              { duration: 2500 });
               this.refresh();
 
           },
           error => this.snackBar.open(
               'Une erreur est survenue. ' + error, 
               'Fermer', 
-              { duration: 1500 })
+              { duration: 2500 })
       )
   }
 
@@ -282,14 +279,14 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
               this.snackBar.open(
               'Les observations ont été dépubliées avec succès.', 
               'Fermer', 
-              { duration: 1500 });
+              { duration: 2500 });
               this.refresh();
 
           },
           error => this.snackBar.open(
               'Une erreur est survenue. ' + error, 
               'Fermer', 
-              { duration: 1500 })
+              { duration: 2500 })
       )
   }
 
@@ -307,7 +304,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
               this.snackBar.open(
               'Les observations ont été supprimées avec succès.', 
               'Fermer', 
-              { duration: 1500 });
+              { duration: 2500 });
               this.clearSelection();
               this.refresh();
 
@@ -315,7 +312,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
           error => this.snackBar.open(
               'Une erreur est survenue. ' + error, 
               'Fermer', 
-              { duration: 1500 })
+              { duration: 2500 })
       );
   }
 
@@ -346,7 +343,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   importSpreadsheet(file: File) {
     let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
-        duration: 1500
+        duration: 2500
     });
 
     this.dataSource.importSpreadsheet(file).subscribe(
@@ -354,14 +351,14 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
           this.snackBar.open(
           'Les observations ont été importées avec succès.', 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
           this.refresh();
 
       },
       error => this.snackBar.open(
           'Une erreur est survenue. ' + error, 
           'Fermer', 
-          { duration: 1500 })
+          { duration: 2500 })
     ); 
   }
 
@@ -373,9 +370,10 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     if ( occ != null ) {
       this.occUnderSpotlight = occ;
     }
+console.debug(event);
     // This is a dirty hack but couldn't find a solution to disable opening
     // occ detail when clicking outside of the selection check boxes
-    if (event.originalTarget.className != 'mat-row ng-star-inserted') {
+    if (event.target.className != 'mat-row ng-star-inserted') {
       if (this.detailDrawer.opened) {
         this.detailDrawer.close();
       } else {

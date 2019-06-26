@@ -1,9 +1,12 @@
-<div id="occurrence-detail-container" class="base-text" *ngIf="occurrence!=null && occurrence!=undefined">
+<!--  -->
+<div id="occurrence-detail-container" [ngStyle]="!isDisplayedInDrawer ? {height:'calc(100vh - 57px)'} : null" class="base-text" *ngIf="occurrence!=null && occurrence!=undefined">
 
   <div class="close-button-container">
     <button mat-button 
+      *ngIf="isDisplayedInDrawer"
       (click)="close()"
       matTooltip="Fermer"
+      matTooltipClass="tooltip" 
       matTooltipPosition="above"><mat-icon svgIcon="close" ></mat-icon></button>
   </div>
 
@@ -13,24 +16,19 @@
     </div>
 
     <mat-toolbar>
-
-            <button mat-button
-                *ngIf="!isMobile"
-                class="thirdary-button"
-                (click)="generatePdfEtiquette()" 
-                matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
-                matTooltipPosition="above">Générer une étiquette d'herbier</button>
                
             <button mat-button
               class="thirdary-button"
               (click)="clone()"
               matTooltip="Créer une nouvelle observation à partir de celle-ci" 
+              matTooltipClass="tooltip" 
               matTooltipPosition="above">Dupliquer</button>
 
             <button mat-button
               class="thirdary-button"
               (click)="navigateToEditOccurrenceForm(occurrence.id)" 
               matTooltip="Modifier l’observation" 
+              matTooltipClass="tooltip" 
               matTooltipPosition="above">Editer</button>
 
             <button mat-button
@@ -38,13 +36,16 @@
               *ngIf="occurrence.isPublic; else publishOccTemplate"
               (click)="unpublish()"  
               matTooltip="Rendre privée l’observation" 
+              matTooltipClass="tooltip" 
               matTooltipPosition="above">Dépublier</button>
 
           <ng-template #publishOccTemplate>
             <button mat-button  
+              [disabled]="!isPublishable()"
               class="thirdary-button"
               (click)="publish()" 
-              matTooltip="Rendre publique l’observation" 
+              [matTooltip]="getPublishButtonTooltip()" 
+              matTooltipClass="tooltip" 
               matTooltipPosition="above">Publier</button> 
           </ng-template>
 
@@ -52,8 +53,10 @@
             (click)="openConfirmDeletionDialog()" 
             class="thirdary-button"  
             matTooltip="Supprimer l'observation" 
+            matTooltipClass="tooltip" 
             matTooltipPosition="above">Supprimer</button> 
-
+  <!-- This fills the remaining space of the current row -->
+  <span class="fill-space"></span>
       </mat-toolbar>
     <div>
 
@@ -69,10 +72,14 @@
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Nom saisi</div>
-          <div> 
-            <a href="https://www.tela-botanica.org/{{occurrence.taxoRepo}}-nn-{{occurrence.userSciNameId}}" 
+          <div *ngIf="occurrence.userSciName  != null"> 
+            <a  href="https://www.tela-botanica.org/{{occurrence.taxoRepo}}-nn-{{occurrence.userSciNameId}}" 
               matTooltip="Ouvrir la fiche eFlore" 
-              matTooltipPosition="above">{{occurrence.userSciName  == null ? "-" : occurrence.userSciName}}</a>
+              matTooltipClass="tooltip" 
+              matTooltipPosition="above">{{occurrence.userSciName}}</a>
+          </div>
+          <div *ngIf="occurrence.userSciName  == null"> 
+            -
           </div>
         </div>
 
@@ -180,6 +187,29 @@
     </div>
   </div>
 
+
+  <div>
+    <button mat-button
+      class="bold-link small thirdary-button"
+      (click)="generatePdfEtiquette()" 
+      matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
+      matTooltipClass="tooltip" 
+      matTooltipPosition="above">Générer une étiquette d'herbier</button>
+
+    <button mat-button 
+      class="bold-link small thirdary-button"
+      (click)="openIdentiPlante()">Ouvrir l'observation dans identiPlante</button>
+  </div>
+
+
+  <div id="occurrence-photo-gallery-container">
+
+      <h2>Photos</h2> 
+
+    <occurrence-photo-gallery
+      [occurrenceId]="occurrence.id"></occurrence-photo-gallery>
+  </div>
+
   <div id="tag-component-container">
     <tb-tag
       [userId]=22
@@ -194,13 +224,6 @@
       tagEndpoint="/api/user_occurrence_tags"></tb-tag>
   </div>
 
-  <div id="occurrence-photo-gallery-container">
-
-      <h2>Photos</h2> 
-
-    <occurrence-photo-gallery
-      [occurrenceId]="occurrence.id"></occurrence-photo-gallery>
-  </div>
 
     <div *ngIf="efloreCard!=null &&efloreCard.scientific_name!=null ">
 
@@ -241,15 +264,4 @@
   
     </div>
 
-    <div>
-      <button mat-button
-        class="bold-link small thirdary-button"
-        (click)="generatePdfEtiquette()" 
-        matTooltip="Créer une étiquette d’herbier à partir de cette observation" 
-        matTooltipPosition="above">Générer une étiquette d'herbier</button>
-
-      <button mat-button 
-        class="bold-link small thirdary-button"
-        (click)="openIdentiPlante()">Ouvrir l'observation dans identiPlante</button>
-    </div>
 </div>

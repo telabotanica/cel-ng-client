@@ -55,7 +55,9 @@ img {
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
-
+ overflow-y:auto; 
+  width:100%;
+  height: calc(100vh - 131px); 
 }
 
 .image-grid-item {
@@ -114,6 +116,10 @@ img {
   margin-top: 10px; 
   padding: 10px;
   overflow:none;
+}
+
+.paginator-container {
+  width: 100%;
 }
 
 

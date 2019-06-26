@@ -19,6 +19,7 @@ export class OccurrenceListDetailComponent implements OnInit {
   occurrences = [];
   isMobile: boolean;
   @Output() closeEvent = new EventEmitter();
+  @Output() occurrenceDeletedEvent = new EventEmitter();
   @Input() 
   set featuresToDisplay(features) {
     this.updateFeatures(features);
@@ -62,9 +63,16 @@ console.log("----------------------------------");
       width: '700px',
       height: '900px',
       data: {occurrenceId: occId}
-    });
+    }).afterClosed()
+  .subscribe(response => {
+    this.removeOccurrenceById(response.deleted)
+    this.occurrenceDeletedEvent.emit();
+  });
   }
 
+  removeOccurrenceById(occId: number) {
+    this.occurrences = this.occurrences.filter(occ => occ.id != occId);
+  }
 
   close() {
     this.closeEvent.emit();

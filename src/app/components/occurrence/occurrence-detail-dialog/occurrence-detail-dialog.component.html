@@ -1,2 +1,2 @@
-    <occurrence-detail [occurrenceId]="occurrenceId" *ngIf="occurrenceId != null" > 
+    <occurrence-detail [occurrenceId]="occurrenceId" *ngIf="occurrenceId != null" (closeEvent)="close()" (occurrenceDeletedEvent)="onOccurrenceDeleted()"> 
     </occurrence-detail>

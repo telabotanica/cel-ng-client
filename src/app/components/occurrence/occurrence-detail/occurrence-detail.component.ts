@@ -32,11 +32,21 @@ export class OccurrenceDetailComponent implements OnInit {
   private _identiplanteBaseUrl: string = environment.identiplante.baseUrl;
   private _apiPrefix = environment.api.prefix;
   private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
+  isDisplayedInDrawer = false;
   isMobile: boolean;
   @Output() closeEvent = new EventEmitter();
+  @Output() occurrenceDeletedEvent = new EventEmitter();
   @Input() 
   set occToDisplay(occ: Occurrence) {
     this.occurrence = occ;
+    this._loadEfloreCardIfNeeded();
+    this.id = occ.id;
+  }
+
+  @Input() 
+  set occurrenceId(occId: number) {
+       this.id = occId;
+       this.initOccurrence(this.id);
   }
 
   constructor(
@@ -54,8 +64,31 @@ export class OccurrenceDetailComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  initOccurrence(occId: number) {
+           this.dataSource.get(occId).subscribe(
+              occurrence => {
+                this.occurrence = occurrence;
+                this._loadEfloreCardIfNeeded();     
+              }
+           );
+  }
 
+  ngOnInit() {
+    if ( this.occurrence == null ) {
+        this.isDisplayedInDrawer = false;
+        this.subscription = this.route.params.subscribe(params => {
+           this.id = parseInt(params['id']);
+           this.initOccurrence(this.id);
+         }
+       );
+    }
+    else {
+      this.isDisplayedInDrawer = true;
+      this._loadEfloreCardIfNeeded();
+    }
+  }
+
+  private _loadEfloreCardIfNeeded() {
       if (this.occurrence.userSciName != null && this.occurrence.taxoRepo !=null && this.occurrence.taxoRepo != 'Autre/inconnu') {
         this.efloreService.get(this.occurrence.userSciName).subscribe(result => {
               this.efloreCard = this.parser.parseEfloreCard(result, this.occurrence.taxoRepo);
@@ -64,6 +97,7 @@ export class OccurrenceDetailComponent implements OnInit {
   }
 
   navigateToEditOccurrenceForm(id: number) {
+    this.closeEvent.emit();
     this.router.navigate(['/occurrence-collection-edit-form', id]);
   }
 
@@ -78,7 +112,7 @@ export class OccurrenceDetailComponent implements OnInit {
 
   publish() {
     let id = this.occurrence.id;
-    this.dataSource.patch(id, {isPublic: false}).subscribe(
+    this.dataSource.patch(id, {isPublic: true}).subscribe(
       data => {
           this.snackBar.open(
           "L'observation a été publiée avec succès.", 
@@ -94,6 +128,13 @@ export class OccurrenceDetailComponent implements OnInit {
         }
     )
   }
+    isPublishable() {
+      return (
+          ( this.occurrence.certainty != null ) &&
+          ( this.occurrence.locality != null || this.occurrence.geometry != null ) &&
+          ( this.occurrence.dateObserved !== null) );
+    }
+
 
   unpublish() {
     let id = this.occurrence.id;
@@ -114,6 +155,7 @@ export class OccurrenceDetailComponent implements OnInit {
 
 
   clone() {
+    this.closeEvent.emit();
     let id = this.occurrence.id;
     this.dataSource.bulkCopy([id]).subscribe(
       data => {
@@ -168,7 +210,7 @@ export class OccurrenceDetailComponent implements OnInit {
         "L'observation a été supprimée avec succès.", 
         "Fermer", 
         { duration: 1500 });
-        this.close();
+        this.occurrenceDeletedEvent.emit();
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
@@ -193,7 +235,10 @@ export class OccurrenceDetailComponent implements OnInit {
     }
   }
 
+  getPublishButtonTooltip() {
+    return this.isPublishable() ? "Rendre publique l’observation" : "La publication n'est possible que pour les observations dont la localisation, la date et la certitude d'identification ont été renseignées.";
 
+  }
   close() {
     this.closeEvent.emit();
   }

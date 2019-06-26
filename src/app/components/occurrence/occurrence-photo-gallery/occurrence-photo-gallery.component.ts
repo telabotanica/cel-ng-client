@@ -48,6 +48,10 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
     }
   }
 
+    ngOnChanges(changes) {
+      this.loadData();
+    }
+
   reset() {
     this.selected = [];
     this.resources = [];

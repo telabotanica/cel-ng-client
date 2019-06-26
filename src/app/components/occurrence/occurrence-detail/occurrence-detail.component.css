@@ -7,9 +7,18 @@
 }
 
 #occurrence-detail-container {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-top: 20px;
   padding-left:30px;
+}
+
+#occurrence-detail-container-standalone {
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 20px;
+  padding-left:30px;
+  height: calc(100vh - 57px);
 }
 
 .obs-detail-content-item-holder {
@@ -69,5 +78,9 @@ img {
 .close-button-container {
   width: 100%;
   text-align: right;
+}
+
+.fill-space {
+  flex: 1 1 auto;
 }
 

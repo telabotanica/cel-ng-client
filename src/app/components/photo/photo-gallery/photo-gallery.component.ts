@@ -1,13 +1,16 @@
 import { 
   Component, 
   ElementRef, 
-  OnInit, 
+  AfterViewInit, 
   Output, 
   EventEmitter, 
   Input,
   ViewChild
 } from '@angular/core';
 import {Observable} from "rxjs/Observable";
+import { 
+  tap
+} from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../../environments/environment';
 import { 
@@ -28,6 +31,7 @@ import { Photo } from "../../../model/photo/photo.model";
 import { PhotoFilters } from "../../../model/photo/photo-filters.model";
 import { PhotoLinkOccurrenceDialogComponent } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import { AddPhotoDialogComponent } from "../../../components/photo/add-photo-dialog/add-photo-dialog.component";
 import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
 
 @Component({
@@ -35,7 +39,7 @@ import { DeviceDetectionService } from "../../../services/commons/device-detecti
   templateUrl: './photo-gallery.component.html',
   styleUrls: ['./photo-gallery.component.css']
 })
-export class PhotoGalleryComponent implements OnInit {
+export class PhotoGalleryComponent implements AfterViewInit {
 
   private subscription: Subscription;
   resources: Photo[];
@@ -44,17 +48,18 @@ export class PhotoGalleryComponent implements OnInit {
   _filters: PhotoFilters;
   private sortBy;
   private sortDirection;
+  totalNbrOfHits: number = 0;
   linkToOccDialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>;
-  baseCelApiUrl: string = environment.api.baseUrl;
-  nbrOfPhotosToBeSEnt = 0;
-  sendPhotoFlag: boolean = false;
+  addPhotoDialogRef: MatDialogRef<AddPhotoDialogComponent>;
   @Output() showFilterEvent = new EventEmitter();
   private _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
   // Mobile or desktop device?
   public isMobile: boolean = false;
-  // The photo the luser wants to see the detail of used to feed the detail
+  // The photo the luser wants to see the detail of - used to feed the detail
   // component input:
   photoUnderSpotlight: Photo;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild('drawer') detailDrawer: any;
 
   constructor(
@@ -70,14 +75,18 @@ export class PhotoGalleryComponent implements OnInit {
 
   }
 
-
-  ngOnInit() {
-    console.log("ngOnInit");
+  ngAfterViewInit() {
+    // Refresh the gallery on paginate events:
+    this.paginator.page.pipe(
+      tap(() => {
+          this.refresh();
+      })
+    ).subscribe();
   }
 
   refresh() {
     this._emptySelection();
-    this.loadData(this._filters);
+    this.loadData();
   }
 
   _emptySelection() {
@@ -91,51 +100,31 @@ export class PhotoGalleryComponent implements OnInit {
 
   @Input() set filters(photoFilters: PhotoFilters) {
     this._filters = photoFilters;
+    this.paginator.pageIndex = 0;
     if (  photoFilters !== null) {
         this._emptySelection();
-        this.loadData(photoFilters);
+        this.loadData();
     }
   }
 
-  isSendPhotoButtonDisabled(): boolean {
-    return !(this.nbrOfPhotosToBeSEnt > 0)
+
+  refreshCountWithFilters(filters: PhotoFilters) {
+    this.dataService.findCount(filters).subscribe( 
+        resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
   }
 
-  onPostPhotoError(data: any) {
-    let msg;
-
-    if ( data.error['hydra:description'].includes('is not a valid image') ) {
-      msg = "Le fichier n'est pas une image valide.";
-    }
-    else if ( data.error['hydra:description'].includes('with the same name') ) {
-      msg = "Vous avez déjà téléversé une image avec le même nom. Ce n'est pas permis dans le CEL.";
-    }
-    else {
-      msg = "Une erreur est survenue.";
-    }
-    this.snackBar.open(
-      msg, 
-      "Fermer", 
-      { duration: 2500 });
-  }
-
-  onPhotoAdded(photo: FileData) {
-    this.nbrOfPhotosToBeSEnt++;
-  }
-
-  onPhotoDeleted(photo: FileData) {
-    this.nbrOfPhotosToBeSEnt--;
-  }
-
-  loadData(filters) {
+  loadData() {
     this.subscription  = this.dataService.getCollection(            
         this.sortBy,
         this.sortDirection,
-        filters).subscribe( 
+        this.paginator.pageIndex,
+        this.paginator.pageSize,
+        this._filters).subscribe( 
           photos => {
             this.resources = photos;
           }
         );
+    this.refreshCountWithFilters(this._filters);
   }
 
   openConfirmDeletionDialog(value) {
@@ -151,6 +140,26 @@ export class PhotoGalleryComponent implements OnInit {
             this.bulkDelete();
           }
       });
+  }
+
+  openAddPhotoDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    this.addPhotoDialogRef = this.dialog.open(AddPhotoDialogComponent, dialogConfig);
+
+    const sub = this.addPhotoDialogRef.componentInstance.onPhotoUploadedEvent.subscribe(photo => { 
+      this.onPhotoUploaded(photo);
+    });
+
+
+    this.addPhotoDialogRef
+      .afterClosed()
+      .subscribe(
+        //occ => this.linkToOccurrence(occ)
+    );
+
   }
 
   buildDialogConfig() {
@@ -178,25 +187,15 @@ export class PhotoGalleryComponent implements OnInit {
   }
 
   addPhoto(photo: Photo) {
-    this.resources.push(photo);
+    this.resources.unshift(photo);
   }
 
 
   onPhotoUploaded(photo: any) {
     this.addPhoto(photo);
-    this.refresh();
-    this.snackBar.open(
-      "Photo enregistrée avec succès.", 
-      'Fermer', 
-      { duration: 1500 });
+    //this.refresh();
   }
 
-  sendPhotos() {
-    this.sendPhotoFlag = true;
-    setTimeout(() => {
-      this.sendPhotoFlag = false;
-    }, 100);
-  }
 
   private _downloadZipInBrowser(data: any) {
     var blob = new Blob([data], { type: "application/zip"});
@@ -298,3 +297,6 @@ export class PhotoGalleryComponent implements OnInit {
   }
 
 }
+
+
+

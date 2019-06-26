@@ -2,27 +2,10 @@
 
 <div>
 
-  <!--
-    <div style="display:block"> 
-      <tb-dropfile-box
-        [showTable]="false" 
-        [uploadTbPhotoFiles]="true"
-        [label]="'Cliquez pour choisir les photos ou glissez les ici'"
-        [ignoreOversizedFiles]="false"
-        [sendImages]="sendPhotoFlag"
-        [photoUploadBaseUrl]="baseCelApiUrl"   
-        [allowedFileTypes]="['jpeg', 'png']"
-        (httpError)="onPostPhotoError($event)"
-        (acceptedFiles)="onPhotoAdded($event)"
-        (uploadedFiles)="onPhotoUploaded($event)"
-      ></tb-dropfile-box>
-      <button mat-button type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
-    </div>
-  -->
     <mat-toolbar fxFlex="1 1 auto" class="photo-gallery-toolbar">
 
       <div [className]="isMobile ? 'floating-button' : ''">
-        <button mat-raised-button color="primary" >Ajouter des photos</button>
+        <button mat-raised-button color="primary" (click)="openAddPhotoDialog()">Ajouter des photos</button>
       </div>
 
       <div >
@@ -37,6 +20,7 @@
         class="thirdary-button"
         (click)="showFilters()"
         matTooltip="Filtrer les observations"
+        matTooltipClass="tooltip" 
         matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
 
         <button mat-button
@@ -44,12 +28,14 @@
           class="thirdary-button"
           (click)="bulkDownload()" 
           matTooltip="Télécharger les photos sélectionnées"
+          matTooltipClass="tooltip" 
           matTooltipPosition="above">Télécharger</button>
 
         <button mat-button
           *ngIf="getSelectedCount()>0 && !isMobile"
           class="thirdary-button"
           matTooltip="Ajouter un tag aux photos sélectionnées"
+          matTooltipClass="tooltip" 
           matTooltipPosition="above">Ajouter un tag</button>
 
         <button mat-button
@@ -57,6 +43,7 @@
           class="thirdary-button"
           (click)="openLinkOccurrenceDialog()" 
           matTooltip="Lier les photos sélectionnées à une observation existante"
+          matTooltipClass="tooltip" 
           matTooltipPosition="above">Lier à une observation</button>
 
         <button mat-button
@@ -64,6 +51,7 @@
           class="thirdary-button"
           (click)="openConfirmDeletionDialog()" 
           matTooltip="Supprimer les photos sélectionnées"
+          matTooltipClass="tooltip" 
           matTooltipPosition="above">Supprimer</button>
 
       </div>
@@ -72,7 +60,9 @@
 
   </div>
 
-  <div class="image-grid module-right-col-content">
+  <mat-divider></mat-divider>
+
+  <div class="image-grid">
 
     <div [ngClass]="isMobile ? 'image-grid-item-mobile gallery-image-container' : 'image-grid-item gallery-image-container'"  *ngFor="let photo of resources" >
 
@@ -82,11 +72,13 @@
       <img *ngIf="photo.occurrence != null" 
         [ngClass]="isMobile ? 'linked-to-occurrence-icon-mobile' : 'linked-to-occurrence-icon'"
         matTooltip="Cette photo est liée à une observation" 
+        matTooltipClass="tooltip" 
         matTooltipPosition="above" 
         src="assets/img/icons/link-icon.svg"/>
 
       <img class="gallery-image" 
         matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" 
+        matTooltipClass="tooltip" 
         matTooltipPosition="above" 
         src="{{photo.url}}" 
         (click)="toogleDetailSlideNav(photo)"/>
@@ -98,9 +90,18 @@
 
     </div>
 
+    <div class="paginator-container">
+	    <mat-paginator
+	        [length]="totalNbrOfHits" 
+	        [pageSize]="12" 
+	        [pageSizeOptions]="[12, 24, 48, 96]" ></mat-paginator>
+    </div>
+  <div style="height: 110px;" *ngIf="isMobile"></div>
   </div>
 
-  <div style="height: 120px;" *ngIf="isMobile"></div>
+
+
+
 
   <mat-drawer #drawer mode="over" position="end" 
     [ngClass]="{

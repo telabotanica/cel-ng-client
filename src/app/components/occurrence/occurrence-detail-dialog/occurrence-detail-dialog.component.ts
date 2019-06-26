@@ -42,5 +42,12 @@ export class OccurrenceDetailDialogComponent {
     this.occurrenceId = data.occurrenceId;
   }
 
+  onOccurrenceDeleted() {
+    this.dialogRef.close({ deleted: this.occurrenceId });
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
 
 }
