@@ -5,6 +5,7 @@
     <button mat-button 
       (click)="close()"
       matTooltip="Fermer"
+      matTooltipClass="tooltip" 
       matTooltipPosition="above"><mat-icon svgIcon="close" ></mat-icon></button>
   </div>
 
@@ -19,21 +20,21 @@
       class="thirdary-button"
       matTooltipPosition="above"
       matTooltip="Afficher l’url de la photo pour la partager"
-      matTooltipPosition="above">Télécharger</button>
+      matTooltipClass="tooltip" >Télécharger</button>
 
     <button mat-button
       (click)="openShareDialog()"
       class="thirdary-button" 
       matTooltipPosition="above"
       matTooltip="Afficher l’url de la photo pour la partager"
-      matTooltipPosition="above">Partager</button>
+      matTooltipClass="tooltip" >Partager</button>
 
     <button mat-button
       (click)="openConfirmDeletionDialog()" 
       class="thirdary-button"
       matTooltipPosition="above"
       matTooltip="Supprimer la photo"
-      matTooltipPosition="above">Supprimer</button>
+      matTooltipClass="tooltip" >Supprimer</button>
 
     <button mat-button
       *ngIf="photo.occurrence == null && !isMobile"
@@ -41,7 +42,7 @@
       class="thirdary-button"
       matTooltipPosition="above"
       matTooltip="Lier cette  photo à une observation existante"
-      matTooltipPosition="above">Associer à une observation</button>
+      matTooltipClass="tooltip" >Associer à une observation</button>
 
   </mat-toolbar>
 
@@ -75,7 +76,7 @@
         class="thirdary-button"
       	    matTooltipPosition="above"
             matTooltip="Supprimer le lien vers l'observation"
-            matTooltipPosition="above">Supprimer le lien</button>
+      matTooltipClass="tooltip" >Supprimer le lien</button>
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ body {
 
 a {
   color: #6c7b0f;
+  cursor: pointer;
 }
 
 .ui-component-menu-item {
@@ -27,6 +28,7 @@ a {
   line-height: 13px;
   font-weight: 50;
 }
+
 
 .mat-radio-label-content {
   padding-left: 5px !important; 
@@ -36,6 +38,11 @@ a {
 .mat-raised-button{
    color: white !important;
 }
+
+mat-input-container label {
+  color: red;
+}
+
 
 .mat-checkbox-inner-container {
   height: 12px !important;
@@ -54,7 +61,11 @@ a {
 }
 
 .mat-tooltip.tooltip {
-  font-size: 22px !important;
+  font-size: 12px;
+}
+
+.mat-radio-label {
+    font-size: 14px;
 }
 
 .floating-button {
@@ -91,9 +102,6 @@ a {
   color:#bbbbbb !important;
 }
 
-input.mat-input-element {
-  color: #484a4c;
-}
 
 .mat-form-field {
     font-size: 13px;
@@ -191,5 +199,21 @@ input.mat-input-element {
 
 .occurrence-form-label {
   @extend .mat-typography;
+}
+
+.detail-drawer {
+  width:600px;
+  height:calc(100% - 20px) !important;
+  margin-top: 10px; 
+  padding: 10px;
+  overflow:none;
+}
+
+.detail-drawer-mobile {
+  width:calc(100% - 40px);
+  height:calc(100% - 20px) !important;
+  margin-top: 10px; 
+  padding: 10px;
+  overflow:none;
 }
 
