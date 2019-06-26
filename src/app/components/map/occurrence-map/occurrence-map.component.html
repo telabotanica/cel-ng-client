@@ -1,3 +1,4 @@
+<mat-drawer-container>
 
 <div>
 
@@ -80,5 +81,19 @@
 
 </div>
 
+
+
 <div id="map" class="map module-right-col-content">
 </div>
+
+  <mat-drawer #drawer mode="over" position="end" (closedStart)="onDrawerCloseStart()" (occurrenceDeletedEvent)="redrawMap()"
+    [ngClass]="{
+      'detail-drawer-mobile': isMobile,
+      'detail-drawer': !isMobile }">
+    <occurrence-list-detail #odl  > 
+    </occurrence-list-detail>
+
+  </mat-drawer>
+<!-- [featuresToDisplay]="selected" -->
+
+</mat-drawer-container>

@@ -1,7 +1,9 @@
 import { 
   Component, 
   OnInit, 
+  AfterViewInit,  
   Output, 
+  ViewChild,
   EventEmitter, 
   Input } from '@angular/core';
 import { environment } from '../../../../environments/environment';
@@ -18,6 +20,7 @@ import { fromLonLat } from 'ol/proj';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import { GeoJSON } from 'ol/format';
 import { OSM, Vector as VectorSource } from 'ol/source'
+import {Icon, Style} from 'ol/style';
 // import Select from 'ol/interaction/Select';
 import { DragBox, Select } from 'ol/interaction';
 import { click, pointerMove, altKeyOnly,platformModifierKeyOnly} from 'ol/events/condition';
@@ -48,16 +51,20 @@ import { ConfirmDialogComponent }
 import { DeviceDetectionService } 
   from "../../../services/commons/device-detection.service";
 
+// @refactor This is the typical OL js mess. Hints too tame it a bit:
+//          1/ use the ViewChild decorator to reference the map div and use that reference all along.
+//          2/ Delegate layer generation + point styles to a helper/utils service + whatever.
 @Component({
   selector: 'app-occurrence-map',
   templateUrl: './occurrence-map.component.html',
   styleUrls: ['./occurrence-map.component.css']
 })
-export class OccurrenceMapComponent implements OnInit {
+export class OccurrenceMapComponent implements AfterViewInit {
 
   private _occFilters: OccurrenceFilters;
-  // The ids of selected occurrences:
+  // The selected features (GeoJSON encoded occurrences):
   selected: any;
+  selectedCount: number;
   private importDialogRef: MatDialogRef<ImportDialogComponent>;
   private source: OlXYZ;
   private view: OlView;
@@ -70,11 +77,15 @@ export class OccurrenceMapComponent implements OnInit {
   private mapBgTileUrl = environment.mapBgTile.url;
   private celGeoJsonServiceFilteredUrl;
   private googleHybridLayer;
+  private centerX;
+
   private token:string;
   private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
   public isMobile: boolean = false;
   @Output() showFilterEvent = new EventEmitter();
- 
+  @ViewChild('drawer') detailDrawer: any;
+  @ViewChild('odl') occurrenceDetail: any;
+    
   constructor(
     private http:HttpClient, 
     private dataSource:             OccurrencesDataSource, 
@@ -98,6 +109,16 @@ export class OccurrenceMapComponent implements OnInit {
     }
   }
 
+  setSelected(features) {
+    this.selected = features;
+    this.selectedCount = features.getLength();
+    if ( features.getArray().length>0 ) {
+      this.toggleDetailSlideNav();
+    }
+    this.occurrenceDetail.updateFeatures(this.selected);
+
+}
+
   navigateToCreateOccurrenceForm() {
       this.router.navigateByUrl('/occurrence-form');
   }
@@ -107,22 +128,32 @@ export class OccurrenceMapComponent implements OnInit {
   }
 
   getSelectedCount() {
-    if (this.selected) {
-      return this.selected.array_.length;
-    }
-    else {
-      return 0;
-    }
+    return this.selectedCount;
   }
 
-  private redrawMap() {
+  redrawMap() {
     let geoJsonUrl = this.celGeoJsonServiceBaseUrl;
     this.select.getFeatures().clear();
     if (this._occFilters != null && this._occFilters != undefined) {
       geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
+    // If we only do a setSource with the new updated source, filtered out
+    // occurrences are still selectable. 
+    // See http://taiga.tela-botanica.net/project/mathias-carnet-en-ligne/issue/417
+    // Thus we do all the source clearing + removing layer from map + 
+    // recreating layer with new filtered source + adding layer to the map:
     var vectorSource = this.createOccurrenceVectorSource(geoJsonUrl);
-    this.occLayer.setSource(vectorSource);
+    this.map.removeLayer(this.occLayer);
+    this.occLayer = null;
+    this.occVectorSource.clear();
+    this.occVectorSource = vectorSource;
+    this.occLayer = new VectorLayer({
+      source: this.occVectorSource,
+      style: this.createOccurrenceLayerStyle()
+      
+    });
+    this.map.addLayer(this.occLayer);
+
   }
 
   private createOlLayer() {
@@ -173,12 +204,38 @@ export class OccurrenceMapComponent implements OnInit {
     return vectorSource;
   }
   
+  private createOccurrenceLayerStyle() {
+    return new Style({
+        image: new Icon(({
+          anchor: [0.5, 0],
+          anchorOrigin: 'bottom-left',
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: 'assets/img/map/marker.png'
+        }))});
+
+  }
+
+  private createSelectedOccurrenceLayerStyle() {
+    return new Style({
+        image: new Icon(({
+          anchor: [0.5, 0],
+          anchorOrigin: 'bottom-left',
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'fraction',
+          src: 'assets/img/map/marker-selected.png'
+        }))});
+
+  }
+
   private createOccurrenceLayer() {
     var vectorSource = this.createOccurrenceVectorSource(this.celGeoJsonServiceBaseUrl);
     this.occVectorSource = vectorSource;
 
     return new VectorLayer({
-      source: this.occVectorSource
+      source: this.occVectorSource,
+      style: this.createOccurrenceLayerStyle()
+      
     });
   }
 
@@ -206,10 +263,9 @@ export class OccurrenceMapComponent implements OnInit {
 
   }
 
-  private createMap() {
+  private _initMap() {
     this.layer = this.createOlLayer();
     this.occLayer = this.createOccurrenceLayer();
-console.log('piopoioppipoipoipoioipoiipoippio');
     this.view = new OlView({
       center: fromLonLat([6.661594, 50.433237]),
       zoom: 3
@@ -223,11 +279,16 @@ console.log('piopoioppipoipoipoioipoiipoippio');
     });
   }
 
-  ngOnInit() {
+  
+  ngAfterViewInit() {
+  
 
-    this.map = this.createMap();
+  //ngOnInit() {
+
+    this.map = this._initMap();
     this.select = new Select({
-      hitTolerance: 10
+      hitTolerance: 10  ,
+      style: this.createSelectedOccurrenceLayerStyle()
     });
 
     var self = this;
@@ -235,11 +296,15 @@ console.log('piopoioppipoipoipoioipoiipoippio');
     if (this.select !== null) {
         this.map.addInteraction(this.select);
         this.select.on('select', function(e) {
-console.debug(e.target.getFeatures());
-            // bind local variable to OL event value
-            self.selected = e.target.getFeatures();
+    console.log("ONSELECT");
+
+            // Set local "selected" var to selected openLayers feature objects:
+            self.setSelected(e.target.getFeatures());
+    console.debug(e.target.getFeatures());
+    console.log("/ONSELECT");
         });
     }
+
 
 
       var selectedFeatures = this.select.getFeatures();
@@ -261,7 +326,8 @@ console.debug(e.target.getFeatures());
             self.selected.push(feature);
 
         });
-        self.selected = selectedFeatures;
+                    self.setSelected(selectedFeatures);
+
       });
 
       // clear selection when drawing a new box and when clicking on the map
@@ -276,11 +342,13 @@ console.debug(e.target.getFeatures());
         var names = selectedFeatures.getArray().map(function(feature) {
           return feature.get('userSciName');
         });
+/*
         if (names.length > 0) {
           console.log(names.join(', '));
         } else {
           console.log('No occ selected');
         }
+*/
       });
     //this.map.addControl(new LayerSwitcher());
 
@@ -319,13 +387,13 @@ console.debug(e.target.getFeatures());
                 this.snackBar.open(
                 'Les observations complètes ont été publiées avec succès.', 
                 'Fermer', 
-                { duration: 1500 });
+                { duration: 2500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error, 
                 'Fermer', 
-                { duration: 1500 })
+                { duration: 2500 })
         )
     }
 
@@ -336,13 +404,13 @@ console.debug(e.target.getFeatures());
                 this.snackBar.open(
                 'Les observations ont été dépubliées avec succès.', 
                 'Fermer', 
-                { duration: 1500 });
+                { duration: 2500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error, 
                 'Fermer', 
-                { duration: 1500 })
+                { duration: 2500 })
         )
     }
 
@@ -416,13 +484,13 @@ console.debug(e.target.getFeatures());
                 this.snackBar.open(
                 'Les observations ont été supprimées avec succès.', 
                 'Fermer', 
-                { duration: 1500 });
+                { duration: 2500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error, 
                 'Fermer', 
-                { duration: 1500 })
+                { duration: 2500 })
         );
     }
 
@@ -445,7 +513,7 @@ console.debug(e.target.getFeatures());
 
     importSpreadsheet(file: File) {
         let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
-            duration: 1500
+            duration: 2500
         });
 
         this.dataSource.importSpreadsheet(file).subscribe(
@@ -454,16 +522,30 @@ console.debug(e.target.getFeatures());
                 this.snackBar.open(
                 'Les observations ont été importées avec succès.', 
                 'Fermer', 
-                { duration: 1500 });
+                { duration: 2500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error, 
                 'Fermer', 
-                { duration: 1500 })
+                { duration: 2500 })
         );
         this.importDialogRef.close(); 
     }
+
+  toggleDetailSlideNav() {
+      if (this.detailDrawer.opened) {
+        this.detailDrawer.close();
+
+      } else {
+        this.detailDrawer.open()
+
+      }
+  }
+    onDrawerCloseStart() {
+
+    }
+
 
 
 }
