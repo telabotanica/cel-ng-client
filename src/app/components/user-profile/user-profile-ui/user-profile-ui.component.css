@@ -1,15 +1,24 @@
 .user-profile-form-container-mobile {
-  margin-top:50px;
+  padding-top:50px;
   overflow:auto;
   text-align: center;
+  height:calc(100vh - 57px);
 }
 
 .user-profile-form-container {
+/*
   width:600px;
    position: fixed;
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
+*/
+
+  padding-top:50px;
+  overflow:auto;
+  text-align: center;
+  height:calc(100vh - 57px);
+
 }
 
 .user-profile-form-section-items-container {
@@ -44,5 +53,13 @@
 
 .logo-img-container {
   text-align:center;
-  padding-top:22px;
+  padding-top:6px;
+  background: #F7F7F7;
+  position: fixed;
+  left: 1px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 10000;
+  display: block;
+  padding-bottom: 6px;
 }

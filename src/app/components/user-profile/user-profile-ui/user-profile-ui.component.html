@@ -57,14 +57,19 @@
   <div class="user-profile-form-section-container">
       <div class="user-profile-form-section-title-container">Options</div>
       <div class="user-profile-form-section-item-container">
-        <button mat-button
-          class="bold-link small thirdary-button" 
-          (click)="navigateToUserAgreement()"
-          matTooltip="Consulter la charte d’utilisation du Carnet en Ligne" 
-          matTooltipPosition="above">Toujours afficher les champs avancés</button>
+
+		          <span class="occurrence-form-option-label">Toujours afficher les champs avancés</span>
+		          <mat-slide-toggle 
+                [checked]="false"      
+                (toggleChange)="toggleAlwaysDisplayExtraFields($event)"  
+                matTooltip="Toujours afficher l’ensemble des champs de saisie" matTooltipClass="tooltip" matTooltipPosition="above"></mat-slide-toggle>
+
+
       </div>
   </div>
 
+<div style="height:200px">
+</div>
   <div class="logo-img-container">
     <img class="logo-img" style="width:93px;" (click)="navigateToTelaHomepage()" src="assets/img/logos/logo_tela.png" /> 
     <img class="logo-img" style="width:70px;" (click)="navigateToMinistereMTESHomepage()" src="assets/img/logos/logo_ministere_mtes.jpg" />

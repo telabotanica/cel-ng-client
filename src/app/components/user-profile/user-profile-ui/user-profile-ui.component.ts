@@ -69,6 +69,10 @@ export class UserProfileUiComponent implements OnInit {
         }
     }
 
+    toggleAlwaysDisplayExtraFields(event) {
+
+    }
+
     navigateToHelp() {
         this.document.location.href = UserProfileUiComponent._helpUrl;
     }
