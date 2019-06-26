@@ -41,6 +41,12 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
+    path: 'occurrence-detail/:id', 
+    component: OccurrenceDetailComponent, 
+
+    canActivate: [AuthGuard] 
+  },
+  { 
     path: 'user-agreement', 
     component: UserAgreementComponent, 
     canActivate: [AuthGuard] 
