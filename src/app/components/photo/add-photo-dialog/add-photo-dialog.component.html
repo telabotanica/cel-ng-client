@@ -1,0 +1,23 @@
+
+<h2 mat-dialog-title>Ajouter des photos à la galerie</h2>
+
+<mat-dialog-content>
+
+    <div style="display:block"> 
+      <tb-dropfile-box
+        [showTable]="true" 
+        [uploadTbPhotoFiles]="true"
+        [label]="'Cliquez pour choisir les photos ou glissez les ici'"
+        [ignoreOversizedFiles]="false"
+        [sendImages]="sendPhotoFlag"
+        [photoUploadBaseUrl]="baseCelApiUrl"   
+        [allowedFileTypes]="['jpeg', 'png']"
+        (httpError)="onPostPhotoError($event)"
+        (acceptedFiles)="onPhotoAdded($event)"
+        (rejectedFiles)="onPhotoRejected($event)"
+        (uploadedFiles)="onPhotoUploaded($event)"
+      ></tb-dropfile-box>
+      <button mat-button  class="thirdary-button" type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
+    </div>
+
+</mat-dialog-content>

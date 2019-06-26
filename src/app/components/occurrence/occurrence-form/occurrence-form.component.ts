@@ -50,6 +50,9 @@ import {
     Occurrence
 } from "../../../model/occurrence/occurrence.model";
 import {
+    Photo
+} from "../../../model/photo/photo.model";
+import {
     PlantnetResponse
 } from "../../../model/plantnet/plantnet-response.model";
 import {
@@ -85,6 +88,9 @@ import {
 import {
     ConfirmDialogComponent
 } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+import {
+    AddPhotoDialogComponent
+} from "../../../components/photo/add-photo-dialog/add-photo-dialog.component";
 import {
     TagDialogComponent
 } from "../../../components/occurrence/tag-dialog/tag-dialog.component";
@@ -147,7 +153,7 @@ export class OccurrenceFormComponent implements OnInit {
     // The ids of the occurrences to be edited:
     ids = [];
     // The photos which have been uploaded for the current occurrence(s):
-    private photos = [];
+    private photos = new Array<Photo>();
     // The LocationModel object as defined by th user 
     private location: LocationModel;
     // The RepositoryItemModel (taxon) object as chosen by the user:
@@ -177,7 +183,13 @@ export class OccurrenceFormComponent implements OnInit {
     // Let's default to create mode:
     mode: string = OccurrenceFormComponent.CREATE_MODE;
     // Should the form be reset?
-    resetForm: boolean;
+    resetForm: boolean = false;
+    // Should the location component be reset?
+    resetLocationComponentFlag: boolean = false;
+    // Should the upload component be reset?
+    resetPhotoUploadComponentFlag: boolean = false;
+    // Should the taxo component be reset?
+    resetTaxoComponentFlag: boolean = false;
     formEnabled: boolean = true;
     // Configuration values for Stephane's modules: 
     tagObjectId: number = null;
@@ -291,6 +303,7 @@ export class OccurrenceFormComponent implements OnInit {
     private linkPhotoToOccDialogRef: MatDialogRef < OccurrenceLinkPhotoDialogComponent > ;
     private plantnetResultDialogRef: MatDialogRef < PlantnetResultDialogComponent > ;
     private tagDialogRef: MatDialogRef < TagDialogComponent > ;
+    private addPhotoDialogRef: MatDialogRef<AddPhotoDialogComponent>;
     private subscription: Subscription;
 
     constructor(
@@ -437,6 +450,9 @@ export class OccurrenceFormComponent implements OnInit {
                 .subscribe(response => {
                     if (response == true) {
                         this.postOrPatch(value, stayOnPage);
+                    }
+                    else {
+                        this.enableForm();
                     }
                 });
         }
@@ -670,12 +686,38 @@ export class OccurrenceFormComponent implements OnInit {
         this.clearFormAfterSubmit = !this.clearFormAfterSubmit;
     }
 
+  openAddPhotoDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    this.addPhotoDialogRef = this.dialog.open(AddPhotoDialogComponent, dialogConfig);
+
+    const subUploaded = this.addPhotoDialogRef.componentInstance.onPhotoUploadedEvent.subscribe(photo => { 
+      this.onPhotoUploaded(photo);
+    });
+    const subAdd = this.addPhotoDialogRef.componentInstance.onPhotoAddedEvent.subscribe(photo => { 
+      this.onPhotoAdded(photo);
+    });
+    const subDelete = this.addPhotoDialogRef.componentInstance.onPhotoDeletedEvent.subscribe(photo => { 
+      this.onPhotoDeleted(photo);
+    });
+
+    this.addPhotoDialogRef
+      .afterClosed()
+      .subscribe(
+        //occ => this.linkToOccurrence(occ)
+    );
+
+  }
+
+
+
     onPhotoAdded(photo: FileData) {
         this.nbrOfPhotosToBeSEnt++;
     }
 
     onPhotoDeleted(photo: FileData) {
-        console.log('DELETEED');
         this.nbrOfPhotosToBeSEnt--;
     }
 
@@ -690,26 +732,37 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
 
-    private linkPhotosToOccurrence(occurrenceId) {
-        const photoIds = this.photos.map(photo => photo.id);
-        this.photoService.bulkReplace(photoIds, {
-            occurrence: {
-                id: occurrenceId
-            }
-        }).subscribe(
-            data => {
-                this.snackBar.open(
-                    "Les photos et l’observation ont été liées avec succès.",
-                    "Fermer", {
-                        duration: 2500
-                    });
-            },
-            error => this.snackBar.open(
-                'Une erreur est survenue. ' + error,
-                'Fermer', {
-                    duration: 2500
-                })
-        );
+    private linkPhotosToOccurrence(occurrenceId, stayOnPage: Boolean) {
+        
+        if (this.photos.length) {
+          const photoIds = this.photos.map(photo => photo.id);
+          this.photoService.bulkReplace(photoIds, {
+              occurrence: {
+                  id: occurrenceId
+              }
+          }).subscribe(
+              data => {
+                  this.snackBar.open(
+                      "Les photos et l’observation ont été liées avec succès.",
+                      "Fermer", {
+                          duration: 2500
+                      });
+                  if ( !stayOnPage ) {
+                    this.navigateToDetail(occurrenceId);
+                  }
+              },
+              error => this.snackBar.open(
+                  'Une erreur est survenue lors de la création du lien entre les photos et l\'obseravation. ' + error,
+                  'Fermer', {
+                      duration: 2500
+                  })
+          );
+        }
+        else {
+          if ( !stayOnPage ) {
+            this.navigateToDetail(occurrenceId);
+          }
+        }
     }
 
 
@@ -797,7 +850,8 @@ export class OccurrenceFormComponent implements OnInit {
 
     private clearRightSideForm() {
         this.taxon = null;
-        this.resetTbLibComponents();
+        this.resetTaxoComponent();
+        this.resetPhotoUploadComponent();
         this.photoGallery.reset();
         this.occurrenceForm.controls['certainty'].setValue('');
         this.occurrenceForm.controls['annotation'].setValue('');
@@ -806,7 +860,6 @@ export class OccurrenceFormComponent implements OnInit {
         this.occurrenceForm.controls['sampleHerbarium'].setValue(false);
         this.occurrenceForm.controls['phenology'].setValue('');
         this.occurrenceForm.controls['identificationAuthor'].setValue('');
-        this.occurrenceForm.controls['observer'].setValue('');
         this.occurrenceForm.controls['occurrenceType'].setValue(OccurrenceFormComponent.occurrenceTypeDefault);
         this.occurrenceForm.controls['isPublic'].setValue(false);
         this.occurrenceForm.controls['isWild'].setValue(OccurrenceFormComponent.isWildSelectedDefault);
@@ -820,6 +873,28 @@ export class OccurrenceFormComponent implements OnInit {
             this.resetForm = false;
         }, 1000);
     }
+
+    private resetLocationComponent() {
+        this.resetLocationComponentFlag = true;
+        setTimeout(() => {
+            this.resetLocationComponentFlag = false;
+        }, 1000);
+    }
+
+    private resetTaxoComponent() {
+        this.resetTaxoComponentFlag = true;
+        setTimeout(() => {
+            this.resetTaxoComponentFlag = false;
+        }, 1000);
+    }
+
+    private resetPhotoUploadComponent() {
+        this.resetPhotoUploadComponentFlag = true;
+        setTimeout(() => {
+            this.resetPhotoUploadComponentFlag = false;
+        }, 1000);
+    }
+
 
     private disableForm() {
         this.occurrenceForm.disable();
@@ -936,6 +1011,9 @@ export class OccurrenceFormComponent implements OnInit {
 
         this.dataService.post(occ).subscribe(
             result => {
+
+                this.linkPhotosToOccurrence(result.id, stayOnPage);
+
                 this.snackBar.open(
                     "L'observation vient d'être créée.",
                     'Fermer', {
@@ -967,6 +1045,7 @@ export class OccurrenceFormComponent implements OnInit {
 
         this.dataService.patch(occ.id, occ).subscribe(
             result => {
+                this.linkPhotosToOccurrence(occ.id, false);
                 this.snackBar.open(
                     "L'observation a bien été modifiée.",
                     'Fermer', {
@@ -974,7 +1053,7 @@ export class OccurrenceFormComponent implements OnInit {
                     });
                 // Useless in this case but quite logical...
                 this.enableForm();
-                this.navigateToDetail(occ.id)
+                
             },
             error => {
                 this.snackBar.open(
@@ -1104,6 +1183,13 @@ export class OccurrenceFormComponent implements OnInit {
             );
 
     }
+
+  onPhotoRejected(photo: Photo) {
+    this.snackBar.open(
+      "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL", 
+      'Fermer', 
+      { duration: 1500 });
+  }
 
     onPhotoRemoved(photo: any) {
         let index = this.photos.indexOf(photo);
