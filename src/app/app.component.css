@@ -12,11 +12,13 @@
 */
 
 ::ng-deep .mat-form-field-infix {
-    border-top: none !important;
+  border-top: none !important;
 }
 
 ::ng-deep input.mat-input-element {
-  color: grey;
-  background-color: white;
+  color: #53504B !important;
 }
 
+::ng-deep .mat-form-field-label{
+  color:#C7C7C7 !important;
+}
