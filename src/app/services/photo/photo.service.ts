@@ -24,9 +24,13 @@ export class PhotoService {
   getCollection(
     sortBy:string = "dateShot",
     sortDirection:string = "desc",
+    pageNumber = 0, 
+    pageSize = 12, 
     filters: PhotoFilters = null):  Observable<Photo[]> {
 
-    let httpParams= new HttpParams();
+    let httpParams= new HttpParams()
+            .set('page', pageNumber.toString())
+            .set('perPage', pageSize.toString());
 
     if ( sortBy !== null && sortBy !== "") {
         httpParams = httpParams.append("sortBy", sortBy);
@@ -57,6 +61,31 @@ export class PhotoService {
     });
 
   }
+
+    findCount(filters: PhotoFilters = null) {
+
+        let httpParams= new HttpParams();
+        console.debug(filters);
+        if ( filters !== null ) {
+            for (var propertyName in filters) {
+                if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
+                    if (Array.isArray(filters[propertyName])) {
+                        for (var val in filters[propertyName]) {
+                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
+                        }
+                    }
+                    else {
+                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+                    }
+                }
+            }
+        }
+
+        return this.http.get(this.resourceUrl + '.json', {
+            params: httpParams,
+            observe: 'response'
+        });
+    }
 
   get(id) : Observable<Photo>{
     return this.http.get<Photo>(this.resourceUrl + '/' + id, {
