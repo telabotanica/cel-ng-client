@@ -31,8 +31,7 @@ export const environment = {
     nameSearchBaseUrl: "https://api.tela-botanica.org/service:cel/NameSearch/"
   },
   plantnet: {
-    baseUrl: "https://my-api.plantnet.org/v1/identify/all",
-    apiKey:  "2a10O8sbWystFClXLBjAJl6x0O"
+    baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api/plantnet"
   },
   chorodep: {
     baseUrl: "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent"

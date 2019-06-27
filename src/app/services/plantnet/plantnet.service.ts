@@ -10,7 +10,7 @@ import { PlantnetResponse } from "../../model/plantnet/plantnet-response.model";
 })
 export class PlantnetService {
 
-  private plantnetApiKey         = environment.plantnet.apiKey;
+  //private plantnetApiKey         = environment.plantnet.apiKey;
   private plantnetBaseUrl        = environment.plantnet.baseUrl;
 
   get(
@@ -23,7 +23,7 @@ export class PlantnetService {
     httpParams = httpParams.append("images", this.encodeStringArray(imageUrls));
     httpParams = httpParams.append("organs", this.encodeStringArray(organs));
     httpParams = httpParams.append("lang", lang);
-    httpParams = httpParams.append("api-key", this.plantnetApiKey);
+    //    httpParams = httpParams.append("api-key", this.plantnetApiKey);
 
     return this.http.get<PlantnetResponse>(this.plantnetBaseUrl, 
       {
