@@ -1127,14 +1127,30 @@ export class OccurrenceFormComponent implements OnInit {
 
     askPlantNet() {
         const photoUrls = this.photos.map(photo => photo.url);
+        const organs = [];
+        for (let p of photoUrls) {
+            organs.push('leaf');
+        }
+        
         this.plantnetService.get(
             photoUrls,
-            ['leaf'],
+            organs,
             'fr').subscribe(
             resp => {
                 console.debug(resp);
                 this.autoSelectValueIfOnlyOneResult = true;
                 this.openPlantNetDialog(resp);
+            },
+            error => { console.debug(error); 
+                let message = "";
+                if (error.status == 404) {
+                    message = "L'espèce n'a pu être déterminée."
+                }
+                this.snackBar.open(
+                    message,
+                    'Fermer', {
+                        duration: 2500
+                    });    
             }
         );
 
