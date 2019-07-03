@@ -4,13 +4,15 @@
 <mat-dialog-content>
   
   <div *ngFor="let result of plantnetResponse.results" >
-    <span><mat-checkbox (click)="onResultSelect(result.species.scientificNameWithoutAuthor, result.species.scientificNameAuthorship)"></mat-checkbox>{{result.species.scientificNameWithoutAuthor}}  (score: {{result.score | number }}) </span>
+    <span><mat-checkbox class="plantnet-checkbox" (click)="onResultSelect(result.species.scientificNameWithoutAuthor, result.species.scientificNameAuthorship)"></mat-checkbox>{{result.species.scientificNameWithoutAuthor}}  (score: {{result.score | number }}) </span>
   </div>
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <button class="mat-raised-button"(click)="close()">Fermer</button>
+<mat-dialog-actions align="center">
+  <button type="button" mat-raised-button color="primary" (click)="close()">Fermer</button>
 </mat-dialog-actions>
+
+
 
 
