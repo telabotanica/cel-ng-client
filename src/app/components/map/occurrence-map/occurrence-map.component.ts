@@ -380,22 +380,50 @@ export class OccurrenceMapComponent implements AfterViewInit {
             });
     }
 
-    bulkPublish() {
-        let ids = this.getSelectedIds();
-        this.dataSource.bulkReplace(ids, {isPublic: true}).subscribe(
-            data => {
-                this.snackBar.open(
-                'Les observations complètes ont été publiées avec succès.', 
-                'Fermer', 
-                { duration: 2500 });
+  bulkPublish() {
+      let occz = this.getSelectedOccurrences();
+      const privateOccz = occz.filter(occ => (occ.isPublic == false) );
+      let privateOccIdz = privateOccz.map(function(occurrence) {
+        return occurrence.id;
+      });
 
-            },
-            error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
-                { duration: 2500 })
-        )
+      if ( privateOccIdz.length>0 ) {
+          this.dataSource.bulkReplace(privateOccIdz, {isPublic: true}).subscribe(
+              data => {
+                  let nbOfPublishedOccz = 0;
+                  for (let d of data)  {
+                    if ( d[Object.keys(d)[0]].message.isPublic == true ) {
+                      nbOfPublishedOccz++;
+                    }
+                  }
+                  let msg;
+                  if ( nbOfPublishedOccz>0 ) {
+                    msg = 'Les observations complètes ont été publiées avec succès';
+                  } 
+                  else {
+                    msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
+
+                  }
+                  this.snackBar.open(
+                  msg, 
+                  'Fermer', 
+                  { duration: 2500 });
+                  this.redrawMap();
+
+              },
+              error => this.snackBar.open(
+                  'Une erreur est survenue. ' + error, 
+                  'Fermer', 
+                  { duration: 2500 })
+          )
     }
+    else {
+        this.snackBar.open(
+          'Aucune observation privée. Aucune observation à publier.', 
+          'Fermer', 
+          { duration: 2500 })
+    }
+  }
 
     bulkUnpublish() {
         let ids = this.getSelectedIds();
@@ -446,6 +474,12 @@ export class OccurrenceMapComponent implements AfterViewInit {
 
     private getSelectedIds() {
       return this.selected.array_.map(function(feature) {
+        return feature.values_.id;
+      });
+    }
+
+    private getSelectedOccurrences() {
+      return this.selected.array_.values_map(function(feature) {
         return feature.values_.id;
       });
     }
