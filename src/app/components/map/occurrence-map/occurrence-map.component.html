@@ -15,7 +15,7 @@
     <button mat-button
       *ngIf="isMobile"
       (click)="showFilters()"
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltip="Filtrer les observations"
       matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
  
@@ -24,34 +24,34 @@
       *ngIf="getSelectedCount()>0 && !isMobile"
       (click)="edit()" 
       matTooltip="Modifier les observations sélectionnées" 
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Editer</button>
 
     <button mat-button
         *ngIf="!isMobile"
       (click)="openImportDialog()" 
       matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Importer</button>
 
       <button mat-button
         *ngIf="isMobile"
         (click)="openImportDialog()" 
         matTooltip="Importer un lot d’observations depuis un tableur (consulter le modèle de fichier dans les options)" 
-        class="tooltip" 
+        matTooltipClass="tooltip" 
         matTooltipPosition="above"><mat-icon svgIcon="import"></mat-icon></button>
 
     <button mat-button
       *ngIf="getSelectedCount()>0  && !isMobile; else exportAllTemplate"
       matTooltip="Exporter toutes vos observations dans un tableur"
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Exporter</button>
 
     <ng-template #exportAllTemplate>
     <button mat-button
       *ngIf="!isMobile"
       matTooltip="Exporter toutes vos observations dans un tableur"
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Exporter Tout</button>
     </ng-template>
 
@@ -65,21 +65,21 @@
       *ngIf="getSelectedCount()>0 && !isMobile"
       (click)="bulkPublish()" 
       matTooltip="Rendre publiques les observations sélectionnées"
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Publier</button>
 
     <button mat-button
       *ngIf="getSelectedCount()>0 && !isMobile"
       (click)="bulkUnpublish()" 
       matTooltip="Rendre privées les observations sélectionnées"
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Dépublier</button>
 
     <button mat-button
       *ngIf="getSelectedCount()>0 && !isMobile"
       (click)="openConfirmDeletionDialog()" 
       matTooltip="Supprimer les observations sélectionnées"
-      class="tooltip" 
+      matTooltipClass="tooltip" 
       matTooltipPosition="above">Supprimer</button>
 
 
