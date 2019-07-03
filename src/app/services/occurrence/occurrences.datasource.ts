@@ -37,23 +37,8 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
     }
 
     findCount(filters: OccurrenceFilters = null) {
-
-        let httpParams= new HttpParams();
         console.debug(filters);
-        if ( filters !== null ) {
-            for (var propertyName in filters) {
-                if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
-                    if (Array.isArray(filters[propertyName])) {
-                        for (var val in filters[propertyName]) {
-                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
-                        }
-                    }
-                    else {
-                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
-                    }
-                }
-            }
-        }
+        let httpParams = this.buildParams(filters);
 
         return this.http.get(this.resourceUrl + '.json', {
             params: httpParams,
@@ -64,26 +49,11 @@ export class OccurrencesDataSource implements DataSource<Occurrence> {
     findOccurrences(sortBy = '', sortDirection = 'asc',
         pageNumber = 0, pageSize = 10, filters: OccurrenceFilters = null):  Observable<Occurrence[]> {
 
-        let httpParams= new HttpParams()
+        let httpParams = this.buildParams(filters)
             .set('sortBy', sortBy)
             .set('sortDirection', sortDirection)
             .set('page', pageNumber.toString())
             .set('perPage', pageSize.toString());
-        if ( filters !== null ) {
-            for (var propertyName in filters) {
-                if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
-                    if (Array.isArray(filters[propertyName])) {
-                        for (var val in filters[propertyName]) {
-                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
-                        }
-                    }
-                    else {
-                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
-                    }
-                }
-            }
-        }
-
 
         return this.http.get<Occurrence[]>(this.resourceUrl + '.json', {
             params: httpParams
@@ -200,6 +170,36 @@ console.debug(params);
     disconnect(collectionViewer: CollectionViewer): void {
         this.occurrencesSubject.complete();
         this.loadingSubject.complete();
+    }
+
+    export(filters: OccurrenceFilters) {
+
+        let httpParams = this.buildParams(filters);
+
+        return this.http.post(this.resourceUrl + '/export', '', {
+            params: httpParams
+        });
+    }
+
+   private buildParams(filters: OccurrenceFilters) {
+        let httpParams= new HttpParams();
+        console.debug(filters);
+        if ( filters !== null ) {
+            for (var propertyName in filters) {
+                if (filters.hasOwnProperty(propertyName) && ! (filters[propertyName] == null)) {
+                    if (Array.isArray(filters[propertyName])) {
+                        for (var val in filters[propertyName]) {
+                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
+                        }
+                    }
+                    else {
+                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
+                    }
+                }
+            }
+        }
+        return httpParams;
+
     }
 
 }
