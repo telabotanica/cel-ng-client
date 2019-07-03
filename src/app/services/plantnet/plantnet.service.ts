@@ -20,8 +20,13 @@ export class PlantnetService {
 
     let httpParams= new HttpParams();
 
-    httpParams = httpParams.append("images", this.encodeStringArray(imageUrls));
-    httpParams = httpParams.append("organs", this.encodeStringArray(organs));
+    for (let imageUrl of imageUrls) {
+        httpParams = httpParams.append("images", imageUrl);
+    }
+    for (let organ of organs) {
+        httpParams = httpParams.append("organs", organ);
+    }
+
     httpParams = httpParams.append("lang", lang);
     //    httpParams = httpParams.append("api-key", this.plantnetApiKey);
 
