@@ -248,43 +248,34 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
       let privateOccIdz = privateOccz.map(function(occurrence) {
         return occurrence.id;
       });
+      this.dataSource.bulkReplace(privateOccIdz, {isPublic: true}).subscribe(
+          data => {
+              let nbOfPublishedOccz = 0;
+              for (let d of data)  {
+                if ( d[Object.keys(d)[0]].message.isPublic == true ) {
+                  nbOfPublishedOccz++;
+                }
+              }
+              let msg;
+              if ( nbOfPublishedOccz>0 ) {
+                 msg = 'Les observations complètes ont été publiées avec succès';
+              } 
+              else {
+                msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
 
-      if ( privateOccIdz.length>0 ) {
-          this.dataSource.bulkReplace(privateOccIdz, {isPublic: true}).subscribe(
-              data => {
-                  let nbOfPublishedOccz = 0;
-                  for (let d of data)  {
-                    if ( d[Object.keys(d)[0]].message.isPublic == true ) {
-                      nbOfPublishedOccz++;
-                    }
-                  }
-                  let msg;
-                  if ( nbOfPublishedOccz>0 ) {
-                    msg = 'Les observations complètes ont été publiées avec succès';
-                  } 
-                  else {
-                    msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
+              }
+              this.snackBar.open(
+              msg, 
+              'Fermer', 
+              { duration: 2500 });
+              this.refresh();
 
-                  }
-                  this.snackBar.open(
-                  msg, 
-                  'Fermer', 
-                  { duration: 2500 });
-                  this.refresh();
-
-              },
-              error => this.snackBar.open(
-                  'Une erreur est survenue. ' + error, 
-                  'Fermer', 
-                  { duration: 2500 })
-          )
-    }
-    else {
-        this.snackBar.open(
-          'Aucune observation privée. Aucune observation à publier.', 
-          'Fermer', 
-          { duration: 2500 })
-    }
+          },
+          error => this.snackBar.open(
+              'Une erreur est survenue. ' + error, 
+              'Fermer', 
+              { duration: 2500 })
+      )
   }
 
   bulkEdit() {
@@ -329,9 +320,23 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
   export() {
     this.dataSource.export(this._occFilters).subscribe(resp => {
-            
+            this.downloadExport(resp);
           });
   }
+
+  private downloadExport(data: any) {
+
+
+    var blob = new Blob([data], { type: "text/csv"});
+    var url = window.URL.createObjectURL(blob);
+    var pwa = window.open(url, '_blank');
+    //@todo use an angular material dialog
+    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+        alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier d\'export.');
+    }
+  }
+
+
 
   bulkDelete() {
 
@@ -354,21 +359,40 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
   }
 
   generatePdfEtiquette() {
+    let ids = this.getSelectedIds();
+    let newWindow = window.open();//OPEN WINDOW FIRST ON SUBMIT THEN POPULATE PDF
+    this.dataSource.generatePdfEtiquette(ids).subscribe(resp => {
+          
+        var blob = new Blob([resp], { type: "application/pdf"});
+        var url = window.URL.createObjectURL(blob);
+        this.router.navigate([url]);
+        newWindow.location.href = url;//POPULATING PDF
+        });
+
+/*
       let ids = this.getSelectedIds();
+      let url = this.dataSource.generatePdfEtiquetteUrl(ids);
+      this.downloadPdfEtiquette(url);
+
       this.dataSource.generatePdfEtiquette(ids).subscribe(resp => {
             this.downloadPdfEtiquette(resp);
           });
+*/
   }
 
   private downloadPdfEtiquette(data: any) {
+
     var blob = new Blob([data], { type: "application/pdf"});
     var url = window.URL.createObjectURL(blob);
     var pwa = window.open(url, '_blank');
-    //@todo use an angular material dialog
     if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
         alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
     }
+    //@todo use an angular material dialog
+
   }
+
+
 
   clearSelection() {
     this.selection.clear();
