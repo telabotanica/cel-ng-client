@@ -437,7 +437,7 @@ export class OccurrenceFormComponent implements OnInit {
         if (this.mode == OccurrenceFormComponent.CREATE_MODE) {
             this.postOrPatch(value, stayOnPage);
         }
-        // Not in create mode: ask for confirmation:
+        // In edit mode, ask for confirmation:
         else {
 
             let dialogConfig = this.buildDialogConfig();
@@ -470,7 +470,7 @@ export class OccurrenceFormComponent implements OnInit {
         } else if (this.mode == OccurrenceFormComponent.SINGLE_EDIT_MODE) {
             confirmQuestion = "Modifier l'observation ?";
         } else if (this.mode == OccurrenceFormComponent.BULK_EDIT_MODE) {
-            confirmQuestion = "Modifier les observation ?";
+            confirmQuestion = "Modifier les observations ?";
         }
 
         return confirmQuestion;
@@ -841,7 +841,9 @@ export class OccurrenceFormComponent implements OnInit {
             isWildSelected: OccurrenceFormComponent.isWildSelectedDefault,
             projectId: null
         });
-        this.photoGallery.reset();
+        if (this.photoGallery) {
+            this.photoGallery.reset();
+        }
         // Ask children components to reset themselves:
         this.resetTbLibComponents();
         this.taxon = null;
@@ -850,9 +852,13 @@ export class OccurrenceFormComponent implements OnInit {
 
     private clearRightSideForm() {
         this.taxon = null;
+        this.occurrences = [];
+        this.ids = [];
         this.resetTaxoComponent();
         this.resetPhotoUploadComponent();
-        this.photoGallery.reset();
+        if (this.photoGallery) {
+            this.photoGallery.reset();
+        }
         this.occurrenceForm.controls['certainty'].setValue('');
         this.occurrenceForm.controls['annotation'].setValue('');
         this.occurrenceForm.controls['bibliographySource'].setValue('');
@@ -899,13 +905,17 @@ export class OccurrenceFormComponent implements OnInit {
     private disableForm() {
         this.occurrenceForm.disable();
         this.formEnabled = false;
-        this.photoGallery.disable();
+        if (this.photoGallery) {
+            this.photoGallery.disable();
+        }
     }
 
     private enableForm() {
         this.occurrenceForm.enable();
         this.formEnabled = true;
-        this.photoGallery.enable();
+        if (this.photoGallery) {
+            this.photoGallery.enable();
+        }
     }
 
 
@@ -1066,7 +1076,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     private bulkReplaceOccurrences(
-        occurrencesToBePatched: Occurrence[], occ: Occurrence) {
+        occurrencesToBePatched: Occurrence[], occ: Occurrence, stayOnPage: Boolean) {
 
         let ids = occurrencesToBePatched.map(function(occurrence) {
             return occurrence.id;
@@ -1079,7 +1089,9 @@ export class OccurrenceFormComponent implements OnInit {
                     'Fermer', {
                         duration: 2500
                     });
-                this.navigateToOccurrenceUi();
+                if ( !stayOnPage ) {                 
+                   this.navigateToOccurrenceUi();
+                }
             },
             error => {
                 this.snackBar.open(
@@ -1105,7 +1117,7 @@ export class OccurrenceFormComponent implements OnInit {
         if (this.occurrences.length > 0) {
             // multiple occurrences, let's json-patch replace!
             if (this.occurrences.length > 1) {
-                this.bulkReplaceOccurrences(this.occurrences, occ);
+                this.bulkReplaceOccurrences(this.occurrences, occ, stayOnPage);
             }
             // single occurrence, let's patch!
             else {
