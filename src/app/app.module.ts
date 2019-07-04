@@ -63,6 +63,7 @@ import { SsoService } from "./services/commons/sso.service";
 import { DeviceDetectionService } from "./services/commons/device-detection.service";
 import { MatPaginatorI18nService } from "./services/commons/mat-paginator-i18n.service";
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
+import { RepoNameTranslatorPipe } from "./pipes/repo-name-translator.pipe";
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -104,6 +105,7 @@ const appearance: MatFormFieldDefaultOptions = {
     UserAgreementComponent,
     HelpComponent,
     ConfirmDialogComponent,
+    RepoNameTranslatorPipe,
   ],
   imports: [
     BrowserModule,
