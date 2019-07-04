@@ -1,14 +1,14 @@
 <div id="outer-container">
 <div id="occurrence-form-container">
 
-	<form
-		[formGroup]="occurrenceForm" >
+	<form	[formGroup]="occurrenceForm" 
+    (submit)="openConfirmActionDialog(occurrenceForm.value, true)">
 
 		<div id='occurrence-form-container' >
 		    
 		    <div class="occurrence-form-column">
 
-		        <div class="occurrence-form-label-container-without-bottom-margin ">
+		        <div class="occurrence-form-label-container">
 		          <label class="occurrence-form-label">Date de l'observation :</label>
 		        </div>
 		        <section class="observed-date-form-field-container">
@@ -325,6 +325,7 @@
                     <button mat-button
                       matTooltip="Téléverser des photos à partir de votre ordinateur" 
                       matTooltipClass="tooltip"
+                      type="button" 
                       matTooltipPosition="above"
                       class="thirdary-button" 
                       (click)="openAddPhotoDialog()">Ajouter des photos</button>
@@ -492,9 +493,28 @@
 
 		<div class="occurrence-form-submit-button-container">
 		  <mat-card-actions align="center" class="occurrence-form-submit-button-card-container">
-		    <button type="button" mat-raised-button color="accent" (click)="onCancel()" matTooltip="Retourner à la page Observations sans enregistrer" matTooltipPosition="above" matTooltipClass="tooltip">Annuler</button>
-		    <button type="submit" mat-raised-button color="primary" (click)="openConfirmActionDialog(occurrenceForm.value, false)" matTooltip="Enregistrer l’observation et retourner à la page Observations" matTooltipClass="tooltip"matTooltipPosition="above">Enregistrer</button>
-		    <button type="button" *ngIf="isInCreateMode()" mat-raised-button color="primary" (click)="openConfirmActionDialog(occurrenceForm.value, true)" matTooltip="Enregistrer l’observation et rester sur le formulaire pour en saisir une autre" matTooltipClass="tooltip" matTooltipPosition="above">Observation suivante</button>
+
+		    <button type="button" 
+            mat-raised-button 
+            color="accent" 
+            (click)="onCancel()" 
+            matTooltip="Retourner à la page Observations sans enregistrer" 
+            matTooltipPosition="above" 
+            matTooltipClass="tooltip">Annuler</button>
+
+		    <button type="button" 
+            mat-raised-button color="primary" 
+            (click)="openConfirmActionDialog(occurrenceForm.value, false)" 
+            matTooltip="{{ isInCreateMode() ? 'Enregistrer' : 'Modifier'}} l’observation et retourner à la page Observations"             
+            matTooltipClass="tooltip"
+            matTooltipPosition="above">{{ isInCreateMode() ? 'Enregistrer' : 'Modifier'}}</button>
+
+		    <button type="submit" 
+            mat-raised-button 
+            color="primary"  
+            matTooltip="{{ isInCreateMode() ? 'Enregistrer' : 'Modifier'}} l’observation et rester sur le formulaire pour en saisir une autre" 
+            matTooltipClass="tooltip" 
+            matTooltipPosition="above">Observation suivante</button>
 
 		  </mat-card-actions>
 		</div>
