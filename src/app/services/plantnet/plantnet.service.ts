@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { Observable } from "rxjs/Observable";
 import { HttpClient, HttpParams } from "@angular/common/http";
 
+import { environment } from '../../../environments/environment';
 import { PlantnetResponse } from "../../model/plantnet/plantnet-response.model";
 
 @Injectable({
@@ -10,8 +10,7 @@ import { PlantnetResponse } from "../../model/plantnet/plantnet-response.model";
 })
 export class PlantnetService {
 
-  //private plantnetApiKey         = environment.plantnet.apiKey;
-  private plantnetBaseUrl        = environment.plantnet.baseUrl;
+  private plantnetBaseUrl = environment.plantnet.baseUrl;
 
   get(
     imageUrls: string[], 
@@ -41,14 +40,11 @@ export class PlantnetService {
   private encodeStringArray(strArr) {
     let encodedArray = '';
     for(let item of strArr) {
-      //encodedArray += '"';
       encodedArray += encodeURI(item);
-      //encodedArray += "',';
       encodedArray += ',';
     }
     // Remove the last comma:
     encodedArray = encodedArray.substring(0, encodedArray.length-1);
-//    encodedArray += ']';
     console.log(encodedArray);
     return encodedArray;
   }
