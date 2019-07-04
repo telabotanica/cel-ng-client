@@ -232,71 +232,7 @@ export class OccurrenceFormComponent implements OnInit {
     projectIdSelected: number;
 
     // List of repositories for the taxon selection module:
-    tbRepositoriesConfig = [{
-        id: 'bdtfx',
-        label: 'Métropole',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtfx/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/bdtfx/noms/',
-        description_fr: ''
-    }, {
-        id: 'bdtfxr',
-        label: 'Métropole (index réduit)',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtfxr/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/bdtfxr/noms/',
-        description_fr: ''
-    }, {
-        id: 'bdtxa',
-        label: 'Antilles françaises',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtxa/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/nva/noms/',
-        description_fr: ''
-    }, {
-        id: 'bdtre',
-        label: 'Réunion',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/bdtre/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/bdtre/noms/',
-        description_fr: ''
-    }, {
-        id: 'florical',
-        label: 'Nouvelle-Calédonie',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/florical/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/florical/noms/',
-        description_fr: ''
-    }, {
-        id: 'aublet',
-        label: 'Guyane',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/aublet/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/aublet/noms/',
-        description_fr: ''
-    }, {
-        id: 'apd',
-        label: 'Afrique',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/apd/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/apd/noms/',
-        description_fr: ''
-    }, {
-        id: 'lbf',
-        label: 'Liban',
-        levels: ['idiotaxon'],
-        apiUrl: environment.taxoApi.nameSearchBaseUrl + '/lbf/',
-        apiUrl2: '',
-        apiUrlValidOccurence: environment.taxoApi.validationBaseUrl + '/lbf/noms/',
-        description_fr: ''
-    }];
+    tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
     sendPhotoFlag: boolean = false;
     nbrOfPhotosToBeSEnt = 0;
 
@@ -748,7 +684,7 @@ export class OccurrenceFormComponent implements OnInit {
                           duration: 2500
                       });
                   if ( !stayOnPage ) {
-                    this.navigateToDetail(occurrenceId);
+                    this.navigateToOccurrenceUi();
                   }
               },
               error => this.snackBar.open(
@@ -760,7 +696,7 @@ export class OccurrenceFormComponent implements OnInit {
         }
         else {
           if ( !stayOnPage ) {
-            this.navigateToDetail(occurrenceId);
+            this.navigateToOccurrenceUi();
           }
         }
     }
@@ -768,6 +704,16 @@ export class OccurrenceFormComponent implements OnInit {
 
     onLocationChange(location: LocationModel) {
         this.location = location;
+/*
+        if ( this.location.locationAccuracy == 'Localité' && this.occurrenceForm.controls['sublocality'].value != "") {
+            this.snackBar.open(
+                "La valeur de la précision a été mise à jour.",
+                "Fermer", {
+                    duration: 2500
+                });
+            this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
+        }
+*/
         console.debug(this.location);
     }
 
