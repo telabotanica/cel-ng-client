@@ -18,7 +18,7 @@
     <mat-toolbar>
                
             <button mat-button
-              class="thirdary-button"
+              class="thirdary-button" 
               (click)="clone()"
               matTooltip="Créer une nouvelle observation à partir de celle-ci" 
               matTooltipClass="tooltip" 
@@ -29,7 +29,7 @@
               (click)="navigateToEditOccurrenceForm(occurrence.id)" 
               matTooltip="Modifier l’observation" 
               matTooltipClass="tooltip" 
-              matTooltipPosition="above">Editer</button>
+              matTooltipPosition="above">Modifier</button>
 
             <button mat-button
               class="thirdary-button"
@@ -40,7 +40,7 @@
               matTooltipPosition="above">Dépublier</button>
 
           <ng-template #publishOccTemplate>
-            <button mat-button  
+            <button mat-button
               [disabled]="!isPublishable()"
               class="thirdary-button"
               (click)="publish()" 
