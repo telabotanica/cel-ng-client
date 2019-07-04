@@ -127,6 +127,24 @@ export class OccurrenceMapComponent implements AfterViewInit {
      this.showFilterEvent.emit();
   }
 
+
+  export() {
+    this.dataSource.export(this._occFilters).subscribe(resp => {
+            this.downloadExport(resp);
+          });
+  }
+
+  private downloadExport(data: any) {
+    var blob = new Blob([data], { type: "text/csv"});
+    var url = window.URL.createObjectURL(blob);
+    var pwa = window.open(url, '_blank');
+    //@todo use an angular material dialog
+    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+        alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier d\'export.');
+    }
+  }
+
+
   getSelectedCount() {
     return this.selectedCount;
   }

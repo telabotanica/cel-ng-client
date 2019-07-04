@@ -44,6 +44,7 @@
     <button mat-button
       *ngIf="getSelectedCount()>0  && !isMobile; else exportAllTemplate"
       matTooltip="Exporter toutes vos observations dans un tableur"
+      (click)="export()" 
       matTooltipClass="tooltip" 
       matTooltipPosition="above">Exporter</button>
 
@@ -51,6 +52,7 @@
     <button mat-button
       *ngIf="!isMobile"
       matTooltip="Exporter toutes vos observations dans un tableur"
+      (click)="export()" 
       matTooltipClass="tooltip" 
       matTooltipPosition="above">Exporter Tout</button>
     </ng-template>
