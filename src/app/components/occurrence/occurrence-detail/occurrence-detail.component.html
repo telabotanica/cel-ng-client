@@ -85,7 +85,7 @@
 
         <div class="obs-detail-content-item-holder">
           <div class="obs-detail-content-item-title">Référentiel</div>
-          <div>{{occurrence.taxoRepo  == null ? "-" : occurrence.taxoRepo}}</div>
+          <div>{{occurrence.taxoRepo  == null ? "-" : occurrence.taxoRepo | repoNameTranslator }}</div>
         </div>
 
         <div class="obs-detail-content-item-holder">
