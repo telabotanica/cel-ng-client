@@ -79,6 +79,7 @@
 		            <mat-form-field>
 		              <input matInput
                         formControlName="sublocality" 
+                        (change)="updateLocationAccuracy()"
                         matTooltip="Toponyme plus précis que la localité" 
                         matTooltipClass="tooltip"
                         matTooltipPosition="above">

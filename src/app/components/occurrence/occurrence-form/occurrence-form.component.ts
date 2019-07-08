@@ -704,17 +704,9 @@ export class OccurrenceFormComponent implements OnInit {
 
     onLocationChange(location: LocationModel) {
         this.location = location;
-/*
-        if ( this.location.locationAccuracy == 'Localité' && this.occurrenceForm.controls['sublocality'].value != "") {
-            this.snackBar.open(
-                "La valeur de la précision a été mise à jour.",
-                "Fermer", {
-                    duration: 2500
-                });
-            this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
-        }
-*/
-        console.debug(this.location);
+        this.updateLocationAccuracy();
+
+
     }
 
     onTaxonChange(taxon: RepositoryItemModel) {
@@ -1284,6 +1276,29 @@ export class OccurrenceFormComponent implements OnInit {
 
     }
 
+    _informUserLocationAccuracyWaAutomaticallyUpdated() {
+                this.snackBar.open(
+                    "La valeur de la précision a été mise à jour.",
+                    "Fermer", {
+                        duration: 2500
+                    });
+
+    }
+
+    updateLocationAccuracy() {
+        if ( this.location.locationAccuracy == "10 à 100 m") {
+            this.occurrenceForm.controls['locationAccuracy'].patchValue("10 à 100 m")
+            this._informUserLocationAccuracyWaAutomaticallyUpdated();
+        }
+        else if ( this.location.locationAccuracy == 'Localité' && this.occurrenceForm.controls['sublocality'].value != "") {
+            this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
+            this._informUserLocationAccuracyWaAutomaticallyUpdated();
+        }
+        else if ( this.location.locationAccuracy == 'Localité' && this.occurrenceForm.controls['sublocality'].value == "") {
+            this.occurrenceForm.controls['locationAccuracy'].patchValue('Localité')
+            this._informUserLocationAccuracyWaAutomaticallyUpdated();
+        }
+    }
 
     sendPhotos() {
         this.sendPhotoFlag = true;
