@@ -959,9 +959,9 @@ export class OccurrenceFormComponent implements OnInit {
 
         this.dataService.post(occ).subscribe(
             result => {
-
-                this.linkPhotosToOccurrence(result.id, stayOnPage);
-
+                if (this.photos.length) {
+                    this.linkPhotosToOccurrence(result.id, stayOnPage);
+                }
                 this.snackBar.open(
                     "L'observation vient d'être créée.",
                     'Fermer', {
@@ -989,11 +989,11 @@ export class OccurrenceFormComponent implements OnInit {
         );
     }
 
-    private patchOccurrence(occ: Occurrence) {
+    private patchOccurrence(occ: Occurrence, stayOnPage: boolean) {
 
         this.dataService.patch(occ.id, occ).subscribe(
             result => {
-                this.linkPhotosToOccurrence(occ.id, false);
+                this.linkPhotosToOccurrence(occ.id, stayOnPage);
                 this.snackBar.open(
                     "L'observation a bien été modifiée.",
                     'Fermer', {
@@ -1042,7 +1042,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     //@refactor: use newly introduced form 'mode' instead of counting occurrences
-    async postOrPatch(occurrenceFormValue, stayOnPage: Boolean) {
+    async postOrPatch(occurrenceFormValue, stayOnPage: boolean) {
 
         let occBuilder = new OccurrenceBuilder(
             occurrenceFormValue,
@@ -1062,7 +1062,7 @@ export class OccurrenceFormComponent implements OnInit {
                 occ.id = this.occurrences[0].id;
                 console.debug(occ);
 
-                this.patchOccurrence(occ);
+                this.patchOccurrence(occ, stayOnPage);
             }
         }
         // No occurrences loaded on init, we're in 'create' mode
