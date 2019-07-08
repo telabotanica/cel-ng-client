@@ -183,7 +183,7 @@
     [ngClass]="{
       'detail-drawer-mobile': isMobile,
       'detail-drawer': !isMobile }">
-    <occurrence-detail [occToDisplay]="occUnderSpotlight" *ngIf="occUnderSpotlight != null" (closeEvent)="onCloseFilterEvent(drawer)"> 
+    <occurrence-detail [occToDisplay]="occUnderSpotlight" *ngIf="occUnderSpotlight != null" (occurrenceDeletedEvent)="onOccurrenceDeletedEvent()" (closeEvent)="onCloseFilterEvent(drawer)"> 
     </occurrence-detail>
 
 
