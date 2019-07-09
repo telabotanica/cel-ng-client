@@ -60,7 +60,10 @@ import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/c
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { NotificationService } from "./services/commons/notification.service";
 import { SsoService } from "./services/commons/sso.service";
+import { DataUsageAgreementService } from "./services/commons/data-usage-agreement.service";
 import { DeviceDetectionService } from "./services/commons/device-detection.service";
+import { ProfileService } from "./services/profile/profile.service";
+import { TokenService } from "./services/commons/token.service";
 import { MatPaginatorI18nService } from "./services/commons/mat-paginator-i18n.service";
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
 import { RepoNameTranslatorPipe } from "./pipes/repo-name-translator.pipe";
@@ -152,6 +155,9 @@ const appearance: MatFormFieldDefaultOptions = {
     PlantnetService,
     ExistInChorodepService,
     TranslateService,
+    TokenService,
+    ProfileService,
+    DataUsageAgreementService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
