@@ -50,6 +50,10 @@ import { ConfirmDialogComponent }
   from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import { DeviceDetectionService } 
   from "../../../services/commons/device-detection.service";
+import {
+    BinaryDownloadService
+} from "../../../services/commons/binary-download.service";
+
 
 // @refactor This is the typical OL js mess. Hints too tame it a bit:
 //          1/ use the ViewChild decorator to reference the map div and use that reference all along.
@@ -94,6 +98,7 @@ export class OccurrenceMapComponent implements AfterViewInit {
     private router:                 Router,
     private confirmDialog:          MatDialog, 
     private deviceDetectionService: DeviceDetectionService,
+    private dldService:             BinaryDownloadService,
     public snackBar:                MatSnackBar ) { 
 
     this.token = this.ssoService.getToken();
@@ -129,10 +134,18 @@ export class OccurrenceMapComponent implements AfterViewInit {
 
 
   export() {
-    this.dataSource.export(this._occFilters).subscribe(resp => {
-            this.downloadExport(resp);
-          });
+        let newWindow = window.open(); 
+        if ( ! this._occFilters ) {
+            this._occFilters = new OccurrenceFilters();
+        }
+        this._occFilters.ids = this.getSelectedIds();
+        this.dataSource.export(this._occFilters).subscribe(data => {
+            this.dldService.downloadBinary(newWindow, data,  "text/csv");
+        });
   }
+
+
+
 
   private downloadExport(data: any) {
     var blob = new Blob([data], { type: "text/csv"});
@@ -548,10 +561,17 @@ export class OccurrenceMapComponent implements AfterViewInit {
 
     generatePdfEtiquette() {
         let ids = this.getSelectedIds();
-        this.dataSource.generatePdfEtiquette(ids).subscribe(resp => {
-            this.downloadPdfEtiquette(resp);
-        });
+        let newWindow = window.open();
+        this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
+
+                //             this.downloadPdfEtiquette(data)
+                    this.dldService.downloadBinary(newWindow, data,  "application/pdf");
+                  });
+
+            
+        
     }
+
   
     private downloadPdfEtiquette(data: any) {
         var blob = new Blob([data], { type: "application/pdf"});

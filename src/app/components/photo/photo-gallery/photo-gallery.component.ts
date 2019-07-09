@@ -57,6 +57,9 @@ import {
 import {
     DeviceDetectionService
 } from "../../../services/commons/device-detection.service";
+import {
+    BinaryDownloadService
+} from "../../../services/commons/binary-download.service";
 
 @Component({
     selector: 'app-photo-gallery',
@@ -92,6 +95,7 @@ export class PhotoGalleryComponent implements AfterViewInit {
         private dialog: MatDialog,
         public snackBar: MatSnackBar,
         private deviceDetectionService: DeviceDetectionService,
+        private dldService: BinaryDownloadService,
         private router: Router) {
         deviceDetectionService.detectDevice().subscribe(result => {
             this.isMobile = result.matches;
@@ -235,9 +239,11 @@ export class PhotoGalleryComponent implements AfterViewInit {
 
     bulkDownload() {
         let ids = this.selected;
+        let newWindow = window.open(); 
         this.dataService.download(ids).subscribe(
             data => {
-                this._downloadZipInBrowser(data);
+              
+                this.dldService.downloadBinary(newWindow, data,  "application/zip");
 
             },
             error => this.snackBar.open(

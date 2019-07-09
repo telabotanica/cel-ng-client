@@ -61,6 +61,11 @@ import {
 import {
     DeviceDetectionService
 } from "../../../services/commons/device-detection.service";
+import {
+    BinaryDownloadService
+} from "../../../services/commons/binary-download.service";
+
+
 
 @Component({
     selector: 'app-occurrence-grid',
@@ -112,10 +117,21 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
         private confirmBulkUnpublishDialog: MatDialog,
         public snackBar: MatSnackBar,
         private deviceDetectionService: DeviceDetectionService,
+        private dldService: BinaryDownloadService,
         private router: Router) {
 
         this.setupResponsive();
     }
+
+
+
+  downloadBinary(srcWindow, data, mimeType): void {
+        var blob = new Blob([data], { type: mimeType});
+        var url = window.URL.createObjectURL(blob);
+        //this.router.navigate([url]);
+        //Populating the file
+        srcWindow.location.href = url;
+  }
 
     private setupResponsive() {
 
@@ -348,25 +364,20 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
         return this.selection.selected;
     }
 
-    export () {
-        this.dataSource.export(this._occFilters).subscribe(resp => {
-            this.downloadExport(resp);
-        });
-    }
+    doExport() {
 
-    private downloadExport(data: any) {
-
-
-        var blob = new Blob([data], {
-            type: "text/csv"
-        });
-        var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url, '_blank');
-        //@todo use an angular material dialog
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert('Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier d\'export.');
+        let newWindow = window.open(); 
+        if ( ! this._occFilters ) {
+            this._occFilters = new OccurrenceFilters();
         }
+        this._occFilters.ids = this.getSelectedIds();
+        this.dataSource.export(this._occFilters).subscribe(data => {
+            this.dldService.downloadBinary(newWindow, data,  "text/csv");
+        });
+
+
     }
+
 
 
 
@@ -394,35 +405,25 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
     generatePdfEtiquette() {
         let ids = this.getSelectedIds();
-        let newWindow = window.open(); //OPEN WINDOW FIRST ON SUBMIT THEN POPULATE PDF
-        this.dataSource.generatePdfEtiquette(ids).subscribe(resp => {
+        let newWindow = window.open();
+        this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
 
-            var blob = new Blob([resp], {
-                type: "application/pdf"
-            });
-            var url = window.URL.createObjectURL(blob);
-            this.router.navigate([url]);
-            newWindow.location.href = url; //POPULATING PDF
-        });
 
-        /*
-              let ids = this.getSelectedIds();
-              let url = this.dataSource.generatePdfEtiquetteUrl(ids);
-              this.downloadPdfEtiquette(url);
-
-              this.dataSource.generatePdfEtiquette(ids).subscribe(resp => {
-                    this.downloadPdfEtiquette(resp);
+                    this.dldService.downloadBinary(newWindow, data,  "application/pdf");
                   });
-        */
+
+            
+        
     }
 
     private downloadPdfEtiquette(data: any) {
-
+        // As no way has been found to cleanly add the nice headers like Content-Disposition
+        // 
         var blob = new Blob([data], {
             type: "application/pdf"
         });
         var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url, '_blank');
+        var pwa = window.open(url);
         if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
             alert('Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
         }

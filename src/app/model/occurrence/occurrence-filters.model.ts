@@ -6,6 +6,7 @@ export class OccurrenceFilters { //interface UrlParameterGenerator
   family:                   string;
   frenchDep:                string;
   userSciName:              string;
+  authorEmail:              string;
   locality:                 string;
   signature:                string;
   osmCountry:               string;
@@ -15,7 +16,7 @@ export class OccurrenceFilters { //interface UrlParameterGenerator
   projectId:                number;
   freeTextQuery:            string;
   tags:                     Array<string>;
-  ids:                      Array<string>;
+  ids:                      Array<number>;
 
   toUrlParameters() : string  {
     let urlParams = '';

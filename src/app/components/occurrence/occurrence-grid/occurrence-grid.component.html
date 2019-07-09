@@ -50,7 +50,7 @@
           class="thirdary-button"
           *ngIf="getSelectedCount()>0 && !isMobile; else exportAllTemplate"
           matTooltip="Exporter toutes vos observations dans un tableur"
-          (click)="export()" 
+          (click)="doExport()" 
           matTooltipClass="tooltip"
           matTooltipPosition="above">Exporter</button>
 
@@ -58,7 +58,7 @@
         <button mat-button
           *ngIf="!isMobile"
           class="thirdary-button"
-          (click)="export()" 
+          (click)="doExport()" 
           matTooltip="Exporter toutes vos observations dans un tableur"
           matTooltipClass="tooltip"
           matTooltipPosition="above">Exporter Tout</button>

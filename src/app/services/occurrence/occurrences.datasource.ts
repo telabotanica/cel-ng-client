@@ -85,6 +85,12 @@ console.debug(params);
         });
     }
 
+
+   generatePdfEtiquetteUrl(ids) {
+        let params = this.buildIdsParams(ids);
+        return this.resourceUrl + '/' + params.toString();
+    }
+
     get(id) : Observable<Occurrence>{
         return this.http.get<Occurrence>(this.resourceUrl + '/' + id, {
             headers: {'Accept':'application/json'}
@@ -177,7 +183,9 @@ console.debug(params);
         let httpParams = this.buildParams(filters);
 
         return this.http.post(this.resourceUrl + '/export', '', {
-            params: httpParams
+            params: httpParams,
+            responseType: 'arraybuffer',
+            headers: {'Accept':'text/csv'}
         });
     }
 
