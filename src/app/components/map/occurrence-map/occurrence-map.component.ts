@@ -7,7 +7,6 @@ import {
   EventEmitter, 
   Input } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient, HttpParams } from "@angular/common/http";
 import { 
   Router, ActivatedRoute } from "@angular/router";
 import OlMap from 'ol/Map';
@@ -53,7 +52,13 @@ import { DeviceDetectionService }
 import {
     BinaryDownloadService
 } from "../../../services/commons/binary-download.service";
-
+import { ProfileService } from "../../../services/profile/profile.service";
+import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
+import { TokenService } from "../../../services/commons/token.service";
+import {
+    NavigationService
+} from "../../../services/commons/navigation.service";
+import { BaseComponent } from '../../generic/base-component/base.component';
 
 // @refactor This is the typical OL js mess. Hints too tame it a bit:
 //          1/ use the ViewChild decorator to reference the map div and use that reference all along.
@@ -63,7 +68,7 @@ import {
   templateUrl: './occurrence-map.component.html',
   styleUrls: ['./occurrence-map.component.css']
 })
-export class OccurrenceMapComponent implements AfterViewInit {
+export class OccurrenceMapComponent extends BaseComponent implements AfterViewInit {
 
   private _occFilters: OccurrenceFilters;
   // The selected features (GeoJSON encoded occurrences):
@@ -91,7 +96,6 @@ export class OccurrenceMapComponent implements AfterViewInit {
   @ViewChild('odl') occurrenceDetail: any;
     
   constructor(
-    private http:HttpClient, 
     private dataSource:             OccurrencesDataSource, 
     private dialog:                 MatDialog, 
     private ssoService:             SsoService,
@@ -99,12 +103,26 @@ export class OccurrenceMapComponent implements AfterViewInit {
     private confirmDialog:          MatDialog, 
     private deviceDetectionService: DeviceDetectionService,
     private dldService:             BinaryDownloadService,
+        protected _navigationService: NavigationService,
+    protected _tokenService: TokenService,
+    protected _profileService: ProfileService,
+    protected _dataUsageAgreementService: DataUsageAgreementService,
+
     public snackBar:                MatSnackBar ) { 
 
+      super(
+        _tokenService,
+        _navigationService,
+        _profileService,
+        _dataUsageAgreementService,
+        deviceDetectionService,
+        router);
+
     this.token = this.ssoService.getToken();
-    deviceDetectionService.detectDevice().subscribe(result => {
-      this.isMobile = result.matches;
-    });
+
+
+
+
   }
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
@@ -124,9 +142,6 @@ export class OccurrenceMapComponent implements AfterViewInit {
 
 }
 
-  navigateToCreateOccurrenceForm() {
-      this.router.navigateByUrl('/occurrence-form');
-  }
 
   showFilters() {
      this.showFilterEvent.emit();
@@ -487,9 +502,7 @@ export class OccurrenceMapComponent implements AfterViewInit {
     } 
   }
 
-  navigateToEditOccurrenceForm(occId) {
-    this.router.navigate(['/occurrence-collection-edit-form', occId]);
-  }
+
 
   bulkEdit() {
       let ids = this.getSelectedIds();

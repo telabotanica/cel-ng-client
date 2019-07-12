@@ -1286,17 +1286,28 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     updateLocationAccuracy() {
+console.log('updateLocationAccuracy');
         if ( this.location.locationAccuracy == "10 à 100 m") {
-            this.occurrenceForm.controls['locationAccuracy'].patchValue("10 à 100 m")
-            this._informUserLocationAccuracyWaAutomaticallyUpdated();
+            if (this.occurrenceForm.controls['locationAccuracy'].value != "10 à 100 m") {
+                this.occurrenceForm.controls['locationAccuracy'].patchValue("10 à 100 m")
+                this._informUserLocationAccuracyWaAutomaticallyUpdated();
+            }
         }
-        else if ( this.location.locationAccuracy == 'Localité' && this.occurrenceForm.controls['sublocality'].value != "") {
-            this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
-            this._informUserLocationAccuracyWaAutomaticallyUpdated();
+        else if (
+             this.location.locationAccuracy == 'Localité' && 
+             (this.occurrenceForm.controls['sublocality'].value != "" && this.occurrenceForm.controls['sublocality'].value != null)) {
+
+            if (this.occurrenceForm.controls['locationAccuracy'].value != "Lieu-dit") {
+                this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
+                this._informUserLocationAccuracyWaAutomaticallyUpdated();
+            }
         }
-        else if ( this.location.locationAccuracy == 'Localité' && this.occurrenceForm.controls['sublocality'].value == "") {
-            this.occurrenceForm.controls['locationAccuracy'].patchValue('Localité')
-            this._informUserLocationAccuracyWaAutomaticallyUpdated();
+        else if ( this.location.locationAccuracy == 'Localité' && ( this.occurrenceForm.controls['sublocality'].value == "" || this.occurrenceForm.controls['sublocality'].value == null) ) {
+            if (this.occurrenceForm.controls['locationAccuracy'].value != "Localité") {
+
+                this.occurrenceForm.controls['locationAccuracy'].patchValue('Localité')
+                this._informUserLocationAccuracyWaAutomaticallyUpdated();
+            }
         }
     }
 

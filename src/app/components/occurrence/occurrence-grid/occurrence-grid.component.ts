@@ -64,15 +64,20 @@ import {
 import {
     BinaryDownloadService
 } from "../../../services/commons/binary-download.service";
-
-
+import { ProfileService } from "../../../services/profile/profile.service";
+import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
+import { TokenService } from "../../../services/commons/token.service";
+import { BaseComponent } from '../../generic/base-component/base.component';
+import {
+    NavigationService
+} from "../../../services/commons/navigation.service";
 
 @Component({
     selector: 'app-occurrence-grid',
     templateUrl: './occurrence-grid.component.html',
     styleUrls: ['./occurrence-grid.component.css']
 })
-export class OccurrenceGridComponent implements AfterViewInit, OnInit {
+export class OccurrenceGridComponent extends BaseComponent implements AfterViewInit {
 
     // Ids of the columns to be displayed:
     displayedColumns = [];
@@ -110,6 +115,10 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
 
     // @refactor Would using a single one to hold all three dialog be ok? 
     constructor(
+        protected _navigationService: NavigationService,
+    protected _tokenService: TokenService,
+    protected _profileService: ProfileService,
+    protected _dataUsageAgreementService: DataUsageAgreementService,
         public dataSource: OccurrencesDataSource,
         private importDialog: MatDialog,
         private confirmBulkDeleteDialog: MatDialog,
@@ -120,9 +129,17 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
         private dldService: BinaryDownloadService,
         private router: Router) {
 
+      super(
+        _tokenService,
+        _navigationService,
+        _profileService,
+        _dataUsageAgreementService,
+        deviceDetectionService,
+        router);
+
         this.setupResponsive();
     }
-
+/*
 
 
   downloadBinary(srcWindow, data, mimeType): void {
@@ -132,8 +149,8 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
         //Populating the file
         srcWindow.location.href = url;
   }
-
-    private setupResponsive() {
+*/
+    protected setupResponsive() {
 
         // @responsive: sets public variable + sets the array of columns 
         //              to display:
@@ -145,6 +162,7 @@ export class OccurrenceGridComponent implements AfterViewInit, OnInit {
     }
 
     ngOnInit() {
+super.ngOnInit();
         this.refreshCount();
         this.dataSource.loadOccurrences('', '', 0, 10);
     }

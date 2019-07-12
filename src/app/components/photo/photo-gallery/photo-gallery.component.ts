@@ -60,13 +60,20 @@ import {
 import {
     BinaryDownloadService
 } from "../../../services/commons/binary-download.service";
+import { BaseComponent } from '../../generic/base-component/base.component';
+import { ProfileService } from "../../../services/profile/profile.service";
+import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
+import { TokenService } from "../../../services/commons/token.service";
+import {
+    NavigationService
+} from "../../../services/commons/navigation.service";
 
 @Component({
     selector: 'app-photo-gallery',
     templateUrl: './photo-gallery.component.html',
     styleUrls: ['./photo-gallery.component.css']
 })
-export class PhotoGalleryComponent implements AfterViewInit {
+export class PhotoGalleryComponent extends BaseComponent implements AfterViewInit {
 
     private subscription: Subscription;
     resources: Photo[];
@@ -95,11 +102,22 @@ export class PhotoGalleryComponent implements AfterViewInit {
         private dialog: MatDialog,
         public snackBar: MatSnackBar,
         private deviceDetectionService: DeviceDetectionService,
+        protected _navigationService: NavigationService,
+    protected _tokenService: TokenService,
+    protected _profileService: ProfileService,
+    protected _dataUsageAgreementService: DataUsageAgreementService,
+
         private dldService: BinaryDownloadService,
         private router: Router) {
-        deviceDetectionService.detectDevice().subscribe(result => {
-            this.isMobile = result.matches;
-        });
+
+
+      super(
+        _tokenService,
+        _navigationService,
+        _profileService,
+        _dataUsageAgreementService,
+        deviceDetectionService,
+        router);
 
     }
 

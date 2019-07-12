@@ -117,14 +117,14 @@ export class OccurrenceDetailComponent implements OnInit {
           this.snackBar.open(
           "L'observation a été publiée avec succès.", 
           "Fermer", 
-          { duration: 1500 });
+          { duration: 2500 });
           this.occurrence.isPublic = true;
       },
       error => {
         this.snackBar.open(
           'Une erreur est survenue. ' + error, 
           'Fermer', 
-          { duration: 1500 });
+          { duration: 2500 });
         }
     )
   }
@@ -143,13 +143,13 @@ export class OccurrenceDetailComponent implements OnInit {
         this.snackBar.open(
           "L'observation a été dépubliée avec succès.", 
           "Fermer", 
-          { duration: 1500 });
+          { duration: 2500 });
         this.occurrence.isPublic = false;
       },
     error => this.snackBar.open(
       'Une erreur est survenue. ' + error, 
       'Fermer', 
-      { duration: 1500 })
+      { duration: 2500 })
     )
   }
 
@@ -168,14 +168,14 @@ export class OccurrenceDetailComponent implements OnInit {
         this.snackBar.open(
         "L'observation a été dupliquée avec succès.", 
         "Fermer", 
-        { duration: 1500 });
+        { duration: 2500 });
 
         this.navigateToEditOccurrenceForm(duplicatedId);
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
         'Fermer', 
-        { duration: 1500 })
+        { duration: 2500 })
     )
   }
 
@@ -209,13 +209,13 @@ export class OccurrenceDetailComponent implements OnInit {
         this.snackBar.open(
         "L'observation a été supprimée avec succès.", 
         "Fermer", 
-        { duration: 1500 });
+        { duration: 2500 });
         this.occurrenceDeletedEvent.emit();
       },
       error => this.snackBar.open(
         'Une erreur est survenue. ' + error, 
         'Fermer', 
-        { duration: 1500 })
+        { duration: 2500 })
     )
   }
 

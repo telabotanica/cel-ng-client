@@ -1,28 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import {
+    Router
+} from "@angular/router";
 
 import { OccurrenceFiltersComponent } from '../occurrence-filters/occurrence-filters.component';
 import { OccurrenceDetailComponent } from '../occurrence-detail/occurrence-detail.component';
 import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
 import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
+import { ProfileService } from "../../../services/profile/profile.service";
+import { TokenService } from "../../../services/commons/token.service";
+import { BaseComponent } from '../../generic/base-component/base.component';
 
 @Component({
   selector: 'app-occurrence-ui',
   templateUrl: './occurrence-ui.component.html',
   styleUrls: ['./occurrence-ui.component.css']
 })
-export class OccurrenceUiComponent implements OnInit {
+export class OccurrenceUiComponent extends BaseComponent {
 
   occFilters: OccurrenceFilters;
   isMobile: boolean = false;
   isFilterVisible: boolean = false;
 
-  constructor(private deviceDetectionService: DeviceDetectionService) { 
-
-    deviceDetectionService.detectDevice().subscribe(result => {
-      this.isMobile = result.matches;
-    });
-
-  }
 
   onShowFilterEvent() {
      this.isFilterVisible = true;
@@ -30,10 +29,6 @@ export class OccurrenceUiComponent implements OnInit {
 
   onCloseFilterEvent() {
      this.isFilterVisible = false;
-  }
-
-  ngOnInit() {
-        
   }
 
   applyFilters(occFilters: OccurrenceFilters) { 
