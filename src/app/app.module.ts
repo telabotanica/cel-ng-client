@@ -55,7 +55,6 @@ import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
 import { TbTagLibModule } from 'tb-tag-lib';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
-import { UserAgreementFormComponent } from './components/generic/user-agreement-form/user-agreement-form.component';
 import { HelpComponent } from './components/generic/help/help.component';
 import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
@@ -108,7 +107,6 @@ const appearance: MatFormFieldDefaultOptions = {
     OccurrencePhotoGalleryComponent,
     PhotoDisplayDialogComponent,
     UserAgreementComponent,
-    UserAgreementFormComponent,
     HelpComponent,
     ConfirmDialogComponent,
     RepoNameTranslatorPipe,
