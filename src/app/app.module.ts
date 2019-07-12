@@ -55,6 +55,7 @@ import { TbDropfileLibModule } from 'tb-dropfile-lib';
 import { TbTsbLibModule } from 'tb-tsb-lib';
 import { TbTagLibModule } from 'tb-tag-lib';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
+import { UserAgreementFormComponent } from './components/generic/user-agreement-form/user-agreement-form.component';
 import { HelpComponent } from './components/generic/help/help.component';
 import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
@@ -63,6 +64,7 @@ import { SsoService } from "./services/commons/sso.service";
 import { DataUsageAgreementService } from "./services/commons/data-usage-agreement.service";
 import { DeviceDetectionService } from "./services/commons/device-detection.service";
 import { ProfileService } from "./services/profile/profile.service";
+import { NavigationService } from "./services/commons/navigation.service";
 import { TokenService } from "./services/commons/token.service";
 import { MatPaginatorI18nService } from "./services/commons/mat-paginator-i18n.service";
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
@@ -106,6 +108,7 @@ const appearance: MatFormFieldDefaultOptions = {
     OccurrencePhotoGalleryComponent,
     PhotoDisplayDialogComponent,
     UserAgreementComponent,
+    UserAgreementFormComponent,
     HelpComponent,
     ConfirmDialogComponent,
     RepoNameTranslatorPipe,
@@ -158,6 +161,7 @@ const appearance: MatFormFieldDefaultOptions = {
     TokenService,
     ProfileService,
     DataUsageAgreementService,
+    NavigationService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
