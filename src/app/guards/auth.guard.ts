@@ -5,6 +5,12 @@ import { DOCUMENT } from '@angular/common';
 import { environment } from '../../environments/environment';
 
 import { SsoService } from "../services/commons/sso.service"
+import {
+    DataUsageAgreementService
+} from "../services/commons/data-usage-agreement.service";
+import {
+    NavigationService
+} from "../services/commons/navigation.service";
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -17,6 +23,8 @@ export class AuthGuard implements CanActivate {
   constructor(
      private router: Router,
      private _ssoService: SsoService,
+    private _navigationService: NavigationService,
+        private _dataUsageAgreementService: DataUsageAgreementService,
 	 @Inject(DOCUMENT) private document: any
   ) { }
 
@@ -34,6 +42,23 @@ export class AuthGuard implements CanActivate {
         if ( response.token ) {
           console.log('SETTING TOKEN IN canActivate TO ' + response.token);
           this._ssoService.setToken(response.token);
+          console.log('SETTING TOKEN FOR DAU IN canActivate TO ' + response.token);
+            this._dataUsageAgreementService.setToken(response.token);
+
+          console.log('DONE');
+           if ( ! this._dataUsageAgreementService.checkIfDuaWasAcceptedCached() ) {
+
+          console.log('DONE');
+
+              this._dataUsageAgreementService.checkIfDuaWasAccepted().subscribe(result => {
+                    if (!result || result.length==0) {
+                        this.navigateToUserAgreementForm();
+                    }
+
+                }, error => {
+                        this.navigateToUserAgreementForm();
+                });;
+            }
           // The token expires after 15 minutes. We need to refresh it 
           // periodically to always keep it fresh
           Observable.interval(this._refreshInterval)
@@ -42,7 +67,7 @@ export class AuthGuard implements CanActivate {
             });
             return true;
          }
-         this.loadAuthWidget();        
+         //this.loadAuthWidget();        
          //return false;
       }).catch(
         error => { 
@@ -67,5 +92,9 @@ export class AuthGuard implements CanActivate {
     console.log('not logged');
     this.document.location.href = this._ssoAuthWidgetUrl + '?origine=' + this._absoluteBaseUrl;
   }
+
+    private navigateToUserAgreementForm() {
+        this._navigationService.navigateToUserAgreementForm();
+    }
 
 }

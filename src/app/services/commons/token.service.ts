@@ -19,7 +19,7 @@ export class TokenService {
   }
 
 
-    private decodeToken(token: string): any {
+    public decodeToken(token: string): any {
         try {
             return jwt_decode(token);
         } catch (Error) {
