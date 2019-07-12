@@ -53,11 +53,6 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
-    path: 'occurrence-form', 
-    component: OccurrenceFormComponent, 
-    canActivate: [AuthGuard] 
-  },
-  { 
     path: 'occurrence-collection-edit-form/:ids', 
     component: OccurrenceFormComponent, 
     canActivate: [AuthGuard] 

@@ -16,12 +16,20 @@ import * as jwt_decode from "jwt-decode";
 import {
     environment
 } from '../../../../environments/environment';
+import { Profile 
+} from "../../../model/profile/profile.model";
 import {
     SsoService
 } from "../../../services/commons/sso.service";
 import {
     DeviceDetectionService
 } from "../../../services/commons/device-detection.service";
+import {
+    NavigationService
+} from "../../../services/commons/navigation.service";
+import {
+    ProfileService
+} from "../../../services/profile/profile.service";
 
 @Component({
     selector: 'app-user-profile-ui',
@@ -40,14 +48,22 @@ export class UserProfileUiComponent implements OnInit {
     private static readonly _ministereMTESHomepageUrl: string = environment.misc.ministereMTESHomepageUrl;
     private decodedToken;
     isMobile = false;
+    profile: Profile;
 
     constructor(
-        private router: Router,
+        private _navigationService: NavigationService,
         private _deviceDetectionService: DeviceDetectionService,
+        private _profileService: ProfileService,
         private ssoService: SsoService,
         @Inject(DOCUMENT) private document: any) {}
 
     ngOnInit() {
+        this._initResponsive();
+        let token = this.ssoService.getToken();
+        this.decodedToken = this.getDecodedAccessToken(token);
+    }
+
+    loadProfile() {
         this._initResponsive();
         let token = this.ssoService.getToken();
         this.decodedToken = this.getDecodedAccessToken(token);
@@ -74,15 +90,15 @@ export class UserProfileUiComponent implements OnInit {
     }
 
     navigateToHelp() {
-        this.document.location.href = UserProfileUiComponent._helpUrl;
+        this._navigationService.navigateToHelp();
     }
 
     navigateToUserAgreement() {
-        this.router.navigateByUrl('/user-agreement');
+        this._navigationService.navigateToUserAgreement();
     }
 
     navigateToImportTemplate() {
-        this.document.location.href = UserProfileUiComponent._importTemplateUrl;
+        this._navigationService.navigateToImportTemplate();
     }
 
     getProfileUrl() {
@@ -98,24 +114,30 @@ export class UserProfileUiComponent implements OnInit {
     }
 
     logout() {
-        this.document.location.href = `${UserProfileUiComponent._ssoAuthWidgetUrl}?action=deconnexion&origine=${UserProfileUiComponent._appAbsoluteBaseUrl}`;
+                this._navigationService.logout();
     }
 
     navigateToWpProfileSettings() {
-        this.document.location.href = this.getProfileUrl();
+                this._navigationService.navigateToWpProfileSettings();
     }
 
     navigateToContact() {
-        this.document.location.href = UserProfileUiComponent._contactUrl;
+                this._navigationService.navigateToContact();
     }
 
     navigateToTelaHomepage() {
-        this.document.location.href = UserProfileUiComponent._homepageUrl;
+                this._navigationService.navigateToTelaHomepage();
     }
 
     navigateToMinistereMTESHomepage() {
+                this._navigationService.navigateToMinistereMTESHomepage();
+    }
+
+    patchProfile(profile: Profile) {
         this.document.location.href = UserProfileUiComponent._ministereMTESHomepageUrl;
     }
+
+
 
 
 
