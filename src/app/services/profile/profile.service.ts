@@ -63,10 +63,10 @@ export class ProfileService {
     }
 
 
-    patch(id, values): Observable < Profile > {
+    patch(profile: Profile): Observable < Profile > {
         return this.http.patch < Profile > (
-            this.resourceUrl + '/' + id,
-            values, {
+            this.resourceUrl + '/' + profile.id,
+            profile, {
                 headers: {
                     'Accept': 'application/json'
                 }
