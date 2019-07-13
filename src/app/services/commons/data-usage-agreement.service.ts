@@ -44,7 +44,7 @@ console.log("rememberDuaWasAccepted");
 
     public acceptDua() {
 console.log("acceptDua");
-            let userId = this.getToken();
+            let userId = this.getToken().id;
         let profile = new Profile();
         profile.userId = userId;
         this._profileService.post(profile).subscribe(
@@ -70,7 +70,7 @@ console.log('ETTING TOKEN IN DUA SRV');
 
         if ( !this.token ) {
 
-             this.token = this._tokenService.getToken();
+             this.token = this._tokenService.getDecodedToken();
         }
         return this.token;
     }
@@ -146,7 +146,7 @@ console.debug('sumthing in localstorage');
             let userId = this.getToken().id ;
 
 
-            return this._profileService.findByUserId(userId)
+            return this._profileService.findByUserId(userId);
 
 
   }

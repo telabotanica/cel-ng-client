@@ -12,6 +12,14 @@ import {
     NavigationService
 } from "../services/commons/navigation.service";
 
+/**
+ *
+ *
+ * <ul>
+ *  <li>SSO token setting/login redirection</li>
+ *  <li>data usage agreement (DUA) management</li>
+ * </ul>
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
 
@@ -40,35 +48,18 @@ export class AuthGuard implements CanActivate {
         console.debug(response);
         // A token was received so the user is logged
         if ( response.token ) {
-          console.log('SETTING TOKEN IN canActivate TO ' + response.token);
-          this._ssoService.setToken(response.token);
-          console.log('SETTING TOKEN FOR DAU IN canActivate TO ' + response.token);
+            this._ssoService.setToken(response.token);
             this._dataUsageAgreementService.setToken(response.token);
-
-          console.log('DONE');
-           if ( ! this._dataUsageAgreementService.checkIfDuaWasAcceptedCached() ) {
-
-          console.log('DONE');
-
-              this._dataUsageAgreementService.checkIfDuaWasAccepted().subscribe(result => {
-                    if (!result || result.length==0) {
-                        this.navigateToUserAgreementForm();
-                    }
-
-                }, error => {
-                        this.navigateToUserAgreementForm();
-                });;
-            }
-          // The token expires after 15 minutes. We need to refresh it 
-          // periodically to always keep it fresh
-          Observable.interval(this._refreshInterval)
-            .subscribe((resp) => { 
-                this._ssoService.refreshToken();
+            this.checkDua();
+            
+            // The token expires after 15 minutes. We need to refresh it 
+            // periodically to always keep it fresh
+            Observable.interval(this._refreshInterval)
+                .subscribe((resp) => { 
+                    this._ssoService.refreshToken();
             });
             return true;
          }
-         //this.loadAuthWidget();        
-         //return false;
       }).catch(
         error => { 
           this.loadAuthWidget(); 
@@ -79,6 +70,7 @@ export class AuthGuard implements CanActivate {
     }
     // We've got a token which should always be fresh so return true (grant access)
     else if (token) {
+      this.checkDua();
       return true;
     }
 
@@ -92,6 +84,22 @@ export class AuthGuard implements CanActivate {
     console.log('not logged');
     this.document.location.href = this._ssoAuthWidgetUrl + '?origine=' + this._absoluteBaseUrl;
   }
+  checkDua(): void {
+           if ( ! this._dataUsageAgreementService.checkIfDuaWasAcceptedCached() ) {
+
+              this._dataUsageAgreementService.checkIfDuaWasAccepted().subscribe(result => {
+                    if (!result || result.length==0) {
+                        this.navigateToUserAgreementForm();
+                    }
+
+                }, error => {
+                        this.navigateToUserAgreementForm();
+                });;
+            }
+
+    }
+
+
 
     private navigateToUserAgreementForm() {
         this._navigationService.navigateToUserAgreementForm();
