@@ -9,7 +9,6 @@ import { OccurrenceDetailComponent } from './components/occurrence/occurrence-de
 import { OccurrenceFormComponent } from './components/occurrence/occurrence-form/occurrence-form.component';
 import { PhotoDetailComponent } from './components/photo/photo-detail/photo-detail.component';
 import { UserAgreementComponent } from './components/generic/user-agreement/user-agreement.component';
-import { UserAgreementFormComponent } from './components/generic/user-agreement-form/user-agreement-form.component';
 import { HelpComponent } from './components/generic/help/help.component';
 import { AuthGuard } from './guards/auth.guard';
 
@@ -42,9 +41,13 @@ const routes: Routes = [
     canActivate: [AuthGuard] 
   },
   { 
+    path: 'occurrence-form', 
+    component: OccurrenceFormComponent, 
+    canActivate: [AuthGuard] 
+  },
+  { 
     path: 'occurrence-detail/:id', 
     component: OccurrenceDetailComponent, 
-
     canActivate: [AuthGuard] 
   },
   { 
