@@ -3,9 +3,6 @@ import {
     OnInit,
     Injectable
 } from '@angular/core';
-import {
-    Router
-} from '@angular/router';
 
 import {
     DeviceDetectionService
@@ -17,9 +14,6 @@ import {
     TokenService
 } from "../../../services/commons/token.service";
 import {
-    DataUsageAgreementService
-} from "../../../services/commons/data-usage-agreement.service";
-import {
     NavigationService
 } from "../../../services/commons/navigation.service";
 
@@ -29,7 +23,6 @@ import {
  *
  * <ul>
  *  <li>navigation (app routing)</li>
- *  <li>data usage agreement (DUA) management</li>
  *  <li>device detection</li>
  *  <li>SSO JWT token access/decoding</li>
  * </ul>
@@ -43,14 +36,12 @@ export abstract class BaseComponent implements OnInit {
         protected _tokenService: TokenService,
         protected _navigationService: NavigationService,
         protected _profileService: ProfileService,
-        protected _dataUsageAgreementService: DataUsageAgreementService,
-        protected _deviceDetectionService: DeviceDetectionService,
-        protected _router: Router) {}
+        protected _deviceDetectionService: DeviceDetectionService) {}
 
     ngOnInit() {
-       // this._dataUsageAgreementService.checkIfDuaAccepted();
         this.setupResponsive();
     }
+
 
     protected setupResponsive() {
 
@@ -62,48 +53,49 @@ export abstract class BaseComponent implements OnInit {
 
 
     public navigateToCreateOccurrenceForm() {
-        this._router.navigateByUrl('/occurrence-form');
+        this._navigationService.navigateToCreateOccurrenceForm();
     }
 
     protected navigateToMultiEditOccurrenceForm(strIds) {
-        this._router.navigate(['/occurrence-collection-edit-form', strIds]);
+        this._navigationService.navigateToMultiEditOccurrenceForm(strIds);
     }
 
 
 
   navigateToEditOccurrenceForm(occId) {
-    this._router.navigate(['/occurrence-collection-edit-form', occId]);
+    this._navigationService.navigateToEditOccurrenceForm(occId);
   }        
 
-
-
-
-    protected logout() {
+    logout() {
                 this._navigationService.logout();
     }
 
-    protected navigateToWpProfileSettings() {
+    navigateToWpProfileSettings() {
                 this._navigationService.navigateToWpProfileSettings();
     }
 
-    protected navigateToContact() {
+    navigateToContact() {
                 this._navigationService.navigateToContact();
     }
 
-    protected navigateToTelaHomepage() {
+    navigateToTelaHomepage() {
                 this._navigationService.navigateToTelaHomepage();
     }
 
-    protected navigateToMinistereMTESHomepage() {
+    navigateToMinistereMTESHomepage() {
                 this._navigationService.navigateToMinistereMTESHomepage();
     }
 
-    protected navigateToHelp() {
+    navigateToHelp() {
         this._navigationService.navigateToHelp();
     }
 
-    protected navigateToUserAgreement() {
+    navigateToUserAgreement() {
         this._navigationService.navigateToUserAgreement();
+    }
+
+    navigateToUserAgreementForm() {
+        this._navigationService.navigateToUserAgreementForm();
     }
 
     navigateToImportTemplate() {

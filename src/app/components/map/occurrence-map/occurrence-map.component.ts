@@ -7,8 +7,6 @@ import {
   EventEmitter, 
   Input } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { 
-  Router, ActivatedRoute } from "@angular/router";
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
 import OlTileLayer from 'ol/layer/Tile';
@@ -53,7 +51,6 @@ import {
     BinaryDownloadService
 } from "../../../services/commons/binary-download.service";
 import { ProfileService } from "../../../services/profile/profile.service";
-import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
 import { TokenService } from "../../../services/commons/token.service";
 import {
     NavigationService
@@ -74,7 +71,12 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
   // The selected features (GeoJSON encoded occurrences):
   selected: any;
   selectedCount: number;
+
+  private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
+  private mapBgTileUrl = environment.mapBgTile.url;
+
   private importDialogRef: MatDialogRef<ImportDialogComponent>;
+
   private source: OlXYZ;
   private view: OlView;
   private occVectorSource: VectorSource;
@@ -82,15 +84,13 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
   private layer: OlTileLayer;
   private occLayer: VectorLayer;
   private select: Select;
-  private celGeoJsonServiceBaseUrl = environment.api.baseUrl + '/occurrences.geojson';
-  private mapBgTileUrl = environment.mapBgTile.url;
+
   private celGeoJsonServiceFilteredUrl;
   private googleHybridLayer;
   private centerX;
 
   private token:string;
   private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
-  public isMobile: boolean = false;
   @Output() showFilterEvent = new EventEmitter();
   @ViewChild('drawer') detailDrawer: any;
   @ViewChild('odl') occurrenceDetail: any;
@@ -99,14 +99,12 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
     private dataSource:             OccurrencesDataSource, 
     private dialog:                 MatDialog, 
     private ssoService:             SsoService,
-    private router:                 Router,
     private confirmDialog:          MatDialog, 
-    private deviceDetectionService: DeviceDetectionService,
+    protected _deviceDetectionService: DeviceDetectionService,
     private dldService:             BinaryDownloadService,
         protected _navigationService: NavigationService,
     protected _tokenService: TokenService,
     protected _profileService: ProfileService,
-    protected _dataUsageAgreementService: DataUsageAgreementService,
 
     public snackBar:                MatSnackBar ) { 
 
@@ -114,9 +112,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
         _tokenService,
         _navigationService,
         _profileService,
-        _dataUsageAgreementService,
-        deviceDetectionService,
-        router);
+        _deviceDetectionService);
 
     this.token = this.ssoService.getToken();
 
@@ -513,7 +509,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
       }
       // Remove the trailing comma:
       strIds = strIds.substring(0, strIds.length-1);
-      this.router.navigate(['/occurrence-collection-edit-form', strIds]);
+      this.navigateToMultiEditOccurrenceForm(strIds);
   }
 
     private getSelectedIds() {

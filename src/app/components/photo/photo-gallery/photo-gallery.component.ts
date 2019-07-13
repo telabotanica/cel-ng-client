@@ -28,9 +28,6 @@ import {
     MatSnackBar,
     MatDialog
 } from "@angular/material";
-import {
-    Router
-} from "@angular/router";
 import * as Leaflet from 'leaflet';
 
 import {
@@ -62,7 +59,6 @@ import {
 } from "../../../services/commons/binary-download.service";
 import { BaseComponent } from '../../generic/base-component/base.component';
 import { ProfileService } from "../../../services/profile/profile.service";
-import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
 import { TokenService } from "../../../services/commons/token.service";
 import {
     NavigationService
@@ -101,23 +97,18 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
         private confirmDeletionDialog: MatDialog,
         private dialog: MatDialog,
         public snackBar: MatSnackBar,
-        private deviceDetectionService: DeviceDetectionService,
+        protected _deviceDetectionService: DeviceDetectionService,
         protected _navigationService: NavigationService,
     protected _tokenService: TokenService,
     protected _profileService: ProfileService,
-    protected _dataUsageAgreementService: DataUsageAgreementService,
-
-        private dldService: BinaryDownloadService,
-        private router: Router) {
+        private dldService: BinaryDownloadService) {
 
 
       super(
         _tokenService,
         _navigationService,
         _profileService,
-        _dataUsageAgreementService,
-        deviceDetectionService,
-        router);
+        _deviceDetectionService);
 
     }
 

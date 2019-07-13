@@ -12,10 +12,6 @@ import {
     CommonModule
 } from '@angular/common';
 import {
-    Router,
-    ActivatedRoute
-} from "@angular/router";
-import {
     HttpClient,
     HttpParams
 } from "@angular/common/http";
@@ -65,7 +61,6 @@ import {
     BinaryDownloadService
 } from "../../../services/commons/binary-download.service";
 import { ProfileService } from "../../../services/profile/profile.service";
-import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
 import { TokenService } from "../../../services/commons/token.service";
 import { BaseComponent } from '../../generic/base-component/base.component';
 import {
@@ -118,7 +113,6 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
         protected _navigationService: NavigationService,
     protected _tokenService: TokenService,
     protected _profileService: ProfileService,
-    protected _dataUsageAgreementService: DataUsageAgreementService,
         public dataSource: OccurrencesDataSource,
         private importDialog: MatDialog,
         private confirmBulkDeleteDialog: MatDialog,
@@ -126,16 +120,13 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
         private confirmBulkUnpublishDialog: MatDialog,
         public snackBar: MatSnackBar,
         private deviceDetectionService: DeviceDetectionService,
-        private dldService: BinaryDownloadService,
-        private router: Router) {
+        private dldService: BinaryDownloadService) {
 
       super(
         _tokenService,
         _navigationService,
         _profileService,
-        _dataUsageAgreementService,
-        deviceDetectionService,
-        router);
+        deviceDetectionService);
 
         this.setupResponsive();
     }
@@ -207,9 +198,7 @@ super.ngOnInit();
     }
 
 
-    navigateToCreateOccurrenceForm() {
-        this.router.navigateByUrl('/occurrence-form');
-    }
+
 
 
 
@@ -347,7 +336,7 @@ super.ngOnInit();
         }
         // Remove the trailing comma:
         strIds = strIds.substring(0, strIds.length - 1);
-        this.router.navigate(['/occurrence-collection-edit-form', strIds]);
+      this.navigateToMultiEditOccurrenceForm(strIds);
     }
 
     bulkUnpublish() {
