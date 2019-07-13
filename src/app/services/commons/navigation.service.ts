@@ -45,6 +45,18 @@ export class NavigationService {
         this._router.navigate(['/user-agreement', 'acceptForm'  ]);
     }
 
+    navigateToCreateOccurrenceForm() {
+        this._router.navigateByUrl('/occurrence-form');
+    }
+
+    navigateToMultiEditOccurrenceForm(strIds) {
+        this._router.navigate(['/occurrence-collection-edit-form', strIds]);
+    }
+
+
+  navigateToEditOccurrenceForm(occId) {
+    this._router.navigate(['/occurrence-collection-edit-form', occId]);
+  }      
 
     // EXTERNAL NAVIGATION
 
