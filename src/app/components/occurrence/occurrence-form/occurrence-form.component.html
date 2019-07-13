@@ -182,8 +182,9 @@
 
 		          <mat-slide-toggle 
                 [checked]="false" 
+                formControlName="displayLeftPanelAdvancedField"  
                 [disabled]="!formEnabled" 
-                (toggleChange)="toggleAdvancedFormLeft($event)"  
+                (toggleChange)="toggleAdvancedFormLeft()"  
                 matTooltip="Afficher l’ensemble des champs de saisie" 
                 matTooltipClass="tooltip"
                 matTooltipPosition="above"></mat-slide-toggle>
@@ -476,8 +477,9 @@
 		          <span class="occurrence-form-option-label">Afficher les champs complémentaires</span>
 		          <mat-slide-toggle 
                 [checked]="false"      
+                formControlName="displayRightPanelAdvancedField"  
                 [disabled]="!formEnabled" 
-                (toggleChange)="toggleAdvancedFormRight($event)"  
+                (toggleChange)="toggleAdvancedFormRight()"  
                 matTooltip="Afficher l’ensemble des champs de saisie" matTooltipClass="tooltip" matTooltipPosition="above"></mat-slide-toggle>
 		        </div>
 

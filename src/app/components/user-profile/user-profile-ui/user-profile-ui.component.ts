@@ -6,21 +6,21 @@ import {
     OnInit
 } from '@angular/core';
 import {
-    Router
-} from "@angular/router";
+    FormGroup,
+    FormControl
+} from '@angular/forms';
 import {
     DOCUMENT
 } from '@angular/common';
-import * as jwt_decode from "jwt-decode";
+import {
+    MatSnackBar,
+} from "@angular/material";
 
 import {
     environment
 } from '../../../../environments/environment';
 import { Profile 
 } from "../../../model/profile/profile.model";
-import {
-    SsoService
-} from "../../../services/commons/sso.service";
 import {
     DeviceDetectionService
 } from "../../../services/commons/device-detection.service";
@@ -30,111 +30,100 @@ import {
 import {
     ProfileService
 } from "../../../services/profile/profile.service";
+import {
+    TokenService
+} from "../../../services/commons/token.service";
+import { BaseComponent } from '../../generic/base-component/base.component';
 
 @Component({
     selector: 'app-user-profile-ui',
     templateUrl: './user-profile-ui.component.html',
     styleUrls: ['./user-profile-ui.component.css']
 })
-export class UserProfileUiComponent implements OnInit {
-
-    private static readonly _ssoAuthWidgetUrl: string = environment.sso.authWidgetUrl;
+export class UserProfileUiComponent extends BaseComponent implements OnInit {
+    
     private static readonly _profileUrl: string = environment.telaWebSite.profileUrl;
-    private static readonly _importTemplateUrl: string = environment.app.importTemplateUrl;
-    private static readonly _contactUrl: string = environment.telaWebSite.contactUrl;
-    private static readonly _helpUrl: string = environment.app.helpUrl;
-    private static readonly _appAbsoluteBaseUrl: string = environment.app.absoluteBaseUrl;
-    private static readonly _homepageUrl: string = environment.telaWebSite.homepageUrl;
-    private static readonly _ministereMTESHomepageUrl: string = environment.misc.ministereMTESHomepageUrl;
-    private decodedToken;
-    isMobile = false;
+    profileForm: FormGroup;
     profile: Profile;
 
     constructor(
-        private _navigationService: NavigationService,
-        private _deviceDetectionService: DeviceDetectionService,
-        private _profileService: ProfileService,
-        private ssoService: SsoService,
-        @Inject(DOCUMENT) private document: any) {}
+        protected _navigationService: NavigationService,
+        protected _deviceDetectionService: DeviceDetectionService,
+        protected _profileService: ProfileService,
+        protected _tokenService: TokenService,
+        private _snackBar: MatSnackBar,
+        @Inject(DOCUMENT) private document: any) {
+
+
+      super(
+        _tokenService,
+        _navigationService,
+        _profileService,
+        _deviceDetectionService);
+
+
+
+}
+
+
 
     ngOnInit() {
-        this._initResponsive();
-        let token = this.ssoService.getToken();
-        this.decodedToken = this.getDecodedAccessToken(token);
+        super.ngOnInit();
+        this._loadProfile();
+        this._initFormGroup();
     }
 
-    loadProfile() {
-        this._initResponsive();
-        let token = this.ssoService.getToken();
-        this.decodedToken = this.getDecodedAccessToken(token);
+    _loadProfile() {
+        let userId =  this._tokenService.getUserId();
+        this._profileService.findByUserId(userId).subscribe(
+            profiles => {
+                if (profiles) {
+                    this.profile = profiles[0];
+                    this.profileForm.patchValue(this.profile);
+                }
+            }
+        );
     }
 
-    private _initResponsive() {
-
-        // @responsive: sets isMobile member value
-        this._deviceDetectionService.detectDevice().subscribe(result => {
-            this.isMobile = result.matches;
+    private _initFormGroup() {
+        this.profileForm = new FormGroup({
+            alwaysDisplayAdvancedFields: new FormControl()
         });
     }
 
-    getDecodedAccessToken(token: string): any {
-        try {
-            return jwt_decode(token);
-        } catch (Error) {
-            return null;
-        }
+
+    toggleAlwaysDisplayAdvancedFields(event) {
+console.log('toggleAlwaysDisplayAdvancedFields');
+console.debug(event);
+            this.profile.alwaysDisplayAdvancedFields = this.profileForm.controls['alwaysDisplayAdvancedFields'].value;
+            this.patchProfile();
+        
     }
 
-    toggleAlwaysDisplayExtraFields(event) {
 
-    }
-
-    navigateToHelp() {
-        this._navigationService.navigateToHelp();
-    }
-
-    navigateToUserAgreement() {
-        this._navigationService.navigateToUserAgreement();
-    }
-
-    navigateToImportTemplate() {
-        this._navigationService.navigateToImportTemplate();
-    }
 
     getProfileUrl() {
         return UserProfileUiComponent._profileUrl;
     }
 
     getUsername() {
-        let pseudoUsed = this.decodedToken.pseudoUtilise;
+        let pseudoUsed = this._tokenService.isPseudoUsed();
         if (pseudoUsed) {
-            return this.decodedToken.pseudo;
+            return this._tokenService.getPseudo();
         }
-        return `${this.decodedToken.prenom} ${this.decodedToken.nom}`;
+        return `${this._tokenService.getFirstName()} ${this._tokenService.getSurname()}`;
     }
 
-    logout() {
-                this._navigationService.logout();
-    }
 
-    navigateToWpProfileSettings() {
-                this._navigationService.navigateToWpProfileSettings();
-    }
-
-    navigateToContact() {
-                this._navigationService.navigateToContact();
-    }
-
-    navigateToTelaHomepage() {
-                this._navigationService.navigateToTelaHomepage();
-    }
-
-    navigateToMinistereMTESHomepage() {
-                this._navigationService.navigateToMinistereMTESHomepage();
-    }
-
-    patchProfile(profile: Profile) {
-        this.document.location.href = UserProfileUiComponent._ministereMTESHomepageUrl;
+    patchProfile() {
+console.log('patchProfile');
+        this._profileService.patch(this.profile).subscribe(result => {
+            this._snackBar.open(
+                "Votre profil a été mis à jour avec succès.",
+                'Fermer', {
+                    duration: 2500
+                });
+        });;
     }
 
 

@@ -62,15 +62,18 @@
   <div class="user-profile-form-section-container">
       <div class="user-profile-form-section-title-container">Options</div>
       <div class="user-profile-form-section-item-container">
-
+	<form	[formGroup]="profileForm" 
+>
 		          <span class="occurrence-form-option-label">Toujours afficher les champs avancés</span>
 		          <mat-slide-toggle 
+                [disabled]="!profile"
                 [checked]="false"      
-                (toggleChange)="toggleAlwaysDisplayExtraFields($event)" 
+                (change)="toggleAlwaysDisplayAdvancedFields($event)" 
+                formControlName="alwaysDisplayAdvancedFields" 
                 matTooltipClass="tooltip" 
                 matTooltip="Toujours afficher l’ensemble des champs de saisie" matTooltipClass="tooltip" matTooltipPosition="above"></mat-slide-toggle>
 
-
+</form>
       </div>
   </div>
 

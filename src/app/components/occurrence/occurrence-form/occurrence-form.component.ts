@@ -52,6 +52,8 @@ import {
 import {
     Photo
 } from "../../../model/photo/photo.model";
+import { Profile 
+} from "../../../model/profile/profile.model";
 import {
     PlantnetResponse
 } from "../../../model/plantnet/plantnet-response.model";
@@ -106,6 +108,12 @@ import {
 import {
     DeviceDetectionService
 } from "../../../services/commons/device-detection.service";
+import { BaseComponent } from '../../generic/base-component/base.component';
+import { ProfileService } from "../../../services/profile/profile.service";
+import { TokenService } from "../../../services/commons/token.service";
+import {
+    NavigationService
+} from "../../../services/commons/navigation.service";
 
 @Component({
     selector: 'app-occurrence-form',
@@ -150,6 +158,8 @@ export class OccurrenceFormComponent implements OnInit {
     // The list of TelaBotanicaProject 
     projects: TelaBotanicaProject[];
     occurrences = [];
+    profile: Profile;
+
     // The ids of the occurrences to be edited:
     ids = [];
     // The photos which have been uploaded for the current occurrence(s):
@@ -247,8 +257,11 @@ export class OccurrenceFormComponent implements OnInit {
         private photoService: PhotoService,
         private plantnetService: PlantnetService,
         private existInChorodepService: ExistInChorodepService,
-        private _deviceDetectionService: DeviceDetectionService,
         private tbPrjService: TelaBotanicaProjectService,
+        protected _deviceDetectionService: DeviceDetectionService,
+        protected _navigationService: NavigationService,
+    protected _tokenService: TokenService,
+    protected _profileService: ProfileService,
         private ssoService: SsoService,
         private dialog: MatDialog,
         private confirmDialog: MatDialog,
@@ -271,6 +284,12 @@ export class OccurrenceFormComponent implements OnInit {
         let decodedToken = this._getDecodedAccessToken(token);
         this.userId = decodedToken.id;
         this.initOccurrencesToEdit();
+        this._loadProjects();
+        this._loadProfile();
+    
+    }
+
+    private _loadProjects() {
         this.tbPrjService.getCollection().subscribe(
             tbProjects => {
                 let emptyPrj = new TelaBotanicaProject();
@@ -316,7 +335,27 @@ export class OccurrenceFormComponent implements OnInit {
             station: new FormControl(),
             bibliographySource: new FormControl(),
             identificationAuthor: new FormControl(),
+            displayLeftPanelAdvancedField: new FormControl(),
+            displayRightPanelAdvancedField: new FormControl(),
         });
+    }
+
+    private _loadProfile() {
+        let userId =  this._tokenService.getUserId();
+        this._profileService.findByUserId(userId).subscribe(
+            profiles => {
+                if (profiles) {
+                    this.profile = profiles[0];
+                     this.occurrenceForm.controls['displayLeftPanelAdvancedField'].patchValue(this.profile.alwaysDisplayAdvancedFields);
+                     this.occurrenceForm.controls['displayRightPanelAdvancedField'].patchValue(this.profile.alwaysDisplayAdvancedFields);
+    
+                    if (this.profile.alwaysDisplayAdvancedFields) {
+                        this.toggleAdvancedFormRight();
+                        this.toggleAdvancedFormLeft();
+                    }
+                }
+            }
+        );
     }
 
     private _getDecodedAccessToken(token: string): any {
@@ -610,11 +649,11 @@ export class OccurrenceFormComponent implements OnInit {
         return (this.mode == OccurrenceFormComponent.CREATE_MODE);
     }
 
-    toggleAdvancedFormLeft(event) {
+    toggleAdvancedFormLeft() {
         this.displayFullFormLeft = !this.displayFullFormLeft;
     }
 
-    toggleAdvancedFormRight(event) {
+    toggleAdvancedFormRight() {
         this.displayFullFormRight = !this.displayFullFormRight;
     }
 
@@ -1319,3 +1358,5 @@ console.log('updateLocationAccuracy');
     }
 
 }
+
+
