@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import * as jwt_decode from "jwt-decode";
 
@@ -11,11 +10,7 @@ import {
 })
 export class TokenService {
 
-  private decodedToken: any;
-
   constructor(private _ssoService: SsoService) { 
-        let token = this._ssoService.getToken();
-        this.decodedToken = this.decodeToken(token);
   }
 
 
@@ -27,8 +22,35 @@ export class TokenService {
         }
     }
 
-     getToken() {
-        return this.decodedToken;
+     getDecodedToken() {
+        return this.decodeToken(this.getToken());
     }
+
+     getToken() {
+        return this._ssoService.getToken();
+    }
+
+     getUserId() {
+        return this.getDecodedToken() ? this.getDecodedToken().id : null;
+    }
+
+     getPseudo() {
+        return this.getDecodedToken() ? this.getDecodedToken().pseudo : null;
+    }
+
+     isPseudoUsed() {
+        return this.getDecodedToken() ? 
+            this.getDecodedToken().pseudoUtilise : null;
+    }
+
+     getFirstName() {
+        return this.getDecodedToken() ? this.getDecodedToken().prenom : null;
+    }
+
+     getSurname() {
+        return this.getDecodedToken() ? this.getDecodedToken().nom : null;
+    }
+
+
 
 }
