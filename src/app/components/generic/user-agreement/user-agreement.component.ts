@@ -1,52 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { 
   MatSnackBar
 } from "@angular/material";
+import {
+    ActivatedRoute
+} from "@angular/router";
 
-import { Profile 
-} from "../../../model/profile/profile.model";
-import { ProfileService } from "../../../services/profile/profile.service";
-import { TokenService } from "../../../services/commons/token.service";
+import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
 
 @Component({
   selector: 'app-user-agreement',
   templateUrl: './user-agreement.component.html',
   styleUrls: ['./user-agreement.component.css']
 })
-export class UserAgreementComponent implements OnInit {
+export class UserAgreementComponent {
 
-
+    version: string;
 
   constructor(
-    private _profileService: ProfileService,
-    private _snackBar: MatSnackBar,
-    private _router: Router,
-    private _tokenService: TokenService
-  ) { }
+        private route: ActivatedRoute,
+    private _dataUsageAgreementService: DataUsageAgreementService
+  ) { 
 
-  ngOnInit() {
-  }
+        this.route.params.subscribe(params => {
+            this.version = params['version'];
+    });
+
+}
 
     acceptUserAgreement() {
-        let token = this._tokenService.getToken();
-        let userId = token.id;
-        let profile = new Profile();
-        profile.userId = userId;
-        this._profileService.post(profile).subscribe(
-            p => {
-                console.debug(p);
-          this._snackBar.open(
-          "Merci d'avoir accepté la charte d'utilisation.", 
-          "Fermer", 
-          { duration: 2500 });
-          this.navigateToOccurrenceGrid();
-
-            }
-        );
+        this._dataUsageAgreementService.acceptDua();
 
     }
-    private navigateToOccurrenceGrid() {
-        this._router.navigateByUrl('/occurrence-ui');
-    }
+
+
 }
