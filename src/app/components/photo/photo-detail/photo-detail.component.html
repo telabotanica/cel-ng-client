@@ -44,11 +44,24 @@
       matTooltip="Lier cette  photo à une observation existante"
       matTooltipClass="tooltip" >Associer à une observation</button>
 
+
+
   </mat-toolbar>
 
   <div>
 
-    <img src="{{photo.url}}" (click)="viewBigger()" />
+    <div>
+      <img [src]="getPhotoUrl()" (click)="viewBigger()" />
+      <div style="text-align:center;max-width: 400px;">
+        <button mat-button
+          (click)="rotate()" 
+          class="thirdary-button"
+          matTooltipPosition="above"
+          matTooltip="Pivoter cette  photo de quatre vingt dix degrés vers la gauche."
+          matTooltipClass="tooltip" >Pivoter</button>
+      </div>
+
+    </div>
 
     <div >
 
