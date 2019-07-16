@@ -52,7 +52,8 @@ import {
 import {
     Photo
 } from "../../../model/photo/photo.model";
-import { Profile 
+import {
+    Profile
 } from "../../../model/profile/profile.model";
 import {
     PlantnetResponse
@@ -108,9 +109,15 @@ import {
 import {
     DeviceDetectionService
 } from "../../../services/commons/device-detection.service";
-import { BaseComponent } from '../../generic/base-component/base.component';
-import { ProfileService } from "../../../services/profile/profile.service";
-import { TokenService } from "../../../services/commons/token.service";
+import {
+    BaseComponent
+} from '../../generic/base-component/base.component';
+import {
+    ProfileService
+} from "../../../services/profile/profile.service";
+import {
+    TokenService
+} from "../../../services/commons/token.service";
 import {
     NavigationService
 } from "../../../services/commons/navigation.service";
@@ -163,7 +170,7 @@ export class OccurrenceFormComponent implements OnInit {
     // The ids of the occurrences to be edited:
     ids = [];
     // The photos which have been uploaded for the current occurrence(s):
-    private photos = new Array<Photo>();
+    private photos = new Array < Photo > ();
     // The LocationModel object as defined by th user 
     private location: LocationModel;
     // The RepositoryItemModel (taxon) object as chosen by the user:
@@ -197,7 +204,7 @@ export class OccurrenceFormComponent implements OnInit {
     // Should the location component be reset?
     resetLocationComponentFlag: boolean = false;
     // Should the upload component be reset?
-    resetPhotoUploadComponentFlag: boolean = false;
+    _resetPhotoUploadComponentFlag: boolean = false;
     // Should the taxo component be reset?
     resetTaxoComponentFlag: boolean = false;
     formEnabled: boolean = true;
@@ -236,6 +243,7 @@ export class OccurrenceFormComponent implements OnInit {
     // ---------------
     // DEFAULT VALUES:
     // ---------------
+    // Used to init/reset 
     occurrenceTypeSelected: string = OccurrenceFormComponent.occurrenceTypeDefault;
     publishedLocationSelected: string = OccurrenceFormComponent.publishedLocationDefault;
     isWildSelected: boolean = OccurrenceFormComponent.isWildSelectedDefault;
@@ -244,12 +252,13 @@ export class OccurrenceFormComponent implements OnInit {
     // List of repositories for the taxon selection module:
     tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
     sendPhotoFlag: boolean = false;
-    nbrOfPhotosToBeSEnt = 0;
+    // Used to enable/diable the "send photos" button:
+    private _nbrOfPhotosToBeSent = 0;
 
     private linkPhotoToOccDialogRef: MatDialogRef < OccurrenceLinkPhotoDialogComponent > ;
     private plantnetResultDialogRef: MatDialogRef < PlantnetResultDialogComponent > ;
     private tagDialogRef: MatDialogRef < TagDialogComponent > ;
-    private addPhotoDialogRef: MatDialogRef<AddPhotoDialogComponent>;
+    private addPhotoDialogRef: MatDialogRef < AddPhotoDialogComponent > ;
     private subscription: Subscription;
 
     constructor(
@@ -260,8 +269,8 @@ export class OccurrenceFormComponent implements OnInit {
         private tbPrjService: TelaBotanicaProjectService,
         protected _deviceDetectionService: DeviceDetectionService,
         protected _navigationService: NavigationService,
-    protected _tokenService: TokenService,
-    protected _profileService: ProfileService,
+        protected _tokenService: TokenService,
+        protected _profileService: ProfileService,
         private ssoService: SsoService,
         private dialog: MatDialog,
         private confirmDialog: MatDialog,
@@ -274,7 +283,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     isSendPhotoButtonDisabled(): boolean {
-        return !(this.nbrOfPhotosToBeSEnt > 0)
+        return !(this._nbrOfPhotosToBeSent > 0)
     }
 
     ngOnInit() {
@@ -286,7 +295,7 @@ export class OccurrenceFormComponent implements OnInit {
         this.initOccurrencesToEdit();
         this._loadProjects();
         this._loadProfile();
-    
+
     }
 
     private _loadProjects() {
@@ -341,14 +350,18 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     private _loadProfile() {
-        let userId =  this._tokenService.getUserId();
+        let userId = this._tokenService.getUserId();
         this._profileService.findByUserId(userId).subscribe(
             profiles => {
                 if (profiles) {
                     this.profile = profiles[0];
-                     this.occurrenceForm.controls['displayLeftPanelAdvancedField'].patchValue(this.profile.alwaysDisplayAdvancedFields);
-                     this.occurrenceForm.controls['displayRightPanelAdvancedField'].patchValue(this.profile.alwaysDisplayAdvancedFields);
-    
+                    this.occurrenceForm.
+                        controls['displayLeftPanelAdvancedField'].
+                        patchValue(this.profile.alwaysDisplayAdvancedFields);
+                    this.occurrenceForm.
+                        controls['displayRightPanelAdvancedField'].
+                        patchValue(this.profile.alwaysDisplayAdvancedFields);
+
                     if (this.profile.alwaysDisplayAdvancedFields) {
                         this.toggleAdvancedFormRight();
                         this.toggleAdvancedFormLeft();
@@ -425,8 +438,7 @@ export class OccurrenceFormComponent implements OnInit {
                 .subscribe(response => {
                     if (response == true) {
                         this.postOrPatch(value, stayOnPage);
-                    }
-                    else {
+                    } else {
                         this.enableForm();
                     }
                 });
@@ -516,7 +528,6 @@ export class OccurrenceFormComponent implements OnInit {
 
             // Initiate the project select input using the right project if needed:
             if (occurrence.project) {
-                //        this.occurrenceForm.controls['projectId'].patchValue(occurrence.project.id, {onlySelf: true, emitEvent:true});
                 this.projectIdSelected = occurrence.project.id;
                 console.log(this.projectIdSelected);
             }
@@ -536,9 +547,10 @@ export class OccurrenceFormComponent implements OnInit {
             }
 
         }
-        // Bulk edit mode:
+        // Multi edit mode: a composite occurrence is built based on 
+        // the occurrences to be edited
         else {
-            occurrence = this.buildPrepopulateOccurrence();
+            occurrence = this._buildPrepopulateOccurrence();
         }
         this.occurrenceForm.patchValue(occurrence);
         this.prepopulateLocation(occurrence);
@@ -614,7 +626,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
 
-    private buildPrepopulateOccurrence() {
+    private _buildPrepopulateOccurrence() {
         let prepopOcc = new Occurrence();
         let testOcc = this.occurrences[0];
 
@@ -661,39 +673,39 @@ export class OccurrenceFormComponent implements OnInit {
         this.clearFormAfterSubmit = !this.clearFormAfterSubmit;
     }
 
-  openAddPhotoDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-    dialogConfig.hasBackdrop = true;
-    this.addPhotoDialogRef = this.dialog.open(AddPhotoDialogComponent, dialogConfig);
+    openAddPhotoDialog() {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.disableClose = false;
+        dialogConfig.autoFocus = true;
+        dialogConfig.hasBackdrop = true;
+        this.addPhotoDialogRef = this.dialog.open(AddPhotoDialogComponent, dialogConfig);
 
-    const subUploaded = this.addPhotoDialogRef.componentInstance.onPhotoUploadedEvent.subscribe(photo => { 
-      this.onPhotoUploaded(photo);
-    });
-    const subAdd = this.addPhotoDialogRef.componentInstance.onPhotoAddedEvent.subscribe(photo => { 
-      this.onPhotoAdded(photo);
-    });
-    const subDelete = this.addPhotoDialogRef.componentInstance.onPhotoDeletedEvent.subscribe(photo => { 
-      this.onPhotoDeleted(photo);
-    });
+        const subUploaded = this.addPhotoDialogRef.componentInstance.onPhotoUploadedEvent.subscribe(photo => {
+            this.onPhotoUploaded(photo);
+        });
+        const subAdd = this.addPhotoDialogRef.componentInstance.onPhotoAddedEvent.subscribe(photo => {
+            this.onPhotoAdded(photo);
+        });
+        const subDelete = this.addPhotoDialogRef.componentInstance.onPhotoDeletedEvent.subscribe(photo => {
+            this.onPhotoDeleted(photo);
+        });
 
-    this.addPhotoDialogRef
-      .afterClosed()
-      .subscribe(
-        //occ => this.linkToOccurrence(occ)
-    );
+        this.addPhotoDialogRef
+            .afterClosed()
+            .subscribe(
+                //occ => this.linkToOccurrence(occ)
+            );
 
-  }
+    }
 
 
 
     onPhotoAdded(photo: FileData) {
-        this.nbrOfPhotosToBeSEnt++;
+        this._nbrOfPhotosToBeSent++;
     }
 
     onPhotoDeleted(photo: FileData) {
-        this.nbrOfPhotosToBeSEnt--;
+        this._nbrOfPhotosToBeSent--;
     }
 
     onPhotoUploaded(photo: any) {
@@ -707,43 +719,45 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
 
-    private linkPhotosToOccurrence(occurrenceId, stayOnPage: Boolean) {
-        
+    private _linkPhotosToOccurrence(occurrenceId, stayOnPage: Boolean) {
+
         if (this.photos.length) {
-          const photoIds = this.photos.map(photo => photo.id);
-          this.photoService.bulkReplace(photoIds, {
-              occurrence: {
-                  id: occurrenceId
-              }
-          }).subscribe(
-              data => {
-                  this.snackBar.open(
-                      "Les photos et l’observation ont été liées avec succès.",
-                      "Fermer", {
-                          duration: 2500
-                      });
-                  if ( !stayOnPage ) {
-                    this.navigateToOccurrenceUi();
-                  }
-              },
-              error => this.snackBar.open(
-                  'Une erreur est survenue lors de la création du lien entre les photos et l\'obseravation. ' + error,
-                  'Fermer', {
-                      duration: 2500
-                  })
-          );
-        }
-        else {
-          if ( !stayOnPage ) {
-            this.navigateToOccurrenceUi();
-          }
+            const photoIds = this.photos.map(photo => photo.id);
+            this.photoService.bulkReplace(photoIds, {
+                occurrence: {
+                    id: occurrenceId
+                }
+            }).subscribe(
+                data => {
+                    this.snackBar.open(
+                        "Les photos et l’observation ont été liées avec succès.",
+                        "Fermer", {
+                            duration: 2500
+                        });
+                    if (!stayOnPage) {
+                        this.navigateToOccurrenceUi();
+                    } else {
+
+                        this.resetFormForNewOccurrence();
+                    }
+                },
+                error => this.snackBar.open(
+                    'Une erreur est survenue lors de la création du lien entre les photos et l\'obseravation. ' + error,
+                    'Fermer', {
+                        duration: 2500
+                    })
+            );
+        } else {
+            if (!stayOnPage) {
+                this.navigateToOccurrenceUi();
+            }
         }
     }
 
 
     onLocationChange(location: LocationModel) {
         this.location = location;
-        this.updateLocationAccuracy();
+        this._updateLocationAccuracy();
 
 
     }
@@ -822,17 +836,17 @@ export class OccurrenceFormComponent implements OnInit {
             this.photoGallery.reset();
         }
         // Ask children components to reset themselves:
-        this.resetTbLibComponents();
+        this._resetTbLibComponents();
         this.taxon = null;
         this.location = null;
     }
 
-    private clearRightSideForm() {
-        this.taxon = null;
+    private resetFormForNewOccurrence() {
         this.occurrences = [];
         this.ids = [];
-        this.resetTaxoComponent();
-        this.resetPhotoUploadComponent();
+        this._resetTaxoComponent();
+        this.taxon = null;
+        this._resetPhotoUploadComponent();
         if (this.photoGallery) {
             this.photoGallery.reset();
         }
@@ -850,31 +864,31 @@ export class OccurrenceFormComponent implements OnInit {
 
     // @refactor: Use ViewChild and call some (to be implemented) component 
     //            reset methods 
-    private resetTbLibComponents() {
+    private _resetTbLibComponents() {
         this.resetForm = true;
         setTimeout(() => {
             this.resetForm = false;
         }, 1000);
     }
 
-    private resetLocationComponent() {
+    private _resetLocationComponent() {
         this.resetLocationComponentFlag = true;
         setTimeout(() => {
             this.resetLocationComponentFlag = false;
         }, 1000);
     }
 
-    private resetTaxoComponent() {
+    private _resetTaxoComponent() {
         this.resetTaxoComponentFlag = true;
         setTimeout(() => {
             this.resetTaxoComponentFlag = false;
         }, 1000);
     }
 
-    private resetPhotoUploadComponent() {
-        this.resetPhotoUploadComponentFlag = true;
+    private _resetPhotoUploadComponent() {
+        this._resetPhotoUploadComponentFlag = true;
         setTimeout(() => {
-            this.resetPhotoUploadComponentFlag = false;
+            this._resetPhotoUploadComponentFlag = false;
         }, 1000);
     }
 
@@ -931,8 +945,6 @@ export class OccurrenceFormComponent implements OnInit {
                     sciname = sciname.concat(' ');
                     sciname = sciname.concat(this.taxon.author);
                 }
-
-
 
                 let duplicateExists = await this.doublonExists(
                     this.userId, day, month, year, sciname,
@@ -999,7 +1011,7 @@ export class OccurrenceFormComponent implements OnInit {
         this.dataService.post(occ).subscribe(
             result => {
                 if (this.photos.length) {
-                    this.linkPhotosToOccurrence(result.id, stayOnPage);
+                    this._linkPhotosToOccurrence(result.id, stayOnPage);
                 }
                 this.snackBar.open(
                     "L'observation vient d'être créée.",
@@ -1013,7 +1025,7 @@ export class OccurrenceFormComponent implements OnInit {
                 if (this.clearFormAfterSubmit) {
                     this.clearForm();
                 } else {
-                    this.clearRightSideForm();
+                    this.resetFormForNewOccurrence();
                 }
                 this.enableForm();
 
@@ -1032,7 +1044,7 @@ export class OccurrenceFormComponent implements OnInit {
 
         this.dataService.patch(occ.id, occ).subscribe(
             result => {
-                this.linkPhotosToOccurrence(occ.id, stayOnPage);
+                this._linkPhotosToOccurrence(occ.id, stayOnPage);
                 this.snackBar.open(
                     "L'observation a bien été modifiée.",
                     'Fermer', {
@@ -1040,7 +1052,9 @@ export class OccurrenceFormComponent implements OnInit {
                     });
                 // Useless in this case but quite logical...
                 this.enableForm();
-                
+
+                this.resetFormForNewOccurrence();
+
             },
             error => {
                 this.snackBar.open(
@@ -1066,8 +1080,8 @@ export class OccurrenceFormComponent implements OnInit {
                     'Fermer', {
                         duration: 2500
                     });
-                if ( !stayOnPage ) {                 
-                   this.navigateToOccurrenceUi();
+                if (!stayOnPage) {
+                    this.navigateToOccurrenceUi();
                 }
             },
             error => {
@@ -1120,7 +1134,7 @@ export class OccurrenceFormComponent implements OnInit {
         for (let p of photoUrls) {
             organs.push('leaf');
         }
-        
+
         this.plantnetService.get(
             photoUrls,
             organs,
@@ -1130,7 +1144,8 @@ export class OccurrenceFormComponent implements OnInit {
                 this.autoSelectValueIfOnlyOneResult = true;
                 this.openPlantNetDialog(resp);
             },
-            error => { console.debug(error); 
+            error => {
+                console.debug(error);
                 let message = "";
                 if (error.status == 404) {
                     message = "L'espèce n'a pu être déterminée."
@@ -1139,13 +1154,13 @@ export class OccurrenceFormComponent implements OnInit {
                     message,
                     'Fermer', {
                         duration: 2500
-                    });    
+                    });
             }
         );
 
     }
 
-    fillTaxofromPlantnetChoice(taxon: RepositoryItemModel) {
+    _patchTaxoUsingPlantnetChoice(taxon: RepositoryItemModel) {
         this.patchTaxon = taxon;
         this.autoSelectValueIfOnlyOneResult = false;
     }
@@ -1177,7 +1192,7 @@ export class OccurrenceFormComponent implements OnInit {
                 taxon => {
                     // Taxon suggestion selected, let's fill the tb-tsb-lib component:
                     if (taxon) {
-                        this.fillTaxofromPlantnetChoice(taxon);
+                        this._patchTaxoUsingPlantnetChoice(taxon);
                     }
                     // The close button has been clicked, no taxon suggestion selected:
                     else {
@@ -1189,12 +1204,13 @@ export class OccurrenceFormComponent implements OnInit {
 
     }
 
-  onPhotoRejected(photo: Photo) {
-    this.snackBar.open(
-      "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL", 
-      'Fermer', 
-      { duration: 1500 });
-  }
+    onPhotoRejected(photo: Photo) {
+        this.snackBar.open(
+            "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL",
+            'Fermer', {
+                duration: 1500
+            });
+    }
 
     onPhotoRemoved(photo: any) {
         let index = this.photos.indexOf(photo);
@@ -1316,32 +1332,30 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     _informUserLocationAccuracyWaAutomaticallyUpdated() {
-                this.snackBar.open(
-                    "La valeur de la précision a été mise à jour.",
-                    "Fermer", {
-                        duration: 2500
-                    });
+        this.snackBar.open(
+            "La valeur de la précision a été mise à jour.",
+            "Fermer", {
+                duration: 2500
+            });
 
     }
 
-    updateLocationAccuracy() {
-console.log('updateLocationAccuracy');
-        if ( this.location.locationAccuracy == "10 à 100 m") {
+    _updateLocationAccuracy() {
+        console.log('_updateLocationAccuracy');
+        if (this.location.locationAccuracy == "10 à 100 m") {
             if (this.occurrenceForm.controls['locationAccuracy'].value != "10 à 100 m") {
                 this.occurrenceForm.controls['locationAccuracy'].patchValue("10 à 100 m")
                 this._informUserLocationAccuracyWaAutomaticallyUpdated();
             }
-        }
-        else if (
-             this.location.locationAccuracy == 'Localité' && 
-             (this.occurrenceForm.controls['sublocality'].value != "" && this.occurrenceForm.controls['sublocality'].value != null)) {
+        } else if (
+            this.location.locationAccuracy == 'Localité' &&
+            (this.occurrenceForm.controls['sublocality'].value != "" && this.occurrenceForm.controls['sublocality'].value != null)) {
 
             if (this.occurrenceForm.controls['locationAccuracy'].value != "Lieu-dit") {
                 this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
                 this._informUserLocationAccuracyWaAutomaticallyUpdated();
             }
-        }
-        else if ( this.location.locationAccuracy == 'Localité' && ( this.occurrenceForm.controls['sublocality'].value == "" || this.occurrenceForm.controls['sublocality'].value == null) ) {
+        } else if (this.location.locationAccuracy == 'Localité' && (this.occurrenceForm.controls['sublocality'].value == "" || this.occurrenceForm.controls['sublocality'].value == null)) {
             if (this.occurrenceForm.controls['locationAccuracy'].value != "Localité") {
 
                 this.occurrenceForm.controls['locationAccuracy'].patchValue('Localité')
@@ -1358,5 +1372,3 @@ console.log('updateLocationAccuracy');
     }
 
 }
-
-
