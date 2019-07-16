@@ -11,9 +11,16 @@ export class DeviceDetectionService {
   constructor(private breakpointObserver: BreakpointObserver) { 
   }
 
+    // @refactor rename to detectMobile now we've got three formats to handle...
   detectDevice() {
     return this.breakpointObserver.observe([
-      '(max-width: 599px)'
+      '(max-width: 1019px)'
+    ]);
+  }
+
+  detectTablet() {
+    return this.breakpointObserver.observe([
+      '(max-width: 1300px)'
     ]);
   }
 

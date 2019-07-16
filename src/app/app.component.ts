@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser'
+import {
+    Router
+} from "@angular/router";
 
 import { environment } from '../environments/environment';
 import { SsoService } from "./services/commons/sso.service";
@@ -14,7 +17,7 @@ import { SsoService } from "./services/commons/sso.service";
 
 export class AppComponent {
 
-  title = environment.app.title;
+  readonly title = environment.app.title;
   private readonly _unsetTokenValue = environment.app.unsetTokenValue;
 
   constructor(

@@ -15,8 +15,52 @@
             {{getSelectedCount()}} photo{{(getSelectedCount()>1) ? 's':''}}  sélectionnée{{(getSelectedCount()>1) ? 's':''}} 
         </span> 
 
+
+        <button *ngIf="isTablet && !isMobile" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item
+                  *ngIf="getSelectedCount()>0"
+                  class="thirdary-button"
+                  (click)="bulkDownload()" 
+                  matTooltip="Télécharger les photos sélectionnées"
+                  matTooltipClass="tooltip"
+                  matTooltipPosition="above">
+            <span>Télécharger</span>
+          </button>
+          <button mat-menu-item
+                  class="thirdary-button"
+                  matTooltip="Ajouter un tag aux photos sélectionnées" 
+                  matTooltipClass="tooltip"
+                  matTooltipPosition="above">
+            <span>Ajouter un tag</span>
+          </button>
+          <button mat-menu-item
+                  class="thirdary-button"
+                  *ngIf="getSelectedCount()>0"
+                  (click)="openLinkOccurrenceDialog()" 
+                  matTooltip="Lier les photos sélectionnées à une observation existante"
+                  matTooltipClass="tooltip"
+                  matTooltipPosition="above">
+            <span>Lier à une observation</span>
+          </button>
+          <button mat-menu-item
+                  class="thirdary-button"
+                  *ngIf="getSelectedCount()>0"
+                  (click)="openConfirmDeletionDialog()" 
+                  matTooltip="Supprimer les photos sélectionnées"
+                  matTooltipClass="tooltip"
+                  matTooltipPosition="above">
+            <span>Supprimer</span>
+          </button>
+
+
+        </mat-menu>
+
+
       <button mat-button
-        *ngIf="isMobile"
+        *ngIf="isMobile && !isMobile"
         class="thirdary-button"
         (click)="showFilters()"
         matTooltip="Filtrer les observations"
@@ -24,7 +68,7 @@
         matTooltipPosition="above"><mat-icon svgIcon="filter"></mat-icon></button>
 
         <button mat-button
-          *ngIf="getSelectedCount()>0 && !isMobile"
+          *ngIf="getSelectedCount()>0 && !isMobile && !isTablet"
           class="thirdary-button"
           (click)="bulkDownload()" 
           matTooltip="Télécharger les photos sélectionnées"
@@ -32,14 +76,14 @@
           matTooltipPosition="above">Télécharger</button>
 
         <button mat-button
-          *ngIf="getSelectedCount()>0 && !isMobile"
+          *ngIf="getSelectedCount()>0 && !isMobile && !isTablet"
           class="thirdary-button"
           matTooltip="Ajouter un tag aux photos sélectionnées"
           matTooltipClass="tooltip" 
           matTooltipPosition="above">Ajouter un tag</button>
 
         <button mat-button
-          *ngIf="getSelectedCount()>0 && !isMobile"
+          *ngIf="getSelectedCount()>0 && !isMobile && !isTablet"
           class="thirdary-button"
           (click)="openLinkOccurrenceDialog()" 
           matTooltip="Lier les photos sélectionnées à une observation existante"
@@ -47,7 +91,7 @@
           matTooltipPosition="above">Lier à une observation</button>
 
         <button mat-button
-          *ngIf="getSelectedCount()>0 && !isMobile"
+          *ngIf="getSelectedCount()>0 && !isMobile && !isTablet"
           class="thirdary-button"
           (click)="openConfirmDeletionDialog()" 
           matTooltip="Supprimer les photos sélectionnées"

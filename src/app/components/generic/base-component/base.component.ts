@@ -31,6 +31,7 @@ import {
 export abstract class BaseComponent implements OnInit {
 
     isMobile: boolean = false;
+    isTablet: boolean = false;
 
     constructor(
         protected _tokenService: TokenService,
@@ -49,6 +50,12 @@ export abstract class BaseComponent implements OnInit {
         this._deviceDetectionService.detectDevice().subscribe(result => {
             this.isMobile = result.matches;
         });
+
+        this._deviceDetectionService.detectTablet().subscribe(result => {
+            this.isTablet = result.matches;
+        });
+
+
     }
 
 

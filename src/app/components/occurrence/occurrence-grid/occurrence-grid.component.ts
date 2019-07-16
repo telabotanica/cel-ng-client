@@ -77,6 +77,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     // Ids of the columns to be displayed:
     displayedColumns = [];
     private displayedColumnsForMobiles = ["userSciName", "dateObserved"];
+    private displayedColumnsForTablet = ["select", "userSciName", "dateObserved", "locality"];
     private displayedColumnsForDesktop = [
         "select", "userSciName", "dateObserved", "locality", "isPublic",
         "id", "identiplanteScore"
@@ -89,6 +90,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     // the table paginator):
     totalNbrOfHits = 0;
     isMobile: boolean = false;
+    isTablet: boolean = false;
     // The occ the luser wants to see the detail of used to feed the detail
     // component input:
     occUnderSpotlight: Occurrence;
@@ -130,26 +132,24 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
         this.setupResponsive();
     }
-/*
 
-
-  downloadBinary(srcWindow, data, mimeType): void {
-        var blob = new Blob([data], { type: mimeType});
-        var url = window.URL.createObjectURL(blob);
-        //this.router.navigate([url]);
-        //Populating the file
-        srcWindow.location.href = url;
-  }
-*/
     protected setupResponsive() {
 
         // @responsive: sets public variable + sets the array of columns 
         //              to display:
+
+        this.deviceDetectionService.detectTablet().subscribe(result => {
+            this.isTablet = result.matches;
+            this.displayedColumns = this.isTablet ?
+                this.displayedColumnsForTablet : this.displayedColumnsForDesktop;
+        });
         this.deviceDetectionService.detectDevice().subscribe(result => {
             this.isMobile = result.matches;
             this.displayedColumns = this.isMobile ?
                 this.displayedColumnsForMobiles : this.displayedColumnsForDesktop;
         });
+
+
     }
 
     ngOnInit() {
@@ -414,31 +414,9 @@ super.ngOnInit();
         let ids = this.getSelectedIds();
         let newWindow = window.open();
         this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-
-
-                    this.dldService.downloadBinary(newWindow, data,  "application/pdf");
-                  });
-
-            
-        
-    }
-
-    private downloadPdfEtiquette(data: any) {
-        // As no way has been found to cleanly add the nice headers like Content-Disposition
-        // 
-        var blob = new Blob([data], {
-            type: "application/pdf"
+            this.dldService.downloadBinary(newWindow, data,  "application/pdf");
         });
-        var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url);
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert('Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
-        }
-        //@todo use an angular material dialog
-
     }
-
-
 
     clearSelection() {
         this.selection.clear();
