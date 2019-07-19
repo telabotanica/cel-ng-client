@@ -993,6 +993,9 @@ export class OccurrenceFormComponent implements OnInit {
                         if (response == true) {
                             this.postOccurrence(occ, stayOnPage);
                         }
+                        else {
+                            this.enableForm();
+                        }
                     });
 
             }
