@@ -763,7 +763,9 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     onTaxonChange(taxon: RepositoryItemModel) {
+console.log('8888888888888888888888888');
         console.debug(taxon);
+console.log('8888888888888888888888888');
         if (taxon.repository != null && taxon.repository != '' && taxon.name != null) {
             if (taxon.repository != 'otherunknow') {
 
@@ -912,8 +914,11 @@ export class OccurrenceFormComponent implements OnInit {
 
 
     private async preSubmitValidation(): Promise < string[] > {
+
+
         let warnings = new Array();
         let dateObserved = this.occurrenceForm.controls['dateObserved'].value;
+console.debug(dateObserved);
 
         // If we've got all the data we need to check existence in chorodep:
         if (this.taxon != null && this.location != null) {
@@ -935,7 +940,7 @@ export class OccurrenceFormComponent implements OnInit {
             if (dateObserved != null) {
 
                 let trueDate = new Date();
-                trueDate.setDate(dateObserved.getDate());
+                trueDate.setDate(dateObserved);
                 let month = (trueDate.getUTCMonth() + 1).toString();
                 let day = trueDate.getUTCDate().toString();
                 let year = trueDate.getUTCFullYear().toString();
