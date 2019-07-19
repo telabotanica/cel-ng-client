@@ -501,6 +501,7 @@
             mat-raised-button 
             color="accent" 
             (click)="onCancel()" 
+            [disabled]='!formEnabled'
             matTooltip="Retourner à la page Observations sans enregistrer" 
             matTooltipPosition="above" 
             matTooltipClass="tooltip">Annuler</button>
@@ -508,12 +509,14 @@
 		    <button type="button" 
             mat-raised-button color="primary" 
             (click)="openConfirmActionDialog(occurrenceForm.value, false)" 
+            [disabled]='!formEnabled'
             matTooltip="{{ isInCreateMode() ? 'Enregistrer' : 'Modifier'}} l’observation et retourner à la page Observations"             
             matTooltipClass="tooltip"
             matTooltipPosition="above">{{ isInCreateMode() ? 'Enregistrer' : 'Modifier'}}</button>
 
 		    <button type="submit" 
             mat-raised-button 
+            [disabled]='!formEnabled'
             color="primary"  
             matTooltip="{{ isInCreateMode() ? 'Enregistrer' : 'Modifier'}} l’observation et rester sur le formulaire pour en saisir une autre" 
             matTooltipClass="tooltip" 

@@ -834,6 +834,7 @@ export class OccurrenceFormComponent implements OnInit {
         });
         if (this.photoGallery) {
             this.photoGallery.reset();
+            this.photos = new Array < Photo > ();;
         }
         // Ask children components to reset themselves:
         this._resetTbLibComponents();
@@ -964,7 +965,13 @@ export class OccurrenceFormComponent implements OnInit {
 
         let warnings = await this.preSubmitValidation();
 
-        // Warning(s): duplicate AND/OR the species is not known to chorodep:
+        // Translates the taxo repo returned by the tb-tsb-lib component 
+        // in case no repo has been chosen:
+        if ( occ.taxoRepo == 'otherunknow') {
+            occ.taxoRepo = 'Autre/inconnu';
+        }
+
+        // Warning(s): (duplicate) OR (the species is not known to chorodep):
         if (warnings.length > 0) {
             // Duplicate!
             if (warnings.includes(this._duplicateMsg)) {
@@ -1044,6 +1051,10 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     private patchOccurrence(occ: Occurrence, stayOnPage: boolean) {
+
+        if ( occ.taxoRepo == 'otherunknow') {
+            occ.taxoRepo = 'Autre/inconnu';
+        }
 
         this.dataService.patch(occ.id, occ).subscribe(
             result => {
