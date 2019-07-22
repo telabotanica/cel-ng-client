@@ -170,7 +170,7 @@ export class OccurrenceFormComponent implements OnInit {
     // The ids of the occurrences to be edited:
     ids = [];
     // The photos which have been uploaded for the current occurrence(s):
-    private photos = new Array < Photo > ();
+    private photos = new Array < Photo >();
     // The LocationModel object as defined by th user 
     private location: LocationModel;
     // The RepositoryItemModel (taxon) object as chosen by the user:
@@ -847,6 +847,7 @@ console.log('8888888888888888888888888');
     private resetFormForNewOccurrence() {
         this.occurrences = [];
         this.ids = [];
+        this.photos = new Array< Photo >();
         this._resetTaxoComponent();
         this.taxon = null;
         this._resetPhotoUploadComponent();
@@ -1112,6 +1113,8 @@ console.debug(dateObserved);
             }
         );
     }
+
+
 
     //@refactor: use newly introduced form 'mode' instead of counting occurrences
     async postOrPatch(occurrenceFormValue, stayOnPage: boolean) {

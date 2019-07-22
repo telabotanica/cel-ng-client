@@ -76,6 +76,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
     // The ids of selected photos:
     selected = [];
     _filters: PhotoFilters;
+    _imageFakeParam = (new Date()).getTime();
     private sortBy;
     private sortDirection;
     totalNbrOfHits: number = 0;
@@ -123,6 +124,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     refresh() {
         this._emptySelection();
+        this._imageFakeParam = (new Date()).getTime();
         this.loadData();
     }
 
@@ -329,6 +331,13 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
                 })
         );
     }
+
+
+    // add a fake param to URL to allow to refresh images after rotation:
+    public generateDynamicPhotoUrl(url) {
+            return url + '?' + this._imageFakeParam;
+    }
+
 
     toogleDetailSlideNav(photo: Photo) {
         if (photo != null) {
