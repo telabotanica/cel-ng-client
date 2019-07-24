@@ -571,7 +571,7 @@ export class OccurrenceFormComponent implements OnInit {
         // when setting every single property setting.
         let tmpTaxon = {
             occurenceId: occ.id,
-            repository: (occ.taxoRepo == null) ? 'otherunknown' : occ.taxoRepo,
+            repository: (occ.taxoRepo == null || occ.taxoRepo == 'Autre/inconnu') ? 'otherunknown' : occ.taxoRepo,
             idNomen: occ.userSciNameId,
             name: occ.userSciName,
             author: ''
