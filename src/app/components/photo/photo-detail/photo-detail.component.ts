@@ -234,9 +234,11 @@ export class PhotoDetailComponent {
 
     public getPhotoUrl() {
         if (this._timestamp) {
-            return this.photo.url + '?' + this._timestamp;
+            return this.photo.url.replace('O', 'S') + '?' + this._timestamp;
+//            return this.photo.getMiniatureUrl() + '?' + this._timestamp;
         }
-        return this.photo.url;
+        //return this.photo.getMiniatureUrl();
+        return this.photo.url.replace('O', 'S');
     }
 
 

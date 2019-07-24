@@ -1,11 +1,8 @@
 import { Occurrence } from "../../model/occurrence/occurrence.model";
 
 export class Photo {
-
     id: number;
     originalName: string;
-    latitude: string;
-    longitude: string;
     url: string;
     contentUrl: Date;
     dateCreated: Date;
@@ -15,5 +12,9 @@ export class Photo {
     occurrence: Occurrence;
     mimeType: string;
     size: number;    
+
+    getMiniatureUrl() {
+       return this.url.replace('O', 'S');
+   }
 
 } 

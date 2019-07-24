@@ -2,7 +2,7 @@
 
   <div class="image-thumbnail-grid-item"  *ngFor="let photo of resources" >
     <img class="image-placeholder" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="" />
-    <img class="gallery-image" src="{{photo.url}}" />
+    <img class="gallery-image" src="{{photo.url.replace('O','S')}}" />
     <div *ngIf="enableRemove"> <button mat-button type="button" (click)="removePhoto(photo)" [disabled]="!enabled">Dissocier</button> </div>
   </div>
   

@@ -124,7 +124,7 @@
         matTooltip="{{  (photo.originalName.length>30) ? (photo.originalName | slice:0:30)+'...':(photo.originalName) }}" 
         matTooltipClass="tooltip" 
         matTooltipPosition="above" 
-        src="{{generateDynamicPhotoUrl(photo.url)}}" 
+        src="{{generateDynamicPhotoUrl(photo)}}" 
         (click)="toogleDetailSlideNav(photo)"/>
 
       <div *ngIf="!isMobile" class="base-text">
