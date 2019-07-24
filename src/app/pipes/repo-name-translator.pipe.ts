@@ -20,9 +20,8 @@ export class RepoNameTranslatorPipe implements PipeTransform {
     let tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
     this.taxoCodeNamemapping = {};
     for ( let entry of tbRepositoriesConfig ) {
-        this.taxoCodeNamemapping[entry['id']] = entry['label'];
+        this.taxoCodeNamemapping[entry['id']] = entry['id'];
     }
-
   }
 
 
