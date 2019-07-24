@@ -124,7 +124,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     refresh() {
         this._emptySelection();
-        this._imageFakeParam = (new Date()).getTime();
+        this._imageFakeParam++;
         this.loadData();
     }
 
@@ -222,7 +222,6 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
             .subscribe(
                 occ => this.linkToOccurrence(occ)
             );
-
     }
 
     addPhoto(photo: Photo) {
@@ -335,6 +334,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     // add a fake param to URL to allow to refresh images after rotation:
     public generateDynamicPhotoUrl(url) {
+console.log('generateDynamicPhotoUrl');
             return url + '?' + this._imageFakeParam;
     }
 
