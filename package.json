@@ -45,7 +45,7 @@
     "tb-dropfile-lib": "https://github.com/steph-del/tb-dropfile-lib/releases/download/v0.5.3/tb-dropfile-lib-0.5.3.tgz",
     "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.6.4/tb-geoloc-lib-0.6.4.tgz",
     "tb-tag-lib": "https://github.com/steph-del/tb-tag-lib/releases/download/v0.3.0/tb-tag-lib-0.3.0.tgz",
-    "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.5.4/tb-tsb-lib-0.5.4.tgz",
+    "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.5.6/tb-tsb-lib-0.5.6.tgz",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
@@ -60,7 +60,7 @@
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~3.1.1",
+    "karma": "^4.2.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
