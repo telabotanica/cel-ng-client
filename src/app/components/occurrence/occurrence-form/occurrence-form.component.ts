@@ -767,7 +767,7 @@ console.log('8888888888888888888888888');
         console.debug(taxon);
 console.log('8888888888888888888888888');
         if (taxon.repository != null && taxon.repository != '' && taxon.name != null) {
-            if (taxon.repository != 'otherunknow') {
+            if (taxon.repository != 'otherunknown') {
 
                 if (this.occurrenceForm.controls['certainty'].value == "douteux") {
                     this.snackBar.open(
@@ -973,7 +973,7 @@ console.debug(dateObserved);
 
         // Translates the taxo repo returned by the tb-tsb-lib component 
         // in case no repo has been chosen:
-        if ( occ.taxoRepo == 'otherunknow') {
+        if ( occ.taxoRepo == 'otherunknown') {
             occ.taxoRepo = 'Autre/inconnu';
         }
 
@@ -1058,7 +1058,7 @@ console.debug(dateObserved);
 
     private patchOccurrence(occ: Occurrence, stayOnPage: boolean) {
 
-        if ( occ.taxoRepo == 'otherunknow') {
+        if ( occ.taxoRepo == 'otherunknown') {
             occ.taxoRepo = 'Autre/inconnu';
         }
 
