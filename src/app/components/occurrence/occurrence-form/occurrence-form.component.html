@@ -228,7 +228,7 @@
 		            (newData)='onTaxonChange($event)'></tb-tsb-search-box>
 		        </div>
 
-		        <button type="button" class="thirdary-button" mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eFlore</button>
+		        <button type="button" style="padding-bottom:10px;" class="thirdary-button" mat-button (click)="displayEfloreCard()" [disabled]="!isEfloreCardDisplayable()">Consulter la fiche eFlore</button>
 
 
 
@@ -307,7 +307,7 @@
 		        </div>
 
 
-          <div class="mat-form-field-wrapperish">
+          <div class="mat-form-field-wrapperish2">
 		        <div id="occurrence-form-annotation-photo-container" *ngIf="mode != BULK_EDIT_MODE">
 
 		            <div class="occurrence-form-photo-container">
@@ -356,7 +356,7 @@
 
 
 
-		        <div *ngIf="isTagComponentDisplayable()">
+		        <div *ngIf="isTagComponentDisplayable()" style="padding-bottom:10px;">
               
 
 	            <button mat-button class="thirdary-button"  
