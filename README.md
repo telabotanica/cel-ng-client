@@ -19,15 +19,37 @@ npm install
 ## Editing configuration
 
 
-The configurations are located in the src/environments folder of the project. Edit the file correponding to your environment by setting the right baseUrl for the CEL api:
+The configurations are located in the src/environments folder of the project. Edit the file correponding to your environment by setting the right baseUrl for the CEL api. For prod, the config should be located at <prj_folder>/src/environments/env.prod.local. When installing the app, the configuration mainly deals in adapting API URL and auth info (API key, app ID).
 
 ### Editing CEL2 API URL
 
-Edit the value of the api.baseUrl JSON element to match your installation.
+This is the case for the CEL2 API and plantnet services (which are proxied by a CEL2 Web service) with the following root entries:
 
-### Editing PlantNet aPI key
+api
+plantnet
 
-Edit the value of the plantnet.apiKey JSON element to match your key.
+### Editing other tela API URL
+
+That's also the case for tela other API with the following root entries:
+
+algolia
+chorodep
+identiplante
+eflore
+sso
+mapBgTile
+
+### Editing app.absoluteBaseUrl
+
+Almost done, the app.absoluteBaseUrl entry value should be adapted. 
+
+### Last checks
+
+The following entries shoud not change from one install to another but a quick check could be useful, especially for the following root entries:
+
+telaWebSite
+app.helpUrl
+app.importTemplateUrl
 
 ## Dev: launching the app on the test server
 
@@ -40,7 +62,13 @@ ng serve
 ## Prod: Building the file in prod mode
 
 ```
-ng build --prod
+ng build --prod --aot
+```
+
+If the app is not at the root of the app server, 
+
+```
+ng build --prod --base-href /cel2-dev/cel2-client/dist/cel2-client/
 ```
 
 Note: the --prod build mode is a bit touchier than the "standard" (dev) build...
