@@ -25,19 +25,19 @@ The configurations are located in the src/environments folder of the project. Ed
 
 This is the case for the CEL2 API and plantnet services (which are proxied by a CEL2 Web service) with the following root entries:
 
-api
-plantnet
+* api
+* plantnet
 
 ### Editing other tela API URL
 
 That's also the case for tela other API with the following root entries:
 
-algolia
-chorodep
-identiplante
-eflore
-sso
-mapBgTile
+* algolia
+* chorodep
+* identiplante
+* eflore
+* sso
+* mapBgTile
 
 ### Editing app.absoluteBaseUrl
 
@@ -47,9 +47,9 @@ Almost done, the app.absoluteBaseUrl entry value should be adapted.
 
 The following entries shoud not change from one install to another but a quick check could be useful, especially for the following root entries:
 
-telaWebSite
-app.helpUrl
-app.importTemplateUrl
+* telaWebSite
+* app.helpUrl
+* app.importTemplateUrl
 
 ## Dev: launching the app on the test server
 
@@ -65,7 +65,7 @@ ng serve
 ng build --prod --aot
 ```
 
-If the app is not at the root of the app server, 
+If the app is not located at the root of the app server, please add the corrseponding "base-href" parameter (don't forget the eding slash...). For example:
 
 ```
 ng build --prod --base-href /cel2-dev/cel2-client/dist/cel2-client/
