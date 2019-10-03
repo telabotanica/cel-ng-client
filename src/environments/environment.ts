@@ -7,7 +7,7 @@ export const environment = {
   app : {
     title:           "Carnet en ligne V2",
     unsetTokenValue: "unset",
-    absoluteBaseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-client/dist/cel2-client",
+    absoluteBaseUrl: "https://beta.tela-botanica.org/cel2/cel2-client/dist/cel2-client/",
     helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
     importTemplateUrl: 'http://perdu.com',
   },
@@ -17,11 +17,11 @@ export const environment = {
     applicationId: "YOTVBFEBJC",
   },
   plantnet: {
-    baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api/plantnet"
+    baseUrl: "https://beta.tela-botanica.org/cel2/cel2-services/public/api/plantnet"
   },
   api: {
-    baseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public/api",
-    tagLibBaseUrl: "https://beta.tela-botanica.org/cel2-dev/cel2-services/public",
+    baseUrl: "https://api-cel-test.tela-botanica.org/api",
+    tagLibBaseUrl: "https://api-cel-test.tela-botanica.org",
     prefix: "api",
   },
   telaWebSite: {
@@ -56,21 +56,21 @@ export const environment = {
   },
   photoTagLib: {
     basicTags: [
-      {path: 'Organes', name: 'Fleur', id: null, userId: null},
-      {path: 'Organes', name: 'Feuille', id: null, userId: null},
-      {path: 'Organes', name: 'Fruit', id: null, userId: null},
-      {path: 'Organes', name: 'Port', id: null, userId: null},
-      {path: 'Organes', name: 'Écorce', id: null, userId: null},
-      {path: 'Organes', name: 'Rameau', id: null, userId: null},
-      {path: 'Organes', name: 'Graine', id: null, userId: null},
-      {path: 'Organes', name: 'Bourgeon', id: null, userId: null},
-      {path: 'Organes', name: 'Cotylédon', id: null, userId: null},
-      {path: 'Organes', name: 'Organe souterrain', id: null, userId: null},
-      {path: 'Photo', name: 'Scan', id: null, userId: null},
-      {path: 'Photo', name: 'Planche', id: null, userId: null},
-      {path: 'Photo', name: 'Dessin', id: null, userId: null},
-      {path: 'Morphologie', name: 'Plantule', id: null, userId: null},
-      {path: 'Morphologie', name: 'Rosette', id: null, userId: null},
+      {category: 'Organes', name: 'Fleur', id: null, userId: null},
+      {category: 'Organes', name: 'Feuille', id: null, userId: null},
+      {category: 'Organes', name: 'Fruit', id: null, userId: null},
+      {category: 'Organes', name: 'Port', id: null, userId: null},
+      {category: 'Organes', name: 'Écorce', id: null, userId: null},
+      {category: 'Organes', name: 'Rameau', id: null, userId: null},
+      {category: 'Organes', name: 'Graine', id: null, userId: null},
+      {category: 'Organes', name: 'Bourgeon', id: null, userId: null},
+      {category: 'Organes', name: 'Cotylédon', id: null, userId: null},
+      {category: 'Organes', name: 'Organe souterrain', id: null, userId: null},
+      {category: 'Photo', name: 'Scan', id: null, userId: null},
+      {category: 'Photo', name: 'Planche', id: null, userId: null},
+      {category: 'Photo', name: 'Dessin', id: null, userId: null},
+      {category: 'Morphologie', name: 'Plantule', id: null, userId: null},
+      {category: 'Morphologie', name: 'Rosette', id: null, userId: null},
     ]
   },
   tbTsbLib: {
