@@ -31,18 +31,18 @@ export class OccurrenceBuilder {
    * Returns an <code>Occurrence</code> which members have been populated
    * with the models and value provided in the constructor.
    */
-  async build(): Promise<Occurrence>  {
+  async build(persistContext: boolean = false): Promise<Occurrence>  {
     this.occ = new Occurrence();
 
     if ( this.taxon != null ) {
-        await this.fillOccTaxoProperties();  
+        await this.fillOccTaxoProperties(persistContext);  
     }
 
     if ( this.location != null ) {
-        this.fillOccLocationProperties();  
+        this.fillOccLocationProperties(persistContext);  
     }
 
-    this.fillOccProperties();
+    this.fillOccProperties(persistContext);
 
     if ( this.formValue['projectId'] ) {
         this.occ.project = '/api/tela_botanica_projects/' + this.formValue['projectId'];
@@ -63,58 +63,70 @@ export class OccurrenceBuilder {
     } 
   }
 
-  private fillOccLocationProperties(): void {
-    let props = ["localityConsistency", 
-      "locationAccuracy", "osmCountry", "osmCountryCode", "osmId",
-      "osmState", "publishedLocation", "station"];
+  private fillOccLocationProperties(persistContext: boolean): void {
 
-    console.debug(this.location);
+    if ( !(persistContext && this.location.locality == "Valeurs multiples")  ) {  
+      let props = ["localityConsistency", 
+        "locationAccuracy", "osmCountry", "osmCountryCode", "osmId",
+        "osmState", "publishedLocation", "station"];
 
-    for (let propName of props) {
-      this.fillOccPropertyWithValue(
-        propName, this.location[propName]);
-    }
+      console.debug(this.location);
+
+      for (let propName of props) {
+        if ( !(persistContext && this.location[propName] == "Valeurs multiples")  ) { 
+            this.fillOccPropertyWithValue(
+              propName, this.location[propName]);
+        }
+      }
+    
+      if (this.location.elevation != null) {
+        let intElevation = this.location.elevation;
+console.log("**** " + this.location.elevation);
+
   
-    if (this.location.elevation != null) {
-      //@todo should be done in Stéphane's component
-      // Let's round double, int are expected
-      this.occ.elevation = Number(this.location.elevation.toFixed());
+        if (typeof(intElevation) == 'string') {
+            intElevation = parseInt(intElevation);
+        }
+        //@todo should be done in Stéphane's component
+        // Let's round double, int are expected
+        this.occ.elevation = Number(intElevation.toFixed());
+      }
+      if (this.location.geometry != null) {
+          this.occ.geometry = JSON.stringify(this.location.geometry);
+      }
+      if (this.location.osmId != null) {
+          this.occ.osmId = String(this.location.osmId);
+      }
+      if (this.location.locality != null) {
+          this.occ.locality = this.location.locality;
+      }
+      if (this.location.inseeData != null && this.location.inseeData.code) {
+          this.occ.localityInseeCode = this.location.inseeData.code;
+      }  
     }
-    if (this.location.geometry != null) {
-        this.occ.geometry = JSON.stringify(this.location.geometry);
-    }
-    if (this.location.osmId != null) {
-        this.occ.osmId = String(this.location.osmId);
-    }
-    if (this.location.locality != null) {
-        this.occ.locality = this.location.locality;
-    }
-    if (this.location.inseeData != null && this.location.inseeData.code) {
-        this.occ.localityInseeCode = this.location.inseeData.code;
-    }  
   }
 
-  private async fillOccTaxoProperties() {
+  private async fillOccTaxoProperties(persistContext: boolean) {
     this.occ.userSciName = this.taxon.name;    
 
-     
-    if ( this.taxon.author ) {
-        this.occ.userSciName = this.occ.userSciName.concat(' ');
-        this.occ.userSciName = this.occ.userSciName.concat(this.taxon.author);
+     if ( !(persistContext && this.taxon.name == "Valeurs multiples")  ) {     
+      if ( this.taxon.author ) {
+          this.occ.userSciName = this.occ.userSciName.concat(' ');
+          this.occ.userSciName = this.occ.userSciName.concat(this.taxon.author);
+      }
+       
+      if (typeof this.taxon.idNomen === 'string') {
+          this.occ.userSciNameId = parseInt(this.taxon.idNomen);
+      } else {
+          this.occ.userSciNameId = this.taxon.idNomen;
+      }
+      if (this.taxon.repository != undefined) {
+        this.occ.taxoRepo = this.taxon.repository;
+      }
     }
-     
-    if (typeof this.taxon.idNomen === 'string') {
-        this.occ.userSciNameId = parseInt(this.taxon.idNomen);
-    } else {
-        this.occ.userSciNameId = this.taxon.idNomen;
-    }
-    if (this.taxon.repository != undefined) {
-      this.occ.taxoRepo = this.taxon.repository;
-    }
-
   }
 
-  private fillOccProperties(): void {
+  private fillOccProperties(persistContext: boolean): void {
     let props = ["certainty", "observer", "occurrenceType", "sampleHerbarium",
       "certainty", "phenology", "geodatum", "environment", "annotation",
       "isWild", "isPublic", "station", "coef", "station", "bibliographySource",
@@ -122,8 +134,13 @@ export class OccurrenceBuilder {
       "identificationAuthor", "locationAccuracy"];
 
     for (let propName of props) {
-      this.fillOccPropertyWithValue(
-        propName, this.formValue[propName]);
+console.log('HANDLING ' + propName);
+
+      if (! (persistContext && this.formValue[propName] == "Valeurs multiples")) {
+console.log('PERSISTING ' + propName);
+        this.fillOccPropertyWithValue(
+          propName, this.formValue[propName]);
+      }
     }
     let date = this.formValue['dateObserved'];
 
@@ -148,7 +165,7 @@ console.debug(date);
     }
 
     if ( this.formValue[''] != null ) {
-        this.fillOccLocationProperties();  
+        this.fillOccLocationProperties(persistContext);  
     }
 
 

@@ -555,7 +555,7 @@ export class OccurrenceFormComponent implements OnInit {
         this.occurrenceForm.patchValue(occurrence);
         this.prepopulateLocation(occurrence);
 
-        if (occurrence.userSciName != null) {
+        if (occurrence.userSciName != null && occurrence.userSciName != "Valeurs multiples") {
             this.prepopulateTaxoSearchBox(occurrence);
         }
 
@@ -600,6 +600,10 @@ export class OccurrenceFormComponent implements OnInit {
 
     private prepopulateLocation(occ: Occurrence) {
 
+console.debug(occ);
+        // To cope with an issue of the geoloc module
+        let osmIdValue = (occ.osmId != null) ? occ.osmId : -1; 
+
         // only useful so that the location is not null when the component is 
         // loaded in single edit mode. This will allow the isPublishable() method
         // to eventually returning true.    
@@ -616,7 +620,7 @@ export class OccurrenceFormComponent implements OnInit {
             "osmCountry": occ.osmCountry,
             "osmCountryCode": occ.osmCountryCode,
             "osmCounty": occ.osmCounty,
-            "osmId": Number(occ.osmId),
+            "osmId": Number(osmIdValue),
             "inseeData": null,
             "osmPostcode": Number(occ.osmPostcode),
             "localityConsistency": false,
@@ -629,6 +633,7 @@ export class OccurrenceFormComponent implements OnInit {
     private _buildPrepopulateOccurrence() {
         let prepopOcc = new Occurrence();
         let testOcc = this.occurrences[0];
+        let forgetAboutMeProperties = ["geometry", "osmId", "localityInseeCode", "locality", "geodatum", "elevation", "isWild", "isPublic", "occurrenceType", "phenology", "publishedLocation", "dateObserved"];
 
         // Let's loop around the ccurrence properties
         for (var propertyName in testOcc) {
@@ -648,7 +653,7 @@ export class OccurrenceFormComponent implements OnInit {
                 } else {
                     if (propertyName == "taxoRepo") {
                         prepopOcc[propertyName] = "Autre/inconnu";
-                    } else {
+                    } else if ( ! forgetAboutMeProperties.includes(propertyName) ) {
                         prepopOcc[propertyName] = "Valeurs multiples";
                     }
                 }
@@ -757,7 +762,7 @@ export class OccurrenceFormComponent implements OnInit {
 
     onLocationChange(location: LocationModel) {
         this.location = location;
-        this._updateLocationAccuracy();
+        this.updateLocationAccuracy();
 
 
     }
@@ -1123,7 +1128,7 @@ console.debug(dateObserved);
             occurrenceFormValue,
             this.taxon,
             this.location);
-        let occ = await occBuilder.build();
+        let occ = await occBuilder.build(true);
 
         // The component has been instanciated with at least one
         // occurrence. We're in 'update/edit' mode:
@@ -1362,7 +1367,7 @@ console.debug(dateObserved);
 
     }
 
-    _updateLocationAccuracy() {
+    updateLocationAccuracy() {
         console.log('_updateLocationAccuracy');
         if (this.location.locationAccuracy == "10 à 100 m") {
             if (this.occurrenceForm.controls['locationAccuracy'].value != "10 à 100 m") {
