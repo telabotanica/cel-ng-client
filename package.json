@@ -44,7 +44,7 @@
     "rxjs-compat": "^6.3.3",
     "tb-dropfile-lib": "https://github.com/steph-del/tb-dropfile-lib/releases/download/v0.5.3/tb-dropfile-lib-0.5.3.tgz",
     "tb-geoloc-lib": "https://github.com/steph-del/tb-geoloc-lib/releases/download/v0.6.5/tb-geoloc-lib-0.6.5.tgz",
-    "tb-tag-lib": "https://github.com/steph-del/tb-tag-lib/releases/download/v2.0.4/tb-tag-lib-2.0.4.tgz",
+    "tb-tag-lib": "https://github.com/steph-del/tb-tag-lib/releases/download/v2.0.5/tb-tag-lib-2.0.5.tgz",
     "tb-tsb-lib": "https://github.com/steph-del/tb-tsb-lib/releases/download/v0.5.6/tb-tsb-lib-0.5.6.tgz",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
