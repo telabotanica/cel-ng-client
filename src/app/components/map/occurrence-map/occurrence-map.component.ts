@@ -144,7 +144,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
   }
 
 
-  export() {
+  doExport() {
         let newWindow = window.open(); 
         if ( ! this._occFilters ) {
             this._occFilters = new OccurrenceFilters();
