@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
@@ -22,7 +22,7 @@ import { EfloreCard } from "../../../model/eflore/eflore-card.model";
   templateUrl: './occurrence-detail.component.html',
   styleUrls: ['./occurrence-detail.component.css']
 })
-export class OccurrenceDetailComponent implements OnInit {
+export class OccurrenceDetailComponent implements OnInit, OnChanges {
 
   id: number;
   occurrence: Occurrence;
@@ -73,6 +73,10 @@ export class OccurrenceDetailComponent implements OnInit {
            );
   }
 
+  ngOnChanges() {
+
+  }
+
   ngOnInit() {
     if ( this.occurrence == null ) {
         this.isDisplayedInDrawer = false;
@@ -93,6 +97,9 @@ export class OccurrenceDetailComponent implements OnInit {
         this.efloreService.get(this.occurrence.userSciName).subscribe(result => {
               this.efloreCard = this.parser.parseEfloreCard(result, this.occurrence.taxoRepo);
         });
+      }
+      else {
+        this.efloreCard = null;
       }
   }
 
