@@ -107,6 +107,12 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
     return this.selected.length;
   }
 
+  getImgMiniatureUrl(photo: Photo) {
+    // return photo.getMiniatureUrl();
+    return photo.url.replace('O','XS');
+  }
+
+
   addPhoto(photo: Photo) {
     this.resources.push(photo);
   }
