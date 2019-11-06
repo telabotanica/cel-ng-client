@@ -337,6 +337,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
         return photo.url.replace('O', 'S') + '?' + this._imageFakeParam;
         // The new method is unknown after build. After investigation, any changes 
         // to the model (like removing data members) is discarded...
+        // another nasty cache issue as we're developping ion production mode? 
         // no time to investigate further...
         //return photo.getMiniatureUrl() + '?' + this._imageFakeParam;
     }
