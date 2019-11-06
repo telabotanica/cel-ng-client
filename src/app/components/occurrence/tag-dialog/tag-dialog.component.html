@@ -1,21 +1,4 @@
-<!--
-  <tb-tag
-    [userId]=22
-    [objectId]="tagObjectId"
-    [noApiCall]="delayTagApiCalls()"
-    [baseApiUrl]="tagLibBaseUrl"
-    (newTag)="onTagAdded($event)"
-    (removedTag)="onTagRemoved($event)"
-    (httpError)="onPostTagError($event)"
-    [apiPath]="apiPath"
-    [apiRelationPath]="apiRelationPath"
-    [apiRetrievePath]="apiRetrievePath"
-    [objectName]="objectName"
-    [objectEndpoint]="objectEndpoint"
-    [tagName]="tagName"
-    [tagEndpoint]="tagEndpoint"></tb-tag>
--->
-
+<div id="tag-module-container">
   <tb-tag
     [userId]=22
     [objectId]="tagObjectId"
@@ -26,9 +9,10 @@
     (httpError)="onPostTagError($event)"
     apiPath="/api/user_occurrence_tags"
     apiTagsRelationsPath="/api/occurrence_user_occurrence_tag_relations"
-    apiRelationPath="/api/user_occurrence_tags/{id}/occurrence_user_occurrence_tag_relations"
-    apiRetrievePath="/api/occurrence/{id}/occurrence_user_occurrence_tag_relations"
+    apiRelationPath="/api/occurrence_user_occurrence_tag_relations"
+    apiRetrievePath="/api/occurrences/{id}/user_tag_relations"
     objectName="occurrence"
     objectEndpoint="/api/occurrences"
     tagName="userOccurrenceTag"
     tagEndpoint="/api/user_occurrence_tags"></tb-tag>
+</div>
