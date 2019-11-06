@@ -513,9 +513,13 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
   }
 
     private getSelectedIds() {
-      return this.selected.array_.map(function(feature) {
-        return feature.values_.id;
+        if (this.selected != null) {
+          return this.selected.array_.map(function(feature) {
+            return feature.values_.id;
       });
+
+        }
+             return [];
     }
 
     private getSelectedOccurrences() {
