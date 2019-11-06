@@ -63,6 +63,10 @@ export class OccurrenceLinkPhotoDialogComponent implements OnInit {
       this.dialogRef.close(photo);
   }
 
+  getImgMiniatureUrl(photo: Photo) {
+    // return photo.getMiniatureUrl();
+    return photo.url.replace('O','S');
+  }
 
 
 }
