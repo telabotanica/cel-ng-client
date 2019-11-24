@@ -98,9 +98,9 @@
 
       <div>
         <mat-form-field>
-          <mat-select [(value)]="projectId">
+          <mat-select [(value)]="projectId" formControlName="project">
           <mat-option>Tous</mat-option>
-            <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}" formControlName="project">{{project.label}}</mat-option>
+            <mat-option *ngFor="let project of telaBotanicaProjects" value="{{project.id}}" >{{project.label}}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
