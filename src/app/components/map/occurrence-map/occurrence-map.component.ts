@@ -220,7 +220,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
        var proj = projection.getCode();
        var xhr = new XMLHttpRequest();
        xhr.open('GET', geoJsonUrl);
-       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+       xhr.setRequestHeader('Authorization', token);
        var onError = function() {
          vectorSource.removeLoadedExtent(extent);
        }
