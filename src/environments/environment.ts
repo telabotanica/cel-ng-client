@@ -5,11 +5,11 @@
 export const environment = {
   production: false,
   app : {
-    title:           "Carnet en ligne V2",
+    title:           "Carnet en ligne DEV",
     unsetTokenValue: "unset",
     absoluteBaseUrl: "https://beta.tela-botanica.org/cel2/cel2-client/dist/cel2-client/",
     helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
-    importTemplateUrl: 'http://perdu.com',
+    importTemplateUrl: 'https://resources.tela-botanica.org/modele_import_excel_carnet_en_ligne.xlsx',
   },
   algolia: {
     baseUrl:       "https://yotvbfebjc-dsn.algolia.net/1/indexes/*/queries",

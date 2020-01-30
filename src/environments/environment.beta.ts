@@ -5,9 +5,9 @@
 export const environment = {
   production: true,
   app : {
-    title:           "Carnet en ligne",
+    title:           "Carnet en ligne BETA",
     unsetTokenValue: "unset",
-    absoluteBaseUrl: "https://www.tela-botanica.org/cel-ng/",
+    absoluteBaseUrl: "https://beta.tela-botanica.org/cel2/cel2-client/dist/cel2-client/",
     helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
     importTemplateUrl: 'https://resources.tela-botanica.org/modele_import_excel_carnet_en_ligne.xlsx',
   },
@@ -17,11 +17,11 @@ export const environment = {
     applicationId: "YOTVBFEBJC",
   },
   plantnet: {
-    baseUrl: "https://api-cel.tela-botanica.org/api/plantnet"
+    baseUrl: "https://api-cel-test.tela-botanica.org/api/plantnet"
   },
   api: {
-    baseUrl: "https://api-cel.tela-botanica.org/api",
-    tagLibBaseUrl: "https://api-cel.tela-botanica.org",
+    baseUrl: "https://api-cel-test.tela-botanica.org/api",
+    tagLibBaseUrl: "https://api-cel-test.tela-botanica.org",
     prefix: "api",
   },
   telaWebSite: {
@@ -46,9 +46,9 @@ export const environment = {
     provider: 'elevationApiIo'
   },
   sso: {
-    identiteEndpoint: 'https://www.tela-botanica.org/service:annuaire:auth/identite',
-    authWidgetUrl:    'http://www.tela-botanica.org/widget:reseau:auth',
-    refreshEndpoint:  'https://www.tela-botanica.org/service:annuaire:auth/rafraichir',
+    identiteEndpoint: 'https://beta.tela-botanica.org/service:annuaire:auth/identite',
+    authWidgetUrl:    'http://beta.tela-botanica.org/widget:reseau:auth',
+    refreshEndpoint:  'https://beta.tela-botanica.org/service:annuaire:auth/rafraichir',
     refreshInterval:  600000
   },
   misc: {
