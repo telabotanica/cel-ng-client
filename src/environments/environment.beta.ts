@@ -7,7 +7,7 @@ export const environment = {
   app : {
     title:           "Carnet en ligne BETA",
     unsetTokenValue: "unset",
-    absoluteBaseUrl: "https://beta.tela-botanica.org/cel2/cel2-client/dist/cel2-client/",
+    absoluteBaseUrl: "https://beta.tela-botanica.org/appli:cel/",
     helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
     importTemplateUrl: 'https://resources.tela-botanica.org/modele_import_excel_carnet_en_ligne.xlsx',
   },
