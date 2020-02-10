@@ -27,7 +27,7 @@ export const environment = {
   telaWebSite: {
     profileUrl: 'https://www.tela-botanica.org/membres/me/settings/profile',
     homepageUrl: 'https://www.tela-botanica.org',
-    contactUrl: 'https://www.tela-botanica.org/widget:reseau:remarques?lang=fr&service=cel&pageSource=https%3A%2F%2Fwww.tela-botanica.org%2Fcel%2Fappli%2Fcel2.html',
+    contactUrl: 'https://www.tela-botanica.org/widget:reseau:remarques?lang=fr&service=cel&pageSource=https%3A%2F%2Fwww.tela-botanica.org%2Fappli%3Acel',
   },
   chorodep: {
     baseUrl: "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent"
