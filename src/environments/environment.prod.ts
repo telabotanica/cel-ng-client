@@ -125,11 +125,19 @@ export const environment = {
         description_fr: ''
     }, {
         id: 'apd',
-        label: 'Afrique',
+        label: 'Afrique tropicale',
         levels: ['idiotaxon'],
         apiUrl: 'https://api.tela-botanica.org/service:cel/NameSearch/apd/',
         apiUrl2: '',
         apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/apd/noms/',
+        description_fr: ''
+    }, {
+        id: 'isfan',
+        label: 'Afrique du Nord',
+        levels: ['idiotaxon'],
+        apiUrl: 'https://api.tela-botanica.org/service:cel/NameSearch/isfan/',
+        apiUrl2: '',
+        apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/isfan/noms/',
         description_fr: ''
     }, {
         id: 'lbf',

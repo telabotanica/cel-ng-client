@@ -7,7 +7,7 @@ export const environment = {
   app : {
     title:           "Carnet en ligne DEV",
     unsetTokenValue: "unset",
-    absoluteBaseUrl: "https://beta.tela-botanica.org/cel2/cel2-client/dist/cel2-client/",
+    absoluteBaseUrl: "http://localhost:4200/",
     helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
     importTemplateUrl: 'https://resources.tela-botanica.org/modele_import_excel_carnet_en_ligne.xlsx',
   },
@@ -17,11 +17,11 @@ export const environment = {
     applicationId: "YOTVBFEBJC",
   },
   plantnet: {
-    baseUrl: "https://beta.tela-botanica.org/cel2/cel2-services/public/api/plantnet"
+    baseUrl: "https://127.0.0.1:8000/api/plantnet"
   },
   api: {
-    baseUrl: "https://api-cel-test.tela-botanica.org/api",
-    tagLibBaseUrl: "https://api-cel-test.tela-botanica.org",
+    baseUrl: "https://127.0.0.1:8000/api",
+    tagLibBaseUrl: "https://127.0.0.1:8000",
     prefix: "api",
   },
   telaWebSite: {
@@ -46,9 +46,9 @@ export const environment = {
     provider: 'elevationApiIo'
   },
   sso: {
-    identiteEndpoint: 'https://beta.tela-botanica.org/service:annuaire:auth/identite',
-    authWidgetUrl:    'http://beta.tela-botanica.org/widget:reseau:auth',
-    refreshEndpoint:  'https://beta.tela-botanica.org/service:annuaire:auth/rafraichir',
+    identiteEndpoint: 'http://localhost:8080/service:annuaire:auth/identite',
+    authWidgetUrl:    'http://localhost:8080/service:annuaire:auth/login?login=killian.stefanini.tb@gmail.com&password=pouetlol&',
+    refreshEndpoint:  'http://localhost:8080/service:annuaire:auth/rafraichir',
     refreshInterval:  600000
   },
   misc: {
@@ -125,11 +125,19 @@ export const environment = {
         description_fr: ''
     }, {
         id: 'apd',
-        label: 'Afrique',
+        label: 'Afrique tropicale',
         levels: ['idiotaxon'],
         apiUrl: 'https://api.tela-botanica.org/service:cel/NameSearch/apd/',
         apiUrl2: '',
         apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/apd/noms/',
+        description_fr: ''
+    }, {
+        id: 'isfan',
+        label: 'Afrique du Nord',
+        levels: ['idiotaxon'],
+        apiUrl: 'https://api.tela-botanica.org/service:cel/NameSearch/isfan/',
+        apiUrl2: '',
+        apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/isfan/noms/',
         description_fr: ''
     }, {
         id: 'lbf',
