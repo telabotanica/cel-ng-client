@@ -86,9 +86,6 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild('drawer') detailDrawer: any;
     @Output() showFilterEvent = new EventEmitter();
-    // The total number of occurrence instances matching _occFilters (used by 
-    // the table paginator):
-    totalNbrOfHits = 0;
     isMobile: boolean = false;
     isTablet: boolean = false;
     // The occ the luser wants to see the detail of used to feed the detail
@@ -153,9 +150,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     ngOnInit() {
-super.ngOnInit();
-        this.refreshCount();
-        this.dataSource.loadOccurrences('', '', 0, 10);
+        super.ngOnInit();
+        // disabled because of redondant call
+        // this.dataSource.loadOccurrences('', '', 0, 10);
     }
 
     showFilters() {
@@ -184,23 +181,8 @@ super.ngOnInit();
             this.paginator.pageIndex,
             this.paginator.pageSize,
             this._occFilters);
-        this.refreshCount();
 
     }
-
-    refreshCount() {
-        this.refreshCountWithFilters(this._occFilters);
-    }
-
-    refreshCountWithFilters(filters: OccurrenceFilters) {
-        this.dataSource.findCount(filters).subscribe(
-            resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')));
-    }
-
-
-
-
-
 
     getSelectedCount() {
         return this.selection.selected.length;

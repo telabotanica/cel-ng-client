@@ -249,7 +249,7 @@
 
     <div class="paginator-container">
 	    <mat-paginator
-	        [length]="totalNbrOfHits" 
+	        [length]="dataSource.occurrencesCount"
 	        [pageSize]="10" 
 	        [pageSizeOptions]="[5, 10, 25, 100]" ></mat-paginator>
     </div>

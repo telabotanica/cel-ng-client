@@ -21,6 +21,7 @@ import {
 } from "rxjs/BehaviorSubject";
 import {
     map,
+    tap,
     catchError,
     finalize
 } from "rxjs/operators";
@@ -55,6 +56,7 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
     public loading$ = this.loadingSubject.asObservable();
     private resourceUrl = environment.api.baseUrl + '/occurrences';
     private photoSubresourceSubpathEndpoint = '/photos';
+    public occurrencesCount : number = 0;
 
     constructor(private http: HttpClient, private jsonPatchService: JsonPatchService) {
 
@@ -69,16 +71,6 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
         });
     }
 
-    findCount(filters: OccurrenceFilters = null) {
-        console.debug(filters);
-        let httpParams = this.buildParams(filters);
-
-        return this.http.get(this.resourceUrl + '.json', {
-            params: httpParams,
-            observe: 'response'
-        });
-    }
-
     findOccurrences(sortBy = '', sortDirection = 'asc',
         pageNumber = 0, pageSize = 10, filters: OccurrenceFilters = null): Observable < Occurrence[] > {
 
@@ -89,8 +81,17 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
             .set('perPage', pageSize.toString());
 
         return this.http.get < Occurrence[] > (this.resourceUrl + '.json', {
-            params: httpParams
-        });
+            params: httpParams,
+            observe: 'response'
+        }).pipe(
+            tap(result => {
+                const count = result.headers.get('x-count');
+                if (null !== count) {
+                    this.occurrencesCount = parseInt(count);
+                }
+            }),
+            map(result => result.body)
+        );
 
 
     }

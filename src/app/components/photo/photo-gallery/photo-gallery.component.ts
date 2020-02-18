@@ -79,7 +79,6 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
     _imageFakeParam = (new Date()).getTime();
     private sortBy;
     private sortDirection;
-    totalNbrOfHits: number = 0;
     linkToOccDialogRef: MatDialogRef < PhotoLinkOccurrenceDialogComponent > ;
     addPhotoDialogRef: MatDialogRef < AddPhotoDialogComponent > ;
     @Output() showFilterEvent = new EventEmitter();
@@ -94,7 +93,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
     @ViewChild('drawer') detailDrawer: any;
 
     constructor(
-        private dataService: PhotoService,
+        public dataService: PhotoService,
         private confirmDeletionDialog: MatDialog,
         private dialog: MatDialog,
         public snackBar: MatSnackBar,
@@ -146,12 +145,6 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
         }
     }
 
-
-    refreshCountWithFilters(filters: PhotoFilters) {
-        this.dataService.findCount(filters).subscribe(
-            resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')));
-    }
-
     loadData() {
         this.subscription = this.dataService.getCollection(
             this.sortBy,
@@ -163,7 +156,6 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
                 this.resources = photos;
             }
         );
-        this.refreshCountWithFilters(this._filters);
     }
 
     openConfirmDeletionDialog(value) {

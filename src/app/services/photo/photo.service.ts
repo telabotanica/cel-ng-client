@@ -7,6 +7,10 @@ import {
 }
 from "rxjs/Observable";
 import {
+    map,
+    tap
+} from "rxjs/operators";
+import {
     HttpClient,
     HttpParams
 }
@@ -38,6 +42,7 @@ from '../../../restit/model/json-patch-response.model';
 export class PhotoService {
 
     private resourceUrl = environment.api.baseUrl + '/photos';
+    public photosCount : number = 0;
 
     getCollection(
         sortBy: string = "dateShot",
@@ -74,33 +79,18 @@ export class PhotoService {
         }
 
         return this.http.get < Photo[] > (this.resourceUrl + ".json", {
-            params: httpParams
-        });
-
-    }
-
-    findCount(filters: PhotoFilters = null) {
-
-        let httpParams = new HttpParams();
-        console.debug(filters);
-        if (filters !== null) {
-            for (var propertyName in filters) {
-                if (filters.hasOwnProperty(propertyName) && !(filters[propertyName] == null)) {
-                    if (Array.isArray(filters[propertyName])) {
-                        for (var val in filters[propertyName]) {
-                            httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
-                        }
-                    } else {
-                        httpParams = httpParams.append(propertyName, filters[propertyName].toString());
-                    }
-                }
-            }
-        }
-
-        return this.http.get(this.resourceUrl + '.json', {
             params: httpParams,
             observe: 'response'
-        });
+        }).pipe(
+            tap(result => {
+                const count = result.headers.get('x-count');
+                if (null !== count) {
+                    this.photosCount = parseInt(count);
+                }
+            }),
+            map(result => result.body)
+        );
+
     }
 
     get(id): Observable < Photo > {

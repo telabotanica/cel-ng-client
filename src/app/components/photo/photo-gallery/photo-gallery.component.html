@@ -136,7 +136,7 @@
 
     <div class="paginator-container">
 	    <mat-paginator
-	        [length]="totalNbrOfHits" 
+	        [length]="dataService.photosCount"
 	        [pageSize]="12" 
 	        [pageSizeOptions]="[12, 24, 48, 96]" ></mat-paginator>
     </div>

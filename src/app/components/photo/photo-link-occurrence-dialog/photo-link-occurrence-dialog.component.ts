@@ -47,8 +47,6 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
   // Instanciate SelectionModel with single selection allowed and no row 
   // selected at startup:
   selection = new SelectionModel<Occurrence>(false, []);
-  // The total number of occurrence instances (used by the table paginator):
-  totalNbrOfHits = 0;
 
   constructor(
     public dialogRef: MatDialogRef<PhotoLinkOccurrenceDialogComponent>,
@@ -58,7 +56,6 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.loadOccurrences('', '', 0, 10);
-    this.refreshCount();
   }
 
   ngAfterViewInit() {
@@ -74,11 +71,6 @@ export class PhotoLinkOccurrenceDialogComponent implements OnInit {
         })
     )
     .subscribe();
-  }
-
-  refreshCount() {
-    this.dataSource.findCount().subscribe( 
-        resp => this.totalNbrOfHits = parseInt(resp.headers.get('X-count')) );
   }
 
   selectOccurrence(occurrence) {

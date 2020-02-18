@@ -10,6 +10,7 @@ import {of} from "rxjs/observable/of";
 import {Photo} from "../../model/photo/photo.model";
 
 // @todo: refactor this by making a generic superclass
+// @todo: unused class, check for deletion
 @Injectable()
 export class PhotoDataSource implements DataSource<Photo> {
 
