@@ -71,11 +71,13 @@ export class PhotoDetailComponent {
     isMobile: boolean = false;
     basicTags: Array < any > = environment.photoTagLib.basicTags;
     baseUrl: string = environment.api.tagLibBaseUrl;
+    refreshButtonDisabled: boolean = false;
 
     private _timestamp: number;
     private _shareDialogRef: MatDialogRef < PhotoShareDialogComponent > ;
     private _linkToOccDialogRef: MatDialogRef < PhotoLinkOccurrenceDialogComponent > ;
     private _photoDisplayDialogRef: MatDialogRef < PhotoDisplayDialogComponent > ;
+
 
     private static readonly _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
     private static readonly _photoRotatedOkMsg: string = 'La photo a été pivotée avec succès.';
@@ -247,12 +249,17 @@ export class PhotoDetailComponent {
     }
 
     rotate() {
+        this.refreshButtonDisabled = true;
         this._photoRotationService.post(this.photo.id).subscribe(
             data => {
                 this._refreshPhoto();
                 this._notifService.notify(PhotoDetailComponent._photoRotatedOkMsg);
+                this.refreshButtonDisabled = false;
             },
-            error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
+            error => {
+                this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error);
+                this.refreshButtonDisabled = false;
+            }
         );
     }
 
