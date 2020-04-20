@@ -218,7 +218,7 @@ export class OccurrenceFormComponent implements OnInit {
     // Should the advanced forms be displayed instead of basic ones: 
     displayFullFormLeft = false;
     displayFullFormRight = false;
-    readonly maxDate: Date = new Date();
+    maxDate: Date = new Date()
     isMobile = false;
 
     // ---------------
@@ -284,6 +284,14 @@ export class OccurrenceFormComponent implements OnInit {
 
     isSendPhotoButtonDisabled(): boolean {
         return !(this._nbrOfPhotosToBeSent > 0)
+    }
+
+    getMaxDate() {
+        return new Date();
+    }
+
+    updateMaxDate() {
+        this.maxDate = this.getMaxDate();
     }
 
     ngOnInit() {

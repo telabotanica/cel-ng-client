@@ -11,7 +11,9 @@
 		        <div class="occurrence-form-label-container">
 		          <label class="occurrence-form-label">Date de l'observation :</label>
 		        </div>
-		        <section class="observed-date-form-field-container">
+		        <section
+		          (mouseenter)="updateMaxDate()"
+		          class="observed-date-form-field-container">
 		          <mat-form-field >
 		            <input matInput 
                       readonly 
