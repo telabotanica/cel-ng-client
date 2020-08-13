@@ -147,6 +147,22 @@ export const environment = {
         apiUrl2: '',
         apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/lbf/noms/',
         description_fr: ''
+    }, {
+        id: 'taxref',
+        label: 'France',
+        levels: ['idiotaxon'],
+        apiUrl: 'https://api.tela-botanica.org/service:cel/NameSearch/taxref/',
+        apiUrl2: '',
+        apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/taxref/noms/',
+        description_fr: ''
+    }, {
+        id: 'taxreflich',
+        label: 'Lichens',
+        levels: ['idiotaxon'],
+        apiUrl: 'https://api.tela-botanica.org/service:cel/NameSearch/taxreflich/',
+        apiUrl2: '',
+        apiUrlValidOccurence: 'https://api.tela-botanica.org/service:eflore:0.1/taxreflich/noms/',
+        description_fr: ''
     }]
   }
 };
