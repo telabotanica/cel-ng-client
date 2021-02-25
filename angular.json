@@ -79,6 +79,30 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
@@ -90,6 +114,12 @@
           "configurations": {
             "production": {
               "browserTarget": "cel2-client:build:production"
+            },
+            "beta": {
+              "browserTarget": "cel2-client:build:beta"
+            },
+            "local": {
+              "browserTarget": "cel2-client:build:local"
             }
           }
         },

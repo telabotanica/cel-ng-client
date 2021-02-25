@@ -44,12 +44,10 @@ The following entries shoud not change from one install to another but a quick c
 * app.helpUrl
 * app.importTemplateUrl
 
-## Dev: launching the app on the test server
-
-You can do so by issuing the following command:
+## Dev: launching the app locally
 
 ```
-ng serve
+ng s -c local
 ```
 
 ## Prod: Building the file in prod mode
