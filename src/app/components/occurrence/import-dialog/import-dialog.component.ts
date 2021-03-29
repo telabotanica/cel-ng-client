@@ -22,36 +22,32 @@ export class ImportDialogComponent implements OnInit {
   onImport = new EventEmitter();
 
   constructor(
-    public snackBar: MatSnackBar, 
+    public snackBar: MatSnackBar,
     private importDialogRef: MatDialogRef<ImportDialogComponent>,
     @Inject(DOCUMENT) private document: any) { }
 
-  ngOnInit() {
-
-    this.importFormGroup = new FormGroup({
-       importFile: new FormControl()
-    });
-
-  }
-
-    
+    ngOnInit() {
+      this.importFormGroup = new FormGroup({
+         importFile: new FormControl()
+      });
+    }
 
     onImportButtonClick() {
       this.onImport.emit();
     }
 
     save() {
-        this.importDialogRef.close();
+      this.importDialogRef.close();
     }
 
     // @todo impl  delegate to the parent
     import(files) {
-        this.spreadsheetFile = files.item(0);
-        this.importDialogRef.close(files.item(0));
+      this.spreadsheetFile = files.item(0);
+      this.importDialogRef.close(files.item(0));
     }
 
     navigateToImportTemplate() {
-        this.document.location.href = ImportDialogComponent._importTemplateUrl;
+      this.document.location.href = ImportDialogComponent._importTemplateUrl;
     }
 
 }

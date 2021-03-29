@@ -162,7 +162,7 @@ export class OccurrenceFormComponent implements OnInit {
     // --------------------
     // USED/MANAGED MODELS:
     // --------------------
-    // The list of TelaBotanicaProject 
+    // The list of TelaBotanicaProject
     projects: TelaBotanicaProject[];
     occurrences = [];
     profile: Profile;
@@ -171,21 +171,21 @@ export class OccurrenceFormComponent implements OnInit {
     ids = [];
     // The photos which have been uploaded for the current occurrence(s):
     private photos = new Array < Photo >();
-    // The LocationModel object as defined by th user 
+    // The LocationModel object as defined by th user
     private location: LocationModel;
     // The RepositoryItemModel (taxon) object as chosen by the user:
     private taxon: RepositoryItemModel;
 
-    private _duplicateMsg = "Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre."
+    private _duplicateMsg = 'Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre.';
 
     // ----------------------------------------------------------------
     // PATCH MEMBER VARIABLES (to initiate children component values) :
     // ----------------------------------------------------------------
     // Edit mode only (both single and multi): these instances are used to
     // prepopulate the taxonomic search box and geoloc map components and that's
-    // it. Once instanciated, those variable values must never change: 
-    // the children components are now responsible for selecting the 
-    // taxon/location. 
+    // it. Once instanciated, those variable values must never change:
+    // the children components are now responsible for selecting the
+    // taxon/location.
     patchTaxon: RepositoryItemModel;
     patchElevation: number;
     patchGeometry;
@@ -208,14 +208,14 @@ export class OccurrenceFormComponent implements OnInit {
     // Should the taxo component be reset?
     resetTaxoComponentFlag: boolean = false;
     formEnabled: boolean = true;
-    // Configuration values for Stephane's modules: 
+    // Configuration values for Stephane's modules:
     tagObjectId: number = null;
     baseCelApiUrl: string = environment.api.baseUrl;
     tagLibBaseUrl: string = environment.api.tagLibBaseUrl;
     elevationApiProvider: string = environment.elevationApi.provider;
     mapBgTileUrl: string = environment.mapBgTile.baseUrl;
     autoSelectValueIfOnlyOneResult: boolean = false;
-    // Should the advanced forms be displayed instead of basic ones: 
+    // Should the advanced forms be displayed instead of basic ones:
     displayFullFormLeft = false;
     displayFullFormRight = false;
     maxDate: Date = new Date()
@@ -243,7 +243,7 @@ export class OccurrenceFormComponent implements OnInit {
     // ---------------
     // DEFAULT VALUES:
     // ---------------
-    // Used to init/reset 
+    // Used to init/reset
     occurrenceTypeSelected: string = OccurrenceFormComponent.occurrenceTypeDefault;
     publishedLocationSelected: string = OccurrenceFormComponent.publishedLocationDefault;
     isWildSelected: boolean = OccurrenceFormComponent.isWildSelectedDefault;
@@ -493,14 +493,14 @@ export class OccurrenceFormComponent implements OnInit {
 
     /**
      * Retrieves the string encoded ids (no array route parameters in angular
-     * at the moment) and loads corresponding Occurrence resources from the WS 
+     * at the moment) and loads corresponding Occurrence resources from the WS
      * to fill the 'occurrences' array property. Also sets the "mode" of the
-     * form to one of the class member constant: either CREATE_MODE,  
+     * form to one of the class member constant: either CREATE_MODE,
      * SINGLE_EDIT_MODE or BULK_EDIT_MODE.
      */
     private initOccurrencesToEdit() {
         this.route.params.subscribe(params => {
-            // Retrieve the string encoded ids parameter from the route: 
+            // Retrieve the string encoded ids parameter from the route:
             let strIds = params['ids'];
 
             // Edit mode:
@@ -555,7 +555,7 @@ export class OccurrenceFormComponent implements OnInit {
             }
 
         }
-        // Multi edit mode: a composite occurrence is built based on 
+        // Multi edit mode: a composite occurrence is built based on
         // the occurrences to be edited
         else {
             occurrence = this._buildPrepopulateOccurrence();
@@ -586,7 +586,7 @@ export class OccurrenceFormComponent implements OnInit {
         }
 
         // Update the class member reference and, consequently, the search box
-        // component: 
+        // component:
         this.patchTaxon = tmpTaxon;
     }
 
@@ -610,11 +610,11 @@ export class OccurrenceFormComponent implements OnInit {
 
 console.debug(occ);
         // To cope with an issue of the geoloc module
-        let osmIdValue = (occ.osmId != null) ? occ.osmId : -1; 
+        let osmIdValue = (occ.osmId != null) ? occ.osmId : -1;
 
-        // only useful so that the location is not null when the component is 
+        // only useful so that the location is not null when the component is
         // loaded in single edit mode. This will allow the isPublishable() method
-        // to eventually returning true.    
+        // to eventually returning true.
         this.location = {
             "geometry": JSON.parse(occ.geometry),
             "locality": occ.locality,
@@ -879,8 +879,8 @@ console.log('8888888888888888888888888');
         this.occurrenceForm.controls['isWild'].setValue(OccurrenceFormComponent.isWildSelectedDefault);
     }
 
-    // @refactor: Use ViewChild and call some (to be implemented) component 
-    //            reset methods 
+    // @refactor: Use ViewChild and call some (to be implemented) component
+    //            reset methods
     private _resetTbLibComponents() {
         this.resetForm = true;
         setTimeout(() => {
@@ -984,7 +984,7 @@ console.debug(dateObserved);
 
         let warnings = await this.preSubmitValidation();
 
-        // Translates the taxo repo returned by the tb-tsb-lib component 
+        // Translates the taxo repo returned by the tb-tsb-lib component
         // in case no repo has been chosen:
         if ( occ.taxoRepo == 'otherunknown') {
             occ.taxoRepo = 'Autre/inconnu';
@@ -1043,7 +1043,7 @@ console.debug(dateObserved);
                     this._linkPhotosToOccurrence(result.id, stayOnPage);
                 }
                 this.snackBar.open(
-                    "L'observation vient d'être créée.",
+                    'L’observation vient d’être créée.',
                     'Fermer', {
                         duration: 2500
                     });
@@ -1331,7 +1331,7 @@ console.debug(dateObserved);
         }
 
         // We must urlencode the because of the "Unicode Problem":
-        // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding 
+        // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
         return btoa(encodeURIComponent(unencodedSignature));
     }
 
