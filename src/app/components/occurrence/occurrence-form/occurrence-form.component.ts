@@ -1268,7 +1268,7 @@ console.debug(dateObserved);
             this.location.inseeData.code.length >= 2) {
 
             let taxonId: number;
-            let frenchDept = this.location.inseeData.code.substr(0, 2);
+            const frenchDept = this.location.inseeData.code.substr(0, 2);
 
             if (typeof this.taxon.idNomen === 'string') {
                 taxonId = parseInt(this.taxon.idNomen);
@@ -1279,7 +1279,8 @@ console.debug(dateObserved);
                 this.taxon.repository,
                 taxonId,
                 this.location.osmCountry,
-                '34').toPromise();
+                frenchDept
+            ).toPromise();
         }
         return null;
     }
