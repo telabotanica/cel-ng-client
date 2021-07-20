@@ -1,30 +1,30 @@
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import { 
-  AfterViewInit, 
-  Component, 
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {
+  AfterViewInit,
+  Component,
   EventEmitter,
   Inject,
-  ElementRef, 
-  OnInit, 
-  ViewChild, 
+  ElementRef,
+  OnInit,
+  ViewChild,
   Output } from '@angular/core';
-import { 
-  Router, ActivatedRoute } from "@angular/router";
+import {
+  Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { 
-  MatPaginator, 
-  MatSort, 
-  MatTableDataSource, 
-  MatSnackBar} from "@angular/material";
-import { 
-  debounceTime, 
-  distinctUntilChanged, 
-  startWith, 
-  tap, 
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatSnackBar} from '@angular/material';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  tap,
   delay } from 'rxjs/operators';
 
-import { PhotoService } from "../../../services/photo/photo.service";
-import { Photo } from "../../../model/photo/photo.model";
+import { PhotoService } from '../../../services/photo/photo.service';
+import { Photo } from '../../../model/photo/photo.model';
 
 
 @Component({
@@ -40,22 +40,22 @@ export class OccurrenceLinkPhotoDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<OccurrenceLinkPhotoDialogComponent>,
-    private dataService: PhotoService, 
+    private dataService: PhotoService,
     public snackBar: MatSnackBar,
-    private router: Router) {  this.loadData();}
+    private router: Router) {  this.loadData(); }
 
   ngOnInit() {
-    //this.loadData();
+    // this.loadData();
   }
 
   loadData() {
-    this.subscription  = this.dataService.getCollection(            
+    this.subscription  = this.dataService.getCollection(
         this.sortBy,
         this.sortDirection,
         0,
         10000,
-        null).subscribe( 
-          photos => {this.resources = photos;}
+        null).subscribe(
+          photos => {this.resources = photos; }
         );
   }
 
@@ -65,7 +65,7 @@ export class OccurrenceLinkPhotoDialogComponent implements OnInit {
 
   getImgMiniatureUrl(photo: Photo) {
     // return photo.getMiniatureUrl();
-    return photo.url.replace('O','S');
+    return photo.url.replace('O', 'M');
   }
 
 

@@ -1,34 +1,34 @@
 
-import { 
-  Component, 
-  OnInit, 
-  AfterViewInit,  
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
     Injectable,
-  Output, 
+  Output,
   ViewChild,
-  EventEmitter, 
+  EventEmitter,
   Input } from '@angular/core';
 
-import { 
-  MatPaginator, 
-  MatSort, 
+import {
+  MatPaginator,
+  MatSort,
   MatDialogRef,
-  MatTableDataSource, 
-  MatDialogConfig, 
+  MatTableDataSource,
+  MatDialogConfig,
   MatSnackBar,
   MatDialog } from "@angular/material";
 
-import {OccurrenceFilters} 
+import {OccurrenceFilters}
   from "../../../model/occurrence/occurrence-filters.model";
-import { Occurrence } 
+import { Occurrence }
   from "../../../model/occurrence/occurrence.model";
-import { OccurrencesDataSource } 
+import { OccurrencesDataSource }
   from "../../../services/occurrence/occurrences.datasource";
-import { ImportDialogComponent } 
+import { ImportDialogComponent }
   from "../../../components/occurrence/import-dialog/import-dialog.component";
-import { SsoService } 
+import { SsoService }
   from "../../../services/commons/sso.service";
-import { ConfirmDialogComponent } 
+import { ConfirmDialogComponent }
   from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
 import {
     BinaryDownloadService
@@ -48,7 +48,7 @@ import {
 import { BaseComponent } from '../../generic/base-component/base.component';
 
 /**
- * Base component responsible for functionalities commonly shared by 
+ * Base component responsible for functionalities commonly shared by
  * CEL components i.e.:
  *
  * <ul>
@@ -75,10 +75,10 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
 
     constructor(
 
-    public  dataSource:             OccurrencesDataSource, 
-    protected dialog:                 MatDialog, 
+    public  dataSource:             OccurrencesDataSource,
+    protected dialog:                 MatDialog,
     protected ssoService:             SsoService,
-    protected confirmDialog:          MatDialog, 
+    protected confirmDialog:          MatDialog,
     protected dldService:             BinaryDownloadService,
 
     public snackBar:                MatSnackBar,
@@ -93,17 +93,6 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
         _navigationService,
         _profileService,
         _deviceDetectionService) ;
-    }
-
-
-    protected downloadPdfEtiquette(data: any) {
-        var blob = new Blob([data], { type: "application/pdf"});
-        var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url);
-        //@todo use an angular material dialog
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
-        }
     }
 
   @Input() set occFilters(newOccFilters: OccurrenceFilters) {
@@ -129,33 +118,20 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
 
 
   export() {
-        let newWindow = window.open(); 
-        if ( ! this._occFilters ) {
-            this._occFilters = new OccurrenceFilters();
-        }
-        this._occFilters.ids = this.getSelectedIds();
-        this.dataSource.export(this._occFilters).subscribe(data => {
-            this.dldService.downloadBinary(newWindow, data,  "text/csv");
-        });
+    if ( ! this._occFilters ) {
+        this._occFilters = new OccurrenceFilters();
+    }
+    this._occFilters.ids = this.getSelectedIds();
+    this.dataSource.export(this._occFilters).subscribe(data => {
+        this.dldService.downloadBinary(data, 'text/csv', 'cel-export-');
+    });
   }
 
-    getSelectedOccurrences() {
-      return this.selected.array_.values_map(function(feature) {
-        return feature.values_.id;
-      });
-    }
-
-
-  protected downloadExport(data: any) {
-    var blob = new Blob([data], { type: "text/csv"});
-    var url = window.URL.createObjectURL(blob);
-    var pwa = window.open(url, '_blank');
-    //@todo use an angular material dialog
-    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-        alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier d\'export.');
-    }
+  getSelectedOccurrences() {
+    return this.selected.array_.values_map(function(feature) {
+      return feature.values_.id;
+    });
   }
-
 
   openConfirmDeletionDialog(value) {
 
@@ -180,32 +156,17 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
             data => {
                 this.refresh();
                 this.snackBar.open(
-                'Les observations ont été supprimées avec succès.', 
-                'Fermer', 
+                'Les observations ont été supprimées avec succès.',
+                'Fermer',
                 { duration: 2500 });
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
+                'Une erreur est survenue. ' + error,
+                'Fermer',
                 { duration: 2500 })
         );
     }
-
-
-    generatePdfEtiquette() {
-        let ids = this.getSelectedIds();
-        let newWindow = window.open();
-        this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-
-
-                    this.dldService.downloadBinary(newWindow, data,  "application/pdf");
-                  });
-
-            
-        
-    }
-
 
   bulkEdit() {
       let ids = this.getSelectedIds();
@@ -260,28 +221,28 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                   let msg;
                   if ( nbOfPublishedOccz>0 ) {
                     msg = 'Les observations complètes ont été publiées avec succès';
-                  } 
+                  }
                   else {
                     msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
 
                   }
                   this.snackBar.open(
-                  msg, 
-                  'Fermer', 
+                  msg,
+                  'Fermer',
                   { duration: 2500 });
                   this.refresh();
 
               },
               error => this.snackBar.open(
-                  'Une erreur est survenue. ' + error, 
-                  'Fermer', 
+                  'Une erreur est survenue. ' + error,
+                  'Fermer',
                   { duration: 2500 })
           )
     }
     else {
         this.snackBar.open(
-          'Aucune observation privée. Aucune observation à publier.', 
-          'Fermer', 
+          'Aucune observation privée. Aucune observation à publier.',
+          'Fermer',
           { duration: 2500 })
     }
   }
@@ -291,14 +252,14 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
         this.dataSource.bulkReplace(ids, {isPublic: false}).subscribe(
             data => {
                 this.snackBar.open(
-                'Les observations ont été dépubliées avec succès.', 
-                'Fermer', 
+                'Les observations ont été dépubliées avec succès.',
+                'Fermer',
                 { duration: 2500 });
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
+                'Une erreur est survenue. ' + error,
+                'Fermer',
                 { duration: 2500 })
         )
     }
@@ -312,17 +273,17 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
             data => {
                 this.refresh();
                 this.snackBar.open(
-                'Les observations ont été importées avec succès.', 
-                'Fermer', 
+                'Les observations ont été importées avec succès.',
+                'Fermer',
                 { duration: 2500 });
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
+                'Une erreur est survenue. ' + error,
+                'Fermer',
                 { duration: 2500 })
         );
-        this.importDialogRef.close(); 
+        this.importDialogRef.close();
     }
 
 abstract refresh();

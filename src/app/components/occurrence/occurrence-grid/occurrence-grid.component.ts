@@ -94,7 +94,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     private _occFilters: OccurrenceFilters;
 
-    // Instanciate SelectionModel with multiselection allowed and no row 
+    // Instanciate SelectionModel with multiselection allowed and no row
     // selected at startup:
     selection = new SelectionModel < Occurrence > (true, []);
 
@@ -107,7 +107,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
         }
     }
 
-    // @refactor Would using a single one to hold all three dialog be ok? 
+    // @refactor Would using a single one to hold all three dialog be ok?
     constructor(
         protected _navigationService: NavigationService,
     protected _tokenService: TokenService,
@@ -132,7 +132,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     protected setupResponsive() {
 
-        // @responsive: sets public variable + sets the array of columns 
+        // @responsive: sets public variable + sets the array of columns
         //              to display:
 
         this.deviceDetectionService.detectTablet().subscribe(result => {
@@ -354,27 +354,20 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     doExport() {
-
-        let newWindow = window.open(); 
         if ( ! this._occFilters ) {
             this._occFilters = new OccurrenceFilters();
         }
         this._occFilters.ids = this.getSelectedIds();
         this.dataSource.export(this._occFilters).subscribe(data => {
-            this.dldService.downloadBinary(newWindow, data,  "text/csv");
+            this.dldService.downloadBinary(data, 'text/csv', 'cel-export-');
         });
-
-
     }
-
-
-
 
     bulkDelete() {
 
-        let ids = this.getSelectedIds();
+        const ids = this.getSelectedIds();
         this.dataSource.bulkRemove(ids).subscribe(
-            data => {
+            () => {
                 this.snackBar.open(
                     'Les observations ont été supprimées avec succès.',
                     'Fermer', {
@@ -393,10 +386,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     generatePdfEtiquette() {
-        let ids = this.getSelectedIds();
-        let newWindow = window.open();
+        const ids = this.getSelectedIds();
         this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-            this.dldService.downloadBinary(newWindow, data,  "application/pdf");
+            this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquettes-');
         });
     }
 
