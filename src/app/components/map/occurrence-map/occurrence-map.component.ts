@@ -1,10 +1,10 @@
-import { 
-  Component, 
-  OnInit, 
-  AfterViewInit,  
-  Output, 
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  Output,
   ViewChild,
-  EventEmitter, 
+  EventEmitter,
   Input } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import OlMap from 'ol/Map';
@@ -23,29 +23,29 @@ import { DragBox, Select } from 'ol/interaction';
 import { click, pointerMove, altKeyOnly,platformModifierKeyOnly} from 'ol/events/condition';
 import TileWMS from 'ol/source/TileWMS';
 import LayerSwitcher from 'ol-layerswitcher/src/ol-layerswitcher';
-import { 
-  MatPaginator, 
-  MatSort, 
+import {
+  MatPaginator,
+  MatSort,
   MatDialogRef,
-  MatTableDataSource, 
-  MatDialogConfig, 
+  MatTableDataSource,
+  MatDialogConfig,
   MatSnackBar,
   MatDialog } from "@angular/material";
 
 //import { LayerSwitcher } from 'ol/control';
-import {OccurrenceFilters} 
+import {OccurrenceFilters}
   from "../../../model/occurrence/occurrence-filters.model";
-import { Occurrence } 
+import { Occurrence }
   from "../../../model/occurrence/occurrence.model";
-import { OccurrencesDataSource } 
+import { OccurrencesDataSource }
   from "../../../services/occurrence/occurrences.datasource";
-import { ImportDialogComponent } 
+import { ImportDialogComponent }
   from "../../../components/occurrence/import-dialog/import-dialog.component";
-import { SsoService } 
+import { SsoService }
   from "../../../services/commons/sso.service";
-import { ConfirmDialogComponent } 
+import { ConfirmDialogComponent }
   from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
-import { DeviceDetectionService } 
+import { DeviceDetectionService }
   from "../../../services/commons/device-detection.service";
 import {
     BinaryDownloadService
@@ -94,19 +94,19 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
   @Output() showFilterEvent = new EventEmitter();
   @ViewChild('drawer') detailDrawer: any;
   @ViewChild('odl') occurrenceDetail: any;
-    
+
   constructor(
-    private dataSource:             OccurrencesDataSource, 
-    private dialog:                 MatDialog, 
+    private dataSource:             OccurrencesDataSource,
+    private dialog:                 MatDialog,
     private ssoService:             SsoService,
-    private confirmDialog:          MatDialog, 
+    private confirmDialog:          MatDialog,
     protected _deviceDetectionService: DeviceDetectionService,
     private dldService:             BinaryDownloadService,
         protected _navigationService: NavigationService,
     protected _tokenService: TokenService,
     protected _profileService: ProfileService,
 
-    public snackBar:                MatSnackBar ) { 
+    public snackBar:                MatSnackBar ) {
 
       super(
         _tokenService,
@@ -145,29 +145,14 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
 
 
   doExport() {
-        let newWindow = window.open(); 
-        if ( ! this._occFilters ) {
-            this._occFilters = new OccurrenceFilters();
-        }
-        this._occFilters.ids = this.getSelectedIds();
-        this.dataSource.export(this._occFilters).subscribe(data => {
-            this.dldService.downloadBinary(newWindow, data,  "text/csv");
-        });
-  }
-
-
-
-
-  private downloadExport(data: any) {
-    var blob = new Blob([data], { type: "text/csv"});
-    var url = window.URL.createObjectURL(blob);
-    var pwa = window.open(url, '_blank');
-    //@todo use an angular material dialog
-    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-        alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier d\'export.');
+    if ( ! this._occFilters ) {
+      this._occFilters = new OccurrenceFilters();
     }
+    this._occFilters.ids = this.getSelectedIds();
+    this.dataSource.export(this._occFilters).subscribe(data => {
+      this.dldService.downloadBinary(data, 'text/csv', 'cel-export-');
+    });
   }
-
 
   getSelectedCount() {
     return this.selectedCount;
@@ -180,9 +165,9 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
       geoJsonUrl += ('?' + this._occFilters.toUrlParameters());
     }
     // If we only do a setSource with the new updated source, filtered out
-    // occurrences are still selectable. 
+    // occurrences are still selectable.
     // See http://taiga.tela-botanica.net/project/mathias-carnet-en-ligne/issue/417
-    // Thus we do all the source clearing + removing layer from map + 
+    // Thus we do all the source clearing + removing layer from map +
     // recreating layer with new filtered source + adding layer to the map:
     var vectorSource = this.createOccurrenceVectorSource(geoJsonUrl);
     this.map.removeLayer(this.occLayer);
@@ -192,7 +177,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
     this.occLayer = new VectorLayer({
       source: this.occVectorSource,
       style: this.createOccurrenceLayerStyle()
-      
+
     });
     this.map.addLayer(this.occLayer);
 
@@ -229,7 +214,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
          if (xhr.status == 200) {
            vectorSource.addFeatures(
                vectorSource.getFormat().readFeatures(
-                 xhr.responseText, 
+                 xhr.responseText,
                  {
                    dataProjection: 'EPSG:4326',
                    featureProjection: 'EPSG:3857'
@@ -245,7 +230,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
    });
     return vectorSource;
   }
-  
+
   private createOccurrenceLayerStyle() {
     return new Style({
         image: new Icon(({
@@ -277,7 +262,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
     return new VectorLayer({
       source: this.occVectorSource,
       style: this.createOccurrenceLayerStyle()
-      
+
     });
   }
 
@@ -321,9 +306,9 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
     });
   }
 
-  
+
   ngAfterViewInit() {
-  
+
 
   //ngOnInit() {
 
@@ -396,8 +381,8 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
 
     if ( !this.isMobile ) {
       this.snackBar.open(
-        'Pour sélectionner plusieurs observations, cliquer sur ces dernières en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.', 
-        'Fermer', 
+        'Pour sélectionner plusieurs observations, cliquer sur ces dernières en maintenant la touche "shift" enfoncée ou en traçant un rectangle avec la touche "control" enfoncée.',
+        'Fermer',
         { duration: 5000 });
     }
   }
@@ -441,28 +426,28 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
                   let msg;
                   if ( nbOfPublishedOccz>0 ) {
                     msg = 'Les observations complètes ont été publiées avec succès';
-                  } 
+                  }
                   else {
                     msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
 
                   }
                   this.snackBar.open(
-                  msg, 
-                  'Fermer', 
+                  msg,
+                  'Fermer',
                   { duration: 2500 });
                   this.redrawMap();
 
               },
               error => this.snackBar.open(
-                  'Une erreur est survenue. ' + error, 
-                  'Fermer', 
+                  'Une erreur est survenue. ' + error,
+                  'Fermer',
                   { duration: 2500 })
           )
     }
     else {
         this.snackBar.open(
-          'Aucune observation privée. Aucune observation à publier.', 
-          'Fermer', 
+          'Aucune observation privée. Aucune observation à publier.',
+          'Fermer',
           { duration: 2500 })
     }
   }
@@ -472,14 +457,14 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
         this.dataSource.bulkReplace(ids, {isPublic: false}).subscribe(
             data => {
                 this.snackBar.open(
-                'Les observations ont été dépubliées avec succès.', 
-                'Fermer', 
+                'Les observations ont été dépubliées avec succès.',
+                'Fermer',
                 { duration: 2500 });
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
+                'Une erreur est survenue. ' + error,
+                'Fermer',
                 { duration: 2500 })
         )
     }
@@ -495,7 +480,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
     // multi edit:
     else if (this.getSelectedCount() > 1) {
       this.bulkEdit();
-    } 
+    }
   }
 
 
@@ -560,40 +545,23 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
             data => {
                 this.redrawMap();
                 this.snackBar.open(
-                'Les observations ont été supprimées avec succès.', 
-                'Fermer', 
+                'Les observations ont été supprimées avec succès.',
+                'Fermer',
                 { duration: 2500 });
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
+                'Une erreur est survenue. ' + error,
+                'Fermer',
                 { duration: 2500 })
         );
     }
 
     generatePdfEtiquette() {
-        let ids = this.getSelectedIds();
-        let newWindow = window.open();
-        this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-
-                //             this.downloadPdfEtiquette(data)
-                    this.dldService.downloadBinary(newWindow, data,  "application/pdf");
-                  });
-
-            
-        
-    }
-
-  
-    private downloadPdfEtiquette(data: any) {
-        var blob = new Blob([data], { type: "application/pdf"});
-        var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url);
-        //@todo use an angular material dialog
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
-        }
+      const ids = this.getSelectedIds();
+      this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
+        this.dldService.downloadBinary(data,  'application/pdf', 'cel-etiquettes-');
+      });
     }
 
     importSpreadsheet(file: File) {
@@ -605,17 +573,17 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
             data => {
                 this.redrawMap();
                 this.snackBar.open(
-                'Les observations ont été importées avec succès.', 
-                'Fermer', 
+                'Les observations ont été importées avec succès.',
+                'Fermer',
                 { duration: 2500 });
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error, 
-                'Fermer', 
+                'Une erreur est survenue. ' + error,
+                'Fermer',
                 { duration: 2500 })
         );
-        this.importDialogRef.close(); 
+        this.importDialogRef.close();
     }
 
   toggleDetailSlideNav() {
@@ -623,7 +591,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
         this.detailDrawer.close();
 
       } else {
-        this.detailDrawer.open()
+        this.detailDrawer.open();
 
       }
   }

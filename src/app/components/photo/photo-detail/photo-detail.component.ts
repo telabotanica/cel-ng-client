@@ -8,10 +8,10 @@ import {
 import {
     Router,
     ActivatedRoute
-} from "@angular/router";
+} from '@angular/router';
 import {
     Observable
-} from "rxjs/Observable";
+} from 'rxjs/Observable';
 import {
     Subscription
 } from 'rxjs/Subscription';
@@ -19,36 +19,36 @@ import {
     MatDialogRef,
     MatDialogConfig,
     MatDialog
-} from "@angular/material";
+} from '@angular/material';
 
 import {
     TbLog
-} from "tb-tag-lib/lib/_models/tb-log.model";
+} from 'tb-tag-lib/lib/_models/tb-log.model';
 
 import {
     environment
 } from '../../../../environments/environment';
 import {
     Photo
-} from "../../../model/photo/photo.model";
+} from '../../../model/photo/photo.model';
 import {
     PhotoRotation
-} from "../../../model/photo/photo-rotation.model";
+} from '../../../model/photo/photo-rotation.model';
 import {
     PhotoService
-} from "../../../services/photo/photo.service";
+} from '../../../services/photo/photo.service';
 import {
     PhotoRotationService
-} from "../../../services/photo/photo-rotation.service";
+} from '../../../services/photo/photo-rotation.service';
 import {
     NotificationService
-} from "../../../services/commons/notification.service";
+} from '../../../services/commons/notification.service';
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     PhotoShareDialogComponent
-} from "../photo-share-dialog/photo-share-dialog.component";
+} from '../photo-share-dialog/photo-share-dialog.component';
 import {
     PhotoLinkOccurrenceDialogComponent
 } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
@@ -57,7 +57,8 @@ import {
 } from '../photo-display-dialog/photo-display-dialog.component';
 import {
     ConfirmDialogComponent
-} from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+} from '../../../components/occurrence/confirm-dialog/confirm-dialog.component';
+import {BinaryDownloadService} from '../../../services/commons/binary-download.service';
 
 @Component({
     selector: 'app-photo-detail',
@@ -65,28 +66,6 @@ import {
     styleUrls: ['./photo-detail.component.css']
 })
 export class PhotoDetailComponent {
-
-    id: number;
-    photo: Photo;
-    isMobile: boolean = false;
-    basicTags: Array < any > = environment.photoTagLib.basicTags;
-    baseUrl: string = environment.api.tagLibBaseUrl;
-    refreshButtonDisabled: boolean = false;
-
-    private _timestamp: number;
-    private _shareDialogRef: MatDialogRef < PhotoShareDialogComponent > ;
-    private _linkToOccDialogRef: MatDialogRef < PhotoLinkOccurrenceDialogComponent > ;
-    private _photoDisplayDialogRef: MatDialogRef < PhotoDisplayDialogComponent > ;
-
-
-    private static readonly _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
-    private static readonly _photoRotatedOkMsg: string = 'La photo a été pivotée avec succès.';
-    private static readonly _occLinkedOkMsg: string = "La photo et l’observation ont bien été liées.";
-    private static readonly _occUnlinkedOkMsg: string = "Le lien entre la photo et l’observation a bien été supprimé.";
-    private static readonly _photoDeletedOkMsg: string = "La photo a été supprimée avec succès.";
-    private static readonly _errorMsg: string = "Une erreur est survenue.";
-
-    @Output() closeEvent = new EventEmitter();
     @Input()
     set photoToDisplay(photo: Photo) {
         this.photo = photo;
@@ -100,13 +79,36 @@ export class PhotoDetailComponent {
         private confirmDialog: MatDialog,
         private route: ActivatedRoute,
         private dialog: MatDialog,
-        private router: Router) {
+        private router: Router,
+        private dldService: BinaryDownloadService) {
 
         _deviceDetectionService.detectDevice().subscribe(result => {
             this.isMobile = result.matches;
         });
 
     }
+
+
+    private static readonly _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
+    private static readonly _photoRotatedOkMsg: string = 'La photo a été pivotée avec succès.';
+    private static readonly _occLinkedOkMsg: string = 'La photo et l’observation ont bien été liées.';
+    private static readonly _occUnlinkedOkMsg: string = 'Le lien entre la photo et l’observation a bien été supprimé.';
+    private static readonly _photoDeletedOkMsg: string = 'La photo a été supprimée avec succès.';
+    private static readonly _errorMsg: string = 'Une erreur est survenue.';
+
+    id: number;
+    photo: Photo;
+    isMobile = false;
+    basicTags: Array < any > = environment.photoTagLib.basicTags;
+    baseUrl: string = environment.api.tagLibBaseUrl;
+    refreshButtonDisabled = false;
+
+    private _timestamp: number;
+    private _shareDialogRef: MatDialogRef < PhotoShareDialogComponent > ;
+    private _linkToOccDialogRef: MatDialogRef < PhotoLinkOccurrenceDialogComponent > ;
+    private _photoDisplayDialogRef: MatDialogRef < PhotoDisplayDialogComponent > ;
+
+    @Output() closeEvent = new EventEmitter();
 
     openShareDialog() {
         const dialogConfig = new MatDialogConfig();
@@ -161,18 +163,6 @@ export class PhotoDetailComponent {
         );
     }
 
-    private downloadZipInBrowser(data: any) {
-        var blob = new Blob([data], {
-            type: "application/zip"
-        });
-        var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url);
-        //@todo use an angular material dialog
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert('Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
-        }
-    }
-
     viewBigger() {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = false;
@@ -187,17 +177,17 @@ export class PhotoDetailComponent {
     }
 
     download() {
-        let id = this.photo.id;
-        this.dataService.download([this.photo.id]).subscribe(
+        const id = this.photo.id;
+        this.dataService.download([id]).subscribe(
             data => {
-                this.downloadZipInBrowser(data);
+              this.dldService.downloadBinary(data, 'application/zip', 'cel-photo-' + id + '-');
             },
             error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
         );
     }
 
     buildDialogConfig() {
-        let dialogConfig = new MatDialogConfig();
+        const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = false;
         dialogConfig.autoFocus = true;
         dialogConfig.hasBackdrop = true;
@@ -206,9 +196,9 @@ export class PhotoDetailComponent {
 
     openConfirmDeletionDialog(value) {
 
-        let dialogConfig = this.buildDialogConfig();
+        const dialogConfig = this.buildDialogConfig();
         dialogConfig.data = PhotoDetailComponent._confirmDeletionMsg;
-        let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+        const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
 
         confirmDialogRef
             .afterClosed()
@@ -220,7 +210,7 @@ export class PhotoDetailComponent {
     }
 
     delete() {
-        let id = this.photo.id;
+        const id = this.photo.id;
         this.dataService.delete(id).subscribe(
             data => {
                 this._notifService.notify(PhotoDetailComponent._photoDeletedOkMsg);
