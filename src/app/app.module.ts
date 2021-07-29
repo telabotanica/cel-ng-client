@@ -27,8 +27,8 @@ import { PhotoFiltersComponent } from './components/photo/photo-filters/photo-fi
 import { OccurrenceFiltersComponent } from './components/occurrence/occurrence-filters/occurrence-filters.component';
 import { OccurrenceUiComponent } from './components/occurrence/occurrence-ui/occurrence-ui.component';
 import { PhotoUiComponent } from './components/photo/photo-ui/photo-ui.component';
-import { UserOccurrenceTagTreeComponent } from "./components/occurrence/user-occurrence-tag-tree/user-occurrence-tag-tree.component";
-import { PhotoTagTreeComponent } from "./components/photo/photo-tag-tree/photo-tag-tree.component";
+import { UserOccurrenceTagTreeComponent } from './components/occurrence/user-occurrence-tag-tree/user-occurrence-tag-tree.component';
+import { PhotoTagTreeComponent } from './components/photo/photo-tag-tree/photo-tag-tree.component';
 import { MapUiComponent } from './components/map/map-ui/map-ui.component';
 import { UserProfileUiComponent } from './components/user-profile/user-profile-ui/user-profile-ui.component';
 import { OccurrenceMapComponent } from './components/map/occurrence-map/occurrence-map.component';
@@ -36,14 +36,14 @@ import { ImportDialogComponent } from './components/occurrence/import-dialog/imp
 import { OccurrenceDetailDialogComponent } from './components/occurrence/occurrence-detail-dialog/occurrence-detail-dialog.component';
 import { TagDialogComponent } from './components/occurrence/tag-dialog/tag-dialog.component';
 import { AddPhotoDialogComponent } from './components/photo/add-photo-dialog/add-photo-dialog.component';
-import { OccurrencesDataSource } from "./services/occurrence/occurrences.datasource";
-import { PhotoService } from "./services/photo/photo.service";
-import { TelaBotanicaProjectService } from "./services/occurrence/tela-botanica-project.service";
-import { UserOccurrenceTagService } from "./services/occurrence/user-occurrence-tag.service";
-import { EfloreService } from "./services/eflore/eflore.service";
-import { AlgoliaEfloreParserService } from "./services/eflore/algolia-eflore-parser.service";
-import { PlantnetService } from "./services/plantnet/plantnet.service";
-import { ExistInChorodepService } from "./services/chorodep/exist-in-chorodep.service";
+import { OccurrencesDataSource } from './services/occurrence/occurrences.datasource';
+import { PhotoService } from './services/photo/photo.service';
+import { TelaBotanicaProjectService } from './services/occurrence/tela-botanica-project.service';
+import { UserOccurrenceTagService } from './services/occurrence/user-occurrence-tag.service';
+import { EfloreService } from './services/eflore/eflore.service';
+import { AlgoliaEfloreParserService } from './services/eflore/algolia-eflore-parser.service';
+import { PlantnetService } from './services/plantnet/plantnet.service';
+import { ExistInChorodepService } from './services/chorodep/exist-in-chorodep.service';
 import { PhotoShareDialogComponent } from './components/photo/photo-share-dialog/photo-share-dialog.component';
 import { PhotoLinkOccurrenceDialogComponent } from './components/photo/photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import { OccurrenceLinkPhotoDialogComponent } from './components/occurrence/occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
@@ -58,16 +58,16 @@ import { UserAgreementComponent } from './components/generic/user-agreement/user
 import { HelpComponent } from './components/generic/help/help.component';
 import { ConfirmDialogComponent } from './components/occurrence/confirm-dialog/confirm-dialog.component';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
-import { NotificationService } from "./services/commons/notification.service";
-import { SsoService } from "./services/commons/sso.service";
-import { DataUsageAgreementService } from "./services/commons/data-usage-agreement.service";
-import { DeviceDetectionService } from "./services/commons/device-detection.service";
-import { ProfileService } from "./services/profile/profile.service";
-import { NavigationService } from "./services/commons/navigation.service";
-import { TokenService } from "./services/commons/token.service";
-import { MatPaginatorI18nService } from "./services/commons/mat-paginator-i18n.service";
-import { AuthInterceptor } from "./interceptors/auth.interceptor";
-import { RepoNameTranslatorPipe } from "./pipes/repo-name-translator.pipe";
+import { NotificationService } from './services/commons/notification.service';
+import { SsoService } from './services/commons/sso.service';
+import { DataUsageAgreementService } from './services/commons/data-usage-agreement.service';
+import { DeviceDetectionService } from './services/commons/device-detection.service';
+import { ProfileService } from './services/profile/profile.service';
+import { NavigationService } from './services/commons/navigation.service';
+import { TokenService } from './services/commons/token.service';
+import { MatPaginatorI18nService } from './services/commons/mat-paginator-i18n.service';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { RepoNameTranslatorPipe } from './pipes/repo-name-translator.pipe';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json');
@@ -121,7 +121,7 @@ const appearance: MatFormFieldDefaultOptions = {
     HttpClientModule,
     OverlayModule,
     TbGeolocLibModule,
-    TbDropfileLibModule, 
+    TbDropfileLibModule,
     TbTsbLibModule,
     TbTagLibModule,
     TranslateModule.forRoot({
@@ -133,21 +133,21 @@ const appearance: MatFormFieldDefaultOptions = {
     })
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, 
+    { provide: MAT_DATE_LOCALE,
       useValue: 'fr-FR' },
 //    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: appearance },
-    { provide: HTTP_INTERCEPTORS, 
-      useClass: AuthInterceptor, 
+    { provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
       multi: true },
     {
       provide: MatPaginatorIntl,
       useClass: MatPaginatorI18nService },
-    OccurrencesDataSource, 
-    PhotoService, 
-    TelaBotanicaProjectService, 
+    OccurrencesDataSource,
+    PhotoService,
+    TelaBotanicaProjectService,
     UserOccurrenceTagService,
     NotificationService,
     JsonPatchService,
@@ -164,7 +164,7 @@ const appearance: MatFormFieldDefaultOptions = {
   bootstrap: [AppComponent],
   entryComponents: [
     ConfirmDialogComponent,
-    ImportDialogComponent, 
+    ImportDialogComponent,
     OccurrenceDetailDialogComponent,
     PhotoShareDialogComponent,
     PhotoLinkOccurrenceDialogComponent,
