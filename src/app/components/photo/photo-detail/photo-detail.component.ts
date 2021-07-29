@@ -94,6 +94,7 @@ export class PhotoDetailComponent {
     private static readonly _occLinkedOkMsg: string = 'La photo et l’observation ont bien été liées.';
     private static readonly _occUnlinkedOkMsg: string = 'Le lien entre la photo et l’observation a bien été supprimé.';
     private static readonly _photoDeletedOkMsg: string = 'La photo a été supprimée avec succès.';
+    private static readonly _downloadMsg: string = 'Génération de l’archive pour la photo en cours, merci de votre patience :)';
     private static readonly _errorMsg: string = 'Une erreur est survenue.';
 
     id: number;
@@ -178,10 +179,9 @@ export class PhotoDetailComponent {
 
     download() {
         const id = this.photo.id;
+        this._notifService.notifyError(PhotoDetailComponent._downloadMsg);
         this.dataService.download([id]).subscribe(
-            data => {
-              this.dldService.downloadBinary(data, 'application/zip', 'cel-photo-' + id + '-');
-            },
+            data => this.dldService.downloadBinary(data, 'application/zip', 'cel-photo-' + id + '-'),
             error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)
         );
     }

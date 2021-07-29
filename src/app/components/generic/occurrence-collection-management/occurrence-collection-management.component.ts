@@ -122,9 +122,19 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
         this._occFilters = new OccurrenceFilters();
     }
     this._occFilters.ids = this.getSelectedIds();
-    this.dataSource.export(this._occFilters).subscribe(data => {
-        this.dldService.downloadBinary(data, 'text/csv', 'cel-export-');
-    });
+
+    this.snackBar.open(
+      'Génération de l’export en cours, merci de votre patience :)',
+      'Fermer',
+      { duration: 3500 });
+
+    this.dataSource.export(this._occFilters).subscribe(
+      data => this.dldService.downloadBinary(data, 'text/csv', 'cel-export-'),
+      () => this.snackBar.open(
+        'Une erreur est survenue durant la génération de l’export.',
+        'Fermer',
+        { duration: 3500 })
+    );
   }
 
   getSelectedOccurrences() {

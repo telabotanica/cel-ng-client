@@ -212,7 +212,7 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
   delete() {
     const id = this.occurrence.id;
     this.dataSource.delete(id).subscribe(
-      data => {
+      () => {
         this.snackBar.open(
         'L’observation a été supprimée avec succès.',
         'Fermer',
@@ -227,9 +227,18 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
   }
 
   generatePdfEtiquette() {
-    this.dataSource.generatePdfEtiquette([this.occurrence.id]).subscribe(data => {
-      this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquette-' + this.occurrence.id + '-');
-    });
+    this.snackBar.open(
+      'Génération de l’étiquette en cours, merci de votre patience :)',
+      'Fermer',
+      { duration: 3500 });
+
+    this.dataSource.generatePdfEtiquette([this.occurrence.id]).subscribe(
+      data => this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquette-' + this.occurrence.id + '-'),
+      () => this.snackBar.open(
+        'Une erreur est survenue durant la génération de l’étiquette.',
+        'Fermer',
+        { duration: 3500 })
+    );
   }
 
   getPublishButtonTooltip() {

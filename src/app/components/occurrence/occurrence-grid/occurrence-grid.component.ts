@@ -357,9 +357,19 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             this._occFilters = new OccurrenceFilters();
         }
         this._occFilters.ids = this.getSelectedIds();
-        this.dataSource.export(this._occFilters).subscribe(data => {
-            this.dldService.downloadBinary(data, 'text/csv', 'cel-export-');
-        });
+
+      this.snackBar.open(
+        'Génération de l’export en cours, merci de votre patience :)',
+        'Fermer',
+        { duration: 3500 });
+
+        this.dataSource.export(this._occFilters).subscribe(
+          data => this.dldService.downloadBinary(data, 'text/csv', 'cel-export-'),
+          () => this.snackBar.open(
+            'Une erreur est survenue durant la génération de l’export.',
+            'Fermer',
+            { duration: 3500 })
+        );
     }
 
     bulkDelete() {
@@ -385,10 +395,19 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     generatePdfEtiquette() {
+        this.snackBar.open(
+            'Génération des étiquettes en cours, merci de votre patience :)',
+            'Fermer',
+            { duration: 3500 });
+
         const ids = this.getSelectedIds();
-        this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-            this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquettes-');
-        });
+        this.dataSource.generatePdfEtiquette(ids).subscribe(
+            data => this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquettes-'),
+            () => this.snackBar.open(
+                'Une erreur est survenue durant la génération des étiquettes.',
+                'Fermer',
+                { duration: 3500 })
+        );
     }
 
     clearSelection() {

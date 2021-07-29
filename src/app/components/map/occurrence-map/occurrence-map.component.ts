@@ -149,9 +149,19 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
       this._occFilters = new OccurrenceFilters();
     }
     this._occFilters.ids = this.getSelectedIds();
-    this.dataSource.export(this._occFilters).subscribe(data => {
-      this.dldService.downloadBinary(data, 'text/csv', 'cel-export-');
-    });
+
+    this.snackBar.open(
+      'Génération de l’export en cours, merci de votre patience :)',
+      'Fermer',
+      { duration: 3500 });
+
+    this.dataSource.export(this._occFilters).subscribe(
+      data => this.dldService.downloadBinary(data, 'text/csv', 'cel-export-'),
+      () => this.snackBar.open(
+        'Une erreur est survenue durant la génération de l’export.',
+        'Fermer',
+        { duration: 3500 })
+    );
   }
 
   getSelectedCount() {
@@ -554,9 +564,19 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
 
     generatePdfEtiquette() {
       const ids = this.getSelectedIds();
-      this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-        this.dldService.downloadBinary(data,  'application/pdf', 'cel-etiquettes-');
-      });
+
+      this.snackBar.open(
+        'Génération des étiquettes en cours, merci de votre patience :)',
+        'Fermer',
+        { duration: 3500 });
+
+      this.dataSource.generatePdfEtiquette(ids).subscribe(
+        data => this.dldService.downloadBinary(data,  'application/pdf', 'cel-etiquettes-'),
+        () => this.snackBar.open(
+          'Une erreur est survenue durant la génération des étiquettes.',
+          'Fermer',
+          { duration: 3500 })
+      );
     }
 
     importSpreadsheet(file: File) {
@@ -565,7 +585,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
         });
 
         this.dataSource.importSpreadsheet(file).subscribe(
-            data => {
+            () => {
                 this.redrawMap();
                 this.snackBar.open(
                 'Les observations ont été importées avec succès.',
@@ -574,7 +594,7 @@ export class OccurrenceMapComponent extends BaseComponent implements AfterViewIn
 
             },
             error => this.snackBar.open(
-                'Une erreur est survenue. ' + error,
+                'Une erreur est survenue durant l’import.',
                 'Fermer',
                 { duration: 3500 })
         );

@@ -227,13 +227,16 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
     }
 
     bulkDownload() {
+        this.snackBar.open(
+          'Génération de l’archive des photos en cours, merci de votre patience :)',
+          'Fermer',
+          { duration: 3500 });
+
         const ids = this.selected;
         this.dataService.download(ids).subscribe(
-            data => {
-                this.dldService.downloadBinary(data,  'application/zip', 'cel-photos-');
-            },
-            error => this.snackBar.open(
-                'Une erreur est survenue. ' + error,
+            data => this.dldService.downloadBinary(data,  'application/zip', 'cel-photos-'),
+            () => this.snackBar.open(
+                'Une erreur est survenue durant la génération de l’archive des photos',
                 'Fermer', {
                     duration: 3500
                 })
