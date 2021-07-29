@@ -5,24 +5,24 @@
 export const environment = {
   production: true,
   app : {
-    title:           "Carnet en ligne BETA",
-    unsetTokenValue: "unset",
-    absoluteBaseUrl: "https://beta.tela-botanica.org/appli:cel/",
-    helpUrl: "https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php",
+    title:           'Carnet en ligne BETA',
+    unsetTokenValue: 'unset',
+    absoluteBaseUrl: 'https://beta.tela-botanica.org/appli:cel/',
+    helpUrl: 'https://www.tela-botanica.org/wikini/AideCarnetEnLigne/wakka.php',
     importTemplateUrl: 'https://resources.tela-botanica.org/modele_import_excel_carnet_en_ligne.xlsx',
   },
   algolia: {
-    baseUrl:       "https://yotvbfebjc-dsn.algolia.net/1/indexes/*/queries",
-    apiKey:        "843a36372facc0f1836f53d1d5968aa8",
-    applicationId: "YOTVBFEBJC",
+    baseUrl:       'https://yotvbfebjc-dsn.algolia.net/1/indexes/*/queries',
+    apiKey:        '843a36372facc0f1836f53d1d5968aa8',
+    applicationId: 'YOTVBFEBJC',
   },
   plantnet: {
-    baseUrl: "https://api-cel-test.tela-botanica.org/api/plantnet"
+    baseUrl: 'https://api-cel-test.tela-botanica.org/api/plantnet'
   },
   api: {
-    baseUrl: "https://api-cel-test.tela-botanica.org/api",
-    tagLibBaseUrl: "https://api-cel-test.tela-botanica.org",
-    prefix: "api",
+    baseUrl: 'https://api-cel-test.tela-botanica.org/api',
+    tagLibBaseUrl: 'https://api-cel-test.tela-botanica.org',
+    prefix: 'api',
   },
   telaWebSite: {
     profileUrl: 'https://www.tela-botanica.org/membres/me/settings/profile',
@@ -30,13 +30,13 @@ export const environment = {
     contactUrl: 'https://www.tela-botanica.org/widget:reseau:remarques?lang=fr&service=cel&pageSource=https%3A%2F%2Fwww.tela-botanica.org%2Fappli%3Acel',
   },
   chorodep: {
-    baseUrl: "https://api.tela-botanica.org/service:cel/InventoryTaxonPresent"
+    baseUrl: 'https://api.tela-botanica.org/service:cel/InventoryTaxonPresent'
   },
   identiplante: {
-    baseUrl: "https://www.tela-botanica.org/appli:identiplante"
+    baseUrl: 'https://www.tela-botanica.org/appli:identiplante'
   },
   eflore: {
-    baseUrlTemplate: "https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese"
+    baseUrlTemplate: 'https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese'
   },
   mapBgTile: {
     baseUrl: 'https://osm.tela-botanica.org/tuiles/osmfr',
@@ -47,12 +47,12 @@ export const environment = {
   },
   sso: {
     identiteEndpoint: 'https://beta.tela-botanica.org/service:annuaire:auth/identite',
-    authWidgetUrl:    'http://beta.tela-botanica.org/widget:reseau:auth',
+    authWidgetUrl:    'https://beta.tela-botanica.org/widget:reseau:auth',
     refreshEndpoint:  'https://beta.tela-botanica.org/service:annuaire:auth/rafraichir',
     refreshInterval:  600000
   },
   misc: {
-    ministereMTESHomepageUrl: "https://www.ecologique-solidaire.gouv.fr/",
+    ministereMTESHomepageUrl: 'https://www.ecologique-solidaire.gouv.fr/',
   },
   photoTagLib: {
     basicTags: [
@@ -171,7 +171,7 @@ export const environment = {
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
  *
- * This import should be commented out in production mode because it will have a negative impact 
+ * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
