@@ -16,35 +16,35 @@ import {
   MatTableDataSource,
   MatDialogConfig,
   MatSnackBar,
-  MatDialog } from "@angular/material";
+  MatDialog } from '@angular/material';
 
 import {OccurrenceFilters}
-  from "../../../model/occurrence/occurrence-filters.model";
+  from '../../../model/occurrence/occurrence-filters.model';
 import { Occurrence }
-  from "../../../model/occurrence/occurrence.model";
+  from '../../../model/occurrence/occurrence.model';
 import { OccurrencesDataSource }
-  from "../../../services/occurrence/occurrences.datasource";
+  from '../../../services/occurrence/occurrences.datasource';
 import { ImportDialogComponent }
-  from "../../../components/occurrence/import-dialog/import-dialog.component";
+  from '../../../components/occurrence/import-dialog/import-dialog.component';
 import { SsoService }
-  from "../../../services/commons/sso.service";
+  from '../../../services/commons/sso.service';
 import { ConfirmDialogComponent }
-  from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+  from '../../../components/occurrence/confirm-dialog/confirm-dialog.component';
 import {
     BinaryDownloadService
-} from "../../../services/commons/binary-download.service";
+} from '../../../services/commons/binary-download.service';
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     ProfileService
-} from "../../../services/profile/profile.service";
+} from '../../../services/profile/profile.service';
 import {
     TokenService
-} from "../../../services/commons/token.service";
+} from '../../../services/commons/token.service';
 import {
     NavigationService
-} from "../../../services/commons/navigation.service";
+} from '../../../services/commons/navigation.service';
 import { BaseComponent } from '../../generic/base-component/base.component';
 
 /**
@@ -68,7 +68,7 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
   protected importDialogRef: MatDialogRef<ImportDialogComponent>;
 
 
-  protected _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
+  protected _confirmDeletionMsg = 'Supprimer la/les observation(s) ?';
   @Output() showFilterEvent = new EventEmitter();
   @ViewChild('drawer') detailDrawer: any;
   @ViewChild('odl') occurrenceDetail: any;
@@ -104,7 +104,7 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
 
 
   private buildDialogConfig() {
-    let dialogConfig = new MatDialogConfig();
+    const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.hasBackdrop = true;
@@ -135,9 +135,9 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
 
   openConfirmDeletionDialog(value) {
 
-    let dialogConfig = this.buildDialogConfig();
+    const dialogConfig = this.buildDialogConfig();
     dialogConfig.data = this._confirmDeletionMsg;
-    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
 
     confirmDialogRef
       .afterClosed()
@@ -150,7 +150,7 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
 
     bulkDelete() {
 
-        let ids = this.getSelectedIds();
+        const ids = this.getSelectedIds();
 
         this.dataSource.bulkRemove(ids).subscribe(
             data => {
@@ -169,14 +169,14 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
     }
 
   bulkEdit() {
-      let ids = this.getSelectedIds();
+      const ids = this.getSelectedIds();
       let strIds = '';
-      for(let id of ids) {
+      for (const id of ids) {
           strIds += id;
           strIds += ',';
       }
       // Remove the trailing comma:
-      strIds = strIds.substring(0, strIds.length-1);
+      strIds = strIds.substring(0, strIds.length - 1);
       this.navigateToMultiEditOccurrenceForm(strIds);
   }
 
@@ -203,28 +203,26 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
     }
 
   bulkPublish() {
-      let occz = this.getSelectedOccurrences();
+      const occz = this.getSelectedOccurrences();
       const privateOccz = occz.filter(occ => (occ.isPublic == false) );
-      let privateOccIdz = privateOccz.map(function(occurrence) {
+      const privateOccIdz = privateOccz.map(function(occurrence) {
         return occurrence.id;
       });
 
-      if ( privateOccIdz.length>0 ) {
+      if ( privateOccIdz.length > 0 ) {
           this.dataSource.bulkReplace(privateOccIdz, {isPublic: true}).subscribe(
               data => {
                   let nbOfPublishedOccz = 0;
-                  for (let d of data)  {
+                  for (const d of data)  {
                     if ( d[Object.keys(d)[0]].message.isPublic == true ) {
                       nbOfPublishedOccz++;
                     }
                   }
                   let msg;
-                  if ( nbOfPublishedOccz>0 ) {
+                  if ( nbOfPublishedOccz > 0 ) {
                     msg = 'Les observations complètes ont été publiées avec succès';
-                  }
-                  else {
-                    msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
-
+                  } else {
+                    msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l’aide pour plus d’informations sur les conditions de publication.';
                   }
                   this.snackBar.open(
                   msg,
@@ -237,18 +235,17 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                   'Une erreur est survenue. ' + error,
                   'Fermer',
                   { duration: 3500 })
-          )
-    }
-    else {
+          );
+    } else {
         this.snackBar.open(
           'Aucune observation privée. Aucune observation à publier.',
           'Fermer',
-          { duration: 3500 })
+          { duration: 3500 });
     }
   }
 
     bulkUnpublish() {
-        let ids = this.getSelectedIds();
+        const ids = this.getSelectedIds();
         this.dataSource.bulkReplace(ids, {isPublic: false}).subscribe(
             data => {
                 this.snackBar.open(
@@ -261,11 +258,11 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                 'Une erreur est survenue. ' + error,
                 'Fermer',
                 { duration: 3500 })
-        )
+        );
     }
 
     importSpreadsheet(file: File) {
-        let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
+        const snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
             duration: 3500
         });
 
