@@ -19,7 +19,7 @@ import {
 import {
     environment
 } from '../../../../environments/environment';
-import { Profile 
+import { Profile
 } from "../../../model/profile/profile.model";
 import {
     DeviceDetectionService
@@ -41,7 +41,7 @@ import { BaseComponent } from '../../generic/base-component/base.component';
     styleUrls: ['./user-profile-ui.component.css']
 })
 export class UserProfileUiComponent extends BaseComponent implements OnInit {
-    
+
     private static readonly _profileUrl: string = environment.telaWebSite.profileUrl;
     profileForm: FormGroup;
     profile: Profile;
@@ -97,7 +97,7 @@ console.log('toggleAlwaysDisplayAdvancedFields');
 console.debug(event);
             this.profile.alwaysDisplayAdvancedFields = this.profileForm.controls['alwaysDisplayAdvancedFields'].value;
             this.patchProfile();
-        
+
     }
 
 
@@ -121,7 +121,7 @@ console.log('patchProfile');
             this._snackBar.open(
                 "Votre profil a été mis à jour avec succès.",
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 });
         });;
     }

@@ -1,24 +1,24 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import { 
-  AfterViewInit, 
-  Component, 
+import {
+  AfterViewInit,
+  Component,
   EventEmitter,
   Inject,
-  ElementRef, 
-  ViewChild, 
+  ElementRef,
+  ViewChild,
   Output } from '@angular/core';
-import { 
+import {
   HttpClient, HttpParams } from "@angular/common/http";
-import { 
-  MatPaginator, 
-  MatSort, 
-  MatTableDataSource, 
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
   MatSnackBar} from "@angular/material";
-import { 
-  debounceTime, 
-  distinctUntilChanged, 
-  startWith, 
-  tap, 
+import {
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  tap,
   delay } from 'rxjs/operators';
 import { merge } from "rxjs/observable/merge";
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -43,7 +43,7 @@ export class AddPhotoDialogComponent {
   @Output() onPhotoDeletedEvent: EventEmitter<Photo> = new EventEmitter<Photo>();
 
   constructor(
-    public dialogRef: MatDialogRef<AddPhotoDialogComponent>,    
+    public dialogRef: MatDialogRef<AddPhotoDialogComponent>,
     public snackBar: MatSnackBar) { }
 
   onPhotoAdded(photo: Photo) {
@@ -81,25 +81,25 @@ export class AddPhotoDialogComponent {
       msg = "Une erreur est survenue.";
     }
     this.snackBar.open(
-      msg, 
-      "Fermer", 
-      { duration: 2500 });
+      msg,
+      "Fermer",
+      { duration: 3500 });
   }
 
   onPhotoUploaded(photo: Photo) {
     this.snackBar.open(
-      "Photo enregistrée avec succès.", 
-      'Fermer', 
-      { duration: 1500 });
+      "Photo enregistrée avec succès.",
+      'Fermer',
+      { duration: 3500 });
     // Notify the gallery it needs to take this new photo into account:
     this.onPhotoUploadedEvent.emit(photo);
   }
 
   onPhotoRejected(photo: Photo) {
     this.snackBar.open(
-      "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL.", 
-      'Fermer', 
-      { duration: 1500 });
+      "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL.",
+      'Fermer',
+      { duration: 3500 });
   }
 
 

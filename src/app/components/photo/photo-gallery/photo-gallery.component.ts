@@ -235,7 +235,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 1500
+                    duration: 3500
                 })
         );
     }
@@ -265,7 +265,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
                 this.snackBar.open(
                     'Les photos ont bien été supprimées.',
                     'Fermer', {
-                        duration: 1500
+                        duration: 3500
                     });
                 for (const id of ids) {
                     console.debug(id);
@@ -277,7 +277,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 1500
+                    duration: 3500
                 })
         );
     }
@@ -296,13 +296,13 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
                 this.snackBar.open(
                     'La photo et l’observation ont bien été liées.',
                     'Fermer', {
-                        duration: 1500
+                        duration: 3500
                     });
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 1500
+                    duration: 3500
                 })
         );
     }

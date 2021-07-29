@@ -5,11 +5,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
     Router
 } from "@angular/router";
-import { 
+import {
   MatSnackBar
 } from "@angular/material";
 
-import { Profile 
+import { Profile
 } from "../../model/profile/profile.model";
 import { environment } from '../../../environments/environment';
 import { ProfileService } from "../profile/profile.service";
@@ -18,7 +18,7 @@ import {
     NavigationService
 } from "./navigation.service";
 
-@Injectable({ providedIn: 'root' }) 
+@Injectable({ providedIn: 'root' })
 export class DataUsageAgreementService {
 
   private _localStorageDataUsageAgreementAcceptedKey: string;
@@ -29,7 +29,7 @@ export class DataUsageAgreementService {
     private _snackBar: MatSnackBar,
     private _navigationService: NavigationService,
     private _tokenService: TokenService,
-    private _profileService: ProfileService) { 
+    private _profileService: ProfileService) {
     }
 
 
@@ -51,9 +51,9 @@ console.log("acceptDua");
             p => {
                 this.rememberDuaWasAccepted();
           this._snackBar.open(
-          "Merci d'avoir accepté la charte d'utilisation.", 
-          "Fermer", 
-          { duration: 2500 });
+          "Merci d'avoir accepté la charte d'utilisation.",
+          "Fermer",
+          { duration: 3500 });
           this.navigateToOccurrenceGrid();
 
             }
@@ -151,6 +151,6 @@ console.debug('sumthing in localstorage');
 
   }
 
-    
+
 }
 

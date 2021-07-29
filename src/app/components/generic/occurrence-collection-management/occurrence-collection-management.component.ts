@@ -158,13 +158,13 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                 this.snackBar.open(
                 'Les observations ont été supprimées avec succès.',
                 'Fermer',
-                { duration: 2500 });
+                { duration: 3500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer',
-                { duration: 2500 })
+                { duration: 3500 })
         );
     }
 
@@ -229,21 +229,21 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                   this.snackBar.open(
                   msg,
                   'Fermer',
-                  { duration: 2500 });
+                  { duration: 3500 });
                   this.refresh();
 
               },
               error => this.snackBar.open(
                   'Une erreur est survenue. ' + error,
                   'Fermer',
-                  { duration: 2500 })
+                  { duration: 3500 })
           )
     }
     else {
         this.snackBar.open(
           'Aucune observation privée. Aucune observation à publier.',
           'Fermer',
-          { duration: 2500 })
+          { duration: 3500 })
     }
   }
 
@@ -254,19 +254,19 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                 this.snackBar.open(
                 'Les observations ont été dépubliées avec succès.',
                 'Fermer',
-                { duration: 2500 });
+                { duration: 3500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer',
-                { duration: 2500 })
+                { duration: 3500 })
         )
     }
 
     importSpreadsheet(file: File) {
         let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
-            duration: 2500
+            duration: 3500
         });
 
         this.dataSource.importSpreadsheet(file).subscribe(
@@ -275,13 +275,13 @@ export abstract class OccurrenceCollectionManagementComponent extends BaseCompon
                 this.snackBar.open(
                 'Les observations ont été importées avec succès.',
                 'Fermer',
-                { duration: 2500 });
+                { duration: 3500 });
 
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer',
-                { duration: 2500 })
+                { duration: 3500 })
         );
         this.importDialogRef.close();
     }

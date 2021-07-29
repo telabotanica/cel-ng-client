@@ -296,7 +296,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 this.snackBar.open(
                     msg,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.refresh();
 
@@ -304,7 +304,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
         )
     }
@@ -330,7 +330,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 this.snackBar.open(
                     'Les observations ont été dépubliées avec succès.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.refresh();
 
@@ -338,7 +338,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
         )
     }
@@ -371,7 +371,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 this.snackBar.open(
                     'Les observations ont été supprimées avec succès.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.clearSelection();
                 this.refresh();
@@ -380,7 +380,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
         );
     }
@@ -402,7 +402,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     importSpreadsheet(file: File) {
         let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
-            duration: 2500
+            duration: 3500
         });
 
         this.dataSource.importSpreadsheet(file).subscribe(
@@ -410,7 +410,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 this.snackBar.open(
                     'Les observations ont été importées avec succès.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.refresh();
 
@@ -418,7 +418,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
         );
     }

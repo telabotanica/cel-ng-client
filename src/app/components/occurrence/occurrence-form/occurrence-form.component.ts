@@ -727,7 +727,7 @@ console.debug(occ);
         this.snackBar.open(
             "La photo " + photo.originalName + " a été enregistrée avec succès.",
             'Fermer', {
-                duration: 2500
+                duration: 3500
             });
     }
 
@@ -745,7 +745,7 @@ console.debug(occ);
                     this.snackBar.open(
                         "Les photos et l’observation ont été liées avec succès.",
                         "Fermer", {
-                            duration: 2500
+                            duration: 3500
                         });
                     if (!stayOnPage) {
                         this.navigateToOccurrenceUi();
@@ -757,7 +757,7 @@ console.debug(occ);
                 error => this.snackBar.open(
                     'Une erreur est survenue lors de la création du lien entre les photos et l’obseravation. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     })
             );
         } else {
@@ -786,7 +786,7 @@ console.log('8888888888888888888888888');
                     this.snackBar.open(
                         "La valeur de la certitude a été mise à 'certain'.",
                         "Fermer", {
-                            duration: 2500
+                            duration: 3500
                         })
                 }
                 this.occurrenceForm.controls['certainty'].patchValue("certain");
@@ -795,7 +795,7 @@ console.log('8888888888888888888888888');
                     this.snackBar.open(
                         "La valeur de la certitude a été mise à 'à déterminer'.",
                         "Fermer", {
-                            duration: 2500
+                            duration: 3500
                         })
                 }
                 this.occurrenceForm.controls['certainty'].patchValue("à déterminer");
@@ -817,7 +817,7 @@ console.log('8888888888888888888888888');
         this.snackBar.open(
             msg,
             "Fermer", {
-                duration: 2500
+                duration: 3500
             });
     }
 
@@ -939,7 +939,7 @@ console.debug(dateObserved);
             this.snackBar.open(
                 "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorologie départementale).",
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 });
             if (this.location.inseeData != null) {
                 let frenchDept = this.location.inseeData.code.substr(0, 2);
@@ -997,7 +997,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     this._duplicateMsg,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
 
@@ -1045,7 +1045,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     "L'observation vient d'être créée.",
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 if (!stayOnPage) {
                     this.navigateToOccurrenceUi();
@@ -1063,7 +1063,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     'Une erreur est survenue. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1081,7 +1081,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     "L'observation a bien été modifiée.",
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 // Useless in this case but quite logical...
                 this.enableForm();
@@ -1093,7 +1093,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     'Une erreur est survenue. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1111,7 +1111,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     "Les observations ont bien été modifiées.",
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 if (!stayOnPage) {
                     this.navigateToOccurrenceUi();
@@ -1121,7 +1121,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     'Une erreur est survenue. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1188,7 +1188,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     message,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1243,7 +1243,7 @@ console.debug(dateObserved);
         this.snackBar.open(
             "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL",
             'Fermer', {
-                duration: 1500
+                duration: 3500
             });
     }
 
@@ -1370,7 +1370,7 @@ console.debug(dateObserved);
         this.snackBar.open(
             "La valeur de la précision a été mise à jour.",
             "Fermer", {
-                duration: 2500
+                duration: 3500
             });
 
     }
