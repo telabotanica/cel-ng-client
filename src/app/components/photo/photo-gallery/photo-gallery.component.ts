@@ -326,12 +326,12 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     // add a fake param to URL to allow to refresh images after rotation:
     public generateDynamicPhotoUrl(photo) {
-        return photo.url.replace('O', 'S') + '?' + this._imageFakeParam;
-        // The new method is unknown after build. After investigation, any changes 
+        return photo.url.replace('O', 'M') + '?' + this._imageFakeParam;
+        // The new method is unknown after build. After investigation, any changes
         // to the model (like removing data members) is discarded...
-        // another nasty cache issue as we're developping ion production mode? 
+        // another nasty cache issue as we're developping ion production mode?
         // no time to investigate further...
-        //return photo.getMiniatureUrl() + '?' + this._imageFakeParam;
+        // return photo.getMiniatureUrl() + '?' + this._imageFakeParam;
     }
 
 

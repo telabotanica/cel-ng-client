@@ -14,7 +14,7 @@ export class Photo {
     size: number;    
 
     getMiniatureUrl() {
-       return this.url.replace('O', 'S');
+       return this.url.replace('O', 'M');
    }
 
 } 

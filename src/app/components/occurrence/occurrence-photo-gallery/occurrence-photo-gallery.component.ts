@@ -109,7 +109,7 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
 
   getImgMiniatureUrl(photo: Photo) {
     // return photo.getMiniatureUrl();
-    return photo.url.replace('O','S');
+    return photo.url.replace('O', 'M');
   }
 
 
