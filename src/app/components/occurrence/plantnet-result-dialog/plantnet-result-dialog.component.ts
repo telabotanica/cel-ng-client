@@ -1,9 +1,9 @@
-import { Component, OnInit,EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Inject } from '@angular/core';
-import { MatDialogRef } from "@angular/material";
+import { MatDialogRef } from '@angular/material';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
-import { PlantnetResponse } from "../../../model/plantnet/plantnet-response.model";
+import { PlantnetResponse } from '../../../model/plantnet/plantnet-response.model';
 
 @Component({
   selector: 'plantnet-result-dialog',
@@ -20,19 +20,19 @@ export class PlantnetResultDialogComponent implements OnInit {
 
   }
 
-    
+
   close() {
     this.dialogRef.close();
   }
 
-  onResultSelect(sciName: string, authorship:string) {
+  onResultSelect(sciName: string, authorship: string) {
 
-    let taxon = {
+    const taxon = {
         name: sciName,
-        repository: 'bdtfx', 
-        idNomen: null, 
+        repository: 'bdtfx',
+        idNomen: null,
         author: authorship
-    }
+    };
 
     this.dialogRef.close(taxon);
   }

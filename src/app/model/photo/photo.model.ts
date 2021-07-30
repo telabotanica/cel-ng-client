@@ -1,4 +1,4 @@
-import { Occurrence } from "../../model/occurrence/occurrence.model";
+import { Occurrence } from '../../model/occurrence/occurrence.model';
 
 export class Photo {
     id: number;
@@ -11,10 +11,10 @@ export class Photo {
     dateShot: Date;
     occurrence: Occurrence;
     mimeType: string;
-    size: number;    
+    size: number;
 
     getMiniatureUrl() {
        return this.url.replace('O', 'M');
    }
 
-} 
+}

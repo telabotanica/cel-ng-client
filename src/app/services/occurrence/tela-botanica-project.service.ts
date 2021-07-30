@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpParams } from "@angular/common/http"
-import { Observable } from "rxjs/Observable";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 
-import { TelaBotanicaProject } from "../../model/occurrence/tela-botanica-project.model";
+import { TelaBotanicaProject } from '../../model/occurrence/tela-botanica-project.model';
 
 @Injectable({
   providedIn: 'root'

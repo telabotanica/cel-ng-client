@@ -33,7 +33,7 @@ export class MatPaginatorI18nService extends MatPaginatorIntl {
       : startIndex + pageSize;
 
     return `${startIndex + 1} - ${endIndex} / ${length}`;
-  };
+  }
 
   public getAndInitTranslations(): void {
     this.translate.get([

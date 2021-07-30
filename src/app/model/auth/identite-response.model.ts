@@ -3,4 +3,4 @@ export class IdentiteResponse {
     token:    string;
     session:  string;
     duration: number;
-} 
+}

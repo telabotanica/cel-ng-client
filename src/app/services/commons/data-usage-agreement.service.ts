@@ -4,19 +4,19 @@ import { map, catchError } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
     Router
-} from "@angular/router";
+} from '@angular/router';
 import {
   MatSnackBar
-} from "@angular/material";
+} from '@angular/material';
 
 import { Profile
-} from "../../model/profile/profile.model";
+} from '../../model/profile/profile.model';
 import { environment } from '../../../environments/environment';
-import { ProfileService } from "../profile/profile.service";
-import { TokenService } from "./token.service";
+import { ProfileService } from '../profile/profile.service';
+import { TokenService } from './token.service';
 import {
     NavigationService
-} from "./navigation.service";
+} from './navigation.service';
 
 @Injectable({ providedIn: 'root' })
 export class DataUsageAgreementService {
@@ -35,7 +35,7 @@ export class DataUsageAgreementService {
 
 
     public rememberDuaWasAccepted() {
-console.log("rememberDuaWasAccepted");
+console.log('rememberDuaWasAccepted');
 
             this.initLocalStorageKeyIfNeeded();
 
@@ -43,16 +43,16 @@ console.log("rememberDuaWasAccepted");
   }
 
     public acceptDua() {
-console.log("acceptDua");
-            let userId = this.getToken().id;
-        let profile = new Profile();
+console.log('acceptDua');
+            const userId = this.getToken().id;
+        const profile = new Profile();
         profile.userId = userId;
         this._profileService.post(profile).subscribe(
             p => {
                 this.rememberDuaWasAccepted();
           this._snackBar.open(
-          "Merci d'avoir accepté la charte d'utilisation.",
-          "Fermer",
+          'Merci d\'avoir accepté la charte d\'utilisation.',
+          'Fermer',
           { duration: 3500 });
           this.navigateToOccurrenceGrid();
 
@@ -78,8 +78,8 @@ console.log('ETTING TOKEN IN DUA SRV');
 
     private initLocalStorageKeyIfNeeded() {
 console.log('initLocalStorageKeyIfNeeded');
-            let token = this.getToken();
-            let userId = token.id;
+            const token = this.getToken();
+            const userId = token.id;
 
         if ( !this._localStorageDataUsageAgreementAcceptedKey ) {
 
@@ -129,7 +129,7 @@ console.debug('sumthing in localstorage');
     public checkIfDuaWasAcceptedCached() {
             this.initLocalStorageKeyIfNeeded();
 
-        let storedAgreement = localStorage.getItem(this._localStorageDataUsageAgreementAcceptedKey);
+        const storedAgreement = localStorage.getItem(this._localStorageDataUsageAgreementAcceptedKey);
 
         if (null === storedAgreement) {
 
@@ -140,10 +140,10 @@ console.debug('sumthing in localstorage');
 
     public checkIfDuaWasAccepted() {
 
-            console.log("checkIfDuaAccepted");
+            console.log('checkIfDuaAccepted');
 
 
-            let userId = this.getToken().id ;
+            const userId = this.getToken().id ;
 
 
             return this._profileService.findByUserId(userId);

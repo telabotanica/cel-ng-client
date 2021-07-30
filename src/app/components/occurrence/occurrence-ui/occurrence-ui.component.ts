@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {
     Router
-} from "@angular/router";
+} from '@angular/router';
 
 import { OccurrenceFiltersComponent } from '../occurrence-filters/occurrence-filters.component';
 import { OccurrenceDetailComponent } from '../occurrence-detail/occurrence-detail.component';
-import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
-import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
-import { ProfileService } from "../../../services/profile/profile.service";
-import { TokenService } from "../../../services/commons/token.service";
+import { OccurrenceFilters } from '../../../model/occurrence/occurrence-filters.model';
+import { DeviceDetectionService } from '../../../services/commons/device-detection.service';
+import { ProfileService } from '../../../services/profile/profile.service';
+import { TokenService } from '../../../services/commons/token.service';
 import { BaseComponent } from '../../generic/base-component/base.component';
 
 @Component({
@@ -19,8 +19,8 @@ import { BaseComponent } from '../../generic/base-component/base.component';
 export class OccurrenceUiComponent extends BaseComponent {
 
   occFilters: OccurrenceFilters;
-  isMobile: boolean = false;
-  isFilterVisible: boolean = false;
+  isMobile = false;
+  isFilterVisible = false;
 
 
   onShowFilterEvent() {
@@ -31,7 +31,7 @@ export class OccurrenceUiComponent extends BaseComponent {
      this.isFilterVisible = false;
   }
 
-  applyFilters(occFilters: OccurrenceFilters) { 
+  applyFilters(occFilters: OccurrenceFilters) {
       this.occFilters = occFilters;
 
   }

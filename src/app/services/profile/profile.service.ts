@@ -5,12 +5,12 @@ from '@angular/core';
 import {
     Observable
 }
-from "rxjs/Observable";
+from 'rxjs/Observable';
 import {
     HttpClient,
     HttpParams
 }
-from "@angular/common/http";
+from '@angular/common/http';
 
 import {
     environment
@@ -18,7 +18,7 @@ import {
 import {
     Profile
 }
-from "../../model/profile/profile.model";
+from '../../model/profile/profile.model';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +40,7 @@ export class ProfileService {
 
     findByUserId(userId: number): Observable < Profile[] > {
 
-        let httpParams = new HttpParams().append('userId', String(userId));
+        const httpParams = new HttpParams().append('userId', String(userId));
 
         return this.http.get < Profile[] > (this.resourceUrl, {
             params: httpParams,

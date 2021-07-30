@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import {
     Router
-} from "@angular/router";
+} from '@angular/router';
 import {
     DOCUMENT
 } from '@angular/common';
@@ -10,7 +10,7 @@ import {
     environment
 } from '../../../environments/environment';
 
-@Injectable({ providedIn: 'root' }) 
+@Injectable({ providedIn: 'root' })
 export class NavigationService {
 
     private static readonly _ssoAuthWidgetUrl: string = environment.sso.authWidgetUrl;
@@ -41,7 +41,7 @@ export class NavigationService {
 
     navigateToUserAgreementForm() {
         // Cannot use boolean route params?
-        let isForm: string = 'no';
+        const isForm = 'no';
         this._router.navigate(['/user-agreement', 'acceptForm'  ]);
     }
 
@@ -56,7 +56,7 @@ export class NavigationService {
 
   navigateToEditOccurrenceForm(occId) {
     this._router.navigate(['/occurrence-collection-edit-form', occId]);
-  }      
+  }
 
     // EXTERNAL NAVIGATION
 
@@ -90,5 +90,5 @@ export class NavigationService {
     }
 
 
-   
+
 }

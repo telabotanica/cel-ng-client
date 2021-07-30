@@ -1,4 +1,4 @@
-export class OccurrenceFilters { //interface UrlParameterGenerator
+export class OccurrenceFilters { // interface UrlParameterGenerator
 
   dateObservedDay:          number;
   dateObservedMonth:        number;
@@ -18,22 +18,19 @@ export class OccurrenceFilters { //interface UrlParameterGenerator
   tags:                     Array<string>;
   ids:                      Array<number>;
 
-  toUrlParameters() : string  {
+  toUrlParameters(): string  {
     let urlParams = '';
-    for (var propertyName in this) {
+    for (const propertyName in this) {
 
       // Array type parameters
       if (Array.isArray(this[propertyName])) {
-        for(var idx in this[propertyName]) {
+        for (const idx in this[propertyName]) {
         urlParams += '&';
         urlParams += propertyName;
         urlParams += '[]=';
         urlParams += this[propertyName][idx].toString();
         }
-      }
-
-      // Simple type parameters
-      else if (this.hasOwnProperty(propertyName) && ! (this[propertyName] == null) ) {
+      } else if (this.hasOwnProperty(propertyName) && ! (this[propertyName] == null) ) {
         urlParams += '&';
         urlParams += propertyName;
         urlParams += '=';
@@ -46,4 +43,4 @@ export class OccurrenceFilters { //interface UrlParameterGenerator
     return urlParams.substring(1);
   }
 
-} 
+}

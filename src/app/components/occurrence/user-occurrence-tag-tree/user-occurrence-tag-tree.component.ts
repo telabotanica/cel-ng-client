@@ -1,13 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, Injectable } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { map, tap } from "rxjs/operators";
+import { map, tap } from 'rxjs/operators';
 
 
-import { UserOccurrenceTagService } from "../../../services/occurrence/user-occurrence-tag.service";
+import { UserOccurrenceTagService } from '../../../services/occurrence/user-occurrence-tag.service';
 
 /**
  * Node for UserOccurrenceTag item
@@ -35,8 +35,8 @@ export class FileTreeBuilder {
 
   get data(): UserOccurrenceTagItemNode[] { return this.dataChange.value; }
 
-  constructor(private http: HttpClient, private userOccurrenceTagService:UserOccurrenceTagService) {
-	//this.http.get<any[]>("http://10.99.34.5:8080/api/userOccurrenceTagTrees").subscribe((jsonTree: any) => this.initialize(jsonTree));
+  constructor(private http: HttpClient, private userOccurrenceTagService: UserOccurrenceTagService) {
+	// this.http.get<any[]>("http://10.99.34.5:8080/api/userOccurrenceTagTrees").subscribe((jsonTree: any) => this.initialize(jsonTree));
     userOccurrenceTagService.getCollectionAsTree().subscribe((jsonTree: any) => this.initialize(jsonTree));
   }
 

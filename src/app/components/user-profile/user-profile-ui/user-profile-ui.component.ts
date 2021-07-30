@@ -14,25 +14,25 @@ import {
 } from '@angular/common';
 import {
     MatSnackBar,
-} from "@angular/material";
+} from '@angular/material';
 
 import {
     environment
 } from '../../../../environments/environment';
 import { Profile
-} from "../../../model/profile/profile.model";
+} from '../../../model/profile/profile.model';
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     NavigationService
-} from "../../../services/commons/navigation.service";
+} from '../../../services/commons/navigation.service';
 import {
     ProfileService
-} from "../../../services/profile/profile.service";
+} from '../../../services/profile/profile.service';
 import {
     TokenService
-} from "../../../services/commons/token.service";
+} from '../../../services/commons/token.service';
 import { BaseComponent } from '../../generic/base-component/base.component';
 
 @Component({
@@ -74,7 +74,7 @@ export class UserProfileUiComponent extends BaseComponent implements OnInit {
     }
 
     _loadProfile() {
-        let userId =  this._tokenService.getUserId();
+        const userId =  this._tokenService.getUserId();
         this._profileService.findByUserId(userId).subscribe(
             profiles => {
                 if (profiles) {
@@ -107,7 +107,7 @@ console.debug(event);
     }
 
     getUsername() {
-        let pseudoUsed = this._tokenService.isPseudoUsed();
+        const pseudoUsed = this._tokenService.isPseudoUsed();
         if (pseudoUsed) {
             return this._tokenService.getPseudo();
         }
@@ -119,11 +119,11 @@ console.debug(event);
 console.log('patchProfile');
         this._profileService.patch(this.profile).subscribe(result => {
             this._snackBar.open(
-                "Votre profil a été mis à jour avec succès.",
+                'Votre profil a été mis à jour avec succès.',
                 'Fermer', {
                     duration: 3500
                 });
-        });;
+        });
     }
 
 

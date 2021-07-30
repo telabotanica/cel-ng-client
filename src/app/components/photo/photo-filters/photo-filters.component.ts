@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import {PhotoFilters} from "../../../model/photo/photo-filters.model";
-import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
-import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
-import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
+import {PhotoFilters} from '../../../model/photo/photo-filters.model';
+import { TelaBotanicaProject } from '../../../model/occurrence/tela-botanica-project.model';
+import { TelaBotanicaProjectService } from '../../../services/occurrence/tela-botanica-project.service';
+import { DeviceDetectionService } from '../../../services/commons/device-detection.service';
 
 @Component({
   selector: 'app-photo-filters',
@@ -16,16 +16,16 @@ export class PhotoFiltersComponent implements OnInit {
   @ViewChild('tagTree') tagTree;
   public telaBotanicaProjects: TelaBotanicaProject[];
   formGroup: FormGroup;
-  isMobile: boolean = false;
-  isPublic;       
-  certainty;         
+  isMobile = false;
+  isPublic;
+  certainty;
   isIdentiplanteValidated;
   projectId;
   project;
 
   @Output() applyFiltersEvent = new EventEmitter();
-  @Output() closeFiltersEvent = new EventEmitter();  
-    
+  @Output() closeFiltersEvent = new EventEmitter();
+
   constructor(private _tbPrjService: TelaBotanicaProjectService,
               private _deviceDetectionService:     DeviceDetectionService) { }
 
@@ -55,7 +55,7 @@ export class PhotoFiltersComponent implements OnInit {
 
   emitApplyFilterEvent() {
 
-      let filters = new PhotoFilters();
+      const filters = new PhotoFilters();
 
       filters.isPublic =  this.formGroup.get('isPublic').value;
       filters.dateShotDay = this.formGroup.get('dateShotDay').value;
@@ -73,7 +73,7 @@ export class PhotoFiltersComponent implements OnInit {
       this.applyFiltersEvent.emit(filters);
 
   }
- 
+
   resetFilters() {
     this.formGroup.reset();
     this.tagTree.reset();
@@ -81,7 +81,7 @@ export class PhotoFiltersComponent implements OnInit {
   }
 
   private _initResponsive() {
-    
+
     // @responsive: sets isMobile member value
     this._deviceDetectionService.detectDevice().subscribe(result => {
       this.isMobile = result.matches;

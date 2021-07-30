@@ -6,9 +6,9 @@ import { Injectable } from '@angular/core';
 })
 export class DeviceDetectionService {
 
-  public isMobile: boolean = false;
+  public isMobile = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) { 
+  constructor(private breakpointObserver: BreakpointObserver) {
   }
 
     // @refactor rename to detectMobile now we've got three formats to handle...

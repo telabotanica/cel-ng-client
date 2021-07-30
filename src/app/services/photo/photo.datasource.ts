@@ -1,13 +1,13 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 import { environment } from '../../../environments/environment';
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {Observable} from "rxjs/Observable";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {map, catchError, finalize} from "rxjs/operators";
-import {of} from "rxjs/observable/of"; 
- 
-import {Photo} from "../../model/photo/photo.model";
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {Observable} from 'rxjs/Observable';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {map, catchError, finalize} from 'rxjs/operators';
+import {of} from 'rxjs/observable/of';
+
+import {Photo} from '../../model/photo/photo.model';
 
 // @todo: refactor this by making a generic superclass
 // @todo: unused class, check for deletion
@@ -23,7 +23,7 @@ export class PhotoDataSource implements DataSource<Photo> {
     public loading$ = this.loadingSubject.asObservable();
     private resourceUrl = environment.api.baseUrl + '/photos';
 
-    constructor(private http:HttpClient) {
+    constructor(private http: HttpClient) {
 
     }
 
@@ -31,7 +31,7 @@ export class PhotoDataSource implements DataSource<Photo> {
         pageNumber = 0, pageSize = 3):  Observable<Photo[]> {
         return this.http.get<Photo[]>(this.resourceUrl + '.json', {
             params: new HttpParams()
-                //.set('filter', filter)
+                // .set('filter', filter)
                 .set('orderBy', sortProperty)
                 .set('sortOrder', sortOrder)
                 .set('pageNumber', pageNumber.toString())
@@ -42,10 +42,10 @@ export class PhotoDataSource implements DataSource<Photo> {
     }
 
 
-    load(sortProperty:string,
-                sortDirection:string,
-                pageIndex:number,
-                pageSize:number) {
+    load(sortProperty: string,
+                sortDirection: string,
+                pageIndex: number,
+                pageSize: number) {
 
         this.loadingSubject.next(true);
 
@@ -59,9 +59,9 @@ export class PhotoDataSource implements DataSource<Photo> {
             });
 
     }
-  
+
     connect(collectionViewer: CollectionViewer): Observable<Photo[]> {
-        console.log("Connecting data source");
+        console.log('Connecting data source');
         return this.resourcesSubject.asObservable();
     }
 

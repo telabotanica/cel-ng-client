@@ -6,14 +6,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IdentiteResponse } from '../../model/auth/identite-response.model';
 
-@Injectable({ providedIn: 'root' }) 
+@Injectable({ providedIn: 'root' })
 export class SsoService {
 
-  private readonly _identiteEndpoint:string = environment.sso.identiteEndpoint;
-  private readonly _refreshEndpoint:string = environment.sso.refreshEndpoint;
-  private readonly _localStorageTokenKey:string = 'token';
+  private readonly _identiteEndpoint: string = environment.sso.identiteEndpoint;
+  private readonly _refreshEndpoint: string = environment.sso.refreshEndpoint;
+  private readonly _localStorageTokenKey: string = 'token';
 
-  constructor(private _http: HttpClient) { 
+  constructor(private _http: HttpClient) {
   }
 
   identity() {
@@ -29,7 +29,7 @@ export class SsoService {
 
   getIdentity() {
     return this._http.get<IdentiteResponse>(
-      this._identiteEndpoint, 
+      this._identiteEndpoint,
       { withCredentials: true });
   }
 
@@ -37,11 +37,11 @@ export class SsoService {
     this.identity();
   }
 
-  getToken():string {
+  getToken(): string {
     return localStorage.getItem(this._localStorageTokenKey);
   }
 
-  setToken(token:string) {
+  setToken(token: string) {
     localStorage.setItem(this._localStorageTokenKey, token);
   }
 
@@ -49,9 +49,9 @@ export class SsoService {
     localStorage.removeItem(this._localStorageTokenKey);
   }
 
-  isTokenSet():boolean {
+  isTokenSet(): boolean {
     return !( this.getToken() === null );
   }
 
-    
+
 }
