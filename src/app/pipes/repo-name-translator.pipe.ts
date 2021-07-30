@@ -17,9 +17,9 @@ export class RepoNameTranslatorPipe implements PipeTransform {
     private taxoCodeNamemapping;
 
   constructor() {
-    let tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
+    const tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
     this.taxoCodeNamemapping = {};
-    for ( let entry of tbRepositoriesConfig ) {
+    for ( const entry of tbRepositoriesConfig ) {
         this.taxoCodeNamemapping[entry['id']] = entry['id'];
     }
   }
@@ -28,7 +28,7 @@ export class RepoNameTranslatorPipe implements PipeTransform {
   transform(value: string): string {
     if ( value in this.taxoCodeNamemapping) {
         return this.taxoCodeNamemapping[value];
-    }   
+    }
     return 'Autre/inconnu';
   }
 

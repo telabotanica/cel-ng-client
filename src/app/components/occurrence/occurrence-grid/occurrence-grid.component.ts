@@ -14,7 +14,7 @@ import {
 import {
     HttpClient,
     HttpParams
-} from "@angular/common/http";
+} from '@angular/common/http';
 import {
     MatPaginator,
     MatSort,
@@ -25,13 +25,13 @@ import {
     MatSnackBar,
     MatDialog
 }
-from "@angular/material";
+from '@angular/material';
 import {
     tap
 } from 'rxjs/operators';
 import {
     merge
-} from "rxjs/observable/merge";
+} from 'rxjs/observable/merge';
 import {
     fromEvent
 } from 'rxjs/observable/fromEvent';
@@ -41,31 +41,31 @@ import {
 
 import {
     OccurrencesDataSource
-} from "../../../services/occurrence/occurrences.datasource";
+} from '../../../services/occurrence/occurrences.datasource';
 import {
     OccurrenceFilters
-} from "../../../model/occurrence/occurrence-filters.model";
+} from '../../../model/occurrence/occurrence-filters.model';
 import {
     Occurrence
-} from "../../../model/occurrence/occurrence.model";
+} from '../../../model/occurrence/occurrence.model';
 import {
     ImportDialogComponent
-} from "../../../components/occurrence/import-dialog/import-dialog.component";
+} from '../../../components/occurrence/import-dialog/import-dialog.component';
 import {
     ConfirmDialogComponent
-} from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+} from '../../../components/occurrence/confirm-dialog/confirm-dialog.component';
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     BinaryDownloadService
-} from "../../../services/commons/binary-download.service";
-import { ProfileService } from "../../../services/profile/profile.service";
-import { TokenService } from "../../../services/commons/token.service";
+} from '../../../services/commons/binary-download.service';
+import { ProfileService } from '../../../services/profile/profile.service';
+import { TokenService } from '../../../services/commons/token.service';
 import { BaseComponent } from '../../generic/base-component/base.component';
 import {
     NavigationService
-} from "../../../services/commons/navigation.service";
+} from '../../../services/commons/navigation.service';
 
 @Component({
     selector: 'app-occurrence-grid',
@@ -76,25 +76,25 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     // Ids of the columns to be displayed:
     displayedColumns = [];
-    private displayedColumnsForMobiles = ["userSciName", "dateObserved"];
-    private displayedColumnsForTablet = ["select", "userSciName", "dateObserved", "locality"];
+    private displayedColumnsForMobiles = ['userSciName', 'dateObserved'];
+    private displayedColumnsForTablet = ['select', 'userSciName', 'dateObserved', 'locality'];
     private displayedColumnsForDesktop = [
-        "select", "userSciName", "dateObserved", "locality", "isPublic",
-        "id", "identiplanteScore"
+        'select', 'userSciName', 'dateObserved', 'locality', 'isPublic',
+        'id', 'identiplanteScore'
     ];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild('drawer') detailDrawer: any;
     @Output() showFilterEvent = new EventEmitter();
-    isMobile: boolean = false;
-    isTablet: boolean = false;
+    isMobile = false;
+    isTablet = false;
     // The occ the luser wants to see the detail of used to feed the detail
     // component input:
     occUnderSpotlight: Occurrence;
 
     private _occFilters: OccurrenceFilters;
 
-    // Instanciate SelectionModel with multiselection allowed and no row 
+    // Instanciate SelectionModel with multiselection allowed and no row
     // selected at startup:
     selection = new SelectionModel < Occurrence > (true, []);
 
@@ -107,7 +107,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
         }
     }
 
-    // @refactor Would using a single one to hold all three dialog be ok? 
+    // @refactor Would using a single one to hold all three dialog be ok?
     constructor(
         protected _navigationService: NavigationService,
     protected _tokenService: TokenService,
@@ -132,7 +132,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     protected setupResponsive() {
 
-        // @responsive: sets public variable + sets the array of columns 
+        // @responsive: sets public variable + sets the array of columns
         //              to display:
 
         this.deviceDetectionService.detectTablet().subscribe(result => {
@@ -205,8 +205,8 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     openImportDialog() {
 
-        let dialogConfig = this.buildDialogConfig();
-        let importDialogRef = this.importDialog.open(ImportDialogComponent, dialogConfig);
+        const dialogConfig = this.buildDialogConfig();
+        const importDialogRef = this.importDialog.open(ImportDialogComponent, dialogConfig);
 
         importDialogRef
             .afterClosed()
@@ -219,9 +219,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     openConfirmBulkDeleteDialog() {
 
-        let dialogConfig = this.buildDialogConfig();
+        const dialogConfig = this.buildDialogConfig();
         dialogConfig.data = 'Supprimer la/les observation(s) ?';
-        let confirmBulkDeleteDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+        const confirmBulkDeleteDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
         confirmBulkDeleteDialogRef
             .afterClosed()
@@ -234,9 +234,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     openConfirmBulkUnpublishDialog() {
 
-        let dialogConfig = this.buildDialogConfig();
-        dialogConfig.data = "Rendre privées la/les observations ? Elles ne seront visibles que par vous-mêmes.";
-        let confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+        const dialogConfig = this.buildDialogConfig();
+        dialogConfig.data = 'Rendre privées la/les observations ? Elles ne seront visibles que par vous-mêmes.';
+        const confirmBulkUnpublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
         confirmBulkUnpublishDialogRef
             .afterClosed()
@@ -249,9 +249,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
 
     openConfirmBulkPublishDialog() {
 
-        let dialogConfig = this.buildDialogConfig();
-        dialogConfig.data = "Rendre publiques la/les observations ? Elles seront visibles par les autres telabotanistes sur le site de Tela Botanica. Cela ne sera effectif que pour les observations dont la localisation, la date et la certitude d'identification ont été renseignées.";
-        let confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
+        const dialogConfig = this.buildDialogConfig();
+        dialogConfig.data = 'Rendre publiques la/les observations ? Elles seront visibles par les autres telabotanistes sur le site de Tela Botanica. Cela ne sera effectif que pour les observations dont la localisation, la date et la certitude d’identification ont été renseignées.';
+        const confirmBulkPublishDialogRef = this.importDialog.open(ConfirmDialogComponent, dialogConfig);
 
         confirmBulkPublishDialogRef
             .afterClosed()
@@ -263,7 +263,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     buildDialogConfig() {
-        let dialogConfig = new MatDialogConfig();
+        const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = false;
         dialogConfig.autoFocus = true;
         dialogConfig.hasBackdrop = true;
@@ -271,9 +271,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     bulkPublish() {
-        let occz = this.getSelectedOccurrences();
+        const occz = this.getSelectedOccurrences();
         const privateOccz = occz.filter(occ => (occ.isPublic == false));
-        let privateOccIdz = privateOccz.map(function(occurrence) {
+        const privateOccIdz = privateOccz.map(function(occurrence) {
             return occurrence.id;
         });
         this.dataSource.bulkReplace(privateOccIdz, {
@@ -281,7 +281,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
         }).subscribe(
             data => {
                 let nbOfPublishedOccz = 0;
-                for (let d of data) {
+                for (const d of data) {
                     if (d[Object.keys(d)[0]].message.isPublic == true) {
                         nbOfPublishedOccz++;
                     }
@@ -290,13 +290,12 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 if (nbOfPublishedOccz > 0) {
                     msg = 'Les observations complètes ont été publiées avec succès';
                 } else {
-                    msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l\'aide pour plus d\'informations sur les conditions de publication.';
-
+                    msg = 'Observation(s) incomplète(s) : aucune observation publiée. Consulter l’aide pour plus d’informations sur les conditions de publication.';
                 }
                 this.snackBar.open(
                     msg,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.refresh();
 
@@ -304,15 +303,15 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
-        )
+        );
     }
 
     bulkEdit() {
-        let ids = this.getSelectedIds();
+        const ids = this.getSelectedIds();
         let strIds = '';
-        for (let id of ids) {
+        for (const id of ids) {
             strIds += id;
             strIds += ',';
         }
@@ -322,7 +321,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     bulkUnpublish() {
-        let ids = this.getSelectedIds();
+        const ids = this.getSelectedIds();
         this.dataSource.bulkReplace(ids, {
             isPublic: false
         }).subscribe(
@@ -330,7 +329,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 this.snackBar.open(
                     'Les observations ont été dépubliées avec succès.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.refresh();
 
@@ -338,9 +337,9 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
-        )
+        );
     }
 
     private getSelectedIds() {
@@ -354,31 +353,34 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     doExport() {
-
-        let newWindow = window.open(); 
         if ( ! this._occFilters ) {
             this._occFilters = new OccurrenceFilters();
         }
         this._occFilters.ids = this.getSelectedIds();
-        this.dataSource.export(this._occFilters).subscribe(data => {
-            this.dldService.downloadBinary(newWindow, data,  "text/csv");
-        });
 
+      this.snackBar.open(
+        'Génération de l’export en cours, merci de votre patience :)',
+        'Fermer',
+        { duration: undefined });
 
+        this.dataSource.export(this._occFilters).subscribe(
+          data => this.dldService.downloadBinary(data, 'text/csv', 'cel-export-'),
+          () => this.snackBar.open(
+            'Une erreur est survenue durant la génération de l’export.',
+            'Fermer',
+            { duration: 3500 })
+        );
     }
-
-
-
 
     bulkDelete() {
 
-        let ids = this.getSelectedIds();
+        const ids = this.getSelectedIds();
         this.dataSource.bulkRemove(ids).subscribe(
-            data => {
+            () => {
                 this.snackBar.open(
                     'Les observations ont été supprimées avec succès.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.clearSelection();
                 this.refresh();
@@ -387,17 +389,25 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
         );
     }
 
     generatePdfEtiquette() {
-        let ids = this.getSelectedIds();
-        let newWindow = window.open();
-        this.dataSource.generatePdfEtiquette(ids).subscribe(data => {
-            this.dldService.downloadBinary(newWindow, data,  "application/pdf");
-        });
+        this.snackBar.open(
+            'Génération des étiquettes en cours, merci de votre patience :)',
+            'Fermer',
+            { duration: undefined });
+
+        const ids = this.getSelectedIds();
+        this.dataSource.generatePdfEtiquette(ids).subscribe(
+            data => this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquettes-'),
+            () => this.snackBar.open(
+                'Une erreur est survenue durant la génération des étiquettes.',
+                'Fermer',
+                { duration: 3500 })
+        );
     }
 
     clearSelection() {
@@ -409,8 +419,8 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
     }
 
     importSpreadsheet(file: File) {
-        let snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
-            duration: 2500
+        const snackBarRef = this.snackBar.open('Import en cours. Cela peut prendre un certain temps.', 'Fermer', {
+            duration: 3500
         });
 
         this.dataSource.importSpreadsheet(file).subscribe(
@@ -418,7 +428,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
                 this.snackBar.open(
                     'Les observations ont été importées avec succès.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 this.refresh();
 
@@ -426,13 +436,13 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 })
         );
     }
 
     translateBoolean(bool) {
-        return bool ? "oui" : "non";
+        return bool ? 'oui' : 'non';
     }
 
     toogleDetailSlideNav(occ: Occurrence, event) {

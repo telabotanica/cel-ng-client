@@ -1,21 +1,22 @@
 import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { 
-  MatDialogRef, 
-  MatDialogConfig, 
+import {
+  MatDialogRef,
+  MatDialogConfig,
   MatSnackBar,
-  MatDialog } from "@angular/material";
+  MatDialog } from '@angular/material';
 
 import { environment } from '../../../../environments/environment';
-import { Occurrence } from "../../../model/occurrence/occurrence.model";
-import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
-import { EfloreService } from "../../../services/eflore/eflore.service";
-import { AlgoliaEfloreParserService } from "../../../services/eflore/algolia-eflore-parser.service";
-import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
-import { ConfirmDialogComponent } from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
-import { EfloreCard } from "../../../model/eflore/eflore-card.model";
+import { Occurrence } from '../../../model/occurrence/occurrence.model';
+import { OccurrencesDataSource } from '../../../services/occurrence/occurrences.datasource';
+import { EfloreService } from '../../../services/eflore/eflore.service';
+import { AlgoliaEfloreParserService } from '../../../services/eflore/algolia-eflore-parser.service';
+import { DeviceDetectionService } from '../../../services/commons/device-detection.service';
+import { ConfirmDialogComponent } from '../../../components/occurrence/confirm-dialog/confirm-dialog.component';
+import { EfloreCard } from '../../../model/eflore/eflore-card.model';
+import {BinaryDownloadService} from '../../../services/commons/binary-download.service';
 
 @Component({
   selector: 'occurrence-detail',
@@ -31,33 +32,34 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
   baseTagLibBaseUrl: string = environment.api.tagLibBaseUrl;
   private _identiplanteBaseUrl: string = environment.identiplante.baseUrl;
   private _apiPrefix = environment.api.prefix;
-  private _confirmDeletionMsg: string = 'Supprimer la/les observation(s) ?';
+  private _confirmDeletionMsg = 'Supprimer la/les observation(s) ?';
   isDisplayedInDrawer = false;
   isMobile: boolean;
   @Output() closeEvent = new EventEmitter();
   @Output() occurrenceDeletedEvent = new EventEmitter();
-  @Input() 
+  @Input()
   set occToDisplay(occ: Occurrence) {
     this.occurrence = occ;
     this._loadEfloreCardIfNeeded();
     this.id = occ.id;
   }
 
-  @Input() 
+  @Input()
   set occurrenceId(occId: number) {
        this.id = occId;
        this.initOccurrence(this.id);
   }
 
   constructor(
-    private dataSource: OccurrencesDataSource, 
+    private dataSource: OccurrencesDataSource,
     private route: ActivatedRoute,
     private router: Router,
-    private confirmDialog: MatDialog, 
+    private confirmDialog: MatDialog,
     public snackBar: MatSnackBar,
     private deviceDetectionService: DeviceDetectionService,
     public efloreService: EfloreService,
-    private parser: AlgoliaEfloreParserService) {
+    private parser: AlgoliaEfloreParserService,
+    private dldService: BinaryDownloadService) {
 
       this.deviceDetectionService.detectDevice().subscribe(result => {
         this.isMobile = result.matches;
@@ -68,7 +70,7 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
            this.dataSource.get(occId).subscribe(
               occurrence => {
                 this.occurrence = occurrence;
-                this._loadEfloreCardIfNeeded();     
+                this._loadEfloreCardIfNeeded();
               }
            );
   }
@@ -85,20 +87,18 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
            this.initOccurrence(this.id);
          }
        );
-    }
-    else {
+    } else {
       this.isDisplayedInDrawer = true;
       this._loadEfloreCardIfNeeded();
     }
   }
 
   private _loadEfloreCardIfNeeded() {
-      if (this.occurrence.userSciName != null && this.occurrence.taxoRepo !=null && this.occurrence.taxoRepo != 'Autre/inconnu') {
+      if (this.occurrence.userSciName != null && this.occurrence.taxoRepo != null && this.occurrence.taxoRepo !== 'Autre/inconnu') {
         this.efloreService.get(this.occurrence.userSciName).subscribe(result => {
               this.efloreCard = this.parser.parseEfloreCard(result, this.occurrence.taxoRepo);
         });
-      }
-      else {
+      } else {
         this.efloreCard = null;
       }
   }
@@ -113,27 +113,27 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
   }
 
   openIdentiPlante() {
-    let url = `${this._identiplanteBaseUrl}/obs${this.occurrence.id}`
+    const url = `${this._identiplanteBaseUrl}/obs${this.occurrence.id}`;
     window.open(url , '_blank');
   }
 
   publish() {
-    let id = this.occurrence.id;
+    const id = this.occurrence.id;
     this.dataSource.patch(id, {isPublic: true}).subscribe(
       data => {
           this.snackBar.open(
-          "L'observation a été publiée avec succès.", 
-          "Fermer", 
-          { duration: 2500 });
+          'L’observation a été publiée avec succès.',
+          'Fermer',
+          { duration: 3500 });
           this.occurrence.isPublic = true;
       },
       error => {
         this.snackBar.open(
-          'Une erreur est survenue. ' + error, 
-          'Fermer', 
-          { duration: 2500 });
+          'Une erreur est survenue. ' + error,
+          'Fermer',
+          { duration: 3500 });
         }
-    )
+    );
   }
     isPublishable() {
       return (
@@ -144,50 +144,50 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
 
 
   unpublish() {
-    let id = this.occurrence.id;
+    const id = this.occurrence.id;
     this.dataSource.patch(id, {isPublic: false}).subscribe(
       data => {
         this.snackBar.open(
-          "L'observation a été dépubliée avec succès.", 
-          "Fermer", 
-          { duration: 2500 });
+          'L’observation a été dépubliée avec succès.',
+          'Fermer',
+          { duration: 3500 });
         this.occurrence.isPublic = false;
       },
     error => this.snackBar.open(
-      'Une erreur est survenue. ' + error, 
-      'Fermer', 
-      { duration: 2500 })
-    )
+      'Une erreur est survenue. ' + error,
+      'Fermer',
+      { duration: 3500 })
+    );
   }
 
 
   clone() {
     this.closeEvent.emit();
-    let id = this.occurrence.id;
+    const id = this.occurrence.id;
     this.dataSource.bulkCopy([id]).subscribe(
       data => {
         // The key in the JSON response for the current resource
         // is its relative URL:
-        let key = `/${this._apiPrefix}/occurrences/${this.occurrence.id}`;
+        const key = `/${this._apiPrefix}/occurrences/${this.occurrence.id}`;
         // Retrieve the id of the duplicated occurrence from the JSON response:
-        let duplicatedId = data[0][key].message.id;
+        const duplicatedId = data[0][key].message.id;
 
         this.snackBar.open(
-        "L'observation a été dupliquée avec succès.", 
-        "Fermer", 
-        { duration: 2500 });
+        'L’observation a été dupliquée avec succès.',
+        'Fermer',
+        { duration: 3500 });
 
         this.navigateToEditOccurrenceForm(duplicatedId);
       },
       error => this.snackBar.open(
-        'Une erreur est survenue. ' + error, 
-        'Fermer', 
-        { duration: 2500 })
-    )
+        'Une erreur est survenue. ' + error,
+        'Fermer',
+        { duration: 3500 })
+    );
   }
 
   buildDialogConfig() {
-    let dialogConfig = new MatDialogConfig();
+    const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.hasBackdrop = true;
@@ -196,9 +196,9 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
 
   openConfirmDeletionDialog() {
 
-    let dialogConfig = this.buildDialogConfig();
+    const dialogConfig = this.buildDialogConfig();
     dialogConfig.data = this._confirmDeletionMsg;
-    let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+    const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
 
     confirmDialogRef
       .afterClosed()
@@ -210,40 +210,39 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
   }
 
   delete() {
-    let id = this.occurrence.id;
+    const id = this.occurrence.id;
     this.dataSource.delete(id).subscribe(
-      data => {
+      () => {
         this.snackBar.open(
-        "L'observation a été supprimée avec succès.", 
-        "Fermer", 
-        { duration: 2500 });
+        'L’observation a été supprimée avec succès.',
+        'Fermer',
+        { duration: 3500 });
         this.occurrenceDeletedEvent.emit();
       },
       error => this.snackBar.open(
-        'Une erreur est survenue. ' + error, 
-        'Fermer', 
-        { duration: 2500 })
-    )
+        'Une erreur est survenue. ' + error,
+        'Fermer',
+        { duration: 3500 })
+    );
   }
 
   generatePdfEtiquette() {
-    this.dataSource.generatePdfEtiquette([this.occurrence.id]).subscribe(resp => {
-          this.downloadPdfEtiquette(resp);
-        });
-  }
+    this.snackBar.open(
+      'Génération de l’étiquette en cours, merci de votre patience :)',
+      'Fermer',
+      { duration: undefined });
 
-  private downloadPdfEtiquette(data: any) {
-    var blob = new Blob([data], { type: "application/pdf"});
-    var url = window.URL.createObjectURL(blob);
-    var pwa = window.open(url);
-    //@todo use an angular material dialog
-    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-        alert( 'Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
-    }
+    this.dataSource.generatePdfEtiquette([this.occurrence.id]).subscribe(
+      data => this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquette-' + this.occurrence.id + '-'),
+      () => this.snackBar.open(
+        'Une erreur est survenue durant la génération de l’étiquette.',
+        'Fermer',
+        { duration: 3500 })
+    );
   }
 
   getPublishButtonTooltip() {
-    return this.isPublishable() ? "Rendre publique l’observation" : "La publication n'est possible que pour les observations dont la localisation, la date et la certitude d'identification ont été renseignées.";
+    return this.isPublishable() ? 'Rendre publique l’observation' : 'La publication n’est possible que pour les observations dont la localisation, la date et la certitude d’identification ont été renseignées.';
 
   }
   close() {

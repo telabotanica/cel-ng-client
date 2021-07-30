@@ -4,4 +4,4 @@ export class Profile {
     userId: number;
     alwaysDisplayAdvancedFields: boolean;
 
-} 
+}

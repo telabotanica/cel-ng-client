@@ -11,7 +11,7 @@ import {
 } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { SsoService } from "../services/commons/sso.service";
+import { SsoService } from '../services/commons/sso.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const token = this._ssoService.getToken();
 
-    // Add authorization request header with auth token if available for CEL2 
+    // Add authorization request header with auth token if available for CEL2
     // and SSO api calls:
     if ( this.applies(request, token) ) {
       request = request.clone({
@@ -38,7 +38,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
 
-  private applies(request:HttpRequest<any>, token:string): boolean {
+  private applies(request: HttpRequest<any>, token: string): boolean {
     return (  token && ( request.url.startsWith(this._baseCelApiUrl) || request.url.startsWith('https://beta.tela-botanica.org/service:annuaire:auth') ) );
   }
 

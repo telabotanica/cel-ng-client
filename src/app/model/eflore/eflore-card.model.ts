@@ -1,7 +1,7 @@
 export class EfloreCard {
   author: string;
   ​​​​​​biblio: string;
-  // Common names, comma separated 
+  // Common names, comma separated
   ​​​​​​common_names: string[];
   ​​​​​​cultivar: string;
   ​​​​​​cultivar_groupe: string;
@@ -16,4 +16,4 @@ export class EfloreCard {
   ​​​​​​supra_genus_name: string;
   celPhotoUrls: string[];
   chorodepMapUrl: string;
-} 
+}

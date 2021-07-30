@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { PhotoFiltersComponent } from '../photo-filters/photo-filters.component';
 import { PhotoDetailComponent } from '../photo-detail/photo-detail.component';
-import { PhotoFilters } from "../../../model/photo/photo-filters.model";
-import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
- 
+import { PhotoFilters } from '../../../model/photo/photo-filters.model';
+import { DeviceDetectionService } from '../../../services/commons/device-detection.service';
+
 @Component({
   selector: 'app-photo-ui',
   templateUrl: './photo-ui.component.html',
@@ -13,10 +13,10 @@ import { DeviceDetectionService } from "../../../services/commons/device-detecti
 export class PhotoUiComponent implements OnInit {
 
   filters: PhotoFilters;
-  isMobile: boolean = false;
-  isFilterVisible: boolean = false;
+  isMobile = false;
+  isFilterVisible = false;
 
-  constructor(private deviceDetectionService: DeviceDetectionService) { 
+  constructor(private deviceDetectionService: DeviceDetectionService) {
 
     deviceDetectionService.detectDevice().subscribe(result => {
       this.isMobile = result.matches;
@@ -25,7 +25,7 @@ export class PhotoUiComponent implements OnInit {
   }
 
   ngOnInit() {
-        
+
   }
 
   onShowFilterEvent() {
@@ -36,7 +36,7 @@ export class PhotoUiComponent implements OnInit {
      this.isFilterVisible = false;
   }
 
-  applyFilters(filters) { 
+  applyFilters(filters) {
       this.filters = filters;
   }
 

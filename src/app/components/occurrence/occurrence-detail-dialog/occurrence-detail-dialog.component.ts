@@ -1,30 +1,30 @@
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import { 
-  AfterViewInit, 
-  Component, 
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {
+  AfterViewInit,
+  Component,
   EventEmitter,
   Inject,
-  ElementRef, 
-  OnInit, 
-  ViewChild, 
+  ElementRef,
+  OnInit,
+  ViewChild,
   Output } from '@angular/core';
-import { 
-  Router, ActivatedRoute } from "@angular/router";
+import {
+  Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { 
-  MatPaginator, 
-  MatSort, 
-  MatTableDataSource, 
-  MatSnackBar} from "@angular/material";
-import { 
-  debounceTime, 
-  distinctUntilChanged, 
-  startWith, 
-  tap, 
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatSnackBar} from '@angular/material';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  tap,
   delay } from 'rxjs/operators';
 
 export interface OccurrenceDetailDialogData {
-  occurrenceId: number
+  occurrenceId: number;
 }
 
 @Component({
@@ -37,7 +37,7 @@ export class OccurrenceDetailDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<OccurrenceDetailDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OccurrenceDetailDialogData) {  
+    @Inject(MAT_DIALOG_DATA) public data: OccurrenceDetailDialogData) {
 
     this.occurrenceId = data.occurrenceId;
   }

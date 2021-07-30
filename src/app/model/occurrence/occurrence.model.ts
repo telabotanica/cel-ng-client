@@ -1,4 +1,4 @@
-import { TelaBotanicaProject } from "./tela-botanica-project.model";
+import { TelaBotanicaProject } from './tela-botanica-project.model';
 
 /**
  * Models a botanical occurrence.
@@ -9,7 +9,7 @@ export class Occurrence {
   userSciName:              string;
   userSciNameId:            number;
   coef:                     number;
-  isPublic:                 boolean; 
+  isPublic:                 boolean;
   isWild:                   boolean;
   identiplanteScore:        number;
   isIdentiplanteValidated:  boolean;
@@ -19,7 +19,7 @@ export class Occurrence {
   occurrenceType:           string;
   identificationAuthor:     string;
   certainty:                string;
-  phenology:                string;  
+  phenology:                string;
   geometry:                 string;
   signature:                string;
   elevation:                any;
@@ -47,4 +47,4 @@ export class Occurrence {
 
 
 
-} 
+}

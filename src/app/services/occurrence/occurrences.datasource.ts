@@ -1,52 +1,52 @@
 import {
     Injectable
-} from "@angular/core";
+} from '@angular/core';
 import {
     environment
 } from '../../../environments/environment';
 import {
     CollectionViewer,
     DataSource
-} from "@angular/cdk/collections";
+} from '@angular/cdk/collections';
 import {
     Observable
-} from "rxjs/Observable";
+} from 'rxjs/Observable';
 import {
     HttpClient,
     HttpParams,
     HttpHeaders
-} from "@angular/common/http";
+} from '@angular/common/http';
 import {
     BehaviorSubject
-} from "rxjs/BehaviorSubject";
+} from 'rxjs/BehaviorSubject';
 import {
     map,
     tap,
     catchError,
     finalize
-} from "rxjs/operators";
+} from 'rxjs/operators';
 import {
     of
-} from "rxjs/observable/of";
+} from 'rxjs/observable/of';
 import 'rxjs/Rx';
 
 import {
     Occurrence
-} from "../../model/occurrence/occurrence.model";
+} from '../../model/occurrence/occurrence.model';
 import {
     Photo
-} from "../../model/photo/photo.model";
+} from '../../model/photo/photo.model';
 import {
     OccurrenceFilters
-} from "../../model/occurrence/occurrence-filters.model";
+} from '../../model/occurrence/occurrence-filters.model';
 import {
     JsonPatchService
-} from "../../../restit/services/json-patch.service";
+} from '../../../restit/services/json-patch.service';
 import {
     JsonPatchResponse
 } from '../../../restit/model/json-patch-response.model';
 
-//@todo refactor this ugly mess!
+// @todo refactor this ugly mess!
 @Injectable()
 export class OccurrencesDataSource implements DataSource < Occurrence > {
 
@@ -56,14 +56,14 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
     public loading$ = this.loadingSubject.asObservable();
     private resourceUrl = environment.api.baseUrl + '/occurrences';
     private photoSubresourceSubpathEndpoint = '/photos';
-    public occurrencesCount : number = 0;
+    public occurrencesCount = 0;
 
     constructor(private http: HttpClient, private jsonPatchService: JsonPatchService) {
 
     }
 
     getPhotos(id): Observable < Photo[] > {
-        let endpoint = this.resourceUrl + '/' + id + this.photoSubresourceSubpathEndpoint;
+        const endpoint = this.resourceUrl + '/' + id + this.photoSubresourceSubpathEndpoint;
         return this.http.get < Photo[] > (endpoint, {
             headers: {
                 'Accept': 'application/json'
@@ -74,7 +74,7 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
     findOccurrences(sortBy = '', sortDirection = 'asc',
         pageNumber = 0, pageSize = 10, filters: OccurrenceFilters = null): Observable < Occurrence[] > {
 
-        let httpParams = this.buildParams(filters)
+        const httpParams = this.buildParams(filters)
             .set('sortBy', sortBy)
             .set('sortDirection', sortDirection)
             .set('page', pageNumber.toString())
@@ -96,8 +96,8 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
 
     }
 
-    //@todo promote all this to its own reusable service:
-    // If we use this, the multivalued parameter are sent as e.g. ids[]=13,15. 
+    // @todo promote all this to its own reusable service:
+    // If we use this, the multivalued parameter are sent as e.g. ids[]=13,15.
     // We want ids[]=13&ids[]=15 instead so we use buildIdsUrlParams(ids).
     private buildIdsParams(ids) {
         let params = new HttpParams();
@@ -108,9 +108,9 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
     }
 
 
-    //@todo merge with getCollection and add/use as a switch the Accept mimetype 
+    // @todo merge with getCollection and add/use as a switch the Accept mimetype
     generatePdfEtiquette(ids) {
-        let params = this.buildIdsParams(ids);
+        const params = this.buildIdsParams(ids);
         console.debug(params);
         return this.http.get(this.resourceUrl, {
             params: params,
@@ -119,12 +119,6 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
                 'Accept': 'application/pdf'
             }
         });
-    }
-
-
-    generatePdfEtiquetteUrl(ids) {
-        let params = this.buildIdsParams(ids);
-        return this.resourceUrl + '/' + params.toString();
     }
 
     get(id): Observable < Occurrence > {
@@ -165,9 +159,9 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
     }
 
     importSpreadsheet(spreadsheetFile) {
-        let formData: FormData = new FormData();
+        const formData: FormData = new FormData();
         formData.append('file', spreadsheetFile, spreadsheetFile.name);
-        let headers = {
+        const headers = {
             'Accept': 'application/json'
         };
 
@@ -216,7 +210,7 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
     }
 
     connect(collectionViewer: CollectionViewer): Observable < Occurrence[] > {
-        console.log("Connecting data source");
+        console.log('Connecting data source');
         return this.occurrencesSubject.asObservable();
     }
 
@@ -227,7 +221,7 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
 
     export (filters: OccurrenceFilters) {
 
-        let httpParams = this.buildParams(filters);
+        const httpParams = this.buildParams(filters);
 
         return this.http.post(this.resourceUrl + '/export', '', {
             params: httpParams,
@@ -242,10 +236,10 @@ export class OccurrencesDataSource implements DataSource < Occurrence > {
         let httpParams = new HttpParams();
         console.debug(filters);
         if (filters !== null) {
-            for (var propertyName in filters) {
+            for (const propertyName in filters) {
                 if (filters.hasOwnProperty(propertyName) && !(filters[propertyName] == null)) {
                     if (Array.isArray(filters[propertyName])) {
-                        for (var val in filters[propertyName]) {
+                        for (const val in filters[propertyName]) {
                             httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
                         }
                     } else {

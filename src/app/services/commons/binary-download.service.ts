@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from "@angular/material";
+import {NotificationService} from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BinaryDownloadService {
 
-  downloadBinary(srcWindow, data, mimeType): void {
-            var blob = new Blob([data], { type: mimeType});
-            var url = window.URL.createObjectURL(blob);
-            //this.router.navigate([url]);
-            //Populating the file
-            srcWindow.location.href = url;
-/*
-        var pwa = window.open(url, '_blank');
+  constructor(
+    private _notifService: NotificationService,
+  ) {}
 
-        //@todo use an angular material dialog
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert('Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier d\'export.');
-        }
-*/
 
+  downloadBinary(data, mimeType, filename, autoSuffix = true): void {
+    if (autoSuffix) {
+      filename = filename + (new Date()).toISOString().slice(0, 19).replace(/-|:|T/g, '');
+    }
+    const blob = new Blob([data], { type: mimeType});
+    const link = window.document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    // Set downloaded filename to link.download
+    link.download = filename + '.' + mimeType.split('/').pop();
+    document.body.appendChild(link);
+    link.click();
+    this._notifService.notify('Téléchargement en cours', 1500);
+    document.body.removeChild(link);
   }
-
-
 }

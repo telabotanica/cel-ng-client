@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser'
+import { DomSanitizer } from '@angular/platform-browser';
 import {
     Router
-} from "@angular/router";
+} from '@angular/router';
 
 import { environment } from '../environments/environment';
-import { SsoService } from "./services/commons/sso.service";
+import { SsoService } from './services/commons/sso.service';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +21,10 @@ export class AppComponent {
   private readonly _unsetTokenValue = environment.app.unsetTokenValue;
 
   constructor(
-    private iconRegistry: MatIconRegistry, 
+    private iconRegistry: MatIconRegistry,
     private sanitizer:    DomSanitizer,
     public translate:     TranslateService,
-    private _ssoService:  SsoService) { 
+    private _ssoService:  SsoService) {
 
     this.initI18n();
     this.registerIcons();
@@ -34,7 +34,7 @@ export class AppComponent {
   }
 
   private initI18n() {
-    const browserLang = this.translate.getBrowserLang();    
+    const browserLang = this.translate.getBrowserLang();
     this.translate.addLangs(['en', 'fr']);
     this.translate.setDefaultLang('fr');
     this.translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');

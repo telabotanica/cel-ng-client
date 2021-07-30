@@ -4,4 +4,4 @@ export class PhotoRotation {
     status: string;
     photoId: string;
 
-} 
+}

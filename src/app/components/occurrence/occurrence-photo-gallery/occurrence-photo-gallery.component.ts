@@ -1,22 +1,22 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { 
-  MatPaginator, 
-  MatSort, 
+import {
+  MatPaginator,
+  MatSort,
   MatDialogRef,
-  MatTableDataSource, 
-  MatDialogConfig, 
+  MatTableDataSource,
+  MatDialogConfig,
   MatSnackBar,
-  MatDialog } from "@angular/material";
-import { 
-  Router } from "@angular/router";
+  MatDialog } from '@angular/material';
+import {
+  Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
 
 import { environment } from '../../../../environments/environment';
-import { FileData } from "tb-dropfile-lib/lib/_models/fileData.d";
-import { OccurrencesDataSource } from "../../../services/occurrence/occurrences.datasource";
-import { Photo } from "../../../model/photo/photo.model";
+import { FileData } from 'tb-dropfile-lib/lib/_models/fileData.d';
+import { OccurrencesDataSource } from '../../../services/occurrence/occurrences.datasource';
+import { Photo } from '../../../model/photo/photo.model';
 
 @Component({
   selector: 'occurrence-photo-gallery',
@@ -32,17 +32,17 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
   baseCelApiUrl: string = environment.api.baseUrl;
   enabled = true;
   @Input('occurrenceId') occurrenceId: number;
-  @Input('enableRemove') enableRemove: boolean = false;
+  @Input('enableRemove') enableRemove = false;
   @Output() onPhotoRemoved = new EventEmitter<Photo>();
 
   constructor(
-    private dataService: OccurrencesDataSource, 
-    private dialog: MatDialog, 
+    private dataService: OccurrencesDataSource,
+    private dialog: MatDialog,
     public snackBar: MatSnackBar,
     private router: Router ) { }
 
   ngOnInit() {
-    console.log("ngOnInit");
+    console.log('ngOnInit');
     if ( this.occurrenceId ) {
       this.loadData();
     }
@@ -71,7 +71,7 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
   }
 
   removePhoto(photo: Photo) {
-		let index = this.resources.indexOf(photo);
+		const index = this.resources.indexOf(photo);
 		if (index > -1) {
   		this.resources.splice(index, 1);
 		}
@@ -80,22 +80,21 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
 
   loadData() {
     if ( this.occurrenceId ) {
-		  this.dataService.getPhotos(this.occurrenceId).subscribe( 
-		    photos => {this.resources = photos;}
+		  this.dataService.getPhotos(this.occurrenceId).subscribe(
+		    photos => {this.resources = photos; }
 		  );
 	  }
   }
 
   isSelected(photo) {
-    return (this.selected.includes(photo.id));  
-  } 
+    return (this.selected.includes(photo.id));
+  }
 
   onPhotoSelect(photo) {
     if (this.isSelected(photo)) {
-      this.selected.splice(this.selected.indexOf(photo.id), 1);  
-    }
-    else {
-      this.selected.push(photo.id);  
+      this.selected.splice(this.selected.indexOf(photo.id), 1);
+    } else {
+      this.selected.push(photo.id);
     }
   }
 
@@ -109,7 +108,7 @@ export class OccurrencePhotoGalleryComponent implements OnInit {
 
   getImgMiniatureUrl(photo: Photo) {
     // return photo.getMiniatureUrl();
-    return photo.url.replace('O','S');
+    return photo.url.replace('O', 'M');
   }
 
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
     Observable
-} from "rxjs/Observable";
+} from 'rxjs/Observable';
 import {
     tap
 } from 'rxjs/operators';
@@ -27,42 +27,42 @@ import {
     MatDialogConfig,
     MatSnackBar,
     MatDialog
-} from "@angular/material";
+} from '@angular/material';
 import * as Leaflet from 'leaflet';
 
 import {
     FileData
-} from "tb-dropfile-lib/lib/_models/fileData.d";
+} from 'tb-dropfile-lib/lib/_models/fileData.d';
 import {
     PhotoService
-} from "../../../services/photo/photo.service";
+} from '../../../services/photo/photo.service';
 import {
     Photo
-} from "../../../model/photo/photo.model";
+} from '../../../model/photo/photo.model';
 import {
     PhotoFilters
-} from "../../../model/photo/photo-filters.model";
+} from '../../../model/photo/photo-filters.model';
 import {
     PhotoLinkOccurrenceDialogComponent
 } from '../photo-link-occurrence-dialog/photo-link-occurrence-dialog.component';
 import {
     ConfirmDialogComponent
-} from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+} from '../../../components/occurrence/confirm-dialog/confirm-dialog.component';
 import {
     AddPhotoDialogComponent
-} from "../../../components/photo/add-photo-dialog/add-photo-dialog.component";
+} from '../../../components/photo/add-photo-dialog/add-photo-dialog.component';
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     BinaryDownloadService
-} from "../../../services/commons/binary-download.service";
+} from '../../../services/commons/binary-download.service';
 import { BaseComponent } from '../../generic/base-component/base.component';
-import { ProfileService } from "../../../services/profile/profile.service";
-import { TokenService } from "../../../services/commons/token.service";
+import { ProfileService } from '../../../services/profile/profile.service';
+import { TokenService } from '../../../services/commons/token.service';
 import {
     NavigationService
-} from "../../../services/commons/navigation.service";
+} from '../../../services/commons/navigation.service';
 
 @Component({
     selector: 'app-photo-gallery',
@@ -82,9 +82,9 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
     linkToOccDialogRef: MatDialogRef < PhotoLinkOccurrenceDialogComponent > ;
     addPhotoDialogRef: MatDialogRef < AddPhotoDialogComponent > ;
     @Output() showFilterEvent = new EventEmitter();
-    private _confirmDeletionMsg: string = 'Supprimer la/les photo(s) ?';
+    private _confirmDeletionMsg = 'Supprimer la/les photo(s) ?';
     // Mobile or desktop device?
-    public isMobile: boolean = false;
+    public isMobile = false;
     // The photo the luser wants to see the detail of - used to feed the detail
     // component input:
     photoUnderSpotlight: Photo;
@@ -160,9 +160,9 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     openConfirmDeletionDialog(value) {
 
-        let dialogConfig = this.buildDialogConfig();
+        const dialogConfig = this.buildDialogConfig();
         dialogConfig.data = this._confirmDeletionMsg;
-        let confirmDeletionDialogRef = this.confirmDeletionDialog.open(ConfirmDialogComponent, dialogConfig);
+        const confirmDeletionDialogRef = this.confirmDeletionDialog.open(ConfirmDialogComponent, dialogConfig);
 
         confirmDeletionDialogRef
             .afterClosed()
@@ -188,13 +188,13 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
         this.addPhotoDialogRef
             .afterClosed()
             .subscribe(
-                //occ => this.linkToOccurrence(occ)
+                // occ => this.linkToOccurrence(occ)
             );
 
     }
 
     buildDialogConfig() {
-        let dialogConfig = new MatDialogConfig();
+        const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = false;
         dialogConfig.autoFocus = true;
         dialogConfig.hasBackdrop = true;
@@ -223,35 +223,22 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     onPhotoUploaded(photo: any) {
         this.addPhoto(photo);
-        //this.refresh();
-    }
-
-
-    private _downloadZipInBrowser(data: any) {
-        var blob = new Blob([data], {
-            type: "application/zip"
-        });
-        var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url);
-        //@todo use an angular material dialog
-        if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-            alert('Merci de désactiver votre bloqueur de popups. Il empêche le téléchargement du fichier des étiquettes.');
-        }
+        // this.refresh();
     }
 
     bulkDownload() {
-        let ids = this.selected;
-        let newWindow = window.open(); 
-        this.dataService.download(ids).subscribe(
-            data => {
-              
-                this.dldService.downloadBinary(newWindow, data,  "application/zip");
+        this.snackBar.open(
+          'Génération de l’archive des photos en cours, merci de votre patience :)',
+          'Fermer',
+          { duration: undefined });
 
-            },
-            error => this.snackBar.open(
-                'Une erreur est survenue. ' + error,
+        const ids = this.selected;
+        this.dataService.download(ids).subscribe(
+            data => this.dldService.downloadBinary(data,  'application/zip', 'cel-photos-'),
+            () => this.snackBar.open(
+                'Une erreur est survenue durant la génération de l’archive des photos',
                 'Fermer', {
-                    duration: 1500
+                    duration: 3500
                 })
         );
     }
@@ -274,16 +261,16 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
 
     bulkDelete() {
-        let ids = this.selected;
+        const ids = this.selected;
         this.dataService.bulkRemove(ids).subscribe(
             data => {
                 this.refresh();
                 this.snackBar.open(
                     'Les photos ont bien été supprimées.',
                     'Fermer', {
-                        duration: 1500
+                        duration: 3500
                     });
-                for (let id of ids) {
+                for (const id of ids) {
                     console.debug(id);
                     console.debug(this.resources);
                     this.resources = this.resources.filter(photo => photo.id !== id);
@@ -293,7 +280,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 1500
+                    duration: 3500
                 })
         );
     }
@@ -302,7 +289,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     linkToOccurrence(occurrence) {
 
-        let ids = this.selected;
+        const ids = this.selected;
         this.dataService.bulkReplace(ids, {
             occurrence: {
                 id: occurrence.id
@@ -310,15 +297,15 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
         }).subscribe(
             data => {
                 this.snackBar.open(
-                    "La photo et l’observation ont bien été liées.",
-                    "Fermer", {
-                        duration: 1500
+                    'La photo et l’observation ont bien été liées.',
+                    'Fermer', {
+                        duration: 3500
                     });
             },
             error => this.snackBar.open(
                 'Une erreur est survenue. ' + error,
                 'Fermer', {
-                    duration: 1500
+                    duration: 3500
                 })
         );
     }
@@ -326,12 +313,12 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
 
     // add a fake param to URL to allow to refresh images after rotation:
     public generateDynamicPhotoUrl(photo) {
-        return photo.url.replace('O', 'S') + '?' + this._imageFakeParam;
-        // The new method is unknown after build. After investigation, any changes 
+        return photo.url.replace('O', 'M') + '?' + this._imageFakeParam;
+        // The new method is unknown after build. After investigation, any changes
         // to the model (like removing data members) is discarded...
-        // another nasty cache issue as we're developping ion production mode? 
+        // another nasty cache issue as we're developping ion production mode?
         // no time to investigate further...
-        //return photo.getMiniatureUrl() + '?' + this._imageFakeParam;
+        // return photo.getMiniatureUrl() + '?' + this._imageFakeParam;
     }
 
 

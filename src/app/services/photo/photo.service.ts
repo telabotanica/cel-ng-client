@@ -5,16 +5,16 @@ from '@angular/core';
 import {
     Observable
 }
-from "rxjs/Observable";
+from 'rxjs/Observable';
 import {
     map,
     tap
-} from "rxjs/operators";
+} from 'rxjs/operators';
 import {
     HttpClient,
     HttpParams
 }
-from "@angular/common/http";
+from '@angular/common/http';
 
 import {
     environment
@@ -22,15 +22,15 @@ import {
 import {
     Photo
 }
-from "../../model/photo/photo.model";
+from '../../model/photo/photo.model';
 import {
     PhotoFilters
 }
-from "../../model/photo/photo-filters.model";
+from '../../model/photo/photo-filters.model';
 import {
     JsonPatchService
 }
-from "../../../restit/services/json-patch.service";
+from '../../../restit/services/json-patch.service';
 import {
     JsonPatchResponse
 }
@@ -42,11 +42,11 @@ from '../../../restit/model/json-patch-response.model';
 export class PhotoService {
 
     private resourceUrl = environment.api.baseUrl + '/photos';
-    public photosCount : number = 0;
+    public photosCount = 0;
 
     getCollection(
-        sortBy: string = "dateShot",
-        sortDirection: string = "desc",
+        sortBy: string = 'dateShot',
+        sortDirection: string = 'desc',
         pageNumber = 0,
         pageSize = 12,
         filters: PhotoFilters = null): Observable < Photo[] > {
@@ -55,19 +55,19 @@ export class PhotoService {
             .set('page', pageNumber.toString())
             .set('perPage', pageSize.toString());
 
-        if (sortBy !== null && sortBy !== "") {
-            httpParams = httpParams.append("sortBy", sortBy);
+        if (sortBy !== null && sortBy !== '') {
+            httpParams = httpParams.append('sortBy', sortBy);
         }
-        if (sortDirection !== null && sortBy !== "") {
-            httpParams = httpParams.append("sortDirection", sortDirection);
+        if (sortDirection !== null && sortBy !== '') {
+            httpParams = httpParams.append('sortDirection', sortDirection);
         }
         if (filters !== null) {
 
-            for (var propertyName in filters) {
+            for (const propertyName in filters) {
                 if (filters.hasOwnProperty(propertyName) && !(filters[propertyName] == null)) {
 
                     if (Array.isArray(filters[propertyName])) {
-                        for (var val in filters[propertyName]) {
+                        for (const val in filters[propertyName]) {
                             httpParams = httpParams.append(propertyName + '[]', filters[propertyName][val]);
                         }
                     } else {
@@ -78,7 +78,7 @@ export class PhotoService {
             }
         }
 
-        return this.http.get < Photo[] > (this.resourceUrl + ".json", {
+        return this.http.get < Photo[] > (this.resourceUrl + '.json', {
             params: httpParams,
             observe: 'response'
         }).pipe(
@@ -123,14 +123,14 @@ export class PhotoService {
 
         let httpParams = new HttpParams();
 
-        for (let id of ids) {
+        for (const id of ids) {
             httpParams = httpParams.append('id[]', id);
         }
 
         return this.http.get(this.resourceUrl + '/download', {
             params: httpParams,
             // this is what we really want but ng ony wants json or arraybuffer...
-            // responseType: 'application/zip' 
+            // responseType: 'application/zip'
             responseType: 'arraybuffer',
         });
     }

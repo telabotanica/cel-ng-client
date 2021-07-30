@@ -1,13 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, Injectable } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { map, tap } from "rxjs/operators";
+import { map, tap } from 'rxjs/operators';
 
 
-import { PhotoTagService } from "../../../services/photo/photo-tag.service";
+import { PhotoTagService } from '../../../services/photo/photo-tag.service';
 
 /**
  * Node for PhotoTag item
@@ -35,8 +35,8 @@ export class FileTreeBuilder {
 
   get data(): PhotoTagItemNode[] { return this.dataChange.value; }
 
-  constructor(private http: HttpClient, private photoTagService:PhotoTagService) {
-	//this.http.get<any[]>("http://10.99.34.5:8080/api/PhotoTagTrees").subscribe((jsonTree: any) => this.initialize(jsonTree));
+  constructor(private http: HttpClient, private photoTagService: PhotoTagService) {
+	// this.http.get<any[]>("http://10.99.34.5:8080/api/PhotoTagTrees").subscribe((jsonTree: any) => this.initialize(jsonTree));
     photoTagService.getCollectionAsTree().subscribe((jsonTree: any) => this.initialize(jsonTree));
   }
 

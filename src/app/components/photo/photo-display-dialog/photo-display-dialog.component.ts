@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import { Photo } from "../../../model/photo/photo.model";
+import { Photo } from '../../../model/photo/photo.model';
 
 @Component({
   selector: 'app-photo-display-dialog',

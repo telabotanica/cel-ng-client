@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from "rxjs/Observable";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { Observable } from 'rxjs/Observable';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 
-import { EfloreCard } from "../../model/eflore/eflore-card.model";
+import { EfloreCard } from '../../model/eflore/eflore-card.model';
 
 @Injectable({
   providedIn: 'root'
 })
-//@todo make this an .utils
+// @todo make this an .utils
 export class AlgoliaEfloreParserService {
 
     parseEfloreCard(algoliaResponse, taxoRepo) {
 
-        let efloreCard = new EfloreCard();
+        const efloreCard = new EfloreCard();
 
-        let firstHit = algoliaResponse.results[0].hits[0];
+        const firstHit = algoliaResponse.results[0].hits[0];
         console.debug(firstHit);
         if ( firstHit != null ) {
-            let efloreEncodedCard = firstHit[taxoRepo];
+            const efloreEncodedCard = firstHit[taxoRepo];
 
             if ( firstHit[taxoRepo] != null ) {
                 efloreCard.common_names = efloreEncodedCard.common_name.split(',');
@@ -36,21 +36,21 @@ export class AlgoliaEfloreParserService {
                         efloreCard.chorodepMapUrl = efloreEncodedCard.thumbnails.chorodep;
                     }
                     if ( efloreEncodedCard.thumbnails.cel != null ) {
-                        let celThumbnails = efloreEncodedCard.thumbnails.cel;
-                        let celPhotoUrls = [];
+                        const celThumbnails = efloreEncodedCard.thumbnails.cel;
+                        const celPhotoUrls = [];
 
-                        for (let celImgUrl of efloreEncodedCard.thumbnails.cel) {
-                            celPhotoUrls.push(celImgUrl)
+                        for (const celImgUrl of efloreEncodedCard.thumbnails.cel) {
+                            celPhotoUrls.push(celImgUrl);
                         }
 
-                        for (var key in celThumbnails) {
+                        for (const key in celThumbnails) {
                             if (celThumbnails.hasOwnProperty(key)) {
                                 celPhotoUrls.push(celThumbnails[key]);
                             }
                         }
                         efloreCard.celPhotoUrls = celPhotoUrls;
                     }
-                  
+
 
                 }
                 console.debug(efloreCard);
@@ -61,5 +61,5 @@ export class AlgoliaEfloreParserService {
     }
 
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 }

@@ -16,87 +16,87 @@ import {
 import {
     Router,
     ActivatedRoute
-} from "@angular/router";
+} from '@angular/router';
 import {
     MatDialogRef,
     MatDialogConfig,
     MatSnackBar,
     MatDialog
-} from "@angular/material";
+} from '@angular/material';
 import {
     Inject
 } from '@angular/core';
 import {
     DOCUMENT
 } from '@angular/common';
-import * as jwt_decode from "jwt-decode";
+import * as jwt_decode from 'jwt-decode';
 
 import {
     TbLog
-} from "tb-tag-lib/lib/_models/tb-log.model";
+} from 'tb-tag-lib/lib/_models/tb-log.model';
 import {
     LocationModel
-} from "tb-geoloc-lib/lib/_models/location.model";
+} from 'tb-geoloc-lib/lib/_models/location.model';
 import {
     RepositoryItemModel
-} from "tb-tsb-lib/lib/_models/repository-item.model";
+} from 'tb-tsb-lib/lib/_models/repository-item.model';
 import {
     FileData
-} from "tb-dropfile-lib/lib/_models/fileData.d";
+} from 'tb-dropfile-lib/lib/_models/fileData.d';
 import {
     environment
 } from '../../../../environments/environment';
 import {
     Occurrence
-} from "../../../model/occurrence/occurrence.model";
+} from '../../../model/occurrence/occurrence.model';
 import {
     Photo
-} from "../../../model/photo/photo.model";
+} from '../../../model/photo/photo.model';
 import {
     Profile
-} from "../../../model/profile/profile.model";
+} from '../../../model/profile/profile.model';
 import {
     PlantnetResponse
-} from "../../../model/plantnet/plantnet-response.model";
+} from '../../../model/plantnet/plantnet-response.model';
 import {
     TelaBotanicaProject
-} from "../../../model/occurrence/tela-botanica-project.model";
+} from '../../../model/occurrence/tela-botanica-project.model';
 import {
     OccurrenceFilters
-} from "../../../model/occurrence/occurrence-filters.model";
+} from '../../../model/occurrence/occurrence-filters.model';
 import {
     OccurrencesDataSource
-} from "../../../services/occurrence/occurrences.datasource";
+} from '../../../services/occurrence/occurrences.datasource';
 import {
     PhotoService
-} from "../../../services/photo/photo.service";
+} from '../../../services/photo/photo.service';
 import {
     PlantnetService
-} from "../../../services/plantnet/plantnet.service";
+} from '../../../services/plantnet/plantnet.service';
 import {
     ExistInChorodepService
-} from "../../../services/chorodep/exist-in-chorodep.service";
+} from '../../../services/chorodep/exist-in-chorodep.service';
 import {
     TelaBotanicaProjectService
-} from "../../../services/occurrence/tela-botanica-project.service";
+} from '../../../services/occurrence/tela-botanica-project.service';
 import {
     OccurrenceBuilder
-} from "../../../utils/occurrence-builder.utils";
+} from '../../../utils/occurrence-builder.utils';
 import {
     EfloreCardUrlBuilder
-} from "../../../utils/eflore-card-url-builder.utils";
+} from '../../../utils/eflore-card-url-builder.utils';
 import {
     DateFormatter
-} from "../../../utils/date-formatter.utils";
+} from '../../../utils/date-formatter.utils';
 import {
     ConfirmDialogComponent
-} from "../../../components/occurrence/confirm-dialog/confirm-dialog.component";
+} from '../../../components/occurrence/confirm-dialog/confirm-dialog.component';
 import {
     AddPhotoDialogComponent
-} from "../../../components/photo/add-photo-dialog/add-photo-dialog.component";
+} from '../../../components/photo/add-photo-dialog/add-photo-dialog.component';
 import {
     TagDialogComponent
-} from "../../../components/occurrence/tag-dialog/tag-dialog.component";
+} from '../../../components/occurrence/tag-dialog/tag-dialog.component';
 import {
     OccurrenceLinkPhotoDialogComponent
 } from '../occurrence-link-photo-dialog/occurrence-link-photo-dialog.component';
@@ -105,22 +105,22 @@ import {
 } from '../plantnet-result-dialog/plantnet-result-dialog.component';
 import {
     SsoService
-} from "../../../services/commons/sso.service";
+} from '../../../services/commons/sso.service';
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     BaseComponent
 } from '../../generic/base-component/base.component';
 import {
     ProfileService
-} from "../../../services/profile/profile.service";
+} from '../../../services/profile/profile.service';
 import {
     TokenService
-} from "../../../services/commons/token.service";
+} from '../../../services/commons/token.service';
 import {
     NavigationService
-} from "../../../services/commons/navigation.service";
+} from '../../../services/commons/navigation.service';
 
 @Component({
     selector: 'app-occurrence-form',
@@ -128,16 +128,6 @@ import {
     styleUrls: ['./occurrence-form.component.css', 'material-overide.css'],
 })
 export class OccurrenceFormComponent implements OnInit {
-
-    // Reference to the photo gallery:
-    @ViewChild('photoGallery') photoGallery;
-
-    // -----------------------------------------------------------------
-    // CONSTANTS (storing the three different mode names for this form):
-    // -----------------------------------------------------------------
-    static readonly CREATE_MODE = "create";
-    static readonly SINGLE_EDIT_MODE = "single edit";
-    static readonly BULK_EDIT_MODE = "multi edit";
 
 
     get CREATE_MODE() {
@@ -151,115 +141,6 @@ export class OccurrenceFormComponent implements OnInit {
     get BULK_EDIT_MODE() {
         return OccurrenceFormComponent.BULK_EDIT_MODE;
     }
-
-    private userId;
-
-    // -----------
-    // FORM GROUP:
-    // -----------
-    occurrenceForm: FormGroup;
-
-    // --------------------
-    // USED/MANAGED MODELS:
-    // --------------------
-    // The list of TelaBotanicaProject 
-    projects: TelaBotanicaProject[];
-    occurrences = [];
-    profile: Profile;
-
-    // The ids of the occurrences to be edited:
-    ids = [];
-    // The photos which have been uploaded for the current occurrence(s):
-    private photos = new Array < Photo >();
-    // The LocationModel object as defined by th user 
-    private location: LocationModel;
-    // The RepositoryItemModel (taxon) object as chosen by the user:
-    private taxon: RepositoryItemModel;
-
-    private _duplicateMsg = "Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre."
-
-    // ----------------------------------------------------------------
-    // PATCH MEMBER VARIABLES (to initiate children component values) :
-    // ----------------------------------------------------------------
-    // Edit mode only (both single and multi): these instances are used to
-    // prepopulate the taxonomic search box and geoloc map components and that's
-    // it. Once instanciated, those variable values must never change: 
-    // the children components are now responsible for selecting the 
-    // taxon/location. 
-    patchTaxon: RepositoryItemModel;
-    patchElevation: number;
-    patchGeometry;
-    patchAddress: string;
-    patchLatLngDec: Array < number > ;
-
-    // -------------
-    // FORM OPTIONS:
-    // -------------
-    // Should the form be cleared after SUBMIT? (create mode only):
-    clearFormAfterSubmit = false;
-    // Let's default to create mode:
-    mode: string = OccurrenceFormComponent.CREATE_MODE;
-    // Should the form be reset?
-    resetForm: boolean = false;
-    // Should the location component be reset?
-    resetLocationComponentFlag: boolean = false;
-    // Should the upload component be reset?
-    _resetPhotoUploadComponentFlag: boolean = false;
-    // Should the taxo component be reset?
-    resetTaxoComponentFlag: boolean = false;
-    formEnabled: boolean = true;
-    // Configuration values for Stephane's modules: 
-    tagObjectId: number = null;
-    baseCelApiUrl: string = environment.api.baseUrl;
-    tagLibBaseUrl: string = environment.api.tagLibBaseUrl;
-    elevationApiProvider: string = environment.elevationApi.provider;
-    mapBgTileUrl: string = environment.mapBgTile.baseUrl;
-    autoSelectValueIfOnlyOneResult: boolean = false;
-    // Should the advanced forms be displayed instead of basic ones: 
-    displayFullFormLeft = false;
-    displayFullFormRight = false;
-    maxDate: Date = new Date()
-    isMobile = false;
-
-    // ---------------
-    // LIST VALUES:
-    // ---------------
-    isWildList = [{
-            "name": "Sauvage",
-            "value": true,
-            "tooltip": "La plante observée pousse de manière spontanée dans le milieu"
-        },
-        {
-            "name": "Cultivée",
-            "value": false,
-            "tooltip": "La plante observée est cultivée ou a été plantée"
-        }
-    ]
-
-    static readonly occurrenceTypeDefault: string = "observation de terrain";
-    static readonly publishedLocationDefault: string = "précise";
-    static readonly isWildSelectedDefault: boolean = true;
-
-    // ---------------
-    // DEFAULT VALUES:
-    // ---------------
-    // Used to init/reset 
-    occurrenceTypeSelected: string = OccurrenceFormComponent.occurrenceTypeDefault;
-    publishedLocationSelected: string = OccurrenceFormComponent.publishedLocationDefault;
-    isWildSelected: boolean = OccurrenceFormComponent.isWildSelectedDefault;
-    projectIdSelected: number;
-
-    // List of repositories for the taxon selection module:
-    tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
-    sendPhotoFlag: boolean = false;
-    // Used to enable/diable the "send photos" button:
-    private _nbrOfPhotosToBeSent = 0;
-
-    private linkPhotoToOccDialogRef: MatDialogRef < OccurrenceLinkPhotoDialogComponent > ;
-    private plantnetResultDialogRef: MatDialogRef < PlantnetResultDialogComponent > ;
-    private tagDialogRef: MatDialogRef < TagDialogComponent > ;
-    private addPhotoDialogRef: MatDialogRef < AddPhotoDialogComponent > ;
-    private subscription: Subscription;
 
     constructor(
         private dataService: OccurrencesDataSource,
@@ -282,8 +163,127 @@ export class OccurrenceFormComponent implements OnInit {
         this._initResponsive();
     }
 
+    // -----------------------------------------------------------------
+    // CONSTANTS (storing the three different mode names for this form):
+    // -----------------------------------------------------------------
+    static readonly CREATE_MODE = 'create';
+    static readonly SINGLE_EDIT_MODE = 'single edit';
+    static readonly BULK_EDIT_MODE = 'multi edit';
+
+    static readonly occurrenceTypeDefault: string = 'observation de terrain';
+    static readonly publishedLocationDefault: string = 'précise';
+    static readonly isWildSelectedDefault: boolean = true;
+
+    // Reference to the photo gallery:
+    @ViewChild('photoGallery') photoGallery;
+
+    private userId;
+
+    // -----------
+    // FORM GROUP:
+    // -----------
+    occurrenceForm: FormGroup;
+
+    // --------------------
+    // USED/MANAGED MODELS:
+    // --------------------
+    // The list of TelaBotanicaProject
+    projects: TelaBotanicaProject[];
+    occurrences = [];
+    profile: Profile;
+
+    // The ids of the occurrences to be edited:
+    ids = [];
+    // The photos which have been uploaded for the current occurrence(s):
+    private photos = new Array < Photo >();
+    // The LocationModel object as defined by th user
+    private location: LocationModel;
+    // The RepositoryItemModel (taxon) object as chosen by the user:
+    private taxon: RepositoryItemModel;
+
+    private _duplicateMsg = 'Vous avez déjà saisi une observation identique dans votre CEL. Merci de vérifier les informations saisies avant de poursuivre.';
+
+    // ----------------------------------------------------------------
+    // PATCH MEMBER VARIABLES (to initiate children component values) :
+    // ----------------------------------------------------------------
+    // Edit mode only (both single and multi): these instances are used to
+    // prepopulate the taxonomic search box and geoloc map components and that's
+    // it. Once instanciated, those variable values must never change:
+    // the children components are now responsible for selecting the
+    // taxon/location.
+    patchTaxon: RepositoryItemModel;
+    patchElevation: number;
+    patchGeometry;
+    patchAddress: string;
+    patchLatLngDec: Array < number > ;
+
+    // -------------
+    // FORM OPTIONS:
+    // -------------
+    // Should the form be cleared after SUBMIT? (create mode only):
+    clearFormAfterSubmit = false;
+    // Let's default to create mode:
+    mode: string = OccurrenceFormComponent.CREATE_MODE;
+    // Should the form be reset?
+    resetForm = false;
+    // Should the location component be reset?
+    resetLocationComponentFlag = false;
+    // Should the upload component be reset?
+    _resetPhotoUploadComponentFlag = false;
+    // Should the taxo component be reset?
+    resetTaxoComponentFlag = false;
+    formEnabled = true;
+    // Configuration values for Stephane's modules:
+    tagObjectId: number = null;
+    baseCelApiUrl: string = environment.api.baseUrl;
+    tagLibBaseUrl: string = environment.api.tagLibBaseUrl;
+    elevationApiProvider: string = environment.elevationApi.provider;
+    mapBgTileUrl: string = environment.mapBgTile.baseUrl;
+    autoSelectValueIfOnlyOneResult = false;
+    // Should the advanced forms be displayed instead of basic ones:
+    displayFullFormLeft = false;
+    displayFullFormRight = false;
+    maxDate: Date = new Date();
+    isMobile = false;
+
+    // ---------------
+    // LIST VALUES:
+    // ---------------
+    isWildList = [{
+            'name': 'Sauvage',
+            'value': true,
+            'tooltip': 'La plante observée pousse de manière spontanée dans le milieu'
+        },
+        {
+            'name': 'Cultivée',
+            'value': false,
+            'tooltip': 'La plante observée est cultivée ou a été plantée'
+        }
+    ];
+
+    // ---------------
+    // DEFAULT VALUES:
+    // ---------------
+    // Used to init/reset
+    occurrenceTypeSelected: string = OccurrenceFormComponent.occurrenceTypeDefault;
+    publishedLocationSelected: string = OccurrenceFormComponent.publishedLocationDefault;
+    isWildSelected: boolean = OccurrenceFormComponent.isWildSelectedDefault;
+    projectIdSelected: number;
+
+    // List of repositories for the taxon selection module:
+    tbRepositoriesConfig = environment.tbTsbLib.tbRepositoriesConfig;
+    sendPhotoFlag = false;
+    // Used to enable/diable the "send photos" button:
+    private _nbrOfPhotosToBeSent = 0;
+
+    private linkPhotoToOccDialogRef: MatDialogRef < OccurrenceLinkPhotoDialogComponent > ;
+    private plantnetResultDialogRef: MatDialogRef < PlantnetResultDialogComponent > ;
+    private tagDialogRef: MatDialogRef < TagDialogComponent > ;
+    private addPhotoDialogRef: MatDialogRef < AddPhotoDialogComponent > ;
+    private subscription: Subscription;
+
     isSendPhotoButtonDisabled(): boolean {
-        return !(this._nbrOfPhotosToBeSent > 0)
+        return !(this._nbrOfPhotosToBeSent > 0);
     }
 
     getMaxDate() {
@@ -297,8 +297,8 @@ export class OccurrenceFormComponent implements OnInit {
     ngOnInit() {
 
         this.initFormGroup();
-        let token = this.ssoService.getToken();
-        let decodedToken = this._getDecodedAccessToken(token);
+        const token = this.ssoService.getToken();
+        const decodedToken = this._getDecodedAccessToken(token);
         this.userId = decodedToken.id;
         this.initOccurrencesToEdit();
         this._loadProjects();
@@ -309,7 +309,7 @@ export class OccurrenceFormComponent implements OnInit {
     private _loadProjects() {
         this.tbPrjService.getCollection().subscribe(
             tbProjects => {
-                let emptyPrj = new TelaBotanicaProject();
+                const emptyPrj = new TelaBotanicaProject();
                 emptyPrj.name = '';
                 emptyPrj.id = null;
                 // Let's add an empty project so the user can revert her choice to
@@ -358,7 +358,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     private _loadProfile() {
-        let userId = this._tokenService.getUserId();
+        const userId = this._tokenService.getUserId();
         this._profileService.findByUserId(userId).subscribe(
             profiles => {
                 if (profiles) {
@@ -392,12 +392,12 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     getTbTagLibMapWidth(): string {
-        return this.isMobile ? '100%' : '100%'
+        return this.isMobile ? '100%' : '100%';
     }
 
     async retrieveOccurrences(ids) {
-        for (let id of ids) {
-            let ctOcc = await this.retrieveOccurrence(id);
+        for (const id of ids) {
+            const ctOcc = await this.retrieveOccurrence(id);
             this.occurrences.push(ctOcc);
         }
         if (this.occurrences.length > 0) {
@@ -411,7 +411,7 @@ export class OccurrenceFormComponent implements OnInit {
     }
 
     displayEfloreCard() {
-        let url = EfloreCardUrlBuilder.build(
+        const url = EfloreCardUrlBuilder.build(
             this.taxon.repository,
             this.taxon.idNomen);
         window.open(url, '_blank');
@@ -432,14 +432,12 @@ export class OccurrenceFormComponent implements OnInit {
         // In create mode: no need for confirmation:
         if (this.mode == OccurrenceFormComponent.CREATE_MODE) {
             this.postOrPatch(value, stayOnPage);
-        }
-        // In edit mode, ask for confirmation:
-        else {
+        } else {
 
-            let dialogConfig = this.buildDialogConfig();
-            let confirmQuestion = this.generateConfirmQuestionFromMode();
+            const dialogConfig = this.buildDialogConfig();
+            const confirmQuestion = this.generateConfirmQuestionFromMode();
             dialogConfig.data = confirmQuestion;
-            let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+            const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
 
             confirmDialogRef
                 .afterClosed()
@@ -461,18 +459,18 @@ export class OccurrenceFormComponent implements OnInit {
     private generateConfirmQuestionFromMode() {
         let confirmQuestion = '';
         if (this.mode == OccurrenceFormComponent.CREATE_MODE) {
-            confirmQuestion = "Enregistrer l'observation ?";
+            confirmQuestion = 'Enregistrer l\'observation ?';
         } else if (this.mode == OccurrenceFormComponent.SINGLE_EDIT_MODE) {
-            confirmQuestion = "Modifier l'observation ?";
+            confirmQuestion = 'Modifier l\'observation ?';
         } else if (this.mode == OccurrenceFormComponent.BULK_EDIT_MODE) {
-            confirmQuestion = "Modifier les observations ?";
+            confirmQuestion = 'Modifier les observations ?';
         }
 
         return confirmQuestion;
     }
 
     buildDialogConfig() {
-        let dialogConfig = new MatDialogConfig();
+        const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = false;
         dialogConfig.autoFocus = true;
         dialogConfig.hasBackdrop = true;
@@ -493,26 +491,24 @@ export class OccurrenceFormComponent implements OnInit {
 
     /**
      * Retrieves the string encoded ids (no array route parameters in angular
-     * at the moment) and loads corresponding Occurrence resources from the WS 
+     * at the moment) and loads corresponding Occurrence resources from the WS
      * to fill the 'occurrences' array property. Also sets the "mode" of the
-     * form to one of the class member constant: either CREATE_MODE,  
+     * form to one of the class member constant: either CREATE_MODE,
      * SINGLE_EDIT_MODE or BULK_EDIT_MODE.
      */
     private initOccurrencesToEdit() {
         this.route.params.subscribe(params => {
-            // Retrieve the string encoded ids parameter from the route: 
-            let strIds = params['ids'];
+            // Retrieve the string encoded ids parameter from the route:
+            const strIds = params['ids'];
 
             // Edit mode:
             if (strIds !== undefined) {
                 // Bulk edit mode:
-                let ids = strIds.split(",");
+                const ids = strIds.split(',');
                 this.ids = ids;
                 if (ids.length > 1) {
                     this.mode = OccurrenceFormComponent.BULK_EDIT_MODE;
-                }
-                // Single edit mode:
-                else {
+                } else {
                     this.tagObjectId = ids[0];
                     this.mode = OccurrenceFormComponent.SINGLE_EDIT_MODE;
                 }
@@ -545,8 +541,8 @@ export class OccurrenceFormComponent implements OnInit {
             this.publishedLocationSelected = occurrence.publishedLocation;
             this.isWildSelected = occurrence.isWild;
 
-            //@todo: temporary ugly fix for CST tests, why the hell does the WS return the nbr as string?!!!
-            if (typeof occurrence.elevation === "string") {
+            // @todo: temporary ugly fix for CST tests, why the hell does the WS return the nbr as string?!!!
+            if (typeof occurrence.elevation === 'string') {
                 occurrence.elevation = Number(occurrence.elevation);
                 // for inputs with default values, we need to set the value explicitely:
                 this.occurrenceTypeSelected = occurrence.occurrenceType;
@@ -554,20 +550,17 @@ export class OccurrenceFormComponent implements OnInit {
                 this.isWildSelected = occurrence.isWild;
             }
 
-        }
-        // Multi edit mode: a composite occurrence is built based on 
-        // the occurrences to be edited
-        else {
+        } else {
             occurrence = this._buildPrepopulateOccurrence();
         }
         this.occurrenceForm.patchValue(occurrence);
         this.prepopulateLocation(occurrence);
 
-        if (occurrence.userSciName != null && occurrence.userSciName != "Valeurs multiples") {
+        if (occurrence.userSciName != null && occurrence.userSciName != 'Valeurs multiples') {
             this.prepopulateTaxoSearchBox(occurrence);
         }
 
-        if (occurrence.geometry != "Valeurs multiples") {
+        if (occurrence.geometry != 'Valeurs multiples') {
             this.prepopulateGeolocMap(occurrence);
         }
 
@@ -577,22 +570,22 @@ export class OccurrenceFormComponent implements OnInit {
 
         // Create a dummy temp taxon so no change events are fired
         // when setting every single property setting.
-        let tmpTaxon = {
+        const tmpTaxon = {
             occurenceId: occ.id,
             repository: (occ.taxoRepo == null || occ.taxoRepo == 'Autre/inconnu') ? 'otherunknown' : occ.taxoRepo,
             idNomen: occ.userSciNameId,
             name: occ.userSciName,
             author: ''
-        }
+        };
 
         // Update the class member reference and, consequently, the search box
-        // component: 
+        // component:
         this.patchTaxon = tmpTaxon;
     }
 
     private prepopulateGeolocMap(occ: Occurrence) {
         if (occ.geometry != null) {
-            let jsonGeom = JSON.parse(occ.geometry);
+            const jsonGeom = JSON.parse(occ.geometry);
             this.patchElevation = occ.elevation;
             this.patchGeometry = [{
                 'type': jsonGeom.type,
@@ -610,46 +603,46 @@ export class OccurrenceFormComponent implements OnInit {
 
 console.debug(occ);
         // To cope with an issue of the geoloc module
-        let osmIdValue = (occ.osmId != null) ? occ.osmId : -1; 
+        const osmIdValue = (occ.osmId != null) ? occ.osmId : -1;
 
-        // only useful so that the location is not null when the component is 
+        // only useful so that the location is not null when the component is
         // loaded in single edit mode. This will allow the isPublishable() method
-        // to eventually returning true.    
+        // to eventually returning true.
         this.location = {
-            "geometry": JSON.parse(occ.geometry),
-            "locality": occ.locality,
-            "elevation": occ.elevation,
-            "station": occ.station,
-            "geodatum": occ.geodatum,
-            "publishedLocation": occ.publishedLocation,
-            "locationAccuracy": null,
-            "sublocality": occ.sublocality,
-            "osmState": occ.osmState,
-            "osmCountry": occ.osmCountry,
-            "osmCountryCode": occ.osmCountryCode,
-            "osmCounty": occ.osmCounty,
-            "osmId": Number(osmIdValue),
-            "inseeData": null,
-            "osmPostcode": Number(occ.osmPostcode),
-            "localityConsistency": false,
-            "osmPlaceId": occ.osmPlaceId
+            'geometry': JSON.parse(occ.geometry),
+            'locality': occ.locality,
+            'elevation': occ.elevation,
+            'station': occ.station,
+            'geodatum': occ.geodatum,
+            'publishedLocation': occ.publishedLocation,
+            'locationAccuracy': null,
+            'sublocality': occ.sublocality,
+            'osmState': occ.osmState,
+            'osmCountry': occ.osmCountry,
+            'osmCountryCode': occ.osmCountryCode,
+            'osmCounty': occ.osmCounty,
+            'osmId': Number(osmIdValue),
+            'inseeData': null,
+            'osmPostcode': Number(occ.osmPostcode),
+            'localityConsistency': false,
+            'osmPlaceId': occ.osmPlaceId
         };
 
     }
 
 
     private _buildPrepopulateOccurrence() {
-        let prepopOcc = new Occurrence();
-        let testOcc = this.occurrences[0];
-        let forgetAboutMeProperties = ["geometry", "osmId", "localityInseeCode", "locality", "geodatum", "elevation", "isWild", "isPublic", "occurrenceType", "phenology", "publishedLocation", "dateObserved"];
+        const prepopOcc = new Occurrence();
+        const testOcc = this.occurrences[0];
+        const forgetAboutMeProperties = ['geometry', 'osmId', 'localityInseeCode', 'locality', 'geodatum', 'elevation', 'isWild', 'isPublic', 'occurrenceType', 'phenology', 'publishedLocation', 'dateObserved'];
 
         // Let's loop around the ccurrence properties
-        for (var propertyName in testOcc) {
+        for (const propertyName in testOcc) {
             // If this is an "own property":
             if (testOcc.hasOwnProperty(propertyName)) {
                 let areDifferent = false;
 
-                for (let occ of this.occurrences) {
+                for (const occ of this.occurrences) {
                     if (occ[propertyName] !== testOcc[propertyName]) {
                         areDifferent = true;
                     }
@@ -659,10 +652,10 @@ console.debug(occ);
                 if (!areDifferent) {
                     prepopOcc[propertyName] = testOcc[propertyName];
                 } else {
-                    if (propertyName == "taxoRepo") {
-                        prepopOcc[propertyName] = "Autre/inconnu";
+                    if (propertyName == 'taxoRepo') {
+                        prepopOcc[propertyName] = 'Autre/inconnu';
                     } else if ( ! forgetAboutMeProperties.includes(propertyName) ) {
-                        prepopOcc[propertyName] = "Valeurs multiples";
+                        prepopOcc[propertyName] = 'Valeurs multiples';
                     }
                 }
             }
@@ -706,7 +699,7 @@ console.debug(occ);
         this.addPhotoDialogRef
             .afterClosed()
             .subscribe(
-                //occ => this.linkToOccurrence(occ)
+                // occ => this.linkToOccurrence(occ)
             );
 
     }
@@ -725,9 +718,9 @@ console.debug(occ);
         this.photoGallery.addPhoto(photo);
         this.photos.push(photo);
         this.snackBar.open(
-            "La photo " + photo.originalName + " a été enregistrée avec succès.",
+            'La photo ' + photo.originalName + ' a été enregistrée avec succès.',
             'Fermer', {
-                duration: 2500
+                duration: 3500
             });
     }
 
@@ -743,9 +736,9 @@ console.debug(occ);
             }).subscribe(
                 data => {
                     this.snackBar.open(
-                        "Les photos et l’observation ont été liées avec succès.",
-                        "Fermer", {
-                            duration: 2500
+                        'Les photos et l’observation ont été liées avec succès.',
+                        'Fermer', {
+                            duration: 3500
                         });
                     if (!stayOnPage) {
                         this.navigateToOccurrenceUi();
@@ -755,9 +748,9 @@ console.debug(occ);
                     }
                 },
                 error => this.snackBar.open(
-                    'Une erreur est survenue lors de la création du lien entre les photos et l\'obseravation. ' + error,
+                    'Une erreur est survenue lors de la création du lien entre les photos et l’obseravation. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     })
             );
         } else {
@@ -782,23 +775,23 @@ console.log('8888888888888888888888888');
         if (taxon.repository != null && taxon.repository != '' && taxon.name != null) {
             if (taxon.repository != 'otherunknown') {
 
-                if (this.occurrenceForm.controls['certainty'].value == "douteux") {
+                if (this.occurrenceForm.controls['certainty'].value == 'douteux') {
                     this.snackBar.open(
-                        "La valeur de la certitude a été mise à 'certain'.",
-                        "Fermer", {
-                            duration: 2500
-                        })
+                        'La valeur de la certitude a été mise à \'certain\'.',
+                        'Fermer', {
+                            duration: 3500
+                        });
                 }
-                this.occurrenceForm.controls['certainty'].patchValue("certain");
+                this.occurrenceForm.controls['certainty'].patchValue('certain');
             } else {
-                if (this.occurrenceForm.controls['certainty'].value !== "à déterminer") {
+                if (this.occurrenceForm.controls['certainty'].value !== 'à déterminer') {
                     this.snackBar.open(
-                        "La valeur de la certitude a été mise à 'à déterminer'.",
-                        "Fermer", {
-                            duration: 2500
-                        })
+                        'La valeur de la certitude a été mise à \'à déterminer\'.',
+                        'Fermer', {
+                            duration: 3500
+                        });
                 }
-                this.occurrenceForm.controls['certainty'].patchValue("à déterminer");
+                this.occurrenceForm.controls['certainty'].patchValue('à déterminer');
             }
         }
         this.taxon = taxon;
@@ -808,16 +801,16 @@ console.log('8888888888888888888888888');
         let msg;
 
         if (data.error['hydra:description'].includes('is not a valid image')) {
-            msg = "Le fichier n'est pas une image valide.";
+            msg = 'Le fichier n\'est pas une image valide.';
         } else if (data.error['hydra:description'].includes('with the same name')) {
-            msg = "Vous avez déjà téléversé une image avec le même nom. Ce n'est pas permis dans le CEL.";
+            msg = 'Vous avez déjà téléversé une image avec le même nom. Ce n\'est pas permis dans le CEL.';
         } else {
-            msg = "Une erreur est survenue.";
+            msg = 'Une erreur est survenue.';
         }
         this.snackBar.open(
             msg,
-            "Fermer", {
-                duration: 2500
+            'Fermer', {
+                duration: 3500
             });
     }
 
@@ -849,7 +842,7 @@ console.log('8888888888888888888888888');
         });
         if (this.photoGallery) {
             this.photoGallery.reset();
-            this.photos = new Array < Photo > ();;
+            this.photos = new Array < Photo > ();
         }
         // Ask children components to reset themselves:
         this._resetTbLibComponents();
@@ -879,8 +872,8 @@ console.log('8888888888888888888888888');
         this.occurrenceForm.controls['isWild'].setValue(OccurrenceFormComponent.isWildSelectedDefault);
     }
 
-    // @refactor: Use ViewChild and call some (to be implemented) component 
-    //            reset methods 
+    // @refactor: Use ViewChild and call some (to be implemented) component
+    //            reset methods
     private _resetTbLibComponents() {
         this.resetForm = true;
         setTimeout(() => {
@@ -930,35 +923,35 @@ console.log('8888888888888888888888888');
     private async preSubmitValidation(): Promise < string[] > {
 
 
-        let warnings = new Array();
-        let dateObserved = this.occurrenceForm.controls['dateObserved'].value;
+        const warnings = new Array();
+        const dateObserved = this.occurrenceForm.controls['dateObserved'].value;
 console.debug(dateObserved);
 
         // If we've got all the data we need to check existence in chorodep:
         if (this.taxon != null && this.location != null) {
             this.snackBar.open(
-                "Validation préalable lancée (recherche de doublons, vérification de présence dans la chorologie départementale).",
+                'Validation préalable lancée (recherche de doublons, vérification de présence dans la chorologie départementale).',
                 'Fermer', {
-                    duration: 2500
+                    duration: 3500
                 });
             if (this.location.inseeData != null) {
-                let frenchDept = this.location.inseeData.code.substr(0, 2);
-                let existsInChorodep = await this.existsInChorodep();
+                const frenchDept = this.location.inseeData.code.substr(0, 2);
+                const existsInChorodep = await this.existsInChorodep();
 
-                if (existsInChorodep == "0") {
-                    let msg = "Attention, le taxon " + this.taxon.name + " n'est pas signalé par la chorologie dans le département " + frenchDept + ". Si vous êtes sûr de votre observation, vous pouvez signaler votre découverte à la liste chorologie à l'adresse : chorologie@tela-botanica.org. ";
+                if (existsInChorodep == '0') {
+                    const msg = 'Attention, le taxon ' + this.taxon.name + ' n\'est pas signalé par la chorologie dans le département ' + frenchDept + '. Si vous êtes sûr de votre observation, vous pouvez signaler votre découverte à la liste chorologie à l\'adresse : chorologie@tela-botanica.org. ';
                     warnings.push(msg);
                 }
             }
             // If we've got all the data we need to check duplicate existence:
             if (dateObserved != null) {
 
-                let trueDate = new Date();
+                const trueDate = new Date();
                 trueDate.setDate(dateObserved);
-                let month = (trueDate.getUTCMonth() + 1).toString();
-                let day = trueDate.getUTCDate().toString();
-                let year = trueDate.getUTCFullYear().toString();
-                let geomAsString = JSON.stringify(this.location.geometry);
+                const month = (trueDate.getUTCMonth() + 1).toString();
+                const day = trueDate.getUTCDate().toString();
+                const year = trueDate.getUTCFullYear().toString();
+                const geomAsString = JSON.stringify(this.location.geometry);
                 let sciname = this.taxon.name;
 
                 if (typeof this.taxon.author) {
@@ -966,7 +959,7 @@ console.debug(dateObserved);
                     sciname = sciname.concat(this.taxon.author);
                 }
 
-                let duplicateExists = await this.doublonExists(
+                const duplicateExists = await this.doublonExists(
                     this.userId, day, month, year, sciname,
                     geomAsString, this.location.locality);
 
@@ -982,9 +975,9 @@ console.debug(dateObserved);
 
     private async postOccurrenceAfterWarningConfirmation(occ: Occurrence, stayOnPage: Boolean) {
 
-        let warnings = await this.preSubmitValidation();
+        const warnings = await this.preSubmitValidation();
 
-        // Translates the taxo repo returned by the tb-tsb-lib component 
+        // Translates the taxo repo returned by the tb-tsb-lib component
         // in case no repo has been chosen:
         if ( occ.taxoRepo == 'otherunknown') {
             occ.taxoRepo = 'Autre/inconnu';
@@ -997,38 +990,32 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     this._duplicateMsg,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
-            }
+            } else {
+                let msg = '';
 
-            // No duplicate but the species is not known to chorodep:
-            else {
-                let msg = "";
-
-                for (let warning of warnings) {
+                for (const warning of warnings) {
                     msg += warning;
                 }
-                msg += " Continuer ?";
-                let dialogConfig = this.buildDialogConfig();
+                msg += ' Continuer ?';
+                const dialogConfig = this.buildDialogConfig();
                 dialogConfig.data = msg;
-                let confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
+                const confirmDialogRef = this.confirmDialog.open(ConfirmDialogComponent, dialogConfig);
 
                 confirmDialogRef
                     .afterClosed()
                     .subscribe(response => {
                         if (response == true) {
                             this.postOccurrence(occ, stayOnPage);
-                        }
-                        else {
+                        } else {
                             this.enableForm();
                         }
                     });
 
             }
 
-        }
-        // no duplicate and species known to chorodep:
-        else {
+        } else {
             // Let's post the occurrence to the REST service:
             this.postOccurrence(occ, stayOnPage);
         }
@@ -1043,9 +1030,9 @@ console.debug(dateObserved);
                     this._linkPhotosToOccurrence(result.id, stayOnPage);
                 }
                 this.snackBar.open(
-                    "L'observation vient d'être créée.",
+                    'L\'observation vient d\'être créée.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 if (!stayOnPage) {
                     this.navigateToOccurrenceUi();
@@ -1063,7 +1050,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     'Une erreur est survenue. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1079,9 +1066,9 @@ console.debug(dateObserved);
             result => {
                 this._linkPhotosToOccurrence(occ.id, stayOnPage);
                 this.snackBar.open(
-                    "L'observation a bien été modifiée.",
+                    'L\'observation a bien été modifiée.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 // Useless in this case but quite logical...
                 this.enableForm();
@@ -1093,7 +1080,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     'Une erreur est survenue. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1102,16 +1089,16 @@ console.debug(dateObserved);
     private bulkReplaceOccurrences(
         occurrencesToBePatched: Occurrence[], occ: Occurrence, stayOnPage: Boolean) {
 
-        let ids = occurrencesToBePatched.map(function(occurrence) {
+        const ids = occurrencesToBePatched.map(function(occurrence) {
             return occurrence.id;
         });
 
         this.dataService.bulkReplace(ids, occ).subscribe(
             result => {
                 this.snackBar.open(
-                    "Les observations ont bien été modifiées.",
+                    'Les observations ont bien été modifiées.',
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
                 if (!stayOnPage) {
                     this.navigateToOccurrenceUi();
@@ -1121,7 +1108,7 @@ console.debug(dateObserved);
                 this.snackBar.open(
                     'Une erreur est survenue. ' + error,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1129,14 +1116,14 @@ console.debug(dateObserved);
 
 
 
-    //@refactor: use newly introduced form 'mode' instead of counting occurrences
+    // @refactor: use newly introduced form 'mode' instead of counting occurrences
     async postOrPatch(occurrenceFormValue, stayOnPage: boolean) {
 
-        let occBuilder = new OccurrenceBuilder(
+        const occBuilder = new OccurrenceBuilder(
             occurrenceFormValue,
             this.taxon,
             this.location);
-        let occ = await occBuilder.build(true);
+        const occ = await occBuilder.build(true);
 
         // The component has been instanciated with at least one
         // occurrence. We're in 'update/edit' mode:
@@ -1144,21 +1131,17 @@ console.debug(dateObserved);
             // multiple occurrences, let's json-patch replace!
             if (this.occurrences.length > 1) {
                 this.bulkReplaceOccurrences(this.occurrences, occ, stayOnPage);
-            }
-            // single occurrence, let's patch!
-            else {
+            } else {
                 occ.id = this.occurrences[0].id;
                 console.debug(occ);
 
                 this.patchOccurrence(occ, stayOnPage);
             }
-        }
-        // No occurrences loaded on init, we're in 'create' mode
-        else {
+        } else {
             this.postOccurrenceAfterWarningConfirmation(occ, stayOnPage);
 
             // Let's post to the REST service:
-            //this.postOccurrence(occ);
+            // this.postOccurrence(occ);
         }
     }
 
@@ -1166,7 +1149,7 @@ console.debug(dateObserved);
     askPlantNet() {
         const photoUrls = this.photos.map(photo => photo.url);
         const organs = [];
-        for (let p of photoUrls) {
+        for (const p of photoUrls) {
             organs.push('leaf');
         }
 
@@ -1181,14 +1164,14 @@ console.debug(dateObserved);
             },
             error => {
                 console.debug(error);
-                let message = "";
+                let message = '';
                 if (error.status == 404) {
-                    message = "L'espèce n'a pu être déterminée."
+                    message = 'L\'espèce n\'a pu être déterminée.';
                 }
                 this.snackBar.open(
                     message,
                     'Fermer', {
-                        duration: 2500
+                        duration: 3500
                     });
             }
         );
@@ -1228,9 +1211,7 @@ console.debug(dateObserved);
                     // Taxon suggestion selected, let's fill the tb-tsb-lib component:
                     if (taxon) {
                         this._patchTaxoUsingPlantnetChoice(taxon);
-                    }
-                    // The close button has been clicked, no taxon suggestion selected:
-                    else {
+                    } else {
                         // Switch the tb-tsb-lib component to default mode:
                         this.autoSelectValueIfOnlyOneResult = false;
                     }
@@ -1241,14 +1222,14 @@ console.debug(dateObserved);
 
     onPhotoRejected(photo: Photo) {
         this.snackBar.open(
-            "Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL",
+            'Seuls les fichiers au format JPEG ou PNG peuvent être ajoutés en tant que photo dans le CEL',
             'Fermer', {
-                duration: 1500
+                duration: 3500
             });
     }
 
     onPhotoRemoved(photo: any) {
-        let index = this.photos.indexOf(photo);
+        const index = this.photos.indexOf(photo);
         if (index > -1) {
             this.photos.splice(index, 1);
         }
@@ -1294,7 +1275,7 @@ console.debug(dateObserved);
         geometry: string,
         locality: string) {
 
-        let filters = new OccurrenceFilters();
+        const filters = new OccurrenceFilters();
 
         filters.signature = this.generateSignature(
             userId, dateObservedDay, dateObservedMonth,
@@ -1316,14 +1297,14 @@ console.debug(dateObserved);
         geometry: string,
         locality: string) {
 
-        let signatureBits = [
+        const signatureBits = [
             userId, dateObservedMonth,
             dateObservedDay, dateObservedYear,
             userSciName.trim(), geometry, locality
         ];
         let unencodedSignature = '';
 
-        for (let bit of signatureBits) {
+        for (const bit of signatureBits) {
             unencodedSignature = unencodedSignature + '-';
             if (bit != undefined) {
                 unencodedSignature = unencodedSignature + bit;
@@ -1332,7 +1313,7 @@ console.debug(dateObserved);
         }
 
         // We must urlencode the because of the "Unicode Problem":
-        // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding 
+        // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
         return btoa(encodeURIComponent(unencodedSignature));
     }
 
@@ -1369,32 +1350,32 @@ console.debug(dateObserved);
 
     _informUserLocationAccuracyWaAutomaticallyUpdated() {
         this.snackBar.open(
-            "La valeur de la précision a été mise à jour.",
-            "Fermer", {
-                duration: 2500
+            'La valeur de la précision a été mise à jour.',
+            'Fermer', {
+                duration: 3500
             });
 
     }
 
     updateLocationAccuracy() {
         console.log('_updateLocationAccuracy');
-        if (this.location.locationAccuracy == "10 à 100 m") {
-            if (this.occurrenceForm.controls['locationAccuracy'].value != "10 à 100 m") {
-                this.occurrenceForm.controls['locationAccuracy'].patchValue("10 à 100 m")
+        if (this.location.locationAccuracy == '10 à 100 m') {
+            if (this.occurrenceForm.controls['locationAccuracy'].value != '10 à 100 m') {
+                this.occurrenceForm.controls['locationAccuracy'].patchValue('10 à 100 m');
                 this._informUserLocationAccuracyWaAutomaticallyUpdated();
             }
         } else if (
             this.location.locationAccuracy == 'Localité' &&
-            (this.occurrenceForm.controls['sublocality'].value != "" && this.occurrenceForm.controls['sublocality'].value != null)) {
+            (this.occurrenceForm.controls['sublocality'].value != '' && this.occurrenceForm.controls['sublocality'].value != null)) {
 
-            if (this.occurrenceForm.controls['locationAccuracy'].value != "Lieu-dit") {
-                this.occurrenceForm.controls['locationAccuracy'].patchValue("Lieu-dit");
+            if (this.occurrenceForm.controls['locationAccuracy'].value != 'Lieu-dit') {
+                this.occurrenceForm.controls['locationAccuracy'].patchValue('Lieu-dit');
                 this._informUserLocationAccuracyWaAutomaticallyUpdated();
             }
-        } else if (this.location.locationAccuracy == 'Localité' && (this.occurrenceForm.controls['sublocality'].value == "" || this.occurrenceForm.controls['sublocality'].value == null)) {
-            if (this.occurrenceForm.controls['locationAccuracy'].value != "Localité") {
+        } else if (this.location.locationAccuracy == 'Localité' && (this.occurrenceForm.controls['sublocality'].value == '' || this.occurrenceForm.controls['sublocality'].value == null)) {
+            if (this.occurrenceForm.controls['locationAccuracy'].value != 'Localité') {
 
-                this.occurrenceForm.controls['locationAccuracy'].patchValue('Localité')
+                this.occurrenceForm.controls['locationAccuracy'].patchValue('Localité');
                 this._informUserLocationAccuracyWaAutomaticallyUpdated();
             }
         }

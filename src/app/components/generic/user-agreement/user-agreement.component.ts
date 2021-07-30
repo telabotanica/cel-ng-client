@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { 
+import {
   MatSnackBar
-} from "@angular/material";
+} from '@angular/material';
 import {
     ActivatedRoute
-} from "@angular/router";
+} from '@angular/router';
 
-import { DataUsageAgreementService } from "../../../services/commons/data-usage-agreement.service";
+import { DataUsageAgreementService } from '../../../services/commons/data-usage-agreement.service';
 
 @Component({
   selector: 'app-user-agreement',
@@ -20,7 +20,7 @@ export class UserAgreementComponent {
   constructor(
         private route: ActivatedRoute,
     private _dataUsageAgreementService: DataUsageAgreementService
-  ) { 
+  ) {
 
         this.route.params.subscribe(params => {
             this.version = params['version'];

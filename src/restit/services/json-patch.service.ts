@@ -1,36 +1,36 @@
-import {Injectable} from "@angular/core";
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {Observable} from "rxjs/Observable";
-import {HttpClient, HttpParams, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {map, catchError, finalize} from "rxjs/operators";
-import {of} from "rxjs/observable/of";
+import {Injectable} from '@angular/core';
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {Observable} from 'rxjs/Observable';
+import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {map, catchError, finalize} from 'rxjs/operators';
+import {of} from 'rxjs/observable/of';
 
 import { JsonPatchResponse } from '../model/json-patch-response.model';
-import { JsonPatchOperation } from '../model/json-patch-operation.model'; 
+import { JsonPatchOperation } from '../model/json-patch-operation.model';
 
 @Injectable()
-export class JsonPatchService{
+export class JsonPatchService {
 
-    private _resourceServiceUrl: string = "";
-    private _resourceBasePath: string = "";
+    private _resourceServiceUrl = '';
+    private _resourceBasePath = '';
 
-    constructor(private http:HttpClient) {
+    constructor(private http: HttpClient) {
 
     }
 
-    set resourceServiceUrl(resourceServiceUrl:string) {
+    set resourceServiceUrl(resourceServiceUrl: string) {
         this._resourceServiceUrl = resourceServiceUrl;
         this._resourceBasePath = this.extractPath(resourceServiceUrl);
     }
 
-    //@refactor put this in a UrlUtils class
-    private extractPath(url){
+    // @refactor put this in a UrlUtils class
+    private extractPath(url) {
         return  url.replace( /^[a-zA-Z]{3,5}\:\/{2}[a-zA-Z0-9_.:-]+/, '' );
     }
 
     private buildBulkOperation(path, op, value, from) {
-        let operation = new JsonPatchOperation();
+        const operation = new JsonPatchOperation();
         operation.op = op;
 
         // Value is not mandatory (e.g. for remove operations):
@@ -48,27 +48,27 @@ export class JsonPatchService{
         return operation;
     }
 
-    private buildPath(id) { 
-        return(this._resourceBasePath + "/" + id);
+    private buildPath(id) {
+        return(this._resourceBasePath + '/' + id);
     }
 
     private buildRemoveOperation(id) {
-        let path = this.buildPath(id);
+        const path = this.buildPath(id);
         return this.buildBulkOperation(path, 'remove', null, null);
     }
 
     private buildReplaceOperation(id, value) {
-        let path = this.buildPath(id);
+        const path = this.buildPath(id);
         return this.buildBulkOperation(path, 'replace', value, null);
     }
 
     private buildCopyOperation(id) {
-        let path = this.buildPath(id);
+        const path = this.buildPath(id);
         return this.buildBulkOperation(null, 'copy', null, path);
     }
 
     bulkRemove(ids):  Observable<JsonPatchResponse[]> {
-        let operations = ids.map(function(id) {
+        const operations = ids.map(function(id) {
           return this.buildRemoveOperation(id);
         }, this);
 
@@ -76,7 +76,7 @@ export class JsonPatchService{
     }
 
     bulkCopy(ids):  Observable<JsonPatchResponse[]> {
-        let operations = ids.map(function(id) {
+        const operations = ids.map(function(id) {
           return this.buildCopyOperation(id);
         }, this);
 
@@ -86,16 +86,16 @@ export class JsonPatchService{
     bulkOperation(atomicOperations):  Observable<JsonPatchResponse[]>  {
 
         return this.http.patch<JsonPatchResponse[]>(
-            this._resourceServiceUrl, 
+            this._resourceServiceUrl,
             atomicOperations,
             {
-                headers: {'Content-Type':'application/json-patch+json'}
+                headers: {'Content-Type': 'application/json-patch+json'}
             }
         );
     }
 
     bulkReplace(ids, value):  Observable<JsonPatchResponse[]> {
-        let operations = ids.map(function(id) {
+        const operations = ids.map(function(id) {
           return this.buildReplaceOperation(id, value);
         }, this);
 

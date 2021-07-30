@@ -6,19 +6,19 @@ import {
 
 import {
     DeviceDetectionService
-} from "../../../services/commons/device-detection.service";
+} from '../../../services/commons/device-detection.service';
 import {
     ProfileService
-} from "../../../services/profile/profile.service";
+} from '../../../services/profile/profile.service';
 import {
     TokenService
-} from "../../../services/commons/token.service";
+} from '../../../services/commons/token.service';
 import {
     NavigationService
-} from "../../../services/commons/navigation.service";
+} from '../../../services/commons/navigation.service';
 
 /**
- * Base component responsible for functionalities commonly shared by 
+ * Base component responsible for functionalities commonly shared by
  * CEL components i.e.:
  *
  * <ul>
@@ -30,8 +30,8 @@ import {
 @Injectable()
 export abstract class BaseComponent implements OnInit {
 
-    isMobile: boolean = false;
-    isTablet: boolean = false;
+    isMobile = false;
+    isTablet = false;
 
     constructor(
         protected _tokenService: TokenService,
@@ -71,7 +71,7 @@ export abstract class BaseComponent implements OnInit {
 
   navigateToEditOccurrenceForm(occId) {
     this._navigationService.navigateToEditOccurrenceForm(occId);
-  }        
+  }
 
     logout() {
                 this._navigationService.logout();

@@ -17,12 +17,12 @@ export class PhotoFilters {
 
 
 
-//interface UrlParameterGenerator
+// interface UrlParameterGenerator
 
-    toUrlParameters() : string  {
-        let urlParams = '';
+    toUrlParameters(): string  {
+        const urlParams = '';
 
-        for (var propertyName in this) {
+        for (const propertyName in this) {
             if (this.hasOwnProperty(propertyName)) {
 //                if ( !(this[propertyName] instanceof Array<string>) ) {
                     console.log(this[propertyName]);
@@ -37,4 +37,4 @@ export class PhotoFilters {
         return urlParams;
     }
 
-} 
+}

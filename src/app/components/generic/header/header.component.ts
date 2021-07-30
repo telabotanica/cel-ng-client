@@ -7,12 +7,12 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { 
-  Router, ActivatedRoute 
-} from "@angular/router";
+import {
+  Router, ActivatedRoute
+} from '@angular/router';
 
-import { DeviceDetectionService 
-} from "../../../services/commons/device-detection.service";
+import { DeviceDetectionService
+} from '../../../services/commons/device-detection.service';
 
 @Component({
   selector: 'header',
@@ -21,14 +21,14 @@ import { DeviceDetectionService
 })
 export class HeaderComponent implements OnInit {
 
-  // Links for the main, top, menu:	
+  // Links for the main, top, menu:
   mainMenuLinks = [
     { path: 'occurrence-ui', label: 'OBSERVATIONS' },
     { path: 'photo-ui', label: 'PHOTOS' },
     { path: 'map-ui', label: 'CARTE' },
   ];
   activeLink = this.mainMenuLinks[0];
-  isMobile: boolean = false;
+  isMobile = false;
 
   constructor(
     private deviceDetectionService: DeviceDetectionService,

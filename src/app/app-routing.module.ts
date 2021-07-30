@@ -13,57 +13,57 @@ import { HelpComponent } from './components/generic/help/help.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { 
-    path: '', 
-    redirectTo: '/occurrence-ui', 
-    pathMatch: 'full', 
-    canActivate: [AuthGuard] 
+  {
+    path: '',
+    redirectTo: '/occurrence-ui',
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'occurrence-ui', 
-    component: OccurrenceUiComponent, 
+  {
+    path: 'occurrence-ui',
+    component: OccurrenceUiComponent,
 
-    canActivate: [AuthGuard] 
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'photo-ui', 
-    component: PhotoUiComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'photo-ui',
+    component: PhotoUiComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'map-ui', 
-    component: MapUiComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'map-ui',
+    component: MapUiComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'user-profile-ui', 
-    component: UserProfileUiComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'user-profile-ui',
+    component: UserProfileUiComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'occurrence-form', 
-    component: OccurrenceFormComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'occurrence-form',
+    component: OccurrenceFormComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'occurrence-detail/:id', 
-    component: OccurrenceDetailComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'occurrence-detail/:id',
+    component: OccurrenceDetailComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'user-agreement/:version', 
-    component: UserAgreementComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'user-agreement/:version',
+    component: UserAgreementComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'occurrence-collection-edit-form/:ids', 
-    component: OccurrenceFormComponent, 
-    canActivate: [AuthGuard] 
+  {
+    path: 'occurrence-collection-edit-form/:ids',
+    component: OccurrenceFormComponent,
+    canActivate: [AuthGuard]
   },
-  { 
-    path: 'help', 
+  {
+    path: 'help',
     component: HelpComponent,
-    canActivate: [AuthGuard] 
+    canActivate: [AuthGuard]
   },
 ];
 

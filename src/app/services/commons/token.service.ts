@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import * as jwt_decode from "jwt-decode";
+import * as jwt_decode from 'jwt-decode';
 
 import {
     SsoService
-} from "./sso.service";
+} from './sso.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
 
-  constructor(private _ssoService: SsoService) { 
+  constructor(private _ssoService: SsoService) {
   }
 
 
@@ -39,7 +39,7 @@ export class TokenService {
     }
 
      isPseudoUsed() {
-        return this.getDecodedToken() ? 
+        return this.getDecodedToken() ?
             this.getDecodedToken().pseudoUtilise : null;
     }
 

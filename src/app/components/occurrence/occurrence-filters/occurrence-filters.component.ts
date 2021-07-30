@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import { OccurrenceFilters } from "../../../model/occurrence/occurrence-filters.model";
-import { TelaBotanicaProject } from "../../../model/occurrence/tela-botanica-project.model";
-import { TelaBotanicaProjectService } from "../../../services/occurrence/tela-botanica-project.service";
-import { DeviceDetectionService } from "../../../services/commons/device-detection.service";
+import { OccurrenceFilters } from '../../../model/occurrence/occurrence-filters.model';
+import { TelaBotanicaProject } from '../../../model/occurrence/tela-botanica-project.model';
+import { TelaBotanicaProjectService } from '../../../services/occurrence/tela-botanica-project.service';
+import { DeviceDetectionService } from '../../../services/commons/device-detection.service';
 
 @Component({
   selector: 'app-occurrence-filters',
@@ -19,9 +19,9 @@ export class OccurrenceFiltersComponent implements OnInit {
   projectId;
   project;
 	isPublic;
-	certainty;         
+	certainty;
   telaBotanicaProjects: TelaBotanicaProject[];
-  isMobile: boolean = false;
+  isMobile = false;
 
   @Output() applyFiltersEvent = new EventEmitter<OccurrenceFilters>();
   @Output() closeFiltersEvent = new EventEmitter();
@@ -47,7 +47,7 @@ export class OccurrenceFiltersComponent implements OnInit {
        frenchDep:         new FormControl(),
        certainty:         new FormControl(),
        project:           new FormControl(),
-       //userOccurrenceTags: new FormControl(),
+       // userOccurrenceTags: new FormControl(),
        freeTextQuery:      new FormControl(),
        isPublic:                new FormControl(),
        isIdentiplanteValidated: new FormControl(),
@@ -68,7 +68,7 @@ export class OccurrenceFiltersComponent implements OnInit {
   }
 
   private _initResponsive() {
-    
+
     // @responsive: sets isMobile member value
     this._deviceDetectionService.detectDevice().subscribe(result => {
       this.isMobile = result.matches;
@@ -77,7 +77,7 @@ export class OccurrenceFiltersComponent implements OnInit {
 
   emitApplyFilterEvent() {
 
-    let occFilters = new OccurrenceFilters();
+    const occFilters = new OccurrenceFilters();
 
     occFilters.isPublic =  this.formGroup.get('isPublic').value;
     occFilters.dateObservedDay = this.formGroup.get('dateObservedDay').value;
