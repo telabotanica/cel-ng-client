@@ -361,7 +361,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
       this.snackBar.open(
         'Génération de l’export en cours, merci de votre patience :)',
         'Fermer',
-        { duration: 3500 });
+        { duration: undefined });
 
         this.dataSource.export(this._occFilters).subscribe(
           data => this.dldService.downloadBinary(data, 'text/csv', 'cel-export-'),
@@ -398,7 +398,7 @@ export class OccurrenceGridComponent extends BaseComponent implements AfterViewI
         this.snackBar.open(
             'Génération des étiquettes en cours, merci de votre patience :)',
             'Fermer',
-            { duration: 3500 });
+            { duration: undefined });
 
         const ids = this.getSelectedIds();
         this.dataSource.generatePdfEtiquette(ids).subscribe(

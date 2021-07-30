@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
+import {NotificationService} from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BinaryDownloadService {
+
+  constructor(
+    private _notifService: NotificationService,
+  ) {}
+
 
   downloadBinary(data, mimeType, filename, autoSuffix = true): void {
     if (autoSuffix) {
@@ -16,6 +22,7 @@ export class BinaryDownloadService {
     link.download = filename + '.' + mimeType.split('/').pop();
     document.body.appendChild(link);
     link.click();
+    this._notifService.notify('Téléchargement en cours', 1500);
     document.body.removeChild(link);
   }
 }

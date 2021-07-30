@@ -230,7 +230,7 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
     this.snackBar.open(
       'Génération de l’étiquette en cours, merci de votre patience :)',
       'Fermer',
-      { duration: 3500 });
+      { duration: undefined });
 
     this.dataSource.generatePdfEtiquette([this.occurrence.id]).subscribe(
       data => this.dldService.downloadBinary(data, 'application/pdf', 'cel-etiquette-' + this.occurrence.id + '-'),

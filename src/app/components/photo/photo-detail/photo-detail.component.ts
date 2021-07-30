@@ -179,7 +179,7 @@ export class PhotoDetailComponent {
 
     download() {
         const id = this.photo.id;
-        this._notifService.notifyError(PhotoDetailComponent._downloadMsg);
+        this._notifService.notify(PhotoDetailComponent._downloadMsg, undefined);
         this.dataService.download([id]).subscribe(
             data => this.dldService.downloadBinary(data, 'application/zip', 'cel-photo-' + id + '-'),
             error => this._notifService.notifyError(PhotoDetailComponent._errorMsg + ' ' + error)

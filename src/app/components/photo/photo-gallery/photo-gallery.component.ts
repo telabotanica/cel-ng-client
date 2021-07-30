@@ -230,7 +230,7 @@ export class PhotoGalleryComponent extends BaseComponent implements AfterViewIni
         this.snackBar.open(
           'Génération de l’archive des photos en cours, merci de votre patience :)',
           'Fermer',
-          { duration: 3500 });
+          { duration: undefined });
 
         const ids = this.selected;
         this.dataService.download(ids).subscribe(
