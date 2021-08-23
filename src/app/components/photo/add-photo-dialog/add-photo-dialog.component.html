@@ -3,21 +3,36 @@
 
 <mat-dialog-content>
 
-    <div style="display:block"> 
-      <tb-dropfile-box
-        [showTable]="true" 
-        [uploadTbPhotoFiles]="true"
-        [label]="'Cliquez pour choisir les photos ou glissez les ici'"
-        [ignoreOversizedFiles]="false"
-        [sendImages]="sendPhotoFlag"
-        [photoUploadBaseUrl]="baseCelApiUrl"   
-        [allowedFileTypes]="['jpeg', 'png']"
-        (httpError)="onPostPhotoError($event)"
-        (acceptedFiles)="onPhotoAdded($event)"
-        (rejectedFiles)="onPhotoRejected($event)"
-        (uploadedFiles)="onPhotoUploaded($event)"
-      ></tb-dropfile-box>
-      <button mat-button  class="thirdary-button" type="button" (click)="sendPhotos()" [disabled]="isSendPhotoButtonDisabled()" >Envoyer les images</button>
-    </div>
+  <details>
+    <summary>En cas d'échec ⓘ</summary>
+
+    - veillez à ce que votre photo ait un nom unique parmi vos photos existantes <br>
+    - vérifiez que votre fichier n'est pas trop gros <br>
+    - rechargez la page, videz le cache de votre navigateur <br>
+    - essayez avec un autre navigateur
+  </details>
+
+  <div style="display:block">
+    <tb-dropfile-box
+      [showTable]="true"
+      [uploadTbPhotoFiles]="true"
+      [label]="'Cliquez pour choisir les photos ou glissez-les ici'"
+      [ignoreOversizedFiles]="false"
+      [sendImages]="sendPhotoFlag"
+      [photoUploadBaseUrl]="baseCelApiUrl"
+      [allowedFileTypes]="['jpeg', 'png']"
+      (httpError)="onPostPhotoError($event)"
+      (acceptedFiles)="onPhotoAdded($event)"
+      (rejectedFiles)="onPhotoRejected($event)"
+      (uploadedFiles)="onPhotoUploaded($event)"
+    ></tb-dropfile-box>
+
+    <button mat-button
+            class="thirdary-button" type="button"
+            (click)="sendPhotos()"
+            [disabled]="isSendPhotoButtonDisabled()">
+      Envoyer les images
+    </button>
+  </div>
 
 </mat-dialog-content>

@@ -11,7 +11,6 @@ html, body {
   display: flex;
   height: 100%;
   flex-direction: column;
-  margin: 0;
 }
 
 body {
@@ -31,8 +30,8 @@ a {
 
 
 .mat-radio-label-content {
-  padding-left: 5px !important; 
-  padding-right: 8px !important; 
+  padding-left: 5px !important;
+  padding-right: 8px !important;
 }
 
 .mat-raised-button{
@@ -90,7 +89,7 @@ mat-input-container label {
   float:      left;
   background: #FCFAF5;
   width:      270px;
-  overflow:   auto;  
+  overflow:   auto;
   height:     calc(100vh - 67px);
 }
 
@@ -98,7 +97,7 @@ mat-input-container label {
   float: left;
   width: 100%;
   background: #FCFAF5;
-  overflow:auto;  
+  overflow:auto;
   height: calc(100vh - 67px);
 }
 
@@ -137,14 +136,14 @@ mat-input-container label {
 
 .module-right-col-content {
   float:left;
-  overflow-y:auto; 
+  overflow-y:auto;
   width:100%;
-  height: calc(100vh - 131px); 
+  height: calc(100vh - 131px);
 }
 
 .module-right-col-mobile {
   width:100%;
-  overflow:none;  
+  overflow:none;
   height: calc(100vh - 67px);
 }
 
@@ -201,7 +200,7 @@ mat-input-container label {
   line-height: 13px;
   padding-bottom: 10px;
   padding-top: 7px;
-  font-weight: 50;   
+  font-weight: 50;
 }
 
 .occurrence-form-label {
@@ -211,7 +210,7 @@ mat-input-container label {
 .detail-drawer {
   width:600px;
   height:calc(100% - 20px) !important;
-  margin-top: 10px; 
+  margin-top: 10px;
   padding: 10px;
   overflow:none;
 }
@@ -219,8 +218,19 @@ mat-input-container label {
 .detail-drawer-mobile {
   width:calc(100% - 40px);
   height:calc(100% - 20px) !important;
-  margin-top: 10px; 
+  margin-top: 10px;
   padding: 10px;
   overflow:none;
+}
+
+details {
+  margin-bottom: 10px;
+}
+
+details summary {
+  cursor: pointer;
+}
+summary {
+  display: list-item;
 }
 
