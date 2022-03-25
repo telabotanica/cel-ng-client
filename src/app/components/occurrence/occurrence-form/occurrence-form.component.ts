@@ -121,11 +121,16 @@ import {
 import {
     NavigationService
 } from '../../../services/commons/navigation.service';
+import {FrenchDateProvider} from '../../../utils/french-date-provider';
+import {DateAdapter} from '@angular/material';
 
 @Component({
     selector: 'app-occurrence-form',
     templateUrl: './occurrence-form.component.html',
     styleUrls: ['./occurrence-form.component.css', 'material-overide.css'],
+  providers: [
+    { provide: DateAdapter, useClass: FrenchDateProvider },
+  ]
 })
 export class OccurrenceFormComponent implements OnInit {
 
