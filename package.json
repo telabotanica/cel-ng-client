@@ -28,7 +28,7 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "algoliasearch": "^3.32.0",
-    "algoliasearch-helper": "^2.26.1",
+    "algoliasearch-helper": "^3.6.2",
     "angular-tree-component": "^8.4.0",
     "core-js": "^2.5.4",
     "exif-js": "^2.3.0",
