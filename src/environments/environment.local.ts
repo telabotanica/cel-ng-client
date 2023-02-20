@@ -43,7 +43,8 @@ export const environment = {
     url: 'https://osm.tela-botanica.org/tuiles/osmfr/{z}/{x}/{y}.png'
   },
   elevationApi: {
-    provider: 'elevationApiIo'
+    provider: 'mapQuest',
+    apiKey:   'mG6oU5clZHRHrOSnAV0QboFI7ahnGg34',
   },
   sso: {
     identiteEndpoint: 'http://localhost:8080/service:annuaire:auth/identite',
