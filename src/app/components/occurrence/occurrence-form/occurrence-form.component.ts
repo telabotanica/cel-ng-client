@@ -243,7 +243,6 @@ export class OccurrenceFormComponent implements OnInit {
     baseCelApiUrl: string = environment.api.baseUrl;
     tagLibBaseUrl: string = environment.api.tagLibBaseUrl;
     elevationApiProvider: string = environment.elevationApi.provider;
-    mapQuestApiKey: string = environment.elevationApi.apiKey;
     mapBgTileUrl: string = environment.mapBgTile.baseUrl;
     autoSelectValueIfOnlyOneResult = false;
     // Should the advanced forms be displayed instead of basic ones:
