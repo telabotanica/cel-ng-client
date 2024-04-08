@@ -39,8 +39,8 @@ export const environment = {
     baseUrlTemplate: 'https://www.tela-botanica.org/${taxoRepoName}-nn-${taxonId}-synthese'
   },
   mapBgTile: {
-    baseUrl: 'https://osm.tela-botanica.org/tuiles/osmfr',
-    url: 'https://osm.tela-botanica.org/tuiles/osmfr/{z}/{x}/{y}.png'
+    baseUrl: 'https://a.tile.openstreetmap.fr/osmfr',
+    url: 'https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
   },
   elevationApi: {
     provider: 'openElevation',
