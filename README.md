@@ -64,6 +64,6 @@ Note: the --prod build mode is a bit touchier than the "standard" (dev) build...
 
 Use rsync like:
 ```
-rsync -av dist/cel-ng-client/ user@server:/home/user/www/cel-ng/
+rsync -av dist/cel2-client/ user@server:/home/user/www/cel-ng/
 ```
 
