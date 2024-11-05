@@ -113,7 +113,7 @@ export class OccurrenceDetailComponent implements OnInit, OnChanges {
   }
 
   openIdentiPlante() {
-    const url = `${this._identiplanteBaseUrl}/obs${this.occurrence.id}`;
+    const url = `${this._identiplanteBaseUrl}/#obs~${this.occurrence.id}`;
     window.open(url , '_blank');
   }
 
